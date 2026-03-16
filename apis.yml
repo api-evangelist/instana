@@ -1,27 +1,48 @@
-name: >-
-  instana/openapi: Contains the instana public api documentation for publish on
-  gh-pages.
+aid: instana
+name: Instana
 description: >-
-  Contains the instana public api documentation for publish on gh-pages. 
-  https://github.com/instana/openapi
-image: >-
-  https://kinlane-productions2.s3.amazonaws.com/apis-json-icons/instanaopenapi-contains-the-instana-public-api-documentation-for-publish-on-gh-pages.png
-url: >-
-  https://example.com/apis/instanaopenapi-contains-the-instana-public-api-documentation-for-publish-on-gh-pages.yml
-created: 2024/7/2
-modified: 2024/7/2
-specificationVersion: '0.16'
+  Instana is an enterprise observability and application performance monitoring
+  platform that provides automated full-stack visibility and AI-powered APM.
+  Instana offers a public REST API for programmatic access to monitoring data,
+  configurations, and integrations.
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-  - Bookmark
+  - Observability
+  - APM
+  - Monitoring
+  - Infrastructure
+url: >-
+  https://raw.githubusercontent.com/api-evangelist/instana/refs/heads/main/apis.yml
+created: '2024-07-02'
+modified: '2026-03-16'
+specificationVersion: '0.19'
 apis:
-  - name: >-
-      instana/openapi: Contains the instana public api documentation for publish
-      on gh-pages.
+  - aid: instana:instana-api
+    name: Instana API
     description: >-
-      Contains the instana public api documentation for publish on gh-pages. 
-      https://github.com/instana/openapi
-    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-    humanURL: https://github.com/instana/openapi
+      The Instana REST API provides programmatic access to the Instana
+      observability platform, enabling integration with monitoring data,
+      events, alerts, and infrastructure configuration.
+    humanURL: https://www.ibm.com/docs/en/instana-observability/current?topic=apis-rest-api
+    tags:
+      - Observability
+      - Monitoring
+      - APM
+    properties:
+      - type: Documentation
+        url: https://instana.github.io/openapi/
+      - type: OpenAPI
+        url: https://instana.github.io/openapi/openapi.yaml
+      - type: GitHub Organization
+        url: https://github.com/instana/openapi
+common:
+  - type: Website
+    url: https://www.ibm.com/products/instana
+  - type: Documentation
+    url: https://www.ibm.com/docs/en/instana-observability/current
+  - type: Support
+    url: https://www.ibm.com/mysupport
 maintainers:
-  - FN: API Evangelist
-    email: info@apievangelist.com
+  - FN: Kin Lane
+    email: kin@apievangelist.com
