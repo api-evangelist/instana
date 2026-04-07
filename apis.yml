@@ -8,10 +8,10 @@ description: >-
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-  - Observability
   - APM
-  - Monitoring
   - Infrastructure
+  - Monitoring
+  - Observability
 url: >-
   https://raw.githubusercontent.com/api-evangelist/instana/refs/heads/main/apis.yml
 created: '2024-07-02'
@@ -26,9 +26,9 @@ apis:
       events, alerts, and infrastructure configuration.
     humanURL: https://www.ibm.com/docs/en/instana-observability/current?topic=apis-rest-api
     tags:
-      - Observability
-      - Monitoring
       - APM
+      - Monitoring
+      - Observability
     properties:
       - type: Documentation
         url: https://instana.github.io/openapi/
