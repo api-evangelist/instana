@@ -16,7 +16,7 @@ Instana is an enterprise observability and application performance monitoring pl
 ## Timestamps
 
 - **Created:** 2024-07-02 
-- **Modified:** 2026-03-16 
+- **Modified:** 2026-04-28 
 
 ## APIs
 
@@ -33,7 +33,7 @@ The Instana REST API provides programmatic access to the Instana observability p
 #### Properties
 
 - [Documentation](https://instana.github.io/openapi/)
-- [OpenAPI](https://instana.github.io/openapi/openapi.yaml)
+- [OpenAPI](openapi/instana-openapi.yml)
 - [GitHub Organization](https://github.com/instana/openapi)
 
 ## Common Properties
