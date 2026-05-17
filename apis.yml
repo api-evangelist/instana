@@ -34,7 +34,7 @@ apis:
         url: https://instana.github.io/openapi/
       - type: OpenAPI
         url: openapi/instana-openapi.yml
-      - type: GitHub Organization
+      - type: GitHubOrganization
         url: https://github.com/instana/openapi
 common:
   - type: Website
