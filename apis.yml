@@ -37,6 +37,8 @@ apis:
       - type: GitHubOrganization
         url: https://github.com/instana/openapi
 common:
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/instana
   - type: Website
     url: https://www.ibm.com/products/instana
   - type: Documentation
