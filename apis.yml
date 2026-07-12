@@ -37,6 +37,10 @@ apis:
       - type: GitHubOrganization
         url: https://github.com/instana/openapi
 common:
+  - type: VulnerabilityDisclosure
+    url: security/instana-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/instana-domain-security.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/instana
   - type: Website
