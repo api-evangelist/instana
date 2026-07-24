@@ -1,0 +1,836 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation Policies API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: Policies
+paths:
+  /api/automation/policies:
+    get:
+      description: Returns all the automation policies filtered by the values in optional query parameters. When using personal access tokens, the user must have at least `Viewer` access for Automation and the automation policies returned are also filtered based on the access set in `Limited access` permission settings.
+      operationId: getPolicies
+      parameters:
+      - description: Filter policies by the event or alert type that can trigger a policy. This is an optional parameter. Valid values are customEvent, builtinEvent, applicationSmartAlert, globalApplicationSmartAlert, websiteSmartAlert, infraSmartAlert, mobileAppSmartAlert, syntheticsSmartAlert, logSmartAlert, sloSmartAlert
+        in: query
+        name: triggerType
+        schema:
+          type: string
+      - description: Trigger identifier. This is an optional parameter.
+        in: query
+        name: triggerId
+        schema:
+          type: string
+      - description: Filter policies by policy execution type. This is an optional parameter.  Valid values are automatic or manual
+        in: query
+        name: executionType
+        schema:
+          type: string
+      - description: Filter policies by action ID. This is an optional parameter.
+        in: query
+        name: actionId
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: a14700b0-401b-47eb-a751-deda0035fde3
+                name: Policy for test
+                description: Policy for test
+                trigger:
+                  type: customEvent
+                  id: C3Ha8PffQHfJ0Hk6
+                  name: Test Event
+                typeConfigurations:
+                - name: manual
+                  runnable:
+                    type: action
+                    id: d473c1b0-0740-4d08-95fe-31e5d0a9faff
+                    runConfiguration:
+                      actions:
+                      - action:
+                          id: d473c1b0-0740-4d08-95fe-31e5d0a9faff
+                          name: Hello World
+                          description: Simple script action for testing
+                          type: SCRIPT
+                          fields:
+                          - name: subtype
+                            description: script subtype
+                            encoding: base64
+                            value: YmFzaA==
+                            secured: false
+                          - name: script_ssh
+                            description: script content
+                            encoding: base64
+                            value: ZWNobyBoZWxsbyB3b3JsZA==
+                            secured: false
+                          - name: timeout
+                            description: timeout of the action execution in seconds
+                            encoding: ascii
+                            value: ''
+                            secured: false
+                          inputParameters: []
+                          tags:
+                          - Test
+                          - idempotent
+                          createdAt: 1694442511.129923
+                          modifiedAt: 1703191040.321448
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Policy'
+          description: Automation policies list filtered by the values in query parameters.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Failed to retrieve the automation policies.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get all automation policies.
+      tags:
+      - Policies
+      x-ibm-ahub-byok: true
+    post:
+      description: Creates a new automation policy. Policy creation requires `Configuration of automation policies` permission.
+      operationId: addPolicy
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: builtin-action-custom-event
+              trigger:
+                name: test event
+                type: customEvent
+                id: 2X5r-Un18MIE59rE
+              typeConfigurations:
+              - name: manual
+                runnable:
+                  type: action
+                  id: c5ba4453-0bc2-3c3e-bdbe-b3ce68239145
+                  runConfiguration:
+                    actions:
+                    - action:
+                        id: c5ba4453-0bc2-3c3e-bdbe-b3ce68239145
+            schema:
+              $ref: '#/components/schemas/Policy'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                id: a14700b0-401b-47eb-a751-deda0035fde3
+                name: Policy for test
+                description: Policy for test
+                trigger:
+                  type: customEvent
+                  id: C3Ha8PffQHfJ0Hk6
+                  name: Test Event
+                typeConfigurations:
+                - name: manual
+                  runnable:
+                    type: action
+                    id: d473c1b0-0740-4d08-95fe-31e5d0a9faff
+                    runConfiguration:
+                      actions:
+                      - action:
+                          id: d473c1b0-0740-4d08-95fe-31e5d0a9faff
+                          name: Hello World
+                          description: Simple script action for testing
+                          type: SCRIPT
+                          fields:
+                          - name: subtype
+                            description: script subtype
+                            encoding: base64
+                            value: YmFzaA==
+                            secured: false
+                          - name: script_ssh
+                            description: script content
+                            encoding: base64
+                            value: ZWNobyBoZWxsbyB3b3JsZA==
+                            secured: false
+                          - name: timeout
+                            description: timeout of the action execution in seconds
+                            encoding: ascii
+                            value: ''
+                            secured: false
+                          inputParameters: []
+                          tags:
+                          - Test
+                          createdAt: 1694442511.129923
+                          modifiedAt: 1703191040.321448
+              schema:
+                $ref: '#/components/schemas/Policy'
+          description: New policy created.
+        '400':
+          description: Bad request.
+        '403':
+          description: Insufficient permissions.
+        '412':
+          description: Invalid input value.
+        '500':
+          description: Internal Server Error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureAutomationPolicies
+      summary: Create an automation policy.
+      tags:
+      - Policies
+      x-ibm-ahub-byok: true
+  /api/automation/policies/bulk:
+    post:
+      description: Creates a list of automation policies. Policy creation requires `Configuration of automation policies` permission.
+      operationId: addPolicies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Policy'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Policy'
+          description: Created.
+        '400':
+          description: Bad request.
+        '403':
+          description: Insufficient permissions.
+        '412':
+          description: Invalid input value.
+        '500':
+          description: Internal Server Error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureAutomationPolicies
+      summary: Create automation policies.
+      tags:
+      - Policies
+      x-ibm-ahub-byok: true
+  /api/automation/policies/{id}:
+    delete:
+      description: Deletes an automation policy by identifier. Policy deletion requires `Configuration of automation policies` permission. When using personal tokens the automation policies deleted are based on the access set in `Limited access` permission settings.
+      operationId: deletePolicy
+      parameters:
+      - description: Automation policy ID to delete
+        example: a14700b0-401b-47eb-a751-deda0035fde3
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Automation policy successfully deleted
+        '403':
+          description: Insufficient permissions.
+        '412':
+          description: Automation policy does not exist
+      security:
+      - ApiKeyAuth:
+        - canConfigureAutomationPolicies
+      summary: Deletes an automation policy by identifier.
+      tags:
+      - Policies
+      x-ibm-ahub-byok: true
+    get:
+      description: Returns the automation policy filtered by the ID in request parameter. When using personal access tokens, the user must have at least `Viewer` access for Automation and the automation policies returned are also filtered based on the access set in `Limited access` permission settings.
+      operationId: getPolicyByID
+      parameters:
+      - description: Automation policy ID
+        example: a14700b0-401b-47eb-a751-deda0035fde3
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: a14700b0-401b-47eb-a751-deda0035fde3
+                name: Policy for test
+                description: Policy for test
+                trigger:
+                  type: customEvent
+                  id: C3Ha8PffQHfJ0Hk6
+                  name: Test Event
+                typeConfigurations:
+                - name: manual
+                  runnable:
+                    type: action
+                    id: d473c1b0-0740-4d08-95fe-31e5d0a9faff
+                    runConfiguration:
+                      actions:
+                      - action:
+                          id: d473c1b0-0740-4d08-95fe-31e5d0a9faff
+                          name: Hello World
+                          description: Simple script action for testing
+                          type: SCRIPT
+                          fields:
+                          - name: subtype
+                            description: script subtype
+                            encoding: base64
+                            value: YmFzaA==
+                            secured: false
+                          - name: script_ssh
+                            description: script content
+                            encoding: base64
+                            value: ZWNobyBoZWxsbyB3b3JsZA==
+                            secured: false
+                          - name: timeout
+                            description: timeout of the action execution in seconds
+                            encoding: ascii
+                            value: ''
+                            secured: false
+                          inputParameters: []
+                          tags:
+                          - Test
+                          createdAt: 1694442511.129923
+                          modifiedAt: 1703191040.321448
+              schema:
+                $ref: '#/components/schemas/Policy'
+          description: Automation policy filtered by the ID in request parameter.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Automation policy not found.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get an automation policy by ID.
+      tags:
+      - Policies
+      x-ibm-ahub-byok: true
+    put:
+      description: Updates an automation policy by identifier. Policy updates requires `Configuration of automation policies` permission. When using personal tokens the automation policies updated are based on the access set in `Limited access` permission settings.
+      operationId: updatePolicy
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: builtin-action-custom-event
+              trigger:
+                name: test event
+                type: customEvent
+                id: 2X5r-Un18MIE59rE
+              typeConfigurations:
+              - name: manual
+                runnable:
+                  type: action
+                  id: c5ba4453-0bc2-3c3e-bdbe-b3ce68239145
+                  runConfiguration:
+                    actions:
+                    - action:
+                        id: c5ba4453-0bc2-3c3e-bdbe-b3ce68239145
+            schema:
+              $ref: '#/components/schemas/Policy'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: a14700b0-401b-47eb-a751-deda0035fde3
+                name: Policy for test
+                description: Policy for test
+                trigger:
+                  type: customEvent
+                  id: C3Ha8PffQHfJ0Hk6
+                  name: Test Event
+                typeConfigurations:
+                - name: manual
+                  runnable:
+                    type: action
+                    id: d473c1b0-0740-4d08-95fe-31e5d0a9faff
+                    runConfiguration:
+                      actions:
+                      - action:
+                          id: d473c1b0-0740-4d08-95fe-31e5d0a9faff
+                          name: Hello World
+                          description: Simple script action for testing
+                          type: SCRIPT
+                          fields:
+                          - name: subtype
+                            description: script subtype
+                            encoding: base64
+                            value: YmFzaA==
+                            secured: false
+                          - name: script_ssh
+                            description: script content
+                            encoding: base64
+                            value: ZWNobyBoZWxsbyB3b3JsZA==
+                            secured: false
+                          - name: timeout
+                            description: timeout of the action execution in seconds
+                            encoding: ascii
+                            value: ''
+                            secured: false
+                          inputParameters: []
+                          tags:
+                          - Test
+                          createdAt: 1694442511.129923
+                          modifiedAt: 1703191040.321448
+              schema:
+                $ref: '#/components/schemas/Policy'
+          description: Automation policy successfully updated.
+        '403':
+          description: Insufficient permissions.
+        '412':
+          description: Invalid input value.
+        '500':
+          description: Server Error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureAutomationPolicies
+      summary: Updates an automation policy by identifier.
+      tags:
+      - Policies
+      x-ibm-ahub-byok: true
+components:
+  schemas:
+    RunConfiguration:
+      type: object
+      description: Action run configuration.
+      properties:
+        actions:
+          type: array
+          description: List of action configurations.
+          items:
+            $ref: '#/components/schemas/ActionConfiguration'
+      required:
+      - actions
+    ParameterValue:
+      type: object
+      description: List of action input parameters.
+      properties:
+        name:
+          type: string
+          description: Parameter name.
+        value:
+          type: string
+          description: Parameter value.
+      required:
+      - name
+      - value
+    Condition:
+      type: object
+      description: This applies to only `automatic` policy type. A Dynamic Focus Query that selects a list of entities on which the policy is run.
+      properties:
+        query:
+          type: string
+          description: Dynamic Focus Query string that selects a list of entities on which the policy is run.
+    MetaData:
+      type: object
+      description: Action metadata.
+      properties:
+        ai:
+          type: array
+          description: List of metadata for AI originated actions.
+          items:
+            type: object
+            additionalProperties:
+              type: object
+              description: List of metadata for AI originated actions.
+            description: List of metadata for AI originated actions.
+        aiOriginated:
+          type: boolean
+          description: AI originated action flag. Value is `true` if action is AI generated `false` otherwise.
+        builtIn:
+          type: boolean
+          description: Built-in out of the box action flag. Value is `true` if built-in action `false` otherwise.
+        readOnly:
+          type: boolean
+          description: Read only action flag. Value is `true` if read only `false` otherwise.
+        sensorImported:
+          type: boolean
+          description: Sensor imported action flag. Value is `true` if action is imported from sensor `false` otherwise.
+    PolicyRunnable:
+      type: object
+      description: Runnable associated with the policy. It can be a `workflow` or `action`. Currently only supports `action`.
+      properties:
+        id:
+          type: string
+          description: Action identifier.
+        runConfiguration:
+          $ref: '#/components/schemas/RunConfiguration'
+        type:
+          type: string
+          description: Type of runnable. Supported value is `action`.
+          enum:
+          - action
+          - workflow
+      required:
+      - id
+      - runConfiguration
+      - type
+    TypeConfiguration:
+      type: object
+      description: List of configurations that contains the list of actions to run and the mode (automatic or manual) in which the policy is run.
+      properties:
+        condition:
+          $ref: '#/components/schemas/Condition'
+        name:
+          type: string
+          description: The policy type determines how a policy is run. Value must be one of the enum values. Value `manual` means the policy is run manually when an event is raised. Value `automatic` means policy is run automatically when an event is raised.
+          enum:
+          - automatic
+          - manual
+        runnable:
+          $ref: '#/components/schemas/PolicyRunnable'
+      required:
+      - name
+      - runnable
+    PolicyScheduling:
+      type: object
+      description: Scheduling information for a scheduled policy.
+      properties:
+        recurrentRule:
+          type: string
+          description: 'Recurrent Rule defines how the policy recurs, using iCalendar RRULE format (e.g., `FREQ=DAILY;INTERVAL=1`).It supports fields like FREQ, INTERVAL, BYDAY. Refer to RFC 5545: https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10'
+        startTime:
+          type: string
+          format: date-time
+          description: The time to run the policy action in milliseconds since epoch (UTC) (e.g., `1706713140000`).
+      required:
+      - startTime
+    ActionConfiguration:
+      type: object
+      description: List of action configurations.
+      properties:
+        action:
+          $ref: '#/components/schemas/Action'
+        agentId:
+          type: string
+          description: Identifier of the agent host on which to run the action.
+        inputParameterValues:
+          type: array
+          description: List of action input parameters.
+          items:
+            $ref: '#/components/schemas/ParameterValue'
+      required:
+      - action
+    Action:
+      type: object
+      description: Automation action definition. When this is used in policy creation request, only `id` should be specified.
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: Action created time.
+        description:
+          type: string
+          description: Action description.
+          maxLength: 512
+          minLength: 0
+        fields:
+          type: array
+          description: List of fields that describe an action.
+          items:
+            $ref: '#/components/schemas/Field'
+        id:
+          type: string
+          description: Action identifier.
+          maxLength: 128
+          minLength: 1
+        inputParameters:
+          type: array
+          description: List of inputs to the action.
+          items:
+            $ref: '#/components/schemas/Parameter'
+        metadata:
+          $ref: '#/components/schemas/MetaData'
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Action modified time.
+        name:
+          type: string
+          description: Action name.
+          maxLength: 128
+          minLength: 1
+        tags:
+          type: array
+          description: List of tags added to the action.
+          items:
+            type: string
+            description: List of tags added to the action.
+        type:
+          type: string
+          description: 'Action type can be one of the following values:  SCRIPT, HTTP, ANSIBLE, EXTERNAL, GITHUB, GITLAB, JIRA, MANUAL, DOC_LINK'
+          enum:
+          - SCRIPT
+          - HTTP
+          - ANSIBLE
+          - EXTERNAL
+          - GITHUB
+          - GITLAB
+          - JIRA
+          - MANUAL
+          - DOC_LINK
+          maxLength: 128
+          minLength: 0
+      required:
+      - createdAt
+      - id
+      - modifiedAt
+      - name
+      - type
+    Parameter:
+      type: object
+      description: List of inputs to the action.
+      properties:
+        description:
+          type: string
+          description: Parameter description.
+        hidden:
+          type: boolean
+          description: Is parameter hidden or not.
+        label:
+          type: string
+          description: Parameter label.
+        name:
+          type: string
+          description: Parameter name.
+        required:
+          type: boolean
+          description: Is parameter required or not.
+        secured:
+          type: boolean
+          description: Is parameter secured or not.
+        type:
+          type: string
+          description: Parameter type. Valid values are `static`, `dynamic`, or `vault`. Default value is `static`
+        value:
+          type: string
+          description: Parameter value.
+      required:
+      - label
+      - name
+      - type
+    Field:
+      type: object
+      description: List of fields that describe an action.
+      properties:
+        description:
+          type: string
+        encoding:
+          type: string
+        name:
+          type: string
+        secured:
+          type: boolean
+        value:
+          type: string
+      required:
+      - encoding
+      - name
+      - value
+    Policy:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Policy description.
+          maxLength: 512
+          minLength: 0
+        id:
+          type: string
+          description: Policy identifier.
+          maxLength: 128
+          minLength: 1
+          readOnly: true
+        name:
+          type: string
+          description: Policy name.
+          maxLength: 128
+          minLength: 1
+        tags:
+          type: array
+          description: A list of policy tags.
+          items:
+            type: string
+            description: A list of policy tags.
+        trigger:
+          $ref: '#/components/schemas/Trigger'
+        typeConfigurations:
+          type: array
+          description: List of configurations that contains the list of actions to run and the mode (automatic or manual) in which the policy is run.
+          items:
+            $ref: '#/components/schemas/TypeConfiguration'
+      required:
+      - id
+      - name
+      - trigger
+      - typeConfigurations
+    Trigger:
+      type: object
+      description: The trigger is the Instana event or Smart Alert that defines the initial conditions that must be met for the policy to apply on the actions in `typeConfiguration`.
+      properties:
+        description:
+          type: string
+          description: A description for the trigger.
+        id:
+          type: string
+          description: Trigger (Instana event or Smart Alert) identifier.
+        name:
+          type: string
+          description: A name of the trigger (name of Instana event or Smart Alert).
+        scheduling:
+          $ref: '#/components/schemas/PolicyScheduling'
+        type:
+          type: string
+          description: Instana event type, Smart Alert type, or 'schedule'. The type must be one of the enum values.
+          enum:
+          - customEvent
+          - builtinEvent
+          - applicationSmartAlert
+          - globalApplicationSmartAlert
+          - websiteSmartAlert
+          - infraSmartAlert
+          - mobileAppSmartAlert
+          - syntheticsSmartAlert
+          - logSmartAlert
+          - sloSmartAlert
+          - schedule
+      required:
+      - type
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage

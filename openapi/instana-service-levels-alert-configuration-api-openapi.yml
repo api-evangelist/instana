@@ -1,0 +1,1031 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation Service Levels Alert Configuration API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: Service Levels Alert Configuration
+paths:
+  /api/events/settings/global-alert-configs/service-levels:
+    get:
+      description: Configs are sorted descending by their created date.
+      operationId: findActiveServiceLevelsAlertConfigs
+      parameters:
+      - description: Service Levels Objective(SLO) Configuration ID
+        example: SLOEANnWh9tQOa2h88kGxK6wQ
+        in: query
+        name: sloId
+        schema:
+          type: string
+      - description: List of Service Levels Alert Configuration IDs
+        example: ln3IGogYS-S7CPqcOQYTNA
+        in: query
+        name: alertIds
+        schema:
+          type: array
+          items:
+            type: string
+          maxItems: 1000
+          minItems: 0
+          uniqueItems: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                name: Error Budget Remaining is low
+                description: Error Budget Remaining is less than or equal to 5%.
+                severity: 5
+                triggering: true
+                rule:
+                  alertType: ERROR_BUDGET
+                  metric: BURNED_PERCENTAGE
+                threshold:
+                  type: staticThreshold
+                  operator: '>='
+                  value: 0.05
+                  lastUpdated: 1716454787342
+                sloIds:
+                - SLOEANnWh9tQOa2h88kGxK6wQ
+                alertChannelIds: []
+                timeThreshold:
+                  expiry: null
+                  timeWindow: 600000
+                customPayloadFields:
+                - type: staticString
+                  key: foo
+                  value: bar
+                id: ln3IGogYS-S7CPqcOQYTNA
+                created: 1717668384754
+                initialCreated: 1717668384754
+                readOnly: false
+                enabled: true
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceLevelseAlertConfigWithMetadata'
+          description: Fetched list of the Service Level Alert Configurations Successfully
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: All Service levels Alert Configs
+      tags:
+      - Service Levels Alert Configuration
+      x-ibm-ahub-byok: true
+    post:
+      operationId: createServiceLevelsAlertConfig
+      requestBody:
+        content:
+          application/json:
+            example:
+              alertChannelIds: []
+              customPayloadFields:
+              - key: foo
+                id: avvh9tbxpfRE65t
+                type: staticString
+                value: bar
+              description: Error Budget Remaining is less than or equal to 5%.
+              name: Error Budget Remaining is low
+              rule:
+                alertType: ERROR_BUDGET
+                metric: BURNED_PERCENTAGE
+              severity: 5
+              sloIds:
+              - SLOEANnWh9tQOa2h88kGxK6wQ
+              threshold:
+                type: staticThreshold
+                value: 0.05
+                operator: '>='
+                lastUpdated: 1716454787342
+              timeThreshold:
+                timeWindow: 600000
+              triggering: true
+            schema:
+              $ref: '#/components/schemas/ServiceLevelsAlertConfig'
+        description: Create Request Body
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                name: Error Budget Remaining is low
+                description: Error Budget Remaining is less than or equal to 5%.
+                severity: 5
+                triggering: true
+                rule:
+                  alertType: ERROR_BUDGET
+                  metric: BURNED_PERCENTAGE
+                threshold:
+                  type: staticThreshold
+                  operator: '>='
+                  value: 0.05
+                  lastUpdated: 1716454787342
+                sloIds:
+                - SLOEANnWh9tQOa2h88kGxK6wQ
+                alertChannelIds: []
+                timeThreshold:
+                  expiry: null
+                  timeWindow: 600000
+                customPayloadFields:
+                - type: staticString
+                  key: foo
+                  value: bar
+                id: ln3IGogYS-S7CPqcOQYTNA
+                created: 1717668384754
+                initialCreated: 1717668384754
+                readOnly: false
+                enabled: true
+              schema:
+                $ref: '#/components/schemas/ServiceLevelseAlertConfigWithMetadata'
+          description: Created new Service Levels Alert Configuration Successfully
+        '400':
+          content:
+            application/json:
+              example:
+                errors:
+                - Website SLOs do not support triggering -> true
+              schema:
+                type: array
+                items:
+                  type: string
+          description: Service levels Alert Config with Website SLOs do not support triggering
+      security:
+      - ApiKeyAuth:
+        - canConfigureServiceLevelSmartAlerts
+      summary: Create Service levels Alert Config
+      tags:
+      - Service Levels Alert Configuration
+      x-ibm-ahub-byok: true
+  /api/events/settings/global-alert-configs/service-levels/{id}:
+    delete:
+      operationId: deleteServiceLevelsAlertConfig
+      parameters:
+      - description: Service Levels Alert Configuration ID
+        example: ln3IGogYS-S7CPqcOQYTNA
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Service Levels Alert Configuration Deleted Successfully
+        '404':
+          content:
+            application/json:
+              example: '{"errors":["Config with id: -DZZjflTQTmZ7yGvBilPlQ is not found"]}'
+              schema:
+                type: string
+          description: Service levels Alert Config with given ID not found
+      security:
+      - ApiKeyAuth:
+        - canConfigureServiceLevelSmartAlerts
+      summary: Delete Service levels Alert Config
+      tags:
+      - Service Levels Alert Configuration
+      x-ibm-ahub-byok: true
+    get:
+      description: Find a Service levels Alert Config by ID. This will deliver deleted configs too.
+      operationId: findServiceLevelsAlertConfig
+      parameters:
+      - description: Service Levels Alert Configuration ID
+        example: ln3IGogYS-S7CPqcOQYTNA
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - description: Service Levels Alert Version Creation Date
+        example: 1706617456952
+        in: query
+        name: validOn
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                name: Error Budget Remaining is low
+                description: Error Budget Remaining is less than or equal to 5%.
+                severity: 5
+                triggering: true
+                rule:
+                  alertType: ERROR_BUDGET
+                  metric: BURNED_PERCENTAGE
+                threshold:
+                  type: staticThreshold
+                  operator: '>='
+                  value: 0.05
+                  lastUpdated: 1716454787342
+                sloIds:
+                - SLOEANnWh9tQOa2h88kGxK6wQ
+                alertChannelIds: []
+                timeThreshold:
+                  expiry: null
+                  timeWindow: 600000
+                customPayloadFields:
+                - type: staticString
+                  key: foo
+                  value: bar
+                id: ln3IGogYS-S7CPqcOQYTNA
+                created: 1717668384754
+                initialCreated: 1717668384754
+                readOnly: false
+                enabled: true
+              schema:
+                $ref: '#/components/schemas/ServiceLevelseAlertConfigWithMetadata'
+          description: Fetched Service Level Alert Configuration Successfully
+        '404':
+          content:
+            application/json:
+              example: '{"errors":["Config with id: -DZZjflTQTmZ7yGvBilPlQ is not found"]}'
+              schema:
+                type: string
+          description: Service levels Alert Config with given ID not found
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get Service levels Alert Config
+      tags:
+      - Service Levels Alert Configuration
+      x-ibm-ahub-byok: true
+    post:
+      operationId: updateServiceLevelsAlertConfig
+      parameters:
+      - description: Service Levels Alert Configuration ID
+        example: ln3IGogYS-S7CPqcOQYTNA
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              alertChannelIds: []
+              customPayloadFields:
+              - key: foo
+                id: avvh9tbxpfRE65t
+                type: staticString
+                value: bar
+              description: Error Budget Remaining is less than or equal to 5%.
+              name: Error Budget Remaining is low
+              rule:
+                alertType: ERROR_BUDGET
+                metric: BURNED_PERCENTAGE
+              severity: 5
+              sloIds:
+              - SLOEANnWh9tQOa2h88kGxK6wQ
+              threshold:
+                type: staticThreshold
+                value: 0.05
+                operator: '>='
+                lastUpdated: 1716454787342
+              timeThreshold:
+                timeWindow: 600000
+              triggering: true
+            schema:
+              $ref: '#/components/schemas/ServiceLevelsAlertConfig'
+        description: Update Request Body
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                name: Error Budget Remaining is low
+                description: Error Budget Remaining is less than or equal to 5%.
+                severity: 5
+                triggering: true
+                rule:
+                  alertType: ERROR_BUDGET
+                  metric: BURNED_PERCENTAGE
+                threshold:
+                  type: staticThreshold
+                  operator: '>='
+                  value: 0.05
+                  lastUpdated: 1716454787342
+                sloIds:
+                - SLOEANnWh9tQOa2h88kGxK6wQ
+                alertChannelIds: []
+                timeThreshold:
+                  expiry: null
+                  timeWindow: 600000
+                customPayloadFields:
+                - type: staticString
+                  key: foo
+                  value: bar
+                id: ln3IGogYS-S7CPqcOQYTNA
+                created: 1717668384754
+                initialCreated: 1717668384754
+                readOnly: false
+                enabled: true
+              schema:
+                $ref: '#/components/schemas/ServiceLevelseAlertConfigWithMetadata'
+          description: Updated Service Levels Alert Configuration Successfully
+        '204':
+          description: Service Levels Smart Alert Configuration did not change
+        '400':
+          content:
+            application/json:
+              example:
+                errors:
+                - Website SLOs do not support triggering -> true
+              schema:
+                type: array
+                items:
+                  type: string
+          description: Service levels Alert Config with Website SLOs do not support triggering
+      security:
+      - ApiKeyAuth:
+        - canConfigureServiceLevelSmartAlerts
+      summary: Update Service levels Alert Config
+      tags:
+      - Service Levels Alert Configuration
+      x-ibm-ahub-byok: true
+  /api/events/settings/global-alert-configs/service-levels/{id}/disable:
+    put:
+      operationId: disableServiceLevelsAlertConfig
+      parameters:
+      - description: Service Levels Alert Configuration ID
+        example: ln3IGogYS-S7CPqcOQYTNA
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '204':
+          description: Service Levels Alert Configuration Disabled Successfully
+        '404':
+          content:
+            application/json:
+              example: '{"errors":["Config with id: -DZZjflTQTmZ7yGvBilPlQ is not found"]}'
+              schema:
+                type: string
+          description: Service levels Alert Config with given ID not found
+      security:
+      - ApiKeyAuth:
+        - canConfigureServiceLevelSmartAlerts
+      summary: Disable Service levels Alert Config
+      tags:
+      - Service Levels Alert Configuration
+      x-ibm-ahub-byok: true
+  /api/events/settings/global-alert-configs/service-levels/{id}/enable:
+    put:
+      operationId: enableServiceLevelsAlertConfig
+      parameters:
+      - description: Service Levels Alert Configuration ID
+        example: ln3IGogYS-S7CPqcOQYTNA
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '204':
+          description: Service Levels Alert Configuration Enabled Successfully
+        '404':
+          content:
+            application/json:
+              example: '{"errors":["Config with id: -DZZjflTQTmZ7yGvBilPlQ is not found"]}'
+              schema:
+                type: string
+          description: Service levels Alert Config with given ID not found
+      security:
+      - ApiKeyAuth:
+        - canConfigureServiceLevelSmartAlerts
+      summary: Enable Service levels Alert Config
+      tags:
+      - Service Levels Alert Configuration
+      x-ibm-ahub-byok: true
+  /api/events/settings/global-alert-configs/service-levels/{id}/restore/{created}:
+    put:
+      operationId: restoreServiceLevelsAlertConfig
+      parameters:
+      - description: Service Levels Alert Configuration ID
+        example: ln3IGogYS-S7CPqcOQYTNA
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - description: Service Levels Alert Version Creation Date
+        example: 1706617456952
+        in: path
+        name: created
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '204':
+          description: Service Levels Alert Configuration Restored Successfully
+        '404':
+          content:
+            application/json:
+              example: '{"errors":["Config with id: -DZZjflTQTmZ7yGvBilPlQ is not found"]}'
+              schema:
+                type: string
+          description: Service levels Alert Config with given ID not found
+      security:
+      - ApiKeyAuth:
+        - canConfigureServiceLevelSmartAlerts
+      summary: Restore Service levels Alert Config
+      tags:
+      - Service Levels Alert Configuration
+      x-ibm-ahub-byok: true
+  /api/events/settings/global-alert-configs/service-levels/{id}/versions:
+    get:
+      description: Find all versions of a Service levels Alert Config by ID. This will deliver deleted configs too. Configs are sorted descending by their created date.
+      operationId: findServiceLevelsAlertConfigVersions
+      parameters:
+      - description: Service Levels Alert Configuration ID
+        example: ln3IGogYS-S7CPqcOQYTNA
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: ln3IGogYS-S7CPqcOQYTNA
+                created: 1717507017767
+                enabled: false
+                deleted: false
+                changeSummary:
+                  changeType: DISABLE
+                  author:
+                    id: SCzqyU_LTtmO9CCnvvVOAg
+                    type: API
+                    fullName: userToken
+              - id: ln3IGogYS-S7CPqcOQYTNA
+                created: 1717506979607
+                enabled: true
+                deleted: false
+                changeSummary:
+                  changeType: CREATE
+                  author:
+                    id: SCzqyU_LTtmO9CCnvvVOAg
+                    type: API
+                    fullName: userToken
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConfigVersion'
+          description: Fetched list of Service Level Alert Configuration Versions Successfully
+        '404':
+          content:
+            application/json:
+              example: '{"errors":["Config with id: -DZZjflTQTmZ7yGvBilPlQ is not found"]}'
+              schema:
+                type: string
+          description: Service levels Alert Config with given ID not found
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get versions of Service levels Alert Config
+      tags:
+      - Service Levels Alert Configuration
+      x-ibm-ahub-byok: true
+components:
+  schemas:
+    ServiceLevelseAlertConfigWithMetadata:
+      type: object
+      properties:
+        alertChannelIds:
+          type: array
+          description: This is the list of channel IDs when alert triggered and sent to.
+          items:
+            type: string
+            description: This is the list of channel IDs when alert triggered and sent to.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        burnRateConfig:
+          type: array
+          description: This is the burn rate alert configuration which defines alerting windows and corresponding thresholds. This configuration must to specified for BURN_RATE_V2 Alerts.
+          items:
+            $ref: '#/components/schemas/ServiceLevelsBurnRateConfig'
+          uniqueItems: true
+        burnRateTimeWindows:
+          $ref: '#/components/schemas/ServiceLevelsBurnRateTimeWindows'
+        created:
+          type: integer
+          format: int64
+          description: Created Date of the version of Service Levels Smart Alerts Configuration.
+          minimum: 1
+        customPayloadFields:
+          type: array
+          description: This is the custom name and value pairs to be sent along with the alert to the alert channels.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        description:
+          type: string
+          description: The description of the alert. It is also the alert message content.
+          maxLength: 65536
+          minLength: 0
+        enabled:
+          type: boolean
+          description: Boolean Parameter specifying the enabled state of Service Levels Smart Alerts Configuration.
+        id:
+          type: string
+          description: Unique ID of the Service Levels Smart Alerts Configuration.
+          maxLength: 64
+          minLength: 0
+        initialCreated:
+          type: integer
+          format: int64
+          description: Created Date of the Initial version of Service Levels Smart Alerts Configuration.
+          minimum: 1
+        name:
+          type: string
+          description: Name of the Service Levels Smart Alerts Configuration.
+          maxLength: 256
+          minLength: 0
+        readOnly:
+          type: boolean
+          description: Boolean Parameter specifying the readonly access to Service Levels Smart Alerts Configuration.
+        rule:
+          $ref: '#/components/schemas/ServiceLevelsAlertRule'
+        severity:
+          type: integer
+          format: int32
+          description: 'This is the severity of the alert. The value can be: <b>5</b>: warning, <b>10</b>: critical.'
+        sloIds:
+          type: array
+          description: This is the list of SLO configurations related to this alert.
+          items:
+            type: string
+            description: This is the list of SLO configurations related to this alert.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        threshold:
+          $ref: '#/components/schemas/StaticThreshold'
+        timeThreshold:
+          $ref: '#/components/schemas/ServiceLevelsTimeThreshold'
+        triggering:
+          type: boolean
+          description: Incident flag. If value is true, this alert will become an accident.
+      required:
+      - alertChannelIds
+      - customPayloadFields
+      - description
+      - id
+      - name
+      - rule
+      - severity
+      - sloIds
+      - timeThreshold
+    Author:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - API
+          - USER
+          - INSTANA
+          - UNKNOWN
+    CustomPayloadField:
+      type: object
+      description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+      discriminator:
+        mapping:
+          dynamic: '#/components/schemas/DynamicField'
+          staticString: '#/components/schemas/StaticStringField'
+        propertyName: type
+      properties:
+        key:
+          type: string
+          description: A user-specified unique identifier or name for a custom payload entry.
+        type:
+          type: string
+      required:
+      - key
+      - type
+    ConfigVersion:
+      type: object
+      properties:
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummary'
+        created:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the creation time of this revision.
+          minimum: 1
+        deleted:
+          type: boolean
+          deprecated: true
+          description: Flag to indicate whether or not the configuration was deleted.
+        enabled:
+          type: boolean
+          deprecated: true
+          description: Flag to indicate whether or not the configuration is enabled.
+        id:
+          type: string
+          description: ID of this configuration version.
+          maxLength: 64
+          minLength: 0
+      required:
+      - id
+    ChangeSummary:
+      type: object
+      description: Brief summary of changes made in this config version.
+      properties:
+        author:
+          $ref: '#/components/schemas/Author'
+        changeType:
+          type: string
+          enum:
+          - CREATE
+          - UPDATE
+          - DELETE
+          - ENABLE
+          - DISABLE
+          - RESTORE
+          - UNKNOWN
+      required:
+      - author
+      - changeType
+    ServiceLevelsAlertConfig:
+      type: object
+      properties:
+        alertChannelIds:
+          type: array
+          description: This is the list of channel IDs when alert triggered and sent to.
+          items:
+            type: string
+            description: This is the list of channel IDs when alert triggered and sent to.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        burnRateConfig:
+          type: array
+          description: This is the burn rate alert configuration which defines alerting windows and corresponding thresholds. This configuration must to specified for BURN_RATE_V2 Alerts.
+          items:
+            $ref: '#/components/schemas/ServiceLevelsBurnRateConfig'
+          uniqueItems: true
+        burnRateTimeWindows:
+          $ref: '#/components/schemas/ServiceLevelsBurnRateTimeWindows'
+        customPayloadFields:
+          type: array
+          description: This is the custom name and value pairs to be sent along with the alert to the alert channels.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        description:
+          type: string
+          description: The description of the alert. It is also the alert message content.
+          maxLength: 65536
+          minLength: 0
+        name:
+          type: string
+          description: Name of the Service Levels Smart Alerts Configuration.
+          maxLength: 256
+          minLength: 0
+        rule:
+          $ref: '#/components/schemas/ServiceLevelsAlertRule'
+        severity:
+          type: integer
+          format: int32
+          description: 'This is the severity of the alert. The value can be: <b>5</b>: warning, <b>10</b>: critical.'
+        sloIds:
+          type: array
+          description: This is the list of SLO configurations related to this alert.
+          items:
+            type: string
+            description: This is the list of SLO configurations related to this alert.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        threshold:
+          $ref: '#/components/schemas/StaticThreshold'
+        timeThreshold:
+          $ref: '#/components/schemas/ServiceLevelsTimeThreshold'
+        triggering:
+          type: boolean
+          description: Incident flag. If value is true, this alert will become an accident.
+      required:
+      - alertChannelIds
+      - customPayloadFields
+      - description
+      - name
+      - rule
+      - severity
+      - sloIds
+      - timeThreshold
+    ServiceLevelsStaticThresholdConfig:
+      type: object
+      description: This threshold defines a static value to be evaluated with a specific operator for burn rate v2 alerts.
+      properties:
+        lastUpdated:
+          type: integer
+          format: int64
+          minimum: 0
+        operator:
+          type: string
+          enum:
+          - '>'
+          - '>='
+          - <
+          - <=
+        value:
+          type: number
+          format: double
+          minimum: 0
+      required:
+      - operator
+    ServiceLevelsBurnRateConfig:
+      type: object
+      description: This is the burn rate alert configuration which defines alerting windows and corresponding thresholds. This configuration must to specified for BURN_RATE_V2 Alerts.
+      properties:
+        alertWindowType:
+          type: string
+          description: 'Specifies the Burn Rate Alerting Window type: SINGLE for single window/threshold alerts, or LONG and SHORT for multi-window/threshold alerts.'
+          enum:
+          - SINGLE
+          - LONG
+          - SHORT
+        duration:
+          type: integer
+          format: int32
+          description: Duration of the Burn Rate Alerting Window.
+        durationUnitType:
+          type: string
+          description: Duration Unit Type of the Burn Rate Alerting Window.
+          enum:
+          - millisecond
+          - second
+          - minute
+          - hour
+          - day
+          - week
+          - month
+        threshold:
+          $ref: '#/components/schemas/ServiceLevelsStaticThresholdConfig'
+      required:
+      - duration
+      - durationUnitType
+      - threshold
+    StaticThreshold:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Threshold'
+      - type: object
+        properties:
+          lastUpdated:
+            type: integer
+            format: int64
+            minimum: 0
+          value:
+            type: number
+            format: double
+            minimum: 0
+      description: This threshold defines a static value to be evaluated with a specific operator.
+      required:
+      - operator
+    ServiceLevelsBurnRateTimeWindows:
+      type: object
+      deprecated: true
+      description: This is the short and long time window setting for the burn rate alerts.
+      properties:
+        longTimeWindow:
+          $ref: '#/components/schemas/AlertingTimeWindow'
+        shortTimeWindow:
+          $ref: '#/components/schemas/AlertingTimeWindow'
+    ServiceLevelsTimeThreshold:
+      type: object
+      description: This is the warm-up and cool-down setting to emit or stop alert event after threshold reached.
+      properties:
+        expiry:
+          type: integer
+          format: int64
+          description: This is the cooldown period when the active alert misses threshold and stop emitting notification.
+        timeWindow:
+          type: integer
+          format: int64
+          description: This is the grace period when the threshold is reached and the alert becomes active to emit notification.
+      required:
+      - expiry
+      - timeWindow
+    ServiceLevelsAlertRule:
+      type: object
+      description: This is the service levels alert type. It could be error budget alert or service levels object alert.
+      discriminator:
+        mapping:
+          ERROR_BUDGET: '#/components/schemas/ErrorBudgetAlertRule'
+          SERVICE_LEVELS_OBJECTIVE: '#/components/schemas/ServiceLevelObjectiveAlertRule'
+        propertyName: alertType
+      properties:
+        alertType:
+          type: string
+      required:
+      - alertType
+    AlertingTimeWindow:
+      type: object
+      properties:
+        duration:
+          type: integer
+          format: int32
+        durationType:
+          type: string
+          enum:
+          - millisecond
+          - second
+          - minute
+          - hour
+          - day
+          - week
+          - month
+        durationUnit:
+          type: string
+          enum:
+          - millisecond
+          - second
+          - minute
+          - hour
+          - day
+          - week
+          - month
+          writeOnly: true
+      required:
+      - duration
+      - durationType
+    Threshold:
+      type: object
+      deprecated: true
+      description: Indicates the type of threshold this alert rule is evaluated on.
+      discriminator:
+        mapping:
+          adaptiveBaseline: '#/components/schemas/AdaptiveBaseline'
+          historicBaseline: '#/components/schemas/HistoricBaseline'
+          staticThreshold: '#/components/schemas/StaticThreshold'
+        propertyName: type
+      properties:
+        operator:
+          type: string
+          enum:
+          - '>'
+          - '>='
+          - <
+          - <=
+        type:
+          type: string
+      required:
+      - operator
+      - type
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage

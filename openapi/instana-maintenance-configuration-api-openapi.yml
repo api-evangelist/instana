@@ -1,0 +1,990 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation Maintenance Configuration API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: Maintenance Configuration
+  description: "### Maintenance Windows\nMaintenance windows allow you to mute alerts.\n\n### Types of Maintenance Configurations\n**One-Time**: Executed once at a fixed scheduled time, after which the configuration expires.\n\n**Recurrent**: Executed on a schedule basis (e.g., daily, weekly, monthly, or yearly).\n\n### Pausing or Resuming Maintenance Configurations\nMaintenance windows can be paused or resumed.\n\nIf a maintenance configuration is paused, alerts for the events matching the scope of the configuration will no longer be muted. \n"
+paths:
+  /api/settings/maintenance:
+    get:
+      deprecated: true
+      description: '
+
+        For more information on Maintenance Configurations please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#maintenance-configurations.'
+      operationId: getMaintenanceConfigs
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidatedMaintenanceConfigWithStatus'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMaintenanceWindows
+      summary: All maintenance configurations
+      tags:
+      - Maintenance Configuration
+      x-ibm-ahub-byok: true
+  /api/settings/maintenance/{id}:
+    delete:
+      deprecated: true
+      description: '
+
+        For more information on Maintenance Configurations please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#maintenance-configurations.'
+      operationId: deleteMaintenanceConfig
+      parameters:
+      - description: ID of the Maintenance Window Configuration to delete.
+        example: MPhKWoXRp0PBelqk
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMaintenanceWindows
+      summary: Delete maintenance configuration
+      tags:
+      - Maintenance Configuration
+      x-ibm-ahub-byok: true
+    get:
+      deprecated: true
+      description: '
+
+        For more information on Maintenance Configurations please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#maintenance-configurations.'
+      operationId: getMaintenanceConfig
+      parameters:
+      - description: ID of the Maintenance Window Configuration to get.
+        example: MPhKWoXRp0PBelqk
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaintenanceConfigWithLastUpdated'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMaintenanceWindows
+      summary: Maintenance configuration
+      tags:
+      - Maintenance Configuration
+      x-ibm-ahub-byok: true
+    put:
+      deprecated: true
+      description: '
+
+        For more information on Maintenance Configurations please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#maintenance-configurations.'
+      operationId: putMaintenanceConfig
+      parameters:
+      - description: ID of the Maintenance Window Configuration to update.
+        example: MPhKWoXRp0PBelqk
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaintenanceConfig'
+        required: true
+      responses:
+        '200':
+          description: Maintenance config has been created or updated, and successfully scheduled immediately if needed
+        '202':
+          description: Maintenance config has been created or updated, but could not to be scheduled immediately. It will therefore be scheduled during the next auto-refresh with a delay of up to 4 minutes.
+        '400':
+          description: Invalid JSON or mismatching IDs have been provided
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMaintenanceWindows
+      summary: Create or update maintenance configuration
+      tags:
+      - Maintenance Configuration
+      x-ibm-ahub-byok: true
+  /api/settings/v2/maintenance:
+    get:
+      operationId: getMaintenanceConfigsV2
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: maintenanceConfigId
+                name: maintenanceConfig
+                query: entity.application.id:"anApplicationId"
+                scheduling:
+                  start: 1680703219486
+                  duration:
+                    amount: 2
+                    unit: HOURS
+                  rrule: FREQ=DAILY;INTERVAL=1;COUNT=1
+                  timezoneId: UTC
+                  type: RECURRENT
+                paused: false
+                lastUpdated: 1680703219678
+                state: EXPIRED
+                validVersion: 1
+                occurrence:
+                  start: 1680703219000
+                  end: 1680710419000
+                invalid: false
+                applicationNames:
+                - anApplicationName
+              - id: anotherMaintenanceConfigId
+                name: anotherMaintenanceConfig
+                query: entity.type:ibmz.db2
+                scheduling:
+                  start: 1680703219486
+                  duration:
+                    amount: 2
+                    unit: HOURS
+                  rrule: FREQ=DAILY;INTERVAL=1;COUNT=1
+                  timezoneId: UTC
+                  type: RECURRENT
+                paused: false
+                lastUpdated: 1680703219678
+                state: EXPIRED
+                validVersion: 1
+                occurrence:
+                  start: 1680703219000
+                  end: 1680710419000
+                invalid: false
+                applicationNames: []
+              - id: '1698949644924'
+                name: sampleMaintenanceConfig
+                query: ''
+                scheduling:
+                  start: 1698949644924
+                  duration:
+                    amount: 2
+                    unit: HOURS
+                  rrule: FREQ=WEEKLY;INTERVAL=2;BYDAY=SA;COUNT=10
+                  timezoneId: America/New_York
+                  type: RECURRENT
+                paused: false
+                validVersion: 1
+                tagFilterExpression:
+                  type: EXPRESSION
+                  logicalOperator: OR
+                  elements:
+                  - type: TAG_FILTER
+                    name: synthetic.locationLabelAggregated
+                    stringValue: us-east
+                    numberValue: null
+                    booleanValue: null
+                    key: null
+                    value: us-east
+                    operator: EQUALS
+                    entity: NOT_APPLICABLE
+                  - type: TAG_FILTER
+                    name: synthetic.syntheticType
+                    stringValue: HTTPScript
+                    numberValue: null
+                    booleanValue: null
+                    key: null
+                    value: HTTPScript
+                    operator: EQUALS
+                    entity: NOT_APPLICABLE
+                tagFilterExpressionEnabled: true
+                retriggerOpenAlertsEnabled: true
+                lastUpdated: 1698949645163
+                state: SCHEDULED
+                occurrence:
+                  start: 1699122444000
+                  end: 1699129644000
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidatedMaintenanceConfigV2WithStateAndOccurrence'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMaintenanceWindows
+      summary: All maintenance configurations
+      tags:
+      - Maintenance Configuration
+      x-ibm-ahub-byok: true
+      description: 'This endpoint retrieves all available maintenance configurations.  '
+  /api/settings/v2/maintenance/{id}:
+    delete:
+      operationId: deleteMaintenanceConfigV2
+      parameters:
+      - description: Id of the Maintenance Window configuration to delete.
+        example: 8924aa6b
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMaintenanceWindows
+      summary: Delete maintenance configuration
+      tags:
+      - Maintenance Configuration
+      x-ibm-ahub-byok: true
+      description: 'This endpoint deletes a maintenance configuration given its ID.
+
+
+        ### Path Parameters:
+
+
+        - **id:** The ID of the maintenance config to delete.'
+    get:
+      operationId: getMaintenanceConfigV2
+      parameters:
+      - description: Id of the Maintenance Window Configuration to get.
+        example: 8924aa6b
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: maintenanceConfigId
+                name: maintenanceConfig
+                query: ''
+                scheduling:
+                  start: 1683864000000
+                  duration:
+                    amount: 24
+                    unit: HOURS
+                  type: ONE_TIME
+                paused: false
+                validVersion: 1
+                lastUpdated: 1683901553115
+                state: EXPIRED
+                occurrence:
+                  start: 1683864000000
+                  end: 1683950400000
+              schema:
+                $ref: '#/components/schemas/MaintenanceConfigV2WithStateAndOccurrence'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMaintenanceWindows
+      summary: Get maintenance configuration
+      tags:
+      - Maintenance Configuration
+      x-ibm-ahub-byok: true
+      description: 'This endpoint retrieves a maintenance configuration given its ID.
+
+
+        ### Path Parameters:
+
+
+        - **id:** The ID of the maintenance config to fetch.'
+    put:
+      operationId: putMaintenanceConfigV2
+      parameters:
+      - description: Id of the Maintenance Window configuration to update.
+        example: 8924aa6b
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaintenanceConfigV2'
+            examples:
+              payload:
+                value:
+                  id: maintenanceConfigID
+                  name: sampleMaintenanceConfig
+                  query: ''
+                  scheduling:
+                    start: 1683827571245
+                    duration:
+                      amount: 2
+                      unit: HOURS
+                    type: RECURRENT
+                    rrule: FREQ=WEEKLY;INTERVAL=2;BYDAY=SA;COUNT=10
+                    timezoneId: America/New_York
+                  tagFilterExpressionEnabled: true
+                  tagFilterExpression:
+                    type: EXPRESSION
+                    logicalOperator: OR
+                    elements:
+                    - type: TAG_FILTER
+                      name: synthetic.locationLabelAggregated
+                      stringValue: us-east
+                      numberValue: null
+                      booleanValue: null
+                      key: null
+                      value: us-east
+                      operator: EQUALS
+                      entity: NOT_APPLICABLE
+                    - type: TAG_FILTER
+                      name: synthetic.syntheticType
+                      stringValue: HTTPScript
+                      numberValue: null
+                      booleanValue: null
+                      key: null
+                      value: HTTPScript
+                      operator: EQUALS
+                      entity: NOT_APPLICABLE
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: maintenanceConfigId
+                name: maintenanceConfig
+                query: ''
+                scheduling:
+                  start: 1698938631036
+                  duration:
+                    amount: 2
+                    unit: HOURS
+                  type: ONE_TIME
+                paused: false
+                validVersion: 1
+                tagFilterExpression:
+                  type: EXPRESSION
+                  logicalOperator: OR
+                  elements:
+                  - type: TAG_FILTER
+                    name: synthetic.locationLabelAggregated
+                    stringValue: us-east
+                    numberValue: null
+                    booleanValue: null
+                    key: null
+                    value: us-east
+                    operator: EQUALS
+                    entity: NOT_APPLICABLE
+                  - type: TAG_FILTER
+                    name: synthetic.syntheticType
+                    stringValue: HTTPScript
+                    numberValue: null
+                    booleanValue: null
+                    key: null
+                    value: HTTPScript
+                    operator: EQUALS
+                    entity: NOT_APPLICABLE
+                tagFilterExpressionEnabled: true
+                retriggerOpenAlertsEnabled: true
+                lastUpdated: 1698938631408
+                state: ACTIVE
+                occurrence:
+                  start: 1698938631036
+                  end: 1698945831036
+          description: Maintenance config has been created or updated, and successfully scheduled immediately if needed
+        '202':
+          description: Maintenance config has been created or updated, but could not to be scheduled immediately. It will therefore be scheduled during the next auto-refresh with a delay of up to 4 minutes.
+        '400':
+          description: The provided maintenance configuration is invalid.
+        '422':
+          description: The provided maintenance configuration is incomplete or cannot be processed.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMaintenanceWindows
+      summary: Create or update maintenance configuration
+      tags:
+      - Maintenance Configuration
+      x-ibm-ahub-byok: true
+      description: "This endpoint creates or updates a maintenance configuration given its ID.\n\n### Path Parameters:\n\n- **id:** The ID of the maintenance config to create or update.\n\n### Maintenance Configuration Input\nThis is a description for the fields in the request body:\n\n**id**: maintenance configuration unique id  \n**name**: maintenance configuration name  \n**query**: dynamic focus query used to filter alert notifications that will be muted  \n**scheduling**: defines when the maintenance configuration will be scheduled\n- **start**: time in milliseconds from epoch\n- **duration**: duration of each maintenance window occurrence in the maintenance configuration\n    - **amount**: the amount of time\n    - **unit**: the unit of time\n- **type**: `ONE_TIME` or `RECURRENT`\n- **rrule**:  for `RECURRENT` mainteance configurations, the RRULE standard from the [iCalendar Spec](https://datatracker.ietf.org/doc/html/rfc5545)\n- **paused**: indicates whether maintenance configuration is paused or not  \n\n**tagFilterExpressionEnabled (OPTIONAL) (Closed Beta)**: indicates whether tagFilterExpression is used to filter alert notifications  \n**tagFilterExpression (OPTIONAL) (Closed Beta)**: tag filter expression used to filter alert notifications that will be muted (this field needs to be provided if **tagFilterExpressionEnabled** is set to true) \n\n### **Scope**\nThere are four supported scopes; application perspective, dynamic focus query, synthetic tests, all entities. Below is the configuration corresponding to each scope:\n\n**1. Application Perspective**  \n&nbsp;&nbsp; dfq: a valid dynamic focus query  \n&nbsp;&nbsp; tfeEnabled: (optional)  \n&nbsp;&nbsp; tfe: (optional)  \n\n**2. Dynamic Focus Query**  \n&nbsp;&nbsp; dfq: a valid dynamic focus query  \n&nbsp;&nbsp; tfeEnabled: (optional)  \n&nbsp;&nbsp; tfe: (optional)  \n\n**3. Synthetic Tests**  \n&nbsp;&nbsp; dfq: \"\"  \n&nbsp;&nbsp; tfeEnabled: true  \n&nbsp;&nbsp; tfe: a valid tag filter expression  \n\n**4. All Entities**  \n&nbsp;&nbsp; dfq: \"\"  \n&nbsp;&nbsp; tfeEnabled: false  \n&nbsp;&nbsp; tfe: null\n\n### **RRULE Support**\nYou can use the [RRULE tool](https://icalendar.org/rrule-tool.html) for generating RRULEs.\n\n\nThe following RRULE tokens are supported: `FREQ`, `UNTIL`, `COUNT`, `INTERVAL`, `BYDAY`, `BYMONTHDAY`, `BYMONTH`.\n\n**Additional Constraints:**\n\n1. For `MONTHLY` and `YEARLY`, you can only specify one value for `BYDAY` and `BYMONTHDAY`.  \n2. The maximum `INTERVAL` allowed is as follows:  \n    - DAILY is 365\n    - WEEKLY is 52\n    - MONTHLY is 12\n    - YEARLY is 1\n3. If an `UNTIL` date is specified, the value needs to be in UTC.\n\n### **Tag Filter Expression Support**\nWe support the following tag filters:\n- synthetic.syntheticType\n- synthetic.testName\n- synthetic.locationLabelAggregated\n- synthetic.tags"
+  /api/settings/v2/maintenance/{id}/pause:
+    put:
+      operationId: pauseRecurrentMaintenanceConfiguration
+      parameters:
+      - description: Id of the Maintenance Window configuration to pause.
+        example: 8924aa6b
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: maintenanceConfigId
+                name: maintenanceConfig
+                query: entity.application.id:"anApplicationId"
+                scheduling:
+                  start: 1684251745262
+                  duration:
+                    amount: 2
+                    unit: HOURS
+                  type: ONE_TIME
+                paused: true
+                validVersion: 1
+                lastUpdated: 1684251750475
+                state: PAUSED
+                occurrence:
+                  start: 1684251745262
+                  end: 1684258945262
+              schema:
+                $ref: '#/components/schemas/MaintenanceConfigV2WithStateAndOccurrence'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMaintenanceWindows
+      summary: Pause maintenance configuration
+      tags:
+      - Maintenance Configuration
+      x-ibm-ahub-byok: true
+      description: 'This endpoint pauses a maintenance configuration given its ID.
+
+
+        When you pause a maintenance configuration, you will start receiving alerts again for the scope defined in the maintenance configuration.
+
+        ### Path Parameters:
+
+
+        - **id:** The ID of the maintenance config to pause.
+
+        '
+  /api/settings/v2/maintenance/{id}/resume:
+    put:
+      operationId: resumeRecurrentMaintenanceConfiguration
+      parameters:
+      - description: Id of the Maintenance Window configuration to resume.
+        example: 8924aa6b
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: maintenanceConfigId
+                name: maintenanceConfig
+                query: entity.application.id:"anApplicationId"
+                scheduling:
+                  start: 1684251745262
+                  duration:
+                    amount: 2
+                    unit: HOURS
+                  type: ONE_TIME
+                paused: false
+                validVersion: 1
+                lastUpdated: 1684251933433
+                state: ACTIVE
+                occurrence:
+                  start: 1684251745262
+                  end: 1684258945262
+              schema:
+                $ref: '#/components/schemas/MaintenanceConfigV2WithStateAndOccurrence'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMaintenanceWindows
+      summary: Resume maintenance configuration
+      tags:
+      - Maintenance Configuration
+      x-ibm-ahub-byok: true
+      description: 'This endpoint resumes a maintenance configuration given its ID.
+
+
+        If the maintenance configuration becomes active when you resume the maintenance configuration, you will not receive alerts for the scope defined in the maintenance configuration.
+
+        ### Path Parameters:
+
+
+        - **id:** The ID of the maintenance config to resume.
+
+        '
+components:
+  schemas:
+    MaintenanceConfigV2:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the Maintenance Window configuration.
+          maxLength: 64
+          minLength: 0
+        name:
+          type: string
+          description: Name of the Maintenance Window configuration.
+          maxLength: 256
+          minLength: 0
+        paused:
+          type: boolean
+          description: Boolean flag to determine if the Maintenance Window configuration is paused or still live.
+        query:
+          type: string
+          description: Dynamic Focus Query that determines the scope of the Maintenance Window configuration.
+          maxLength: 2048
+          minLength: 0
+        retriggerOpenAlertsEnabled:
+          type: boolean
+          description: Boolean flag to determine if we should retrigger open alerts to be sent out for any events that opened during this maintenance window, and continues to remain open after the window expires
+        scheduling:
+          $ref: '#/components/schemas/MaintenanceConfigScheduling'
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilterExpressionEnabled:
+          type: boolean
+          description: Boolean flag to determine if the tagFilterExpression is enabled.
+      required:
+      - id
+      - name
+      - query
+      - scheduling
+    MaintenanceConfigWithLastUpdated:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the Maintenance Window Configuration.
+          maxLength: 64
+          minLength: 0
+        lastUpdated:
+          type: integer
+          format: int64
+          minimum: 1
+        name:
+          type: string
+          description: Name of the Maintenance Window Configuration.
+          maxLength: 256
+          minLength: 0
+        query:
+          type: string
+          description: Dynamic Focus Query that determines the scope of the Maintenance Window configuration.
+          maxLength: 2048
+          minLength: 0
+        windows:
+          type: array
+          description: A set of time periods when the Maintenance Window Configuration is active.
+          items:
+            $ref: '#/components/schemas/MaintenanceWindow'
+          maxItems: 1
+          minItems: 0
+          uniqueItems: true
+      required:
+      - id
+      - name
+      - query
+    ValidatedMaintenanceConfigWithStatus:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the Maintenance Window Configuration.
+          maxLength: 64
+          minLength: 0
+        invalid:
+          type: boolean
+          description: Boolean flag that tells if the Dynamic Focus Query(DFQ) is invalid.
+        lastUpdated:
+          type: integer
+          format: int64
+          minimum: 1
+        name:
+          type: string
+          description: Name of the Maintenance Window Configuration.
+          maxLength: 256
+          minLength: 0
+        query:
+          type: string
+          description: Dynamic Focus Query that determines the scope of the Maintenance Window configuration.
+          maxLength: 2048
+          minLength: 0
+        status:
+          type: string
+          description: 'Status of the Maintenance Window Configuration. It can be one of: UNSCHEDULED, SCHEDULED, ACTIVE, FINISHED, PAUSED.'
+          enum:
+          - UNSCHEDULED
+          - SCHEDULED
+          - ACTIVE
+          - FINISHED
+          - PAUSED
+        windows:
+          type: array
+          description: A set of time periods when the Maintenance Window Configuration is active.
+          items:
+            $ref: '#/components/schemas/MaintenanceWindow'
+          maxItems: 1
+          minItems: 0
+          uniqueItems: true
+      required:
+      - id
+      - name
+      - query
+      - status
+    MaintenanceWindow:
+      type: object
+      description: A set of time periods when the Maintenance Window Configuration is active.
+      properties:
+        end:
+          type: integer
+          format: int64
+          minimum: 1
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+        start:
+          type: integer
+          format: int64
+          minimum: 0
+      required:
+      - id
+    MaintenanceConfigScheduling:
+      type: object
+      description: Time scheduling of the Maintenance Window configurations.
+      discriminator:
+        mapping:
+          ONE_TIME: '#/components/schemas/OneTimeMaintenanceWindow'
+          RECURRENT: '#/components/schemas/RecurrentMaintenanceWindow'
+        propertyName: type
+      properties:
+        duration:
+          $ref: '#/components/schemas/Duration'
+        start:
+          type: integer
+          format: int64
+          minimum: 1
+        type:
+          type: string
+          maxLength: 2048
+          minLength: 0
+      required:
+      - duration
+      - start
+      - type
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    Occurrence:
+      type: object
+      description: Time window of the Maintence Window configuration occurrences.
+      properties:
+        end:
+          type: integer
+          format: int64
+          minimum: 1
+        start:
+          type: integer
+          format: int64
+          minimum: 0
+    Duration:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+          minimum: 1
+        unit:
+          type: string
+          enum:
+          - MINUTES
+          - HOURS
+          - DAYS
+      required:
+      - amount
+      - unit
+    MaintenanceConfig:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the Maintenance Window Configuration.
+          maxLength: 64
+          minLength: 0
+        name:
+          type: string
+          description: Name of the Maintenance Window Configuration.
+          maxLength: 256
+          minLength: 0
+        query:
+          type: string
+          description: Dynamic Focus Query that determines the scope of the Maintenance Window configuration.
+          maxLength: 2048
+          minLength: 0
+        windows:
+          type: array
+          description: A set of time periods when the Maintenance Window Configuration is active.
+          items:
+            $ref: '#/components/schemas/MaintenanceWindow'
+          maxItems: 1
+          minItems: 0
+          uniqueItems: true
+      required:
+      - id
+      - name
+      - query
+    ValidatedMaintenanceConfigV2WithStateAndOccurrence:
+      type: object
+      properties:
+        applicationNames:
+          type: array
+          description: Name set of the Application Perspectives within the scope of the Maintenance Window
+          items:
+            type: string
+            description: Name set of the Application Perspectives within the scope of the Maintenance Window
+          uniqueItems: true
+        id:
+          type: string
+          description: ID of the Maintenance Window configuration.
+          maxLength: 64
+          minLength: 0
+        invalid:
+          type: boolean
+          description: Boolean flag that tells if the Dynamic Focus Query(DFQ) is invalid.
+        lastUpdated:
+          type: integer
+          format: int64
+          minimum: 1
+        name:
+          type: string
+          description: Name of the Maintenance Window configuration.
+          maxLength: 256
+          minLength: 0
+        occurrence:
+          $ref: '#/components/schemas/Occurrence'
+        paused:
+          type: boolean
+          description: Boolean flag to determine if the Maintenance Window configuration is paused or still live.
+        query:
+          type: string
+          description: Dynamic Focus Query that determines the scope of the Maintenance Window configuration.
+          maxLength: 2048
+          minLength: 0
+        retriggerOpenAlertsEnabled:
+          type: boolean
+          description: Boolean flag to determine if we should retrigger open alerts to be sent out for any events that opened during this maintenance window, and continues to remain open after the window expires
+        scheduling:
+          $ref: '#/components/schemas/MaintenanceConfigScheduling'
+        state:
+          type: string
+          description: 'State of the Maintenance Window, it can be: UNSCHEDULED, SCHEDULED, ACTIVE, PAUSED, EXPIRED.'
+          enum:
+          - UNSCHEDULED
+          - SCHEDULED
+          - ACTIVE
+          - PAUSED
+          - EXPIRED
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilterExpressionEnabled:
+          type: boolean
+          description: Boolean flag to determine if the tagFilterExpression is enabled.
+      required:
+      - id
+      - name
+      - occurrence
+      - query
+      - scheduling
+    MaintenanceConfigV2WithStateAndOccurrence:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the Maintenance Window configuration.
+          maxLength: 64
+          minLength: 0
+        lastUpdated:
+          type: integer
+          format: int64
+          minimum: 1
+        name:
+          type: string
+          description: Name of the Maintenance Window configuration.
+          maxLength: 256
+          minLength: 0
+        occurrence:
+          $ref: '#/components/schemas/Occurrence'
+        paused:
+          type: boolean
+          description: Boolean flag to determine if the Maintenance Window configuration is paused or still live.
+        query:
+          type: string
+          description: Dynamic Focus Query that determines the scope of the Maintenance Window configuration.
+          maxLength: 2048
+          minLength: 0
+        retriggerOpenAlertsEnabled:
+          type: boolean
+          description: Boolean flag to determine if we should retrigger open alerts to be sent out for any events that opened during this maintenance window, and continues to remain open after the window expires
+        scheduling:
+          $ref: '#/components/schemas/MaintenanceConfigScheduling'
+        state:
+          type: string
+          description: 'State of the Maintenance Window, it can be: UNSCHEDULED, SCHEDULED, ACTIVE, PAUSED, EXPIRED.'
+          enum:
+          - UNSCHEDULED
+          - SCHEDULED
+          - ACTIVE
+          - PAUSED
+          - EXPIRED
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilterExpressionEnabled:
+          type: boolean
+          description: Boolean flag to determine if the tagFilterExpression is enabled.
+      required:
+      - id
+      - name
+      - occurrence
+      - query
+      - scheduling
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage

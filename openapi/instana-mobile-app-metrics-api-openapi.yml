@@ -1,0 +1,914 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation Mobile App Metrics API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: Mobile App Metrics
+paths:
+  /api/mobile-app-monitoring/metrics:
+    post:
+      deprecated: true
+      description: API request to get mobile app monitoring beacon metrics.
+      operationId: getMobileAppBeaconMetrics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetMobileAppMetrics'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MobileAppMetricResult'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get mobile app beacon metrics
+      tags:
+      - Mobile App Metrics
+      x-ibm-ahub-byok: true
+  /api/mobile-app-monitoring/session{id}{timestamp}:
+    get:
+      description: API request to get a mobile app monitoring session.
+      operationId: getSession
+      parameters:
+      - description: Identifier of the session to be retrieved
+        example: 9CA9E31D-B0F7-40EC-8D32-FE163A6557AE
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: matrix
+      - description: Timestamp of the session to be retrieved
+        example: 1730595029980
+        in: path
+        name: timestamp
+        required: true
+        schema:
+          type: integer
+          format: int64
+        style: matrix
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - agentVersion: 1.8.5
+                mobileAppId: K3bP-bmCRkyimNai9vvq8o
+                mobileAppLabel: robot-warehouse
+                timestamp: 1707025019211
+                clockSkew: 460
+                ingestionTime: 1707025019670
+                duration: 0
+                batchSize: 1
+                sessionId: 9CA9E31D-B0F7-40EC-8D32-FE163A6557AE
+                beaconId: 659302486df75422
+                parentBeaconId: ''
+                backendTraceId: ''
+                type: sessionStart
+                view: Products
+                customEventName: ''
+                meta:
+                  feature.testGroup: sigma
+                userIp: 149.200.0.0
+                userId: Example user id
+                userSessionId: ''
+                userName: Example user name
+                userEmail: example@example.com
+                userLanguages:
+                - ar-JO
+                useFeatures: []
+                bundleIdentifier: com.example.shop
+                appBuild: aba9031kl
+                appVersion: 1.42.3
+                platform: iOS
+                osName: iOS
+                osVersion: 16.7.1
+                deviceManufacturer: Apple
+                deviceModel: iPhone 13
+                deviceHardware: iPhone14,5
+                viewportWidth: 320
+                viewportHeight: 680
+                carrier: Orange
+                connectionType: wifi
+                effectiveConnectionType: 3g
+                latitude: 31.9555
+                longitude: 35.9435
+                accuracyRadius: 20
+                city: Amman
+                subdivision: Amman Governorate
+                subdivisionCode: AM
+                country: Jordan
+                countryCode: JO
+                continent: Asia
+                continentCode: AS
+                httpCallUrl: ''
+                httpCallOrigin: ''
+                httpCallPath: ''
+                httpCallMethod: ''
+                httpCallHeaders: {}
+                errorCount: 0
+                errorMessage: ''
+                errorId: ''
+                errorType: ''
+                stackTrace: ''
+                stackTraceLine: []
+                parsedStackTrace: ''
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MobileAppMonitoringBeacon'
+          description: OK
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get mobile app session
+      tags:
+      - Mobile App Metrics
+      x-ibm-ahub-byok: true
+  /api/mobile-app-monitoring/v2/metrics:
+    post:
+      description: API request to get mobile app monitoring beacon metrics.
+      operationId: getMobileAppBeaconMetricsV2
+      requestBody:
+        content:
+          application/json:
+            example:
+              metrics:
+              - metric: beaconCount
+                aggregation: SUM
+                granularity: 60
+              tagFilterExpression:
+                type: EXPRESSION
+                logicalOperator: AND
+                elements:
+                - type: TAG_FILTER
+                  name: mobileBeacon.mobileApp.name
+                  operator: EQUALS
+                  entity: NOT_APPLICABLE
+                  value: robot-warehouse
+                - type: TAG_FILTER
+                  name: mobileBeacon.view.name
+                  operator: EQUALS
+                  entity: NOT_APPLICABLE
+                  value: Products
+              timeFrame:
+                to: null
+                windowSize: 3600000
+              type: SESSION_START
+            schema:
+              $ref: '#/components/schemas/GetMobileAppMetricsV2'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                metrics:
+                  beaconCount.sum.60:
+                  - - 1707026940000
+                    - 75
+                  - - 1707027000000
+                    - 75
+                adjustedTimeframe:
+                  windowSize: 3540000
+                  to: 1707030480000
+              schema:
+                $ref: '#/components/schemas/MetricAPIResult'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get beacon metrics
+      tags:
+      - Mobile App Metrics
+      x-ibm-ahub-byok: true
+components:
+  schemas:
+    DeprecatedTagFilter:
+      type: object
+      properties:
+        entity:
+          type: string
+          enum:
+          - NOT_APPLICABLE
+          - DESTINATION
+          - SOURCE
+        name:
+          type: string
+        operator:
+          type: string
+          enum:
+          - EQUALS
+          - CONTAINS
+          - LESS_THAN
+          - LESS_OR_EQUAL_THAN
+          - GREATER_THAN
+          - GREATER_OR_EQUAL_THAN
+          - NOT_EMPTY
+          - NOT_EQUAL
+          - NOT_CONTAIN
+          - IS_EMPTY
+          - NOT_BLANK
+          - IS_BLANK
+          - STARTS_WITH
+          - ENDS_WITH
+          - NOT_STARTS_WITH
+          - NOT_ENDS_WITH
+          - REGEX_MATCH
+        value:
+          type: string
+      required:
+      - name
+      - operator
+      - value
+    MobileAppMonitoringBeacon:
+      type: object
+      properties:
+        accuracyRadius:
+          type: integer
+          format: int64
+          minimum: -1
+        agentVersion:
+          type: string
+          maxLength: 128
+          minLength: 0
+        appBuild:
+          type: string
+          maxLength: 128
+          minLength: 0
+        appVersion:
+          type: string
+          maxLength: 128
+          minLength: 0
+        appVersionNumber:
+          type: integer
+          format: int64
+          minimum: -1
+        availableMb:
+          type: integer
+          format: int64
+          minimum: -1
+        backendTraceId:
+          type: string
+          maxLength: 128
+          minLength: 0
+        batchSize:
+          type: integer
+          format: int64
+          minimum: 1
+        beaconId:
+          type: string
+          maxLength: 128
+          minLength: 0
+        bundleIdentifier:
+          type: string
+          maxLength: 128
+          minLength: 0
+        bytesIngested:
+          type: integer
+          format: int64
+        carrier:
+          type: string
+          maxLength: 256
+          minLength: 0
+        city:
+          type: string
+          maxLength: 256
+          minLength: 0
+        clockSkew:
+          type: integer
+          format: int64
+          minimum: 0
+        coldStartTimeMs:
+          type: integer
+          format: int64
+          minimum: -1
+        connectionType:
+          type: string
+          maxLength: 16
+          minLength: 0
+        continent:
+          type: string
+          maxLength: 256
+          minLength: 0
+        continentCode:
+          type: string
+          maxLength: 64
+          minLength: 0
+        country:
+          type: string
+          maxLength: 256
+          minLength: 0
+        countryCode:
+          type: string
+          maxLength: 64
+          minLength: 0
+        currentAppState:
+          type: string
+          maxLength: 24
+          minLength: 0
+        customEventName:
+          type: string
+          maxLength: 256
+          minLength: 0
+        customMetric:
+          type: number
+          format: double
+        decodedBodySize:
+          type: integer
+          format: int64
+          minimum: -1
+        deviceHardware:
+          type: string
+          maxLength: 128
+          minLength: 0
+        deviceManufacturer:
+          type: string
+          maxLength: 128
+          minLength: 0
+        deviceModel:
+          type: string
+          maxLength: 128
+          minLength: 0
+        dropView:
+          type: string
+          maxLength: 256
+          minLength: 0
+        duration:
+          type: integer
+          format: int64
+          minimum: 0
+        effectiveConnectionType:
+          type: string
+          maxLength: 16
+          minLength: 0
+        encodedBodySize:
+          type: integer
+          format: int64
+          minimum: -1
+        environment:
+          type: string
+          maxLength: 256
+          minLength: 0
+        errorCount:
+          type: integer
+          format: int64
+          minimum: 0
+        errorId:
+          type: string
+          maxLength: 128
+          minLength: 0
+        errorMessage:
+          type: string
+          maxLength: 16384
+          minLength: 0
+        errorType:
+          type: string
+          maxLength: 1024
+          minLength: 0
+        googlePlayServicesMissing:
+          type: boolean
+        hotStartTimeMs:
+          type: integer
+          format: int64
+          minimum: -1
+        httpCallHeaders:
+          type: object
+          additionalProperties:
+            type: string
+        httpCallMethod:
+          type: string
+          maxLength: 16
+          minLength: 0
+        httpCallOrigin:
+          type: string
+          maxLength: 1024
+          minLength: 0
+        httpCallPath:
+          type: string
+          maxLength: 4096
+          minLength: 0
+        httpCallStatus:
+          type: integer
+          format: int32
+          maximum: 599
+          minimum: -1
+        httpCallUrl:
+          type: string
+          maxLength: 4096
+          minLength: 0
+        ingestionTime:
+          type: integer
+          format: int64
+          minimum: 1
+        internalMeta:
+          type: object
+          additionalProperties:
+            type: string
+        label:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        maxMb:
+          type: integer
+          format: int64
+          minimum: -1
+        meta:
+          type: object
+          additionalProperties:
+            type: string
+        mobileAppId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        mobileAppLabel:
+          type: string
+          maxLength: 128
+          minLength: 0
+        osName:
+          type: string
+          maxLength: 128
+          minLength: 0
+        osVersion:
+          type: string
+          maxLength: 128
+          minLength: 0
+        parentBeaconId:
+          type: string
+        parsedStackTrace:
+          type: string
+          maxLength: 16384
+          minLength: 0
+        performanceSubtype:
+          type: string
+          maxLength: 24
+          minLength: 0
+        platform:
+          type: string
+          maxLength: 32
+          minLength: 0
+        rateLimitBeaconType:
+          type: string
+          maxLength: 128
+          minLength: 0
+        rateLimitCount:
+          type: integer
+          format: int64
+          minimum: 0
+        rateLimitCustomMetricVal:
+          type: array
+          items:
+            type: number
+            format: float
+        rateLimitTimeMax:
+          type: integer
+          format: int64
+          minimum: 0
+        rateLimitTimeMin:
+          type: integer
+          format: int64
+          minimum: 0
+        region:
+          type: string
+          maxLength: 256
+          minLength: 0
+        rooted:
+          type: boolean
+        sessionId:
+          type: string
+          maxLength: 128
+          minLength: 0
+        stackTrace:
+          type: string
+          maxLength: 16384
+          minLength: 0
+        stackTraceKeyChecksum:
+          type: string
+          maxLength: 128
+          minLength: 0
+        stackTraceKeyInformation:
+          type: string
+          maxLength: 1024
+          minLength: 0
+        stackTraceLine:
+          type: array
+          items:
+            $ref: '#/components/schemas/StackTraceLine'
+          maxItems: 128
+          minItems: 0
+        stackTraceParsingStatus:
+          type: integer
+          format: int32
+          minimum: -1
+        subdivision:
+          type: string
+          maxLength: 256
+          minLength: 0
+        subdivisionCode:
+          type: string
+          maxLength: 64
+          minLength: 0
+        tenant:
+          type: string
+          maxLength: 256
+          minLength: 0
+        timestamp:
+          type: integer
+          format: int64
+          minimum: 1
+        transferSize:
+          type: integer
+          format: int64
+          minimum: -1
+        type:
+          type: string
+          maxLength: 24
+          minLength: 0
+        unit:
+          type: string
+          maxLength: 256
+          minLength: 0
+        useFeatures:
+          type: array
+          items:
+            type: string
+          maxItems: 15
+          minItems: 0
+        usedMb:
+          type: integer
+          format: int64
+          minimum: -1
+        userEmail:
+          type: string
+          maxLength: 128
+          minLength: 0
+        userId:
+          type: string
+          maxLength: 128
+          minLength: 0
+        userIp:
+          type: string
+          maxLength: 45
+          minLength: 0
+        userLanguages:
+          type: array
+          items:
+            type: string
+          maxItems: 5
+          minItems: 0
+        userName:
+          type: string
+          maxLength: 128
+          minLength: 0
+        userSessionId:
+          type: string
+          maxLength: 128
+          minLength: 0
+        view:
+          type: string
+          maxLength: 256
+          minLength: 0
+        viewportHeight:
+          type: integer
+          format: int32
+          minimum: -1
+        viewportWidth:
+          type: integer
+          format: int32
+          minimum: -1
+        warmStartTimeMs:
+          type: integer
+          format: int64
+          minimum: -1
+      required:
+      - beaconId
+      - mobileAppId
+      - performanceSubtype
+      - rateLimitBeaconType
+      - type
+    StackTraceLine:
+      type: object
+      properties:
+        column:
+          type: integer
+          format: int32
+          minimum: -1
+        file:
+          type: string
+        line:
+          type: integer
+          format: int32
+          minimum: -1
+        name:
+          type: string
+        translationExplanation:
+          type: string
+        translationStatus:
+          type: integer
+          format: int32
+          minimum: -1
+      required:
+      - file
+    MetricAPIResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+      required:
+      - metrics
+    MobileAppMetricResult:
+      type: object
+      properties:
+        empty:
+          type: boolean
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    GetMobileAppMetrics:
+      type: object
+      properties:
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAppMonitoringMetricsConfiguration'
+          maxItems: 5
+          minItems: 1
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeprecatedTagFilter'
+          maxItems: 32
+          minItems: 0
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+        type:
+          type: string
+          enum:
+          - SESSION_START
+          - HTTP_REQUEST
+          - CRASH
+          - CUSTOM
+          - VIEW_CHANGE
+          - DROP_BEACON
+          - PERF
+      required:
+      - metrics
+      - type
+    MobileAppMonitoringMetricsConfiguration:
+      type: object
+      properties:
+        aggregation:
+          type: string
+          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        granularity:
+          type: integer
+          format: int32
+          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
+        metric:
+          type: string
+          description: 'Set a particular metric, eg: `latency`.'
+        numeratorTagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+      required:
+      - aggregation
+      - metric
+    AdjustedTimeframe:
+      type: object
+      description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
+
+        For example, In request payload, if timeframe is 08:03 - 14:03, which is a 6 hour window size. It is adjusted to 08:05 - 14:00
+
+        Another example, In request payload, if timeframe is 08:20 - 08:20 (next day) which is a 24h window size. It is adjusted to 08:30 - 08:00 (next day)
+
+        '
+      properties:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          minimum: 0
+      required:
+      - to
+    GetMobileAppMetricsV2:
+      type: object
+      properties:
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAppMonitoringMetricsConfiguration'
+          maxItems: 5
+          minItems: 1
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+        type:
+          type: string
+          enum:
+          - SESSION_START
+          - HTTP_REQUEST
+          - CRASH
+          - CUSTOM
+          - VIEW_CHANGE
+          - DROP_BEACON
+          - PERF
+      required:
+      - metrics
+      - type
+    TimeFrame:
+      type: object
+      description: Time range for which the data should be retrieved.
+      properties:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          maximum: 2678400000
+          minimum: 0
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage

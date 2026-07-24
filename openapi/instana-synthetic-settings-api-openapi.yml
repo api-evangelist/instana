@@ -1,0 +1,1979 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation Synthetic Settings API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: Synthetic Settings
+  description: "The API endpoints of this group can be used to manage Synthetic Locations, Synthetic Tests and Synthetic Credentials. \n\n## Synthetic Location Properties:\n- **id** Unique identifier of the location resource.\n- **label** Friendly name of the location.\n- **description** The description of the location.\n- **locationType** Indicates if the location is managed or private.\n- **playbackCapability** The playback capabilities provided by this location resource.\n  The playbackCapability object has the following properties: \n  - **syntheticType** Different types of synthetic tests that can be executed at this location. \n    Possible values are HTTPAction, HTTPScript, BrowserScript, WebpageAction, WebpageScript, SSLCertificate, and DNS. \n    The values are corresponding to the syntheticType parameter available in the createSyntheticTest endpoint.\n  - **browserType** Different types of supported Web browsers when creating synthetic tests for BrowserScript, WebpageAction and WebpageScript.\n    Right now, only Chrome and Firefox are supported. \n- **geoPoint** An object includes the longitude, latitude, country name, and city name properties of a location. \n- **popVersion** PoP's version\n- **customProperties** An object with name/value pairs to provide additional information of the Synthetic location.\n- **createdAt** The location created time, following RFC3339 standard.\n- **modifiedAt** The location modified time, following RFC3339 standard.\n- **observedAt** The timestamp when PoP requests a Synthetic test, following RFC3339 standard.\n\n## Synthetic Test Properties:\n- **id** Unique identifier of the Synthetic test resource.\n- **label** Friendly name of the Synthetic test resource.\n- **description** The description of the Synthetic test.\n- **active** Indicates if the Synthetic test is started or not. The default is true.\n- **applicationId** Unique identifier of the Application Perspective.\n- **configuration** An object which has two properties: syntheticType and the corresponding configuration object:\n    - **syntheticType** The type of the Synthetic test. Supported values are HTTPAction, HTTScript, BrowserScript, WebpageAction,\n      WebpageScript, SSLCertificate, and DNS. The locations assigned to execute this Synthetic\n      test must support this syntheticType, i.e. the location's playbackCapabilities property.\n    - **markSyntheticCall** Flag used to control if HTTP calls will be marked as synthetic calls/endpoints in Instana backend, so they can be ignored when calculating service and application KPIs, users can also check \"Hide Synthetic Calls\" checkbox to hide/show them in UI.\n    - **retries** An integer type from 0 to 2, 0 by default.\n      It indicates how many attempts (max 2) will be allowed\n      to get a successful connection (not necessarily a successful result).\n      For API Simple, failures like socket hangups, gateway timeouts, and DNS lookup fails cause retires, but 404's 400's, do not.\n      API Script and Browser Script test will retry if script failed for any reason.\n    - **retryInterval** The time interval between retries in seconds. The default is 1s, max is 10s.\n    - **timeout** The timeout to be used by the PoP playback engines running the test. Values are in integers followed by a time unit (ms, s, m). \n      It is the minimum value of test configuration `timeout`, `testFrequency` and `maxTimeout` configured in PoP deployment.\n        - If user defined timeout value exceeds the `maxTimeout` or `testFrequency` in test configuration, the timeout value does not take effect \n          and PoP playback engines use the smaller one of `maxTimeout` and `testFrequency` as the actual timeout value.\n        - If timeout value in test configuration is not provided, the default value is **1m** for HTTPAction and HTTPScript tests. \n          BrowserScript, WebpageAction, and WebpageScript tests use the smaller one of `maxTimeout` and `testFrequency` as the actual timeout value.\n    - **XXXConfiguration** The configuration corresponding to the syntheticType. Configuration types are HTTPActionConfiguration, HTTPScriptConfiguration,\n      BrowserScriptConfiguration, WebpageActionConfiguration, WebpageScriptConfiguration, SSLCertificateConfiguration, and DNSConfiguration. \n        - **HTTPActionConfiguration** has the following properties:\n            - **url** The URL is being tested. It is required.\n            - **syntheticType** Its value is HTTPAction. It is required.\n            - **operation** An operation being used must be one of GET, HEAD, OPTIONS, PATCH, POST, PUT, and DELETE. By default, it is GET.\n            - **headers** An object with header/value pairs\n                - **header** The header to be sent in operation. It should not contain the terminating ':' character.\n                - **value** The value of the header.\n            - **body** The body content to send with the operation.\n            - **validationString** An expression to be evaluated.\n            - **followRedirect** A boolean type, true by default; to allow redirect.\n            - **allowInsecure** A boolean type,  true by default; if set to true then allow insecure certificates\n              (expired, self-signed, etc).\n            - **expectStatus** An integer type, by default, the Synthetic passes for any 2XX status code.\n              This forces just one status code to cause a pass, including what would normally be a fail, for example, a 404.\n            - **expectJson** An optional object to be used to check against the test response object.\n            - **expectMatch** An optional regular expression string to be used to check the test response.\n            - **expectExists** An optional list of property labels used to check if they are present in the test response object.\n            - **expectNotEmpty** An optional list of property labels used to check if they are present in the test response object with a non-empty value.\n        - **HTTPScriptConfiguration** has the following properties:\n          - **script** The Javascript content, it is plain text, not base64 encoded. **script** and **scripts** are mutually exclusive.\n          - **scripts** Multi script package. **script** and **scripts** are mutually exclusive.\n              - **scriptFile** The name of the file to run\n              - **bundle** All required js files bundled up into a single zip file with base64 encoded\n          - **syntheticType** Its value is HTTPScript. It is required.\n          - The API Script Guide, including examples, can be found at: https://www.ibm.com/docs/en/instana-observability/current?topic=monitoring-using-api-scripts\n        - **BrowserScriptConfiguration** has the following properties:\n          - **script** A Node.js based test script, it is plain text, not base64 encoded. **script** and **scripts** are mutually exclusive.\n          - **scripts** Multi script package. **script** and **scripts** are mutually exclusive.\n              - **scriptFile** The name of the file to run\n              - **bundle** All required js files bundled up into a single zip file with base64 encoded\n          - **scriptType** The type of the script, right now, only Basic type is supported. \n          - **browser** The type of the browser: chrome or firefox, chrome by default.\n          - **recordVideo** A boolean type, false by default.\n          - **syntheticType** Its value is BrowserScript. It is required.\n        - **WebpageActionConfiguration** has the following properties:\n          - **url** The URL of the Web page being tested. It is required.\n          - **browser** The type of the browser: chrome or firefox, chrome by default.\n          - **recordVideo** A boolean type, false by default.\n          - **syntheticType** Its value is WebpageAction. It is required.\n        - **WebpageScriptConfiguration** has the following properties:\n          - **script** A Selenium IDE recording script. It is required.\n          - **browser** The type of the browser: chrome or firefox, chrome by default.\n          - **recordVideo** A boolean type, false by default.\n          - **syntheticType** Its value is WebpageScript. It is required.\n        - **SSLCertificateConfiguration** has the following properties:\n          - **hostname** The hostname of the SSL enabled website.\n          - **port** The SSL port, set to 443 by default.\n          - **daysRemainingCheck** The number of days to use on the validation check. The test will fail when the certificate validity has less than this number of days remaining until expiration.\n          - **acceptSelfSignedCertificate** A boolean type, false by default, used to support self-signed certificates. \n        - **DNSConfiguration** has the following properties:\n          - **acceptCNAME** A boolean type, false by default. When enabled, the canonical name in the DNS response is accepted and no further lookups are performed.\n          - **lookup** The name or IP address of the host whose record is being queried.\n          - **lookupServerName** A boolean type, false by default, that enables recursive DNS lookups.\n          - **port** The DNS server listening port, set to 53 by default.\n          - **queryTime** An optional filter to be used to validate the test response time. \n            Syntax: \\<key\\>\\<operator\\>\\<value\\>, where:\n              - **key** is the name of the property to be validated. Only **responseTime** is supported.\n              - **operator** is one of EQUALS, GREATER_THAN, LESS_THAN.\n              - **value** is a numeric value, in milliseconds, Default is 10000.\n          - **queryType** The DNS query type used in the test. Value must be one of ALL, ALL_CONDITIONS, ANY, A, AAAA, CNAME, NS. Default value is A.\n              - If **ALL** is defined, all available query types will be executed.\n              - If **ALL_CONDITIONS** is defined, only the query types defined in **targetValues** will be executed.\n          - **recursiveLookups** A boolean type, false by default, that enables recursive DNS lookups.\n          - **server** The IP address of the DNS server.\n          - **serverRetries** The number of times to try a timed-out DNS lookup before returning failure. Default is 1. \n          - **targetValues** An optional list of filters to be used to validate the test response.\n            Syntax: [\\<key\\>\\<operator\\>\\<value\\>, ...], where:\n              - **key** is the name of the property to be validated.\n              - **operator** is one of CONTAINS, IS, MATCHES, NOT_MATCHES.\n              - **value** is the expected property value.\n          - **transport** The protocol used to do DNS check. Only UDP is supported.\n- **createdAt** The test created time, following RFC3339 standard.\n- **createdBy** The user identifier who created the test resource.\n- **customProperties** An object with name/value pairs to provide additional information of the Synthetic test.\n- **locations** It is an array of the PoP location IDs where the Synthetic tests are located.\n- **applications** It is an array of the unique identifiers of the Application Perspectives associated to this test.\n- **modifiedAt** The test last updated time, following RFC3339 standard.\n- **modifiedBy** The user identifier who updated the test resource.\n- **playbackMode** Defines how the Synthetic test should be executed across multiple\n  PoPs. This property is optional, and its default value is Simultaneous, and only Simultaneous is supported, i.e.,\n  Synthetic tests run at all locations simultaneously. \n- **testFrequency** How often the playback for a Synthetic test is scheduled. The unit of the testFrequency parameter is minute.\n  The default is every 15 minutes. The range is from 1 minute to 120 minutes. \n  For SSLCertificate tests, the default is every 24 hours and the range is from 60 minute to 1440 minutes.\n\n## Synthetic Credentials:\n\nSynthetic credentials can be used to store passwords and/or secrets used by the Synthetic Tests.\n\nAll Script Tests can use credentials in their body and API Simple Tests can use them on header parameters.\n\nIt is required that the credentials used in the test be created before the test is created or modified.\n\nCredentials can be associated to multiple Application Perspectives, Websites, and Mobile Apps.\n\nTests using credentials are validated during test creation and update whether you use the API or UI, as follows:\n\n1. The user Id of the logged in user or API Token being used to create or modify the test must have permission to use credentials.  \n  Requests to create or update a test referencing credentials without the correct permission will fail with return code `Forbidden`.\n\n2. The credentials or secrets used in the test must exist.  \n  Requests to create or update a test referencing credentials that do not exist will fail with return code `Bad Request`.\n\n3. Credentials associated to Application Perspectives, Websites, and Mobile Apps can only be used by tests that are associated to at least one common Application Perspective, Websites, and MobileApps.\n   Requests to create or update a test referencing credentials without matching Application Perspectives, Websites, or Mobile Apps will fail with return code `Bad Request`."
+paths:
+  /api/synthetics/settings/credentials:
+    get:
+      description: 'API request to retrieve the names of all Synthetic Credentials.
+
+        For more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings.'
+      operationId: getSyntheticCredentialNames
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - kittyhawk_test2
+              - user1_password
+              - user1_name
+              - MyBearer
+              - MY_CREDS333
+              - Test_Creds
+              - credName5
+              - credName4
+              - credName3
+              - credName2
+              - credName1
+              - MY_CREDS1
+              - MY_PASS
+              - USER_NAME_TEST
+              schema:
+                type: array
+                items:
+                  type: string
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canUseSyntheticCredentials
+        - canConfigureSyntheticTests
+      summary: All Synthetic credential names
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+    post:
+      description: 'API request to create a Synthetic Credential.
+
+        For more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings.'
+      operationId: createSyntheticCredential
+      requestBody:
+        content:
+          application/json:
+            example:
+              credentialName: userPassword
+              credentialValue: '123456'
+              rbacTags:
+              - id: test
+                displayName: test
+            schema:
+              $ref: '#/components/schemas/SyntheticCredential'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json: {}
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureSyntheticCredentials
+      summary: Create a Synthetic credential
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+  /api/synthetics/settings/credentials/associations:
+    get:
+      description: 'API request to retrieve all Synthetic Credentials.
+
+        For more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings.'
+      operationId: getSyntheticCredentialAssociations
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - credentialName: password1
+                createdAt: 1717617206785
+                modifiedAt: 1717617206785
+              - credentialName: password2
+                applications:
+                - f4KX5zd8RW2pERKKFUCZgQ
+                applicationLabels:
+                - All Services
+                createdAt: 1717620972843
+                modifiedAt: 1717620972843
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SyntheticCredential'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canUseSyntheticCredentials
+        - canConfigureSyntheticTests
+      summary: All Synthetic credentials
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+  /api/synthetics/settings/credentials/associations/{name}:
+    get:
+      description: 'API request to retrieve a Synthetic Credential with matching name.
+
+        For more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings.'
+      operationId: getOneSyntheticCredentialAssociations
+      parameters:
+      - description: Name of the credential to be retrieved
+        example: password4test
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                credentialName: password4test
+                applications:
+                - f4KX5zd8RW2pERKKFUCZgQ
+                applicationLabels:
+                - All Services
+                createdAt: 1717620972843
+                modifiedAt: 1717620972843
+              schema:
+                $ref: '#/components/schemas/SyntheticCredential'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canUseSyntheticCredentials
+        - canConfigureSyntheticTests
+      summary: A Synthetic credential
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+  /api/synthetics/settings/credentials/{name}:
+    delete:
+      description: 'API request to delete a Synthetic Credential.
+
+        For more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings.'
+      operationId: deleteSyntheticCredential
+      parameters:
+      - description: Name of the credential to be deleted
+        example: password4test
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Successful - no content to return.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureSyntheticCredentials
+      summary: Delete a Synthetic credential
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+    patch:
+      operationId: patchSyntheticCredential
+      parameters:
+      - description: Name of the credential to be patched
+        example: password4test
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              credentialValue: password4test
+              applications:
+              - f4KX5zd8RW2pERKKFUCZgQ
+              rbacTags:
+              - id: test
+                displayName: test
+            schema:
+              $ref: '#/components/schemas/SyntheticCredential'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json: {}
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canUseSyntheticCredentials
+        - canConfigureSyntheticTests
+      summary: Patch a Synthetic credential
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+    put:
+      description: 'API request to update a Synthetic Credential.
+
+        For more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings.'
+      operationId: updateSyntheticCredential
+      parameters:
+      - description: Name of the credential to be updated
+        example: password4db2
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              credentialName: password4db2
+              credentialValue: '123456'
+              applications:
+              - f4KX5zd8RW2pERKKFUCZgQ
+              rbacTags:
+              - id: test
+                displayName: test
+            schema:
+              $ref: '#/components/schemas/SyntheticCredential'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json: {}
+          description: Successful - resource created
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureSyntheticCredentials
+      summary: Update a Synthetic credential
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+  /api/synthetics/settings/datacenters:
+    get:
+      description: 'API request to retrieve all Synthetic Datacenters.
+
+        For more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings.'
+      operationId: getSyntheticDatacenters
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - code: us-east-1
+                label: us-east-1(NVirginia)
+                provider: aws
+                countryName: USA
+                cityName: NVirginia
+                latitude: 37.22
+                longitude: -81.44
+                status: Active
+                modifiedAt: 1728096600396
+                configuration:
+                  ipAddresses:
+                  - 34.226.13.189
+                locationLabel: instana-test-aws-us-east-1-NVirginia
+                datacenterId: aws-us-east-1-NVirginia
+              - code: eu-central-1
+                label: eu-central-1(Frankfurt)
+                provider: aws
+                countryName: DEU
+                cityName: Frankfurt
+                latitude: 50.11
+                longitude: 8.68
+                status: Active
+                modifiedAt: 1710241599981
+                configuration:
+                  ipAddresses:
+                  - 3.122.151.177
+                locationLabel: instana-test-aws-eu-central-1-Frankfurt
+                datacenterId: aws-eu-central-1-Frankfurt
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SyntheticDatacenter'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureSyntheticLocations
+      summary: All Synthetic datacenters
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+  /api/synthetics/settings/datacenters/{datacenterId}:
+    get:
+      description: 'API request to retrieve a Synthetic Datacenter with matching id.
+
+        For more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings.'
+      operationId: getSyntheticDatacenter
+      parameters:
+      - description: Id of the datacenter to be retrieved
+        example: aws-us-east-1-NVirginia
+        in: path
+        name: datacenterId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                code: us-east-1
+                label: us-east-1(NVirginia)
+                provider: aws
+                countryName: USA
+                cityName: NVirginia
+                latitude: 37.22
+                longitude: -81.44
+                status: Active
+                modifiedAt: 1728096600396
+                configuration:
+                  ipAddresses:
+                  - 34.226.13.189
+                locationLabel: instana-test-aws-us-east-1-NVirginia
+                datacenterId: aws-us-east-1-NVirginia
+              schema:
+                $ref: '#/components/schemas/SyntheticDatacenter'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureSyntheticLocations
+      summary: A Synthetic datacenter
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+  /api/synthetics/settings/locations:
+    get:
+      operationId: getSyntheticLocations
+      parameters:
+      - description: Defines the attribute by which the returned synthetic locations will be ordered by. Order using '+' means ASC and '-' means DESC
+        example: +label
+        in: query
+        name: sort
+        schema:
+          type: string
+          pattern: ' <+|-><attribute name>'
+      - description: Used in conjunction with limit. Defines how many pages will be skipped before returning the synthetic locations
+        example: 1
+        in: query
+        name: offset
+        schema:
+          type: integer
+          format: int64
+      - description: Defines the size of a page - the number of synthetic locations that will be returned by the query
+        example: 10
+        in: query
+        name: limit
+        schema:
+          type: integer
+          format: int64
+      - description: Defines the attributes by which the returned synthetic locations will be filtered by. Multiple filter parameters are allowed. See 'Supported filter attributes and operators' for complete list of supported attributes and operators.
+        example: '{locationType=Managed}'
+        in: query
+        name: filter
+        schema:
+          type: string
+          pattern: ' {<attribute name><operator><attribute value>}'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: 55bzhnXQ9uqwld4Ha3bD
+                label: Austin
+                displayLabel: AUTO
+                popVersion: 1.1.2
+                description: My Location 101
+                locationType: Private
+                playbackCapabilities:
+                  syntheticType:
+                  - HTTPAction
+                  - HTTPScript
+                  - BrowserScript
+                  - WebpageScript
+                  browserType:
+                  - firefox
+                  - chrome
+                geoPoint:
+                  cityName: austin
+                  countryName: india
+                  latitude: 0
+                  longitude: 0
+                totalTests: 1
+                configuration:
+                  namespace: syn-pop-tls
+                customProperties: {}
+                createdAt: 1698742890784
+                modifiedAt: 1702372728619
+                observedAt: 1704266105229
+                status: Offline
+              - id: OjJPXWHmsE9deLzanNAW
+                label: Dallas
+                displayLabel: AUTOscaling
+                popVersion: 1.1.1
+                description: My Location 101
+                locationType: Private
+                playbackCapabilities:
+                  syntheticType:
+                  - HTTPAction
+                  - HTTPScript
+                  - BrowserScript
+                  - WebpageScript
+                  browserType:
+                  - firefox
+                  - chrome
+                geoPoint:
+                  cityName: dallas
+                  countryName: india
+                  latitude: 0
+                  longitude: 0
+                totalTests: 0
+                configuration:
+                  namespace: andy
+                customProperties: {}
+                createdAt: 1698988890723
+                modifiedAt: 1700116951600
+                observedAt: 1705556766316
+                status: Offline
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SyntheticLocation'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canViewSyntheticLocations
+      summary: All Synthetic locations
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+      description: "This endpoint retrieves Synthetic Locations.\n\n## Optional Parameters:\n\n- **filter** Filters the Synthetic Locations to retrieve only the ones that match the specified filter condition. \n  Users are allowed to specify more than one filter parameter, and they will be combined in a single expression using logical operator 'AND'.\n  The filter parameter is formatted as '**_{\\<attribute>\\<operator>\\<value}_**'. For example, '_{label=MyPoP}_'\n  \n### Supported filter attributes and operators:\n\n| | = | != | \\> | < | \\>= | <= | Example |\n|-|---|----|---|---|---|-|--------------------------------------------------------|\n| label | &check; | &check; | - | - | - | - | /api/synthetics/settings/locations?filter={label=MyPoP} |\n| displayLabel | &check; | &check; | - | - | - | - | /api/synthetics/settings/locations?filter={displayLabel=My PoP} |\n| popVersion | &check; | &check; | - | - | - | - | /api/synthetics/settings/tests?filter={popVersion=1.1.9} |\n| description | &check; | &check; | - | - | - | - | /api/synthetics/settings/tests?filter={description=My Test PoP} |\n| locationType | &check; | &check; | - | - | - | - | /api/synthetics/settings/locations?filter={locationType=Private} |\n| playbackCapabilities.syntheticType | &check; | &check; | - | - | - | - | /api/synthetics/settings/locations?filter={playbackCapabilities.syntheticType=HTTPAction} |\n| playbackCapabilities.browserType | &check; | &check; | - | - | - | - | /api/synthetics/settings/locations?filter={playbackCapabilities.browserType=chrome} |\n| configuration.clusterName | &check; | &check; | - | - | - | - | /api/synthetics/settings/locations?filter={configuration.clusterName=qa_cluster} |\n| configuration.namespace | &check; | &check; | - | - | - | - | /api/synthetics/settings/locations?filter={configuration.namespace=test_pop} |\n| customProperties.\\<all properties> | &check; | &check; | - | - | - | - | /api/ynthetics/settings/locations?filter={customProperty.usage=Test} |\n| createdAt | &check; | &check; | &check; | &check; | &check; | &check; | /api/synthetics/settings/locations?filter={createdAt>1715190462000} |\n| modifiedAt | &check; | &check; | &check; | &check; | &check; | &check; | /api/synthetics/settings/locations?filter={modifiedAt<=1715190462000} |\n| observerdAt | &check; | &check; | &check; | &check; | &check; | &check; | /api/synthetics/settings/locations?filter={observedAt>=1715190462000} |\n\n"
+  /api/synthetics/settings/locations/{id}:
+    delete:
+      operationId: deleteSyntheticLocation
+      parameters:
+      - description: Identifier of the location to be deleted
+        example: 55bzhnXQ9uqwld4Ha3bD
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Successful - no content to return.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureSyntheticLocations
+      summary: Delete a Synthetic location
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+      description: 'This API endpoint deletes a synthetic location.
+
+
+        Note: Users cannot use this API to delete managed locations. '
+    get:
+      description: 'API request to retrieve a Synthetic Location with matching id.
+
+        For more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings.'
+      operationId: getSyntheticLocation
+      parameters:
+      - description: Identifier of the location to be retrieved
+        example: OjJPXWHmsE9deLzanNAW
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: OjJPXWHmsE9deLzanNAW
+                label: Austin
+                displayLabel: AUTOscaling
+                popVersion: 1.1.1
+                description: Test Location 101
+                locationType: Private
+                playbackCapabilities:
+                  syntheticType:
+                  - HTTPAction
+                  - HTTPScript
+                  - BrowserScript
+                  - WebpageScript
+                  browserType:
+                  - firefox
+                  - chrome
+                geoPoint:
+                  cityName: austin
+                  countryName: india
+                  latitude: 0
+                  longitude: 0
+                totalTests: 0
+                configuration:
+                  namespace: andy
+                customProperties: {}
+                createdAt: 1698988890723
+                modifiedAt: 1700116951600
+                observedAt: 1705556766316
+                status: Offline
+              schema:
+                $ref: '#/components/schemas/SyntheticLocation'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canViewSyntheticLocations
+      summary: A Synthetic location
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+  /api/synthetics/settings/tests:
+    get:
+      operationId: getSyntheticTests
+      parameters:
+      - description: 'Defines the application id by which the returned synthetic tests will be filtered by. '
+        example: pWoK4onRRN-POTz1RU62UQ
+        in: query
+        name: applicationId
+        schema:
+          type: string
+      - description: 'Defines the location id by which the returned synthetic tests will be filtered by. '
+        example: 18WyhtDb5jpVOsjlNdeV
+        in: query
+        name: locationId
+        schema:
+          type: string
+      - description: 'Defines the credential name by which the returned synthetic tests will be filtered by. '
+        example: adminPassword
+        in: query
+        name: credentialName
+        schema:
+          type: string
+      - description: Defines the attribute by which the returned synthetic tests will be ordered by. Order using '+' means ASC and '-' means DESC
+        example: +label
+        in: query
+        name: sort
+        schema:
+          type: string
+          pattern: ' <+|-><attribute name>'
+      - description: Used in conjunction with limit. Defines how many pages will be skipped before returning the synthetic tests
+        example: 1
+        in: query
+        name: offset
+        schema:
+          type: integer
+          format: int64
+      - description: Defines the size of a page - the number of synthetic tests that will be returned by the query
+        example: 10
+        in: query
+        name: limit
+        schema:
+          type: integer
+          format: int64
+      - description: Defines the attributes by which the returned synthetic tests will be filtered by. Multiple filter parameters are allowed. See 'Supported filter attributes and operators' for complete list of supported attributes and operators.
+        example: '{label=MyTest}'
+        in: query
+        name: filter
+        schema:
+          type: string
+          pattern: ' {<attribute name><operator><attribute value>}'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: ic25Vt1T5dgKzi0K7812
+                tenantId: saas_instana_test
+                label: 260-api-feature
+                active: true
+                testFrequency: 10
+                playbackMode: Simultaneous
+                applicationId: UOGJ3jBOSMOgN2EBCoOghw
+                applicationLabel: test_cb
+                locations:
+                - KHphVmZqqRf9Kp2xSoud
+                - cs1RvxTXJcavxnbQ6fBE
+                locationLabels:
+                - microk8s_PoP
+                - mini_PoP2_BrowserTest
+                locationDisplayLabels:
+                - MicroK8s PoP
+                - mini_PoP2_BrowserTest
+                configuration:
+                  syntheticType: HTTPScript
+                  markSyntheticCall: true
+                  retries: 1
+                  retryInterval: 1
+                  timeout: ''
+                  script: "const assert = require('assert');\n\n$got('https://www.ibm.com').then(response=>{\n    console.log('request 1/2:', response.statusCode);\n    assert.equal(response.statusCode, 200, 'it should be 200')\n    \n    setTimeout(()=>{\n        $got('https://www.bing.com').then(response=>{\n            console.log('request 2/2:', response.statusCode);\n            assert.equal(response.statusCode, 200, 'it should be 200')\n        })\n\n    }, 70000);\n});"
+                  scriptType: Basic
+                customProperties: {}
+                createdAt: 1697175907759
+                modifiedAt: 1705915155144
+              - id: EFNRoPd39SgZBkULeQIf
+                tenantId: saas_instana_test
+                label: APITest_getApplication
+                active: true
+                testFrequency: 15
+                playbackMode: Simultaneous
+                applicationId: UOGJ3jBOSMOgN2EBCoOghw
+                applicationLabel: test_cb
+                locations:
+                - 18WyhtDb5jpVOsjlNdeV
+                locationLabels:
+                - Syne2e
+                locationDisplayLabels:
+                - E2ETest PoP
+                configuration:
+                  syntheticType: HTTPScript
+                  markSyntheticCall: true
+                  retries: 2
+                  retryInterval: 1
+                  timeout: 10m
+                  script: "const got = require('got');\nconst assert = require('assert');\n\n// Define the API request configuration\nconst apiConfig = {\n  method: 'GET',\n  url: 'https://test-instana.pink.instana.rocks/api/application-monitoring/settings/application/btg-B701Rx6o9QNXUS4TVw',\n  headers: {\n    'Authorization': $secure.apiToken\n  }\n};\n\n// Function to perform the API test\nconst performAPITest = async () => {\n  const response = await got(apiConfig);\n  console.info(\"Get one application API - GET, response code: \" + response.statusCode);\n  assert.ok(response.statusCode == 200, \"GET status is \" + response.statusCode + \", it should be 200\");\n\n  const jsonBody = JSON.parse(response.body);\n  assert.ok(jsonBody.id != \"\", \"Application ID is not in the payload\");\n  assert.ok(jsonBody.label != \"\", \"Application label is not in the payload\");\n  assert.ok(jsonBody.tagFilterExpression != null, \"tagFilterExpression is not in the payload\");\n};\n\n// Initial test\nperformAPITest();"
+                  scriptType: Basic
+                customProperties:
+                  test: '123'
+                createdAt: 1696625954210
+                modifiedAt: 1701216106812
+                modifiedBy: Internal
+                rbacTags:
+                - id: test
+                  displayName: test
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SyntheticTest'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canViewSyntheticTests
+      summary: All Synthetic tests
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+      description: "This endpoint retrieves Synthetic Tests.\n\n## Optional Parameters:\n\n- **locationId** Filters the Synthetic Tests to retrieve only the ones that are associated to the specified PoP location ID.\n- **filter** Filters the Synthetic Tests to retrieve only the ones that match the specified filter condition. \n  Users are allowed to specify more than one filter parameter, and they will be combined in a single expression using logical operator 'AND'.\n  The filter parameter is formatted as '**_{\\<attribute>\\<operator>\\<value}_**'. For example, '_{label=MyTest}_'\n  \n### Supported filter attributes and operators:\n\n| | = | != | \\> | < | \\>= | <= | Example |\n|-|---|----|---|---|---|-|---------|\n| label | &check; | &check; | - | - | - | - | /api/synthetics/settings/tests?filter={label=ABC} |\n| description | &check; | &check; | - | - | - | - | /api/synthetics/settings/tests?filter={description=MyTest} |\n| active | &check; | &check; | - | - | - | - | /api/synthetics/settings/tests?filter={active=true} |\n| testFrequency | &check; | &check; | - | - | - | - | /api/synthetics/settings/tests?filter={testFrequency=5} |\n| applicationId | &check; | &check; | - | - | - | - | /api/synthetics/settings/tests?filter={applicationId=APP_ID} |\n| locations | &check; | &check; | - | - | - | - | /api/synthetics/settings/tests?filter={locations=POP_ID} |\n| locationLabels | &check; | &check; | - | - | - | - | /api/synthetics/settings/tests?filter={locationLabels=MyPoP} |\n| locationDisplayLabels | &check; | &check; | - | - | - | - | /api/synthetics/settings/tests?filter={locationDisplayLabels=My PoP} |\n| configuration.\\<any property of type string> | &check; | &check; | - | - | - | - | /api/synthetics/settings/tests?filter={configurtion.syntheticType=HTTPAction} |\n| customProperties.\\<all properties> | &check; | &check; | - | - | - | - | /api/synthetics/settings/tests?filter={customProperty.usage=Test} |\n| createdAt | &check; | &check; | &check; | &check; | &check; | &check; | /api/synthetics/settings/tests?filter={createdAt>1715190462000} |\n| modifiedAt | &check; | &check; | &check; | &check; | &check; | &check; | /api/synthetics/settings/tests?filter={modifiedAt<=1715190462000} |\n\n"
+    post:
+      operationId: createSyntheticTest
+      requestBody:
+        content:
+          application/json:
+            example:
+              label: Test_SimplePing
+              description: this is to test a simple ping API
+              applicationId: applicationId001
+              active: true
+              testFrequency: 1
+              playbackMode: Simultaneous
+              locations:
+              - saas_instana_test
+              configuration:
+                syntheticType: HTTPAction
+                url: https://httpbin.org/post
+                operation: POST
+                headers:
+                  Content-Type: text/plain
+                body: Hello World!
+                validationString: Hello World!
+              customProperties:
+                Team: DevTeam
+                Purpose: Demo
+              rbacTags:
+              - id: test
+                displayName: test
+            schema:
+              $ref: '#/components/schemas/SyntheticTest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                id: ic25Vt1T5dgKzi0K7812
+                label: Test_SimplePing
+                description: this is to test a simple ping API
+                applicationId: applicationId001
+                active: true
+                testFrequency: 1
+                playbackMode: Simultaneous
+                locations:
+                - saas_instana_test
+                configuration:
+                  syntheticType: HTTPAction
+                  url: https://httpbin.org/post
+                  operation: POST
+                  headers:
+                    Content-Type: text/plain
+                  body: Hello World!
+                  validationString: Hello World!
+                customProperties:
+                  Team: DevTeam
+                  Purpose: Demo
+                rbacTags:
+                - id: test
+                  displayName: test
+              schema:
+                $ref: '#/components/schemas/SyntheticTest'
+          description: Successful - resource created
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureSyntheticTests
+      summary: Create a Synthetic test
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+      description: "This API endpoint creates a Synthetic Test.\n\n## Optional Parameters:\n\n- **id** Users are allowed to specify their own id for the test. A test id can contain letters, numbers, underscores, colons and hyphens. Maximum length is 128.\n\n## Sample script and payload: \n- A sample script to create an API Simple test\n\n```\ncurl -k -v -X POST \\\nhttps://<Host>/api/synthetics/settings/tests \\\n-H 'authorization: apiToken <Token>' \\\n-H 'content-type: application/json' \\\n-d '{\n    \"id\":\"test_id:12134-89\",\n    \"label\":\"Test_SimplePing\",\n    \"description\":\"this is to test a simple ping API\",\n    \"serviceId\":\"serviceId001\",\n    \"applicationId\":\"applicationId001\",\n    \"active\":true,\n    \"testFrequency\":1,\n    \"playbackMode\":\"Simultaneous\",\n    \"locations\":[\n        \"saas_instana_test\"\n    ],\n    \"configuration\":{\n        \"syntheticType\":\"HTTPAction\",\n        \"url\":\"https://httpbin.org/post\",\n        \"operation\":\"POST\",\n        \"headers\":{\n            \"Content-Type\":\"text/plain\"\n        },\n        \"body\":\"Hello World!\",\n        \"validationString\":\"Hello World!\"\n    },\n    \"customProperties\":{\n        \"Team\":\"DevTeam\",\n        \"Purpose\":\"Demo\"\n    }\n  }'\n```"
+  /api/synthetics/settings/tests/bulk-delete:
+    post:
+      description: API request to delete a list of Synthetic Tests.
+      operationId: bulkDeleteSyntheticTests
+      requestBody:
+        content:
+          application/json:
+            example:
+            - ic25Vt1T5dgKzi0K7812
+            - EFNRoPd39SgZBkULeQIf
+            - kaj02pbxbW0XmQP9qu4b
+            - FrhxAJzKdsXU6V4WxWrY
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: ic25Vt1T5dgKzi0K7812
+                status: 200 - Success
+              - id: EFNRoPd39SgZBkULeQIf
+                status: 404 - Not Found
+              - id: kaj02pbxbW0XmQP9qu4b
+                status: 401 - Forbidden
+              - id: FrhxAJzKdsXU6V4WxWrY
+                status: 500 - Internal Server Error
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SyntheticBulkResponse'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureSyntheticTests
+      summary: Delete Synthetic tests
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+  /api/synthetics/settings/tests/bulk-update:
+    post:
+      description: API request to update a list of Synthetic Tests.
+      operationId: bulkUpdateSyntheticTests
+      requestBody:
+        content:
+          application/json:
+            example: "{\n    \"ids\" : [\n      \"ic25Vt1T5dgKzi0K7812\",\n      \"EFNRoPd39SgZBkULeQIf\",\n      \"kaj02pbxbW0XmQP9qu4b\",\n      \"FrhxAJzKdsXU6V4WxWrY\"\n    ],\n    \"locations\": {\n      \"add\": [ \"hGyJAQCTnMbpmWrYfbq6\", \"RMtD8XkRHmxG5N0IT418\" ],\n      \"remove\": [\"AOsPYuhGjpFHpNgWub90\"],\n    },\n    \"applications\": {\n      \"add\": [ \"XRVRqG3zLNDKlJUho90j\" ]\n    },\n    \"configuration\": {\n      \"timeout\": \"1s\"\n    },\n    \"customProperties\": {\n      \"add\": {\n        \"property1\": \"Test\"\n      },\n      \"remove\": [\"property2\", \"property3\"],\n    }\n{\n"
+            schema:
+              $ref: '#/components/schemas/SyntheticTestUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: ic25Vt1T5dgKzi0K7812
+                status: 200 - Success
+              - id: EFNRoPd39SgZBkULeQIf
+                status: 404 - Not Found
+              - id: kaj02pbxbW0XmQP9qu4b
+                status: 401 - Forbidden
+              - id: FrhxAJzKdsXU6V4WxWrY
+                status: 500 - Internal Server Error
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SyntheticBulkResponse'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureSyntheticTests
+      summary: Update Synthetic tests
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+  /api/synthetics/settings/tests/ci-cd:
+    get:
+      operationId: getSyntheticTestCICDs
+      parameters:
+      - description: Defines the attributes by which the returned synthetic test CI/CDs will be filtered by. Multiple filter parameters are allowed. See 'Supported filter attributes and operators' for complete list of supported attributes and operators.
+        example: '{runType=OnDemand}'
+        in: query
+        name: filter
+        schema:
+          type: string
+          pattern: ' {<attribute name><operator><attribute value>}'
+      - description: Used in conjunction with limit. Defines how many pages will be skipped before returning the synthetic test CI/CDs
+        example: 1
+        in: query
+        name: offset
+        schema:
+          type: integer
+          format: int64
+      - description: Defines the size of a page - the number of synthetic test CI/CDs that will be returned by the query
+        example: 10
+        in: query
+        name: limit
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - testResultId: e22aba08-e630-422d-8d7a-19b8a1c75d32
+                locationId: r4zo4DjbORqEAES2c8xj
+                locationLabel: SynTest
+                testId: 5ufGW4jOnZNhViGmIbnx
+                testLabel: test
+                testType: HTTPAction
+                runType: OnDemand
+                completed: false
+                customization:
+                  configuration:
+                    retries: 1
+                    timeout: 15s
+                  customProperties:
+                    tag: test
+              - testResultId: 0cf1324b-3022-4116-ae03-6c868daa43d4
+                locationId: r4zo4DjbORqEAES2c8xj
+                locationLabel: SynTest
+                testId: 5ufGW4jOnZNhViGmIbnx
+                testLabel: test
+                testType: HTTPAction
+                runType: OnDemand
+                completed: false
+                customization:
+                  configuration:
+                    retries: 2
+                    timeout: 5s
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SyntheticTestCICDItem'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureSyntheticTests
+      summary: All Synthetic test CI/CDs
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+      description: "This endpoint retrieves Synthetic Test CI/CDs.\n\n## Optional Parameters:\n\n- **filter** Filters the Synthetic Test CI/CDs to retrieve only the ones that match the specified filter condition.\n  Users are allowed to specify more than one filter parameter, and they will be combined in a single expression using logical operator 'AND'.\n  The filter parameter is formatted as '**_{\\<attribute>\\<operator>\\<value}_**'. For example, '_{runType=CI/CD}_'\n\n### Supported filter attributes and operators:\n\n| | = | != | \\> | < | \\>= | <= | Example                                                                     |\n|-|---|----|---|---|---|-|-----------------------------------------------------------------------------|\n| locationId | &check; | &check; | - | - | - | - | /api/synthetics/settings/locations?filter={locationId=9xblOq15RyzLj2koBWwc} |\n| testId | &check; | &check; | - | - | - | - | /api/synthetics/settings/locations?filter={testId=m3P10zF5up6HJqp8JeVp}     |\n| runType | &check; | &check; | - | - | - | - | /api/synthetics/settings/tests?filter={runType=CI/CD}                       |\n| completed | &check; | &check; | - | - | - | - | /api/synthetics/settings/tests?filter={completed=true}                      |\n"
+    post:
+      operationId: createSyntheticTestCICD
+      requestBody:
+        content:
+          application/json:
+            example:
+            - testId: K331gkuCbelN1HI5y1wl
+              customization:
+                locations:
+                - 8mCxCPOI7oEmMSee4ec0
+                - lalQTzq7MwO6hZ6c6xDd
+                configuration:
+                  timeout: 100ms
+                  retries: 2
+                customProperties:
+                  Team: DevTeam
+                  Purpose: Demo
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SyntheticTestCICD'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - testResultId: f078443e-468c-4e35-b614-979ad9200fe4
+                testId: K331gkuCbelN1HI5y1wl
+                locationId: 8mCxCPOI7oEmMSee4ec0
+              - testResultId: 2cba4974-c73a-45ea-ad63-77c44c19bd36
+                testId: K331gkuCbelN1HI5y1wl
+                locationId: lalQTzq7MwO6hZ6c6xDd
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SyntheticTestCICDResponse'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureSyntheticTests
+      summary: Create a Synthetic test CI/CD
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+      description: "This API endpoint creates an OnDemand Execution of Synthetic Tests to be used on CI/CD Integrations.\n\n## Mandatory Parameters:\n\n- **testId** The id of the test to be executed upon request.\n- **customization.locations** The ids of the locations where the test needs to be executed.\n- \n## Optional Parameters:\n\n- **customization.configuration** An configuration object with properties timeout, retries and retryInterval, used to override the test defined configuration. \n- **customization.customProperties** An object with name/value pairs to provide additional information to this Synthetic Test CI/CD execution.\n- \n## Sample script and payload: \n- A sample script to create a Synthetic Test CI/CD\n\n```\ncurl -k -v -X POST \\\nhttps://<Host>/api/synthetics/settings/tests/ci-cd \\\n-H 'authorization: apiToken <Token>' \\\n-H 'content-type: application/json' \\\n-d '[\n  {\n    \"testId\":\"pdVai8bqov1ta9Wq0Fnw\", \n    \"customization\":{\n      \"locations\":[\n        \"DNCYizgM3cju2Xnap24Z\"\n      ], \n      \"configuration\":{\n        \"timeout\":\"5s\", \n        \"retryInterval\":1,\n        \"retries\":2\n      }, \n      \"customProperties\" : {\n        \"type\":\"Build\"\n      }\n    }\n  }\n]'\n```"
+  /api/synthetics/settings/tests/ci-cd/{testResultId}:
+    get:
+      operationId: getSyntheticTestCICD
+      parameters:
+      - description: The synthetic test result id of the CI/CD to be retrieved
+        example: 0cf1324b-3022-4116-ae03-6c868daa43d4
+        in: path
+        name: testResultId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                testResultId: 0cf1324b-3022-4116-ae03-6c868daa43d4
+                locationId: r4zo4DjbORqEAES2c8xj
+                locationLabel: SynTest
+                testId: 5ufGW4jOnZNhViGmIbnx
+                testLabel: test
+                testType: HTTPAction
+                runType: OnDemand
+                completed: false
+                customization:
+                  configuration:
+                    retries: 2
+                    timeout: 5s
+              schema:
+                $ref: '#/components/schemas/SyntheticTestCICDItem'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureSyntheticTests
+      summary: A Synthetic test CI/CD.
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+  /api/synthetics/settings/tests/{id}:
+    delete:
+      description: 'API request to delete a Synthetic Test.
+
+        For more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings.'
+      operationId: deleteSyntheticTest
+      parameters:
+      - description: Id of the synthetic test to be deleted
+        example: ic25Vt1T5dgKzi0K7812
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Successful - no content to return.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureSyntheticTests
+      summary: Delete a Synthetic test
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+    get:
+      description: 'API request to retrieve a Synthetic Test with matching id.
+
+        For more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings.'
+      operationId: getSyntheticTest
+      parameters:
+      - description: Id of the synthetic test to be retrieved
+        example: EFNRoPd39SgZBkULeQIf
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: EFNRoPd39SgZBkULeQIf
+                tenantId: saas_instana_test
+                label: APITest_getApplication
+                active: true
+                testFrequency: 15
+                playbackMode: Simultaneous
+                applicationId: UOGJ3jBOSMOgN2EBCoOghw
+                applicationLabel: test_cb
+                locations:
+                - 18WyhtDb5jpVOsjlNdeV
+                locationLabels:
+                - Syne2e
+                locationDisplayLabels:
+                - E2ETest PoP
+                configuration:
+                  syntheticType: HTTPScript
+                  markSyntheticCall: true
+                  retries: 2
+                  retryInterval: 1
+                  timeout: 10m
+                  script: "const got = require('got');\nconst assert = require('assert');\n\n// Define the API request configuration\nconst apiConfig = {\n  method: 'GET',\n  url: 'https://test-instana.pink.instana.rocks/api/application-monitoring/settings/application/btg-B701Rx6o9QNXUS4TVw',\n  headers: {\n    'Authorization': $secure.apiToken\n  }\n};\n\n// Function to perform the API test\nconst performAPITest = async () => {\n  const response = await got(apiConfig);\n  console.info(\"Get one application API - GET, response code: \" + response.statusCode);\n  assert.ok(response.statusCode == 200, \"GET status is \" + response.statusCode + \", it should be 200\");\n\n  const jsonBody = JSON.parse(response.body);\n  assert.ok(jsonBody.id != \"\", \"Application ID is not in the payload\");\n  assert.ok(jsonBody.label != \"\", \"Application label is not in the payload\");\n  assert.ok(jsonBody.tagFilterExpression != null, \"tagFilterExpression is not in the payload\");\n};\n\n// Initial test\nperformAPITest();"
+                  scriptType: Basic
+                customProperties:
+                  test: '123'
+                createdAt: 1696625954210
+                modifiedAt: 1701216106812
+                modifiedBy: Internal
+                rbacTags:
+                - id: test
+                  displayName: test
+              schema:
+                $ref: '#/components/schemas/SyntheticTest'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canViewSyntheticTests
+      summary: A Synthetic test
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+    patch:
+      operationId: patchSyntheticTest
+      parameters:
+      - description: Id of the synthetic test to be patched
+        example: ic25Vt1T5dgKzi0K7812
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              active: true
+              configuration:
+                scripts: null
+                script: //script goes here
+              rbacTags:
+              - id: test
+                displayName: test
+            schema:
+              $ref: '#/components/schemas/SyntheticTest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json: {}
+          description: OK
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureSyntheticTests
+      summary: Patch a Synthetic test
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+      description: "This API endpoint updates selected attributes of a Synthetic Test.\n\n- All attributes listed as in the schema, including the required ones, are optional for this call.\n- Synthetic Test configuration properties set to null will be removed from the configuration.\n- Patching an array attribute will replace the entire array with the full set of values provided.\n- For major updates to the Synthetic Test or to remove main attributes, see \"Update a Synthetic test\"\n\n## Sample script and payload: \n- A sample script to patch a simple HTTP Script Test to enable it and to switch from multi-scripts to single script.\n\n```\ncurl -k -v -X PATCH \\\nhttps://<Host>/api/synthetics/settings/tests/Ilfs9bW97KkTxuyGtxBF \\\n-H 'authorization: apiToken <Token>' \\\n-H 'content-type: application/json' \\\n-d '{\n    \"active\" : true,\n    \"configuration\" : { \n      \"scripts\" : null,\n      \"script\" : \"//script goes here\"\n    }\n  }'\n```"
+    put:
+      operationId: updateSyntheticTest
+      parameters:
+      - description: Id of the synthetic test to be updated
+        example: ic25Vt1T5dgKzi0K7812
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              id: ic25Vt1T5dgKzi0K7812
+              label: Test_SimplePing
+              description: this is to test a simple ping API
+              applicationId: applicationId001
+              active: true
+              testFrequency: 1
+              playbackMode: Simultaneous
+              locations:
+              - saas_instana_test
+              configuration:
+                syntheticType: HTTPAction
+                url: https://httpbin.org/post
+                operation: POST
+                headers:
+                  Content-Type: text/plain
+                body: Hello World!
+                validationString: Hello World!
+              customProperties:
+                Team: DevTeam
+                Purpose: Demo
+              rbacTags:
+              - id: JxrVZtRtTUGug71K1oYMcw
+                displayName: tests
+            schema:
+              $ref: '#/components/schemas/SyntheticTest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json: {}
+          description: OK
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - canConfigureSyntheticTests
+      summary: Update a Synthetic test
+      tags:
+      - Synthetic Settings
+      x-ibm-ahub-byok: true
+components:
+  schemas:
+    SyntheticCredential:
+      type: object
+      properties:
+        applicationLabels:
+          type: array
+          items:
+            type: string
+            readOnly: true
+          readOnly: true
+        applications:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: integer
+          format: int64
+          readOnly: true
+        createdBy:
+          type: string
+          maxLength: 128
+          minLength: 0
+        credentialName:
+          type: string
+          maxLength: 128
+          minLength: 1
+        credentialValue:
+          type: string
+          writeOnly: true
+        mobileAppLabels:
+          type: array
+          items:
+            type: string
+            readOnly: true
+          readOnly: true
+        mobileApps:
+          type: array
+          items:
+            type: string
+        modifiedAt:
+          type: integer
+          format: int64
+          readOnly: true
+        modifiedBy:
+          type: string
+          maxLength: 128
+          minLength: 0
+        rbacTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTag'
+          uniqueItems: true
+        websiteLabels:
+          type: array
+          items:
+            type: string
+            readOnly: true
+          readOnly: true
+        websites:
+          type: array
+          items:
+            type: string
+      required:
+      - credentialName
+      - credentialValue
+    SyntheticTestCICDItem:
+      type: object
+      properties:
+        applications:
+          type: array
+          items:
+            type: string
+        completed:
+          type: boolean
+        customization:
+          $ref: '#/components/schemas/SyntheticTestCICDCustomization'
+        locationId:
+          type: string
+        locationLabel:
+          type: string
+        mobileApps:
+          type: array
+          items:
+            type: string
+        runType:
+          type: string
+        testId:
+          type: string
+        testLabel:
+          type: string
+        testResultId:
+          type: string
+        testType:
+          type: string
+        websites:
+          type: array
+          items:
+            type: string
+      required:
+      - completed
+      - customization
+      - locationId
+      - locationLabel
+      - testId
+      - testLabel
+      - testResultId
+      - testType
+    SyntheticGeoPoint:
+      type: object
+      properties:
+        cityName:
+          type: string
+        countryName:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+      required:
+      - cityName
+      - countryName
+      - latitude
+      - longitude
+    SyntheticTestCICD:
+      type: object
+      properties:
+        customization:
+          $ref: '#/components/schemas/SyntheticTestCICDCustomization'
+        runType:
+          type: string
+        testId:
+          type: string
+      required:
+      - customization
+      - testId
+    SyntheticTestUpdate:
+      type: object
+      description: Identifies the type of the synthetic tests updated on this request. Valid types are Deep and Shallow.
+      discriminator:
+        mapping:
+          Deep: '#/components/schemas/SyntheticTestDeepUpdate'
+          Shallow: '#/components/schemas/SyntheticTestShallowUpdate'
+        propertyName: syntheticUpdateType
+      properties:
+        active:
+          type: boolean
+        applications:
+          $ref: '#/components/schemas/SyntheticResourceUpdateListStringListString'
+        customProperties:
+          $ref: '#/components/schemas/SyntheticResourceUpdateMapStringStringListString'
+        ids:
+          type: array
+          items:
+            type: string
+        lastModifiedAt:
+          type: array
+          items:
+            type: integer
+            format: int64
+        locations:
+          $ref: '#/components/schemas/SyntheticResourceUpdateListStringListString'
+        mobileApps:
+          $ref: '#/components/schemas/SyntheticResourceUpdateListStringListString'
+        modifiedBy:
+          type: string
+        shallowUpdate:
+          type: boolean
+        syntheticUpdateType:
+          type: string
+          description: 'Indicates the type of update to apply to a set of tests of same syntheticType (Deep)
+
+            or a mix of syntheticType values (Shallow). When Shallow is used, only the configuration properties
+
+            retries, retryInterval and timeout can be updated
+
+            '
+          enum:
+          - Deep
+          - Shallow
+        testFrequency:
+          type: integer
+          format: int32
+          maximum: 1440
+          minimum: 1
+        websites:
+          $ref: '#/components/schemas/SyntheticResourceUpdateListStringListString'
+      required:
+      - syntheticUpdateType
+    SyntheticTypeConfiguration:
+      type: object
+      description: 'Synthetic test configuration that is unique to a synthetic type. Valid types are BrowserScript,
+
+        DNS, HTTPAction, HTTPScript, SSLCertificate, WebpageAction, and WebpageScript.'
+      discriminator:
+        mapping:
+          BrowserScript: '#/components/schemas/BrowserScriptConfiguration'
+          DNS: '#/components/schemas/DNSConfiguration'
+          HTTPAction: '#/components/schemas/HttpActionConfiguration'
+          HTTPScript: '#/components/schemas/HttpScriptConfiguration'
+          NotConfigured: '#/components/schemas/EmptyConfiguration'
+          SSLCertificate: '#/components/schemas/SSLCertificateConfiguration'
+          WebpageAction: '#/components/schemas/WebpageActionConfiguration'
+          WebpageScript: '#/components/schemas/WebpageScriptConfiguration'
+        propertyName: syntheticType
+      properties:
+        markSyntheticCall:
+          type: boolean
+        retries:
+          type: integer
+          format: int32
+          maximum: 2
+          minimum: 0
+        retryInterval:
+          type: integer
+          format: int32
+          maximum: 10
+          minimum: 1
+        syntheticType:
+          type: string
+          enum:
+          - BrowserScript
+          - DNS
+          - HTTPAction
+          - HTTPScript
+          - SSLCertificate
+          - WebpageAction
+          - WebpageScript
+          - NotConfigured
+        timeout:
+          type: string
+      required:
+      - markSyntheticCall
+      - syntheticType
+    SyntheticDatacenter:
+      type: object
+      properties:
+        cityName:
+          type: string
+        code:
+          type: string
+          maxLength: 128
+          minLength: 1
+        configuration:
+          $ref: '#/components/schemas/SyntheticDatacenterConfiguration'
+        countryName:
+          type: string
+        datacenterId:
+          type: string
+        expectedActiveAt:
+          type: integer
+          format: int64
+        label:
+          type: string
+          maxLength: 128
+          minLength: 1
+        latitude:
+          type: number
+          format: double
+        locationLabel:
+          type: string
+        longitude:
+          type: number
+          format: double
+        modifiedAt:
+          type: integer
+          format: int64
+        provider:
+          type: string
+          maxLength: 128
+          minLength: 1
+        status:
+          type: string
+      required:
+      - cityName
+      - code
+      - countryName
+      - label
+      - provider
+    SyntheticBulkResponse:
+      type: object
+      properties:
+        errorMessage:
+          type: string
+        id:
+          type: string
+        status:
+          type: string
+    SyntheticTest:
+      type: object
+      properties:
+        active:
+          type: boolean
+        applicationId:
+          type: string
+          maxLength: 512
+          minLength: 0
+        applicationLabel:
+          type: string
+          maxLength: 512
+          minLength: 0
+          readOnly: true
+        applicationLabels:
+          type: array
+          items:
+            type: string
+            readOnly: true
+          readOnly: true
+        applications:
+          type: array
+          items:
+            type: string
+        configuration:
+          $ref: '#/components/schemas/SyntheticTypeConfiguration'
+        createdAt:
+          type: integer
+          format: int64
+          readOnly: true
+        createdBy:
+          type: string
+          maxLength: 128
+          minLength: 0
+        customProperties:
+          type: object
+          additionalProperties:
+            type: string
+        description:
+          type: string
+          maxLength: 512
+          minLength: 0
+        id:
+          type: string
+          maxLength: 128
+          minLength: 1
+        label:
+          type: string
+          maxLength: 128
+          minLength: 1
+        locationDisplayLabels:
+          type: array
+          items:
+            type: string
+            readOnly: true
+          readOnly: true
+        locationLabels:
+          type: array
+          items:
+            type: string
+            readOnly: true
+          readOnly: true
+        locations:
+          type: array
+          items:
+            type: string
+        mobileAppLabels:
+          type: array
+          items:
+            type: string
+            readOnly: true
+          readOnly: true
+        mobileApps:
+          type: array
+          items:
+            type: string
+        modifiedAt:
+          type: integer
+          format: int64
+        modifiedBy:
+          type: string
+          maxLength: 128
+          minLength: 0
+        playbackMode:
+          type: string
+          enum:
+          - Simultaneous
+          - Staggered
+        rbacTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTag'
+          uniqueItems: true
+        tenantId:
+          type: string
+        testFrequency:
+          type: integer
+          format: int32
+          maximum: 1440
+          minimum: 1
+        websiteLabels:
+          type: array
+          items:
+            type: string
+            readOnly: true
+          readOnly: true
+        websites:
+          type: array
+          items:
+            type: string
+      required:
+      - active
+      - configuration
+      - label
+      - locations
+      - testFrequency
+    SyntheticResourceUpdateListStringListString:
+      type: object
+      properties:
+        add:
+          type: array
+          items:
+            type: string
+        remove:
+          type: array
+          items:
+            type: string
+    SyntheticTestCICDCustomization:
+      type: object
+      properties:
+        configuration:
+          $ref: '#/components/schemas/SyntheticConfiguration'
+        customProperties:
+          type: object
+          additionalProperties:
+            type: string
+        locations:
+          type: array
+          items:
+            type: string
+      required:
+      - configuration
+    SyntheticConfiguration:
+      type: object
+      properties:
+        retries:
+          type: integer
+          format: int32
+          maximum: 2
+          minimum: 0
+        retryInterval:
+          type: integer
+          format: int32
+          maximum: 10
+          minimum: 1
+        timeout:
+          type: string
+    SyntheticPlaybackCapabilities:
+      type: object
+      properties:
+        browserType:
+          type: array
+          items:
+            type: string
+            enum:
+            - chrome
+            - firefox
+        executionType:
+          type: array
+          items:
+            type: string
+            enum:
+            - CI/CD
+        syntheticType:
+          type: array
+          items:
+            type: string
+      required:
+      - browserType
+      - syntheticType
+    SyntheticDatacenterConfiguration:
+      type: object
+      properties:
+        ipAddresses:
+          type: array
+          items:
+            type: string
+    SyntheticLocationConfiguration:
+      type: object
+      properties:
+        clusterName:
+          type: string
+        namespace:
+          type: string
+        tenantType:
+          type: string
+          enum:
+          - Multi
+          - Single
+    SyntheticLocation:
+      type: object
+      properties:
+        configuration:
+          $ref: '#/components/schemas/SyntheticLocationConfiguration'
+        createdAt:
+          type: integer
+          format: int64
+        customProperties:
+          type: object
+          additionalProperties:
+            type: string
+        description:
+          type: string
+          maxLength: 512
+          minLength: 0
+        displayLabel:
+          type: string
+          maxLength: 128
+          minLength: 1
+        geoPoint:
+          $ref: '#/components/schemas/SyntheticGeoPoint'
+        id:
+          type: string
+          maxLength: 128
+          minLength: 0
+        label:
+          type: string
+          maxLength: 128
+          minLength: 1
+        locationType:
+          type: string
+        modifiedAt:
+          type: integer
+          format: int64
+        observedAt:
+          type: integer
+          format: int64
+        playbackCapabilities:
+          $ref: '#/components/schemas/SyntheticPlaybackCapabilities'
+        popVersion:
+          type: string
+          maxLength: 64
+          minLength: 1
+        status:
+          type: string
+        totalTests:
+          type: integer
+          format: int32
+      required:
+      - geoPoint
+      - label
+      - locationType
+      - playbackCapabilities
+    ApiTag:
+      type: object
+      properties:
+        displayName:
+          type: string
+          maxLength: 256
+          minLength: 0
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+      required:
+      - displayName
+      - id
+    SyntheticTestCICDResponse:
+      type: object
+      properties:
+        locationId:
+          type: string
+        testId:
+          type: string
+        testResultId:
+          type: string
+      required:
+      - locationId
+      - testId
+      - testResultId
+    SyntheticResourceUpdateMapStringStringListString:
+      type: object
+      properties:
+        add:
+          type: object
+          additionalProperties:
+            type: string
+        remove:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage

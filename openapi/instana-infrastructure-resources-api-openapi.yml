@@ -1,0 +1,672 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation Infrastructure Resources API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: Infrastructure Resources
+paths:
+  /api/infrastructure-monitoring/monitoring-state:
+    get:
+      description: This API endpoint retrieves the current monitoring state of the system, providing details about the number of monitored hosts and serverless entities. It responds with a JSON object containing this information.
+      operationId: getMonitoringState
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                hasEntities: true
+                hostCount: 122
+                serverlessCount: 7
+              schema:
+                $ref: '#/components/schemas/MonitoringState'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Monitored host count
+      tags:
+      - Infrastructure Resources
+      x-ibm-ahub-byok: true
+  /api/infrastructure-monitoring/payloads/{snapshotId}/{payloadKey}:
+    get:
+      operationId: getPluginPayload
+      parameters:
+      - description: Snapshot id.
+        in: path
+        name: snapshotId
+        required: true
+        schema:
+          type: string
+      - description: Payload key. Use [getAvailablePayloadKeysByPluginId](/openapi/#operation/getAvailablePayloadKeysByPluginId) to retrieve the list of possible keys.
+        example: topqueries
+        in: path
+        name: payloadKey
+        required: true
+        schema:
+          type: string
+      - description: End of timeframe expressed as the Unix epoch time in milliseconds.
+        example: 1689018652000
+        in: query
+        name: to
+        schema:
+          type: integer
+          format: int64
+      - description: Window size in milliseconds.
+        example: 3600000
+        in: query
+        name: windowSize
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                raw_payload:
+                - DEFERRED_VALUE: '64'
+                  DEFERRED_VALUE_FLAGS: NONE
+                  VALUE: '64'
+                  NAME: app_ctl_heap_sz
+                  VALUE_FLAGS: NONE
+                timestamp: 1707833086000
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get a payload for a snapshot
+      tags:
+      - Infrastructure Resources
+      x-ibm-ahub-byok: true
+  /api/infrastructure-monitoring/snapshots:
+    get:
+      operationId: getSnapshots
+      parameters:
+      - description: query to use to filter snapshot retrieval
+        example: entity.zone:myZone*
+        in: query
+        name: query
+        schema:
+          type: string
+      - description: end of timeframe expressed as the Unix epoch time in milliseconds
+        example: 1689018652000
+        in: query
+        name: to
+        schema:
+          type: integer
+          format: int64
+      - description: windowSize in milliseconds
+        example: 3600000
+        in: query
+        name: windowSize
+        schema:
+          type: integer
+          format: int64
+      - description: maximum number of snapshots to retrieve
+        example: 100
+        in: query
+        name: size
+        schema:
+          type: integer
+          format: int32
+      - description: entity type
+        example: host
+        in: query
+        name: plugin
+        schema:
+          type: string
+      - description: retrieve snapshots which were online during the timeframe, otherwise, return only snapshot which were online at the end of the timeframe
+        example: false
+        in: query
+        name: offline
+        schema:
+          type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                items:
+                - snapshotId: ZoKkksp277FMLSXIghPKdjZcvfE
+                  plugin: host
+                  from: 1706785156000
+                  to: null
+                  tags: []
+                  label: ip-10-255-200-30.instana.io
+                  host: EC2-i-03afb0ac5188f57f3
+                - snapshotId: ONRQyD-iztZX6QS9QnjKbFFy-oI
+                  plugin: host
+                  from: 1706756437000
+                  to: null
+                  tags: []
+                  label: ip-10-255-218-45.instana.io
+                  host: EC2-i-091cba86bac58cc77
+                - snapshotId: 0GvRrdko-0Ds9OWPzJVEm0j0vTA
+                  plugin: host
+                  from: 1706785131000
+                  to: null
+                  tags: []
+                  label: ip-10-255-203-60.instana.io
+                  host: EC2-i-0d2743935b9596c85
+              schema:
+                $ref: '#/components/schemas/SnapshotResult'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Search snapshots
+      tags:
+      - Infrastructure Resources
+      x-ibm-ahub-byok: true
+      description: "These APIs can be used to retrieve information about hosts, processes, JVMs and other entities that we are calling snapshots. A snapshot represents static information about an entity as it was at a specific point in time. To clarify:\r\n**Static information** is any information which is seldom changing, e.g. process IDs, host FQDNs or a list of host hard disks. The counterpart to static information are metrics which have a much higher change rate, e.g. host CPU usage or JVM garbage collection activity. Snapshots only contain static information.\r\n- Snapshots are **versioned** and represent an entity's state for a specific point in time. While snapshots only contain static information, even that information may change. For example you may add another hard disk to a server. For such a change, a new snapshot would be created.\r\n- The **size** parameter can be used in order to limit the maximum number of retrieved snapshots.\r\n- The **offline** parameter is used to allow deeper visibility into snapshots. Set to `false`, the query will return all snapshots that are still available on the given **to** timestamp. However, set to `true`, the query will return all snapshots that have been active within the time window, this must at least include the online result and snapshots terminated within this time.\r\n"
+    post:
+      description: This endpoint retrieves detail information for one or more snapshots. timeFrame defaults to the last 10 minutes if not specified.
+      operationId: postSnapshots
+      requestBody:
+        content:
+          application/json:
+            examples:
+              This example retrieves the detail information for two snapshots.:
+                description: This example retrieves the detail information for two snapshots.
+                value:
+                  snapshotIds:
+                  - AB3DeFGHIJkLm9OpQrstUVwxY_z
+                  - ZY4XwVUTSRqPo8MlKjihGFedC_a
+                  timeFrame:
+                    to: 1689018652000
+                    windowSize: 3600000
+            schema:
+              $ref: '#/components/schemas/GetSnapshotsQuery'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostSnapshotsResult'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get snapshot details for multiple snapshots
+      tags:
+      - Infrastructure Resources
+      x-ibm-ahub-byok: true
+  /api/infrastructure-monitoring/snapshots/{id}:
+    get:
+      description: Get all snapshot information
+      operationId: getSnapshot
+      parameters:
+      - description: snapshot id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - description: end of timeframe expressed as the Unix epoch time in milliseconds
+        example: 1689018652000
+        in: query
+        name: to
+        schema:
+          type: integer
+          format: int64
+      - description: windowSize in milliseconds
+        example: 3600000
+        in: query
+        name: windowSize
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                snapshotId: ZoKkksp277FMLSXIghPKdjZcvfE
+                plugin: host
+                from: 1706785156000
+                tags: []
+                label: ip-10-255-200-30.instana.io
+                entityId:
+                  host: EC2-i-03afb0ac5188f57f3
+                  pluginId: com.instana.forge.infrastructure.os.host.Host
+                  steadyId: h
+                data:
+                  interfaces:
+                    eth0:
+                      addresses:
+                      - subnet: 10.255.200.0
+                        fqdn:
+                        - 10-255-200-30.instana-agent-headless.instana-agent.svc.cluster.local
+                        - 10-255-200-30.instana-agent.instana-agent.svc.cluster.local
+                        - 10-255-200-30.prometheus-prometheus-node-exporter.prometheus.svc.cluster.local
+                        ip: 10.255.200.30
+                      mac: 06:00:E9:32:99:C5
+                    eth1:
+                      addresses:
+                      - subnet: 10.255.200.0
+                        ip: 10.255.205.14
+                      mac: 06:93:A2:5B:97:D9
+                  cpu.model: AMD EPYC 7R13 Processor
+                  fqdn: ip-10-255-200-30.instana.io
+                  bootId: 3b7e2fe9-7cff-42bb-9879-6b856582fa27
+                  os.arch: amd64
+                  start: 1694791889000
+                  memory.total: 65994727424
+                  openFiles.max: 6441978
+                  filesystems:
+                    /dev/nvme0n1p1:
+                      options: rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota
+                      mounts:
+                      - /var/lib/kubelet/pods/dc320aef-ef0e-499a-8eb2-56cb454c22d6/volume-subpaths/configuration/instana-agent/11
+                      - /var/lib/kubelet/pods/dc320aef-ef0e-499a-8eb2-56cb454c22d6/volume-subpaths/configuration/instana-agent/14
+                      - /var/lib/kubelet/pods/dc320aef-ef0e-499a-8eb2-56cb454c22d6/volume-subpaths/additional-backend-2/instana-agent/12
+                      - /var/lib/kubelet/pods/dc320aef-ef0e-499a-8eb2-56cb454c22d6/volume-subpaths/additional-backend-3/instana-agent/13
+                      - /
+                      systype: xfs
+                      icapacity: 28180816
+                      mount: /
+                      capacity: 83873772
+                  os.version: 5.10.186-179.751.amzn2.x86_64
+                  tags: []
+                  cpu.count: 8
+                  hostname: ip-10-255-200-30
+                  machineId: ec2f95ff87a4a46d4672835afb9e2bb5
+                  systemSerialNumber: ec2f95ff-87a4-a46d-4672-835afb9e2bb5
+                  os.name: Linux
+              schema:
+                $ref: '#/components/schemas/SnapshotItem'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get snapshot details
+      tags:
+      - Infrastructure Resources
+      x-ibm-ahub-byok: true
+  /api/infrastructure-monitoring/software/versions:
+    get:
+      description: 'Retrieve information about the software that are sensed by the agent remotely, natively, or both. This includes runtime and package manager information.
+
+
+        The `plugin`, `name`, `version`, `discoveryType`, `softwareType` and `vendor` parameters are optional filters that can be used to reduce the result data set.
+
+        The `snapshotId` in `usedBy` is either of host or container, if available'
+      operationId: softwareVersions
+      parameters:
+      - description: Timeframe expressed as the Unix epoch time in milliseconds
+        in: query
+        name: time
+        schema:
+          type: integer
+          format: int64
+      - description: Filter on discoveryType
+        example: NATIVE_SENSOR
+        in: query
+        name: discoveryType
+        schema:
+          type: string
+          enum:
+          - NATIVE_SENSOR
+          - REMOTE_SENSOR
+          - PACKAGE_MANAGER
+          - OTHER
+      - description: Filter on softwareType
+        example: DEPENDENCY
+        in: query
+        name: softwareType
+        schema:
+          type: string
+          enum:
+          - DEPENDENCY
+          - RUNTIME
+          - DATABASE
+          - MESSAGING
+          - PLATFORM
+          - PACKAGE
+          - OS
+          - CACHE
+          - API_GATEWAY
+          - OTHER
+          - APPLICATION_FRAMEWORK
+      - description: Filter on this software name
+        in: query
+        name: name
+        schema:
+          type: string
+      - description: Filter on this plugin
+        in: query
+        name: plugin
+        schema:
+          type: string
+      - description: Filter on this version
+        in: query
+        name: version
+        schema:
+          type: string
+      - description: Filter on this vendor
+        in: query
+        name: vendor
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example: "[\n  {\n    \"name\": \"errno\",\n    \"plugin\": \"nodeJsRuntimePlatform\",\n    \"version\": \"0.1.8\",\n    \"discoveryType\": \"NATIVE_SENSOR\",\n    \"softwareType\": \"DEPENDENCY\",\n    \"vendor\": \"\",\n    \"metadata\": {},\n    \"usedBy\": [\n      {\n        \"host\": \"instana-centos1.fyre.ibm.com\",\n        \"container\": null,\n        \"process\": \"instana-payload-simulator v1.0.0\",\n        \"snapshotId\": \"nQHb946M0I_rzRNuTFLVVSUorr8\"\n      }\n    ]\n  },\n  {\n    \"name\": \"OpenJDK 64-Bit Server VM\",\n    \"plugin\": \"jvmRuntimePlatform\"\n    \"version\": \"17.0.1\",\n    \"discoveryType\": \"NATIVE_SENSOR\",\n    \"softwareType\": \"RUNTIME\",\n    \"vendor\": \"Azul Systems, Inc.\",\n    \"metadata\": {},\n    \"usedBy\": [\n      {\n        \"host\": \"lima-rancher-desktop\",\n        \"container\": \"elasticsearch/elasticsearch:7.16.2\",\n        \"process\": \"docker-cluster: 0c930ef6c5af\",\n        \"snapshotId\": \"cn06irROoHrvrDEa4fWw9vD6yhc\"\n      }\n    ]\n  }\n]\n"
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SoftwareVersion'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get installed software
+      tags:
+      - Infrastructure Resources
+      x-ibm-ahub-byok: true
+components:
+  schemas:
+    PostSnapshotsResult:
+      type: object
+      properties:
+        items:
+          type: array
+          description: Detail information for requested snapshots.
+          items:
+            $ref: '#/components/schemas/SnapshotItem'
+        notFoundSnapshotsIds:
+          type: array
+          description: Snapshot ids for snapshots that could not be retrieved.
+          items:
+            type: string
+            description: Snapshot ids for snapshots that could not be retrieved.
+    SoftwareVersion:
+      type: object
+      properties:
+        discoveryType:
+          type: string
+          enum:
+          - NATIVE_SENSOR
+          - REMOTE_SENSOR
+          - PACKAGE_MANAGER
+          - OTHER
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        name:
+          type: string
+        plugin:
+          type: string
+        softwareType:
+          type: string
+          enum:
+          - DEPENDENCY
+          - RUNTIME
+          - DATABASE
+          - MESSAGING
+          - PLATFORM
+          - PACKAGE
+          - OS
+          - CACHE
+          - API_GATEWAY
+          - OTHER
+          - APPLICATION_FRAMEWORK
+        usedBy:
+          type: array
+          items:
+            $ref: '#/components/schemas/SoftwareUser'
+          uniqueItems: true
+        vendor:
+          type: string
+        version:
+          type: string
+      required:
+      - discoveryType
+      - name
+      - plugin
+      - softwareType
+      - usedBy
+      - vendor
+      - version
+    MonitoringState:
+      type: object
+      properties:
+        hasEntities:
+          type: boolean
+          description: Has entities
+        hostCount:
+          type: integer
+          format: int32
+          description: Count of hosts
+        monitoredEntitiesStats:
+          $ref: '#/components/schemas/MonitoredEntitiesStats'
+        openTelemetryCount:
+          type: integer
+          format: int32
+          description: Count of open telemetry
+        serverlessCount:
+          type: integer
+          format: int32
+          description: Count of serverless
+    SoftwareUser:
+      type: object
+      properties:
+        container:
+          type: string
+        host:
+          type: string
+        process:
+          type: string
+        snapshotId:
+          type: string
+    SnapshotResult:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SnapshotItem'
+    MonitoredEntitiesStats:
+      type: object
+      description: Statistics of monitored entities.
+      properties:
+        hostCount:
+          type: integer
+          format: int32
+        otelCount:
+          type: integer
+          format: int32
+        serverlessCount:
+          type: integer
+          format: int32
+    GetSnapshotsQuery:
+      type: object
+      properties:
+        snapshotIds:
+          type: array
+          description: List of one or more snapshot ids.
+          items:
+            type: string
+            description: List of one or more snapshot ids.
+          maxItems: 1000
+          minItems: 0
+          uniqueItems: true
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+      required:
+      - snapshotIds
+    TimeFrame:
+      type: object
+      description: Time range for which the data should be retrieved.
+      properties:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          maximum: 2678400000
+          minimum: 0
+    SnapshotItem:
+      type: object
+      description: Detail information for requested snapshots.
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            type: object
+        from:
+          type: integer
+          format: int64
+          description: Start of timeframe expressed as the Unix epoch time in milliseconds
+        host:
+          type: string
+          description: Host name
+        label:
+          type: string
+          description: Friendly label for the entity
+        plugin:
+          type: string
+          description: Plugin name
+          example: host
+        snapshotId:
+          type: string
+          description: Snapshot ID
+        tags:
+          type: array
+          description: Tags which can be used to search for this entity
+          items:
+            type: string
+            description: Tags which can be used to search for this entity
+        to:
+          type: integer
+          format: int64
+          description: End of timeframe expressed as the Unix epoch time in milliseconds
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage

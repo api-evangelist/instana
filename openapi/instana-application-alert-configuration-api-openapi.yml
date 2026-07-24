@@ -1,0 +1,1378 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation Application Alert Configuration API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: Application Alert Configuration
+  description: "The API endpoints of this group can be used to manage Application alert configurations.\n\n## Parameters:\n\n- **id:** ID of the application alert config which needs to be updated.\n\n- **name:** Name for the application alert configuration.\n\n- **description:** Description for the application alert configuration.\n\n- **severity:** The severity of the alert when triggered, which is either `5` (Warning), or `10` (Critical).\n\n- **triggering:** Optional flag to indicate whether also an Incident is triggered or not.\n\n- **applications:** Selection of application, services and endpoints in scope.\n\n  The selection defines a tree of included or excluded sub entities. The defined `inclusive` flag defines whether this node and his child nodes are included (`inclusive: true`) or excluded (`inclusive: false`) by default. Empty selections or unnecessary selections are not allowed. \n\n  #### Example 1: Select an entire Application Perspective\n\n  To select the entire application with ID `<appId>` including all its services and endpoints, simply provide the following selection object:\n\n  ```json\n  \"applications\": {\n      \"<appId>\": {\n          \"applicationId\": \"<appId>\"\n      }\n  }\n  ```\n\n  Leaf nodes of the selection tree default to `true` if no `inclusive` value is defined.\n\n  #### Example 2: Specific selection of services and endpoints\n\n  To select not the entire application with ID `<appId>`, but only the entire serivces Service1 with ID `<service1>` and Service2 with ID `<service2>`, with the exception of endpoint `<endpoint2>` of Service2. And in addition, only Endpoint `<endpoint3>` of Service3 with id `<service3>`, then use the following selection:\n\n  ```json\n  \"applications\": {\n      \"<appId>\": {\n          \"applicationId\": \"<appId>\",\n          \"inclusive\": false,\n          \"services\": {\n              \"<service1>\": {\n                  \"serviceId\": \"<service1>\"\n              },\n              \"<service2>\": {\n                  \"serviceId\": \"<service2>\",\n                  \"inclusive\": true,\n                  \"endpoints\": {\n                      \"<endpoint2>\": {\n                          \"endpointId\": \"<endpoint2>\",\n                          \"inclusive\": false\n                      }\n                  }\n              },\n              \"<service3>\": {\n                  \"serviceId\": \"<service3>\",\n                  \"inclusive\": false,\n                  \"endpoints\": {\n                      \"<endpoint3>\": {\n                          \"endpointId\": \"<endpoint3>\",\n                          \"inclusive\": true\n                      }\n                  }\n              }\n          }\n      }\n  }\n  ``` \n\n- **boundaryScope:** Boundary scope of the Application Perspective\n\n- **tagFilterExpression:** Boolean expression of tag filters to define the scope of relevant calls.\n\n- **includeInternal:** Optional flag to indicate whether also internal calls are included in the scope or not. The default is `false`.\n\n- **includeSynthetic:** Optional flag to indicate whether also synthetic calls are included in the scope or not. The default is `false`.\n\n- **evaluationType:** The alert evaluation type of the alert configuration. For example, this allows to configure whether calls of the configured scope is aggregated to a single metric that is then considered for alerting (`\"PER_AP\"`), or whether each service of an Appliction Perspective is is evaluated individually (`\"PER_AP_SERVICE\"`).\n\n- **granularity:** The evaluation granularity used for detection of violations of the defined threshold. In other words, it defines the size of the tumbling window used.\n\n- **rule:** Indicates the type of rule this alert configuration is about.\n\n- **threshold:** Indicates the type of threshold this alert rule is evaluated on .\n\n- **timeThreshold:** Indicates the type of violation of the defined threshold.\n\n- **alertChannelIds:** List of IDs of alert channels defined in Instana.\n\n## Deprecated Parameters\n\n- **applicationId:** Unique ID of the Application Perspective. It is replaced by **applications**."
+paths:
+  /api/events/settings/application-alert-configs:
+    get:
+      description: 'Gets all the Smart Alert Configurations pertaining to a specific application. Configurations are sorted by creation date in descending order.
+
+        For more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.'
+      operationId: findAllActiveApplicationAlertConfigs
+      parameters:
+      - description: The ID of a specific Application.
+        example: IYS1XOEcTNiT1eOD8pxgXg
+        in: query
+        name: applicationId
+        required: true
+        schema:
+          type: string
+      - description: A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs.
+        example: IYS1XOEcTNiT1eOD8pxgXg
+        in: query
+        name: alertIds
+        schema:
+          type: array
+          items:
+            type: string
+          maxItems: 1000
+          minItems: 0
+          uniqueItems: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - name: Erroneous call rate is higher than normal
+                description: The erroneous call rate is higher or equal to 4%.
+                boundaryScope: ALL
+                applicationId: IYS1XOEcTNiT1eOD8pxgXg
+                applications:
+                  IYS1XOEcTNiT1eOD8pxgXg:
+                    applicationId: IYS1XOEcTNiT1eOD8pxgXg
+                    inclusive: true
+                    services: {}
+                severity: 5
+                triggering: false
+                tagFilterExpression:
+                  type: EXPRESSION
+                  logicalOperator: AND
+                  elements: []
+                includeInternal: false
+                includeSynthetic: false
+                rule:
+                  alertType: errors
+                  metricName: errors
+                  aggregation: MEAN
+                threshold:
+                  type: staticThreshold
+                  operator: '>='
+                  value: 0.04
+                  lastUpdated: 0
+                alertChannelIds: []
+                granularity: 600000
+                timeThreshold:
+                  type: violationsInSequence
+                  timeWindow: 600000
+                evaluationType: PER_AP
+                customPayloadFields: []
+                id: A5VvSXR_SVG6z7YbnIHiHQ
+                created: 1707751873882
+                initialCreated: 1707751873882
+                readOnly: false
+                enabled: true
+                derivedFromGlobalAlert: false
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApplicationAlertConfigWithMetadata'
+          description: OK - Returns an empty list if no configurations match the criteria
+        '403':
+          description: Insufficient permissions.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get all Smart Alert Configs
+      tags:
+      - Application Alert Configuration
+      x-ibm-ahub-byok: true
+    post:
+      description: 'Creates a new Smart Alert Configuration.
+
+        For more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.'
+      operationId: createApplicationAlertConfig
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: Calls are slower than usual
+              description: Calls are slower or equal to the expectation based on latency (90th).
+              boundaryScope: INBOUND
+              applicationId: ZOi0te_ERE-mRm-9zsbwdg
+              applications:
+                ZOi0te_ERE-mRm-9zsbwdg:
+                  applicationId: ZOi0te_ERE-mRm-9zsbwdg
+                  inclusive: true
+                  services: {}
+              severity: 5
+              triggering: false
+              tagFilterExpression:
+                type: TAG_FILTER
+                name: endpoint.name
+                stringValue: null
+                numberValue: null
+                booleanValue: null
+                key: null
+                value: null
+                operator: NOT_EMPTY
+                entity: DESTINATION
+              includeInternal: false
+              includeSynthetic: false
+              rule:
+                alertType: slowness
+                aggregation: P90
+                metricName: latency
+              threshold:
+                type: historicBaseline
+                operator: '>='
+                seasonality: DAILY
+                baseline:
+                - - 0
+                  - 1
+                  - 3
+                - - 600000
+                  - 1
+                  - 3
+                deviationFactor: 3
+                lastUpdated: 0
+              alertChannelIds: []
+              granularity: 600000
+              timeThreshold:
+                type: violationsInSequence
+                timeWindow: 600000
+              evaluationType: PER_AP
+              customPayloadFields: []
+            schema:
+              $ref: '#/components/schemas/ApplicationAlertConfig'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                name: Calls are slower than usual
+                description: Calls are slower or equal to the expectation based on latency (90th).
+                boundaryScope: INBOUND
+                applicationId: ZOi0te_ERE-mRm-9zsbwdg
+                applications:
+                  ZOi0te_ERE-mRm-9zsbwdg:
+                    applicationId: ZOi0te_ERE-mRm-9zsbwdg
+                    inclusive: true
+                    services: {}
+                severity: 5
+                triggering: false
+                tagFilterExpression:
+                  type: TAG_FILTER
+                  name: endpoint.name
+                  stringValue: null
+                  numberValue: null
+                  booleanValue: null
+                  key: null
+                  value: null
+                  operator: NOT_EMPTY
+                  entity: DESTINATION
+                includeInternal: false
+                includeSynthetic: false
+                rule:
+                  alertType: slowness
+                  aggregation: P90
+                  metricName: latency
+                threshold:
+                  type: historicBaseline
+                  operator: '>='
+                  seasonality: DAILY
+                  baseline:
+                  - - 0
+                    - 1
+                    - 3
+                  - - 600000
+                    - 1
+                    - 3
+                  deviationFactor: 3
+                  lastUpdated: 0
+                alertChannelIds: []
+                granularity: 600000
+                timeThreshold:
+                  type: violationsInSequence
+                  timeWindow: 600000
+                evaluationType: PER_AP
+                customPayloadFields: []
+                id: DKp0JArJRAiQIav9CoKSWQ
+                created: 1706617456952
+                initialCreated: 1706617456952
+                readOnly: false
+                enabled: true
+                derivedFromGlobalAlert: false
+              schema:
+                $ref: '#/components/schemas/ApplicationAlertConfigWithMetadata'
+          description: Smart Alert Configuration created.
+        '400':
+          description: Invalid Configuration.
+        '403':
+          description: Insufficient permissions.
+        '422':
+          description: Unprocessable entity.
+        '428':
+          description: Baseline calculation failed due to insufficient data.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureApplicationSmartAlerts
+      summary: Create Smart Alert Config
+      tags:
+      - Application Alert Configuration
+      x-ibm-ahub-byok: true
+  /api/events/settings/application-alert-configs/{id}:
+    delete:
+      description: 'Deletes an Smart Alert Configuration.
+
+        For more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.'
+      operationId: deleteApplicationAlertConfig
+      parameters:
+      - description: ID of a specific Smart Alert Configuration to delete.
+        example: DKp0JArJRAiQIav9CoKSWQ
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Smart Alert Configuration deleted.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Invalid Configuration ID provided.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureApplicationSmartAlerts
+      summary: Delete Smart Alert Config
+      tags:
+      - Application Alert Configuration
+      x-ibm-ahub-byok: true
+    get:
+      description: 'Gets a specific Smart Alert Configuration. This may return a deleted Configuration.
+
+        For more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.'
+      operationId: findApplicationAlertConfig
+      parameters:
+      - description: ID of a specific Smart Alert Configuration to retrieve.
+        example: DKp0JArJRAiQIav9CoKSWQ
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - description: 'A Unix timestamp representing a specific time the Configuration was active. If no timestamp is provided, the latest active version will be retrieved. '
+        example: 1706617456952
+        in: query
+        name: validOn
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                name: Calls are slower than usual
+                description: Calls are slower or equal to the expectation based on latency (90th).
+                boundaryScope: INBOUND
+                applicationId: ZOi0te_ERE-mRm-9zsbwdg
+                applications:
+                  ZOi0te_ERE-mRm-9zsbwdg:
+                    applicationId: ZOi0te_ERE-mRm-9zsbwdg
+                    inclusive: true
+                    services: {}
+                severity: 5
+                triggering: false
+                tagFilterExpression:
+                  type: TAG_FILTER
+                  name: endpoint.name
+                  stringValue: null
+                  numberValue: null
+                  booleanValue: null
+                  key: null
+                  value: null
+                  operator: NOT_EMPTY
+                  entity: DESTINATION
+                includeInternal: false
+                includeSynthetic: false
+                rule:
+                  alertType: slowness
+                  aggregation: P90
+                  metricName: latency
+                threshold:
+                  type: historicBaseline
+                  operator: '>='
+                  seasonality: DAILY
+                  baseline:
+                  - - 0
+                    - 1
+                    - 3
+                  - - 600000
+                    - 1
+                    - 3
+                  deviationFactor: 3
+                  lastUpdated: 0
+                alertChannelIds: []
+                granularity: 600000
+                timeThreshold:
+                  type: violationsInSequence
+                  timeWindow: 600000
+                evaluationType: PER_AP
+                customPayloadFields: []
+                id: DKp0JArJRAiQIav9CoKSWQ
+                created: 1706617456952
+                initialCreated: 1706617456952
+                readOnly: false
+                enabled: true
+                derivedFromGlobalAlert: false
+              schema:
+                $ref: '#/components/schemas/ApplicationAlertConfigWithMetadata'
+          description: OK
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: The requested Configuration does not exist.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get Smart Alert Config
+      tags:
+      - Application Alert Configuration
+      x-ibm-ahub-byok: true
+    post:
+      description: 'Updates an existing Smart Alert Configuration.
+
+        For more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.'
+      operationId: updateApplicationAlertConfig
+      parameters:
+      - description: ID of a specific Smart Alert Configuration to update.
+        example: DKp0JArJRAiQIav9CoKSWQ
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: Calls are slower than usual
+              description: Calls are slower or equal to the expectation based on latency (90th).
+              boundaryScope: INBOUND
+              applicationId: ZOi0te_ERE-mRm-9zsbwdg
+              applications:
+                ZOi0te_ERE-mRm-9zsbwdg:
+                  applicationId: ZOi0te_ERE-mRm-9zsbwdg
+                  inclusive: true
+                  services: {}
+              severity: 5
+              triggering: false
+              tagFilterExpression:
+                type: TAG_FILTER
+                name: endpoint.name
+                stringValue: null
+                numberValue: null
+                booleanValue: null
+                key: null
+                value: null
+                operator: NOT_EMPTY
+                entity: DESTINATION
+              includeInternal: false
+              includeSynthetic: false
+              rule:
+                alertType: slowness
+                aggregation: P90
+                metricName: latency
+              threshold:
+                type: historicBaseline
+                operator: '>='
+                seasonality: DAILY
+                baseline:
+                - - 0
+                  - 1
+                  - 3
+                - - 600000
+                  - 1
+                  - 3
+                deviationFactor: 3
+                lastUpdated: 0
+              alertChannelIds: []
+              granularity: 600000
+              timeThreshold:
+                type: violationsInSequence
+                timeWindow: 600000
+              evaluationType: PER_AP
+              customPayloadFields: []
+            schema:
+              $ref: '#/components/schemas/ApplicationAlertConfig'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                name: Calls are slower than usual
+                description: Calls are slower or equal to the expectation based on latency (90th).
+                boundaryScope: INBOUND
+                applicationId: ZOi0te_ERE-mRm-9zsbwdg
+                applications:
+                  ZOi0te_ERE-mRm-9zsbwdg:
+                    applicationId: ZOi0te_ERE-mRm-9zsbwdg
+                    inclusive: true
+                    services: {}
+                severity: 5
+                triggering: false
+                tagFilterExpression:
+                  type: TAG_FILTER
+                  name: endpoint.name
+                  stringValue: null
+                  numberValue: null
+                  booleanValue: null
+                  key: null
+                  value: null
+                  operator: NOT_EMPTY
+                  entity: DESTINATION
+                includeInternal: false
+                includeSynthetic: false
+                rule:
+                  alertType: slowness
+                  aggregation: P90
+                  metricName: latency
+                threshold:
+                  type: historicBaseline
+                  operator: '>='
+                  seasonality: DAILY
+                  baseline:
+                  - - 0
+                    - 1
+                    - 3
+                  - - 600000
+                    - 1
+                    - 3
+                  deviationFactor: 3
+                  lastUpdated: 0
+                alertChannelIds: []
+                granularity: 600000
+                timeThreshold:
+                  type: violationsInSequence
+                  timeWindow: 600000
+                evaluationType: PER_AP
+                customPayloadFields: []
+                id: DKp0JArJRAiQIav9CoKSWQ
+                created: 1706617456952
+                initialCreated: 1706617456952
+                readOnly: false
+                enabled: true
+                derivedFromGlobalAlert: false
+              schema:
+                $ref: '#/components/schemas/ApplicationAlertConfigWithMetadata'
+          description: Smart Alert Configuration updated.
+        '204':
+          description: Smart Alert Configuration did not change.
+        '400':
+          description: Invalid Application ID provided.
+        '403':
+          description: Insufficient permissions.
+        '422':
+          description: Unprocessable entity.
+        '428':
+          description: Baseline calculation failed due to insufficient data.
+        '500':
+          description: Internal error.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureApplicationSmartAlerts
+      summary: Update Smart Alert Config
+      tags:
+      - Application Alert Configuration
+      x-ibm-ahub-byok: true
+  /api/events/settings/application-alert-configs/{id}/disable:
+    put:
+      description: 'Disables an Smart Alert Configuration.
+
+        For more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.'
+      operationId: disableApplicationAlertConfig
+      parameters:
+      - description: ID of a specific Smart Alert Configuration to disable.
+        example: DKp0JArJRAiQIav9CoKSWQ
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '204':
+          description: Smart Alert Configuration disabled.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Invalid Configuration ID provided.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureApplicationSmartAlerts
+      summary: Disable Smart Alert Config
+      tags:
+      - Application Alert Configuration
+      x-ibm-ahub-byok: true
+  /api/events/settings/application-alert-configs/{id}/enable:
+    put:
+      description: 'Enables an Smart Alert Configuration.
+
+        For more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.'
+      operationId: enableApplicationAlertConfig
+      parameters:
+      - description: ID of a specific Smart Alert Configuration to enable.
+        example: DKp0JArJRAiQIav9CoKSWQ
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '204':
+          description: Smart Alert Configuration enabled.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Invalid Configuration ID provided.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureApplicationSmartAlerts
+      summary: Enable Application Alert Config
+      tags:
+      - Application Alert Configuration
+      x-ibm-ahub-byok: true
+  /api/events/settings/application-alert-configs/{id}/restore/{created}:
+    put:
+      description: 'Restores a deleted Smart Alert Configuration.
+
+        For more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.'
+      operationId: restoreApplicationAlertConfig
+      parameters:
+      - description: ID of a specific Smart Alert Configuration to restore.
+        example: DKp0JArJRAiQIav9CoKSWQ
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - description: Unix timestamp representing the creation time of a specific Smart Alert Configuration.
+        example: 1707726529124
+        in: path
+        name: created
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '204':
+          description: Smart Alert Configuration restored.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Invalid Configuration provided.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureApplicationSmartAlerts
+      summary: Restore Smart Alert Config
+      tags:
+      - Application Alert Configuration
+      x-ibm-ahub-byok: true
+  /api/events/settings/application-alert-configs/{id}/update-baseline:
+    post:
+      description: 'Recalculates and updates the historic baseline (static seasonal threshold) of a Configuration. The `LastUpdated` field of the Configuration is changed to the current time.
+
+        For more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.'
+      operationId: updateApplicationHistoricBaseline
+      parameters:
+      - description: ID of a specific Smart Alert Configuration to recalculate.
+        example: DKp0JArJRAiQIav9CoKSWQ
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Smart Alert Configuration baseline successfully recalculated and updated.
+        '204':
+          description: Baseline recalculation completed with no changes needed.
+        '400':
+          description: Invalid configuration type or configuration is read-only.
+        '403':
+          description: Insufficient permissions to access this configuration.
+        '404':
+          description: Smart Alert Configuration not found.
+        '428':
+          description: Baseline calculation failed due to insufficient data.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureApplicationSmartAlerts
+      summary: Recalculate Smart Alert Config Baseline
+      tags:
+      - Application Alert Configuration
+      x-ibm-ahub-byok: true
+  /api/events/settings/application-alert-configs/{id}/versions:
+    get:
+      description: 'Gets all versions of an Smart Alert Configuration. This may return deleted Configurations. Configurations are sorted by creation date in descending order.
+
+        For more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.'
+      operationId: findApplicationAlertConfigVersions
+      parameters:
+      - description: ID of a specific Smart Alert Configuration to retrieve.
+        example: DKp0JArJRAiQIav9CoKSWQ
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: DKp0JArJRAiQIav9CoKSWQ
+                created: 1706617456952
+                enabled: true
+                deleted: false
+                changeSummary:
+                  changeType: CREATE
+                  author:
+                    id: 5ee8a3e8cd70020001ecb007
+                    type: USER
+                    fullName: Stan
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConfigVersion'
+          description: OK
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: The requested Configuration does not exist.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get Smart Alert Config Versions
+      tags:
+      - Application Alert Configuration
+      x-ibm-ahub-byok: true
+components:
+  schemas:
+    ThresholdConfigRule:
+      type: object
+      discriminator:
+        mapping:
+          adaptiveBaseline: '#/components/schemas/AdaptiveThresholdRule'
+          historicBaseline: '#/components/schemas/StaticBaselineThresholdRule'
+          staticThreshold: '#/components/schemas/StaticThresholdRule'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    Author:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - API
+          - USER
+          - INSTANA
+          - UNKNOWN
+    ApplicationAlertConfig:
+      type: object
+      properties:
+        alertChannelIds:
+          type: array
+          deprecated: true
+          description: List of IDs of alert channels defined in Instana. Can be left empty.
+          items:
+            type: string
+            deprecated: true
+            description: List of IDs of alert channels defined in Instana. Can be left empty.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        alertChannels:
+          type: object
+          additionalProperties:
+            type: array
+            description: Set of alert channel IDs associated with the severity.
+            items:
+              type: string
+              description: Set of alert channel IDs associated with the severity.
+            uniqueItems: true
+          description: Set of alert channel IDs associated with the severity.
+        applicationId:
+          type: string
+          writeOnly: true
+        applications:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ApplicationNode'
+          description: Selection of applications, services, and endpoints that this Smart Alert configuration is associated with. This selection is connected to the defined `tagFilterExpression` by the logical `AND` operator.
+        boundaryScope:
+          type: string
+          description: Determines the source of the application alert configuration. An `INBOUND` scope refers to consumer-made calls. An `ALL` scope refers to both consumer and internally made calls.
+          enum:
+          - ALL
+          - INBOUND
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        description:
+          type: string
+          description: Description of the application alert configuration. Used as a template for the description of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 65536
+          minLength: 0
+        evaluationType:
+          type: string
+          description: Determines whether calls of the aggregated metrics are grouped by the application, the service, or the endpoint. This also determines whether the resulting events are categorized as an issue on the respective entity of that group.
+          enum:
+          - PER_AP
+          - PER_AP_SERVICE
+          - PER_AP_ENDPOINT
+        gracePeriod:
+          type: integer
+          format: int64
+          description: The duration for which an alert remains open after conditions are no longer violated, with the alert auto-closing once the grace period expires.
+        granularity:
+          type: integer
+          format: int32
+          default: 600000
+          description: The evaluation granularity used for detection of violations of the defined threshold. Defines the size of the tumbling window used.
+          enum:
+          - 60000
+          - 300000
+          - 600000
+          - 900000
+          - 1200000
+          - 1800000
+        includeInternal:
+          type: boolean
+          description: Flag to include Internal Calls. These calls are work done inside a service and correspond to intermediate spans in custom tracing.
+        includeSynthetic:
+          type: boolean
+          description: 'Flag to include Synthetic Calls. These calls have a synthetic endpoint as their destination, such as calls to health-check endpoints. '
+        name:
+          type: string
+          description: Name of the application alert configuration. Used as a template for the title of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 256
+          minLength: 0
+        rule:
+          $ref: '#/components/schemas/ApplicationAlertRule'
+        rules:
+          type: array
+          description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
+          items:
+            $ref: '#/components/schemas/RuleWithThresholdApplicationAlertRule'
+          maxItems: 1
+          minItems: 1
+        severity:
+          type: integer
+          format: int32
+          deprecated: true
+          description: The severity of the alert when triggered, which is either 5 (Warning), or 10 (Critical).
+          maximum: 10
+          minimum: 5
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagFilter'
+          uniqueItems: true
+          writeOnly: true
+        threshold:
+          $ref: '#/components/schemas/Threshold'
+        timeThreshold:
+          $ref: '#/components/schemas/ApplicationTimeThreshold'
+        triggering:
+          type: boolean
+          description: Optional flag to indicate whether an Incident is also triggered or not.
+      required:
+      - alertChannelIds
+      - applications
+      - boundaryScope
+      - customPayloadFields
+      - description
+      - evaluationType
+      - granularity
+      - name
+      - tagFilterExpression
+      - timeThreshold
+    CustomPayloadField:
+      type: object
+      description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+      discriminator:
+        mapping:
+          dynamic: '#/components/schemas/DynamicField'
+          staticString: '#/components/schemas/StaticStringField'
+        propertyName: type
+      properties:
+        key:
+          type: string
+          description: A user-specified unique identifier or name for a custom payload entry.
+        type:
+          type: string
+      required:
+      - key
+      - type
+    TagFilter:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/TagFilterExpressionElement'
+      - type: object
+        properties:
+          entity:
+            type: string
+            description: SOURCE or DESTINATION tag in case of a call tag. For Infrastructure, always set to NOT_APPLICABLE.
+            enum:
+            - NOT_APPLICABLE
+            - DESTINATION
+            - SOURCE
+          key:
+            type: string
+            description: Tag key in case of a key/value tag.
+            maxLength: 512
+            minLength: 0
+          name:
+            type: string
+            description: Name of the tag.
+            maxLength: 128
+            minLength: 0
+          operator:
+            type: string
+            enum:
+            - EQUALS
+            - CONTAINS
+            - LESS_THAN
+            - LESS_OR_EQUAL_THAN
+            - GREATER_THAN
+            - GREATER_OR_EQUAL_THAN
+            - NOT_EMPTY
+            - NOT_EQUAL
+            - NOT_CONTAIN
+            - IS_EMPTY
+            - NOT_BLANK
+            - IS_BLANK
+            - STARTS_WITH
+            - ENDS_WITH
+            - NOT_STARTS_WITH
+            - NOT_ENDS_WITH
+            - REGEX_MATCH
+          value:
+            type: object
+            description: Tag value to filter on. Can be a string, number, or boolean value.
+      required:
+      - entity
+      - name
+      - operator
+    ApplicationAlertConfigWithMetadata:
+      type: object
+      properties:
+        alertChannelIds:
+          type: array
+          deprecated: true
+          description: List of IDs of alert channels defined in Instana. Can be left empty.
+          items:
+            type: string
+            deprecated: true
+            description: List of IDs of alert channels defined in Instana. Can be left empty.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        alertChannels:
+          type: object
+          additionalProperties:
+            type: array
+            description: Set of alert channel IDs associated with the severity.
+            items:
+              type: string
+              description: Set of alert channel IDs associated with the severity.
+            uniqueItems: true
+          description: Set of alert channel IDs associated with the severity.
+        applicationId:
+          type: string
+          deprecated: true
+          description: ID of the application that this Smart Alert configuration is applied to.
+          maxLength: 64
+          minLength: 0
+        applications:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ApplicationNode'
+          description: Selection of applications, services, and endpoints that this Smart Alert configuration is associated with. This selection is connected to the defined `tagFilterExpression` by the logical `AND` operator.
+        boundaryScope:
+          type: string
+          description: Determines the source of the application alert configuration. An `INBOUND` scope refers to consumer-made calls. An `ALL` scope refers to both consumer and internally made calls.
+          enum:
+          - ALL
+          - INBOUND
+        created:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the creation time of this revision.
+          minimum: 1
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        description:
+          type: string
+          description: Description of the application alert configuration. Used as a template for the description of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 65536
+          minLength: 0
+        enabled:
+          type: boolean
+          description: Flag to indicate whether or not the configuration is enabled.
+        evaluationType:
+          type: string
+          description: Determines whether calls of the aggregated metrics are grouped by the application, the service, or the endpoint. This also determines whether the resulting events are categorized as an issue on the respective entity of that group.
+          enum:
+          - PER_AP
+          - PER_AP_SERVICE
+          - PER_AP_ENDPOINT
+        gracePeriod:
+          type: integer
+          format: int64
+          description: The duration for which an alert remains open after conditions are no longer violated, with the alert auto-closing once the grace period expires.
+        granularity:
+          type: integer
+          format: int32
+          default: 600000
+          description: The evaluation granularity used for detection of violations of the defined threshold. Defines the size of the tumbling window used.
+          enum:
+          - 60000
+          - 300000
+          - 600000
+          - 900000
+          - 1200000
+          - 1800000
+        id:
+          type: string
+          description: 'ID of this Application App Alert Config. '
+          maxLength: 64
+          minLength: 0
+        includeInternal:
+          type: boolean
+          description: Flag to include Internal Calls. These calls are work done inside a service and correspond to intermediate spans in custom tracing.
+        includeSynthetic:
+          type: boolean
+          description: 'Flag to include Synthetic Calls. These calls have a synthetic endpoint as their destination, such as calls to health-check endpoints. '
+        initialCreated:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the time of the initial revision.
+          minimum: 1
+        name:
+          type: string
+          description: Name of the application alert configuration. Used as a template for the title of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 256
+          minLength: 0
+        readOnly:
+          type: boolean
+          description: Flag to indicate whether or not the configuration is read-only. Read-only access restricts modification of the config.
+        rule:
+          $ref: '#/components/schemas/ApplicationAlertRule'
+        rules:
+          type: array
+          description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
+          items:
+            $ref: '#/components/schemas/RuleWithThresholdApplicationAlertRule'
+          maxItems: 1
+          minItems: 1
+        severity:
+          type: integer
+          format: int32
+          deprecated: true
+          description: The severity of the alert when triggered, which is either 5 (Warning), or 10 (Critical).
+          maximum: 10
+          minimum: 5
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagFilter'
+          uniqueItems: true
+          writeOnly: true
+        threshold:
+          $ref: '#/components/schemas/Threshold'
+        timeThreshold:
+          $ref: '#/components/schemas/ApplicationTimeThreshold'
+        triggering:
+          type: boolean
+          description: Optional flag to indicate whether an Incident is also triggered or not.
+      required:
+      - alertChannelIds
+      - applications
+      - boundaryScope
+      - customPayloadFields
+      - description
+      - evaluationType
+      - granularity
+      - id
+      - name
+      - tagFilterExpression
+      - timeThreshold
+    EndpointNode:
+      type: object
+      properties:
+        endpointId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        inclusive:
+          type: boolean
+      required:
+      - endpointId
+    ConfigVersion:
+      type: object
+      properties:
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummary'
+        created:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the creation time of this revision.
+          minimum: 1
+        deleted:
+          type: boolean
+          deprecated: true
+          description: Flag to indicate whether or not the configuration was deleted.
+        enabled:
+          type: boolean
+          deprecated: true
+          description: Flag to indicate whether or not the configuration is enabled.
+        id:
+          type: string
+          description: ID of this configuration version.
+          maxLength: 64
+          minLength: 0
+      required:
+      - id
+    ChangeSummary:
+      type: object
+      description: Brief summary of changes made in this config version.
+      properties:
+        author:
+          $ref: '#/components/schemas/Author'
+        changeType:
+          type: string
+          enum:
+          - CREATE
+          - UPDATE
+          - DELETE
+          - ENABLE
+          - DISABLE
+          - RESTORE
+          - UNKNOWN
+      required:
+      - author
+      - changeType
+    ServiceNode:
+      type: object
+      properties:
+        endpoints:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EndpointNode'
+        inclusive:
+          type: boolean
+        serviceId:
+          type: string
+          maxLength: 64
+          minLength: 0
+      required:
+      - endpoints
+      - serviceId
+    ApplicationAlertRule:
+      type: object
+      discriminator:
+        mapping:
+          errorRate: '#/components/schemas/ErrorsApplicationAlertRule'
+          errors: '#/components/schemas/ErrorsApplicationAlertRule'
+          logs: '#/components/schemas/LogsApplicationAlertRule'
+          slowness: '#/components/schemas/SlownessApplicationAlertRule'
+          statusCode: '#/components/schemas/StatusCodeApplicationAlertRule'
+          throughput: '#/components/schemas/ThroughputApplicationAlertRule'
+        propertyName: alertType
+      properties:
+        aggregation:
+          type: string
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        alertType:
+          type: string
+        metricName:
+          type: string
+      required:
+      - alertType
+      - metricName
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    ApplicationTimeThreshold:
+      type: object
+      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
+      discriminator:
+        mapping:
+          requestImpact: '#/components/schemas/TraceImpactApplicationTimeThreshold'
+          violationsInPeriod: '#/components/schemas/ViolationsInPeriodApplicationTimeThreshold'
+          violationsInSequence: '#/components/schemas/ViolationsInSequenceApplicationTimeThreshold'
+        propertyName: type
+      properties:
+        timeWindow:
+          type: integer
+          format: int64
+        type:
+          type: string
+      required:
+      - type
+    ApplicationNode:
+      type: object
+      description: Selection of applications, services, and endpoints that this Smart Alert configuration is associated with. This selection is connected to the defined `tagFilterExpression` by the logical `AND` operator.
+      properties:
+        applicationId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        inclusive:
+          type: boolean
+        services:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ServiceNode'
+      required:
+      - applicationId
+      - services
+    RuleWithThresholdApplicationAlertRule:
+      type: object
+      description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
+      properties:
+        rule:
+          $ref: '#/components/schemas/ApplicationAlertRule'
+        thresholdOperator:
+          type: string
+          enum:
+          - '>'
+          - '>='
+          - <
+          - <=
+        thresholds:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ThresholdConfigRule'
+      required:
+      - rule
+      - thresholdOperator
+      - thresholds
+    Threshold:
+      type: object
+      deprecated: true
+      description: Indicates the type of threshold this alert rule is evaluated on.
+      discriminator:
+        mapping:
+          adaptiveBaseline: '#/components/schemas/AdaptiveBaseline'
+          historicBaseline: '#/components/schemas/HistoricBaseline'
+          staticThreshold: '#/components/schemas/StaticThreshold'
+        propertyName: type
+      properties:
+        operator:
+          type: string
+          enum:
+          - '>'
+          - '>='
+          - <
+          - <=
+        type:
+          type: string
+      required:
+      - operator
+      - type
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage

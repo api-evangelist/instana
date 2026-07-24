@@ -1,0 +1,1463 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation Synthetic Test Playback Results API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: Synthetic Test Playback Results
+  description: "The endpoints of this group retrieve the results for defined Synthetic tests.\n\n**Note on names in TagFilter/TagFilterExpression**: From R243, the name used in a TagFilter or a TagFilterExpression has the format: synthetic.\\<name\\>.\nIt can be one of the following: synthetic.id (id is the test result id), synthetic.testId,\nsynthetic.testName, synthetic.locationId, synthetic.applicationId, synthetic.serviceId, synthetic.syntheticType,\nsynthetic.locationName, and synthetic.locationLabel. If it is a metric name, then the format is: synthetic.metrics\\<MetricName\\>.\nFor example, synthetic.metricsResponseTime, synthetic.metricsStatus.\n\nThe names used prior to R243 should be considered as deprecated. They will be accepted temporarily and will be removed in an upcoming release.\n\n## Get Synthetic test playback results \nThe endpoint returns the aggregated Synthetic test result data\n\n### Mandatory Parameters  \n\n**testId** An array of the unique identifiers of Synthetic tests\n\n**metrics** A list of metric objects that define which metric should be returned, with the defined aggregation. Each metrics objects consists of minimum two items:\n1. *metric* select a particular metric. This is the list of available metrics for all types of Synthetic Tests: \n   synthetic.metricsResponseTime (ms), synthetic.metricsResponseSize (bytes), synthetic.metricsStatusCode (an integer represents an HTTP response code, e.g., 200, 401, 500), synthetic.metricsRequestSize (bytes), \n   synthetic.metricsUploadSpeed (bytes per second), synthetic.metricsDownloadSpeed (bytes per second), \n   synthetic.metricsRedirectTime (ms), synthetic.metricsRedirectCount, synthetic.metricsConnectCount, synthetic.metricsStatus (an integer, 1-success or 0-failure), and synthetic.tags (list of custom properties and values). \n   \n   The following metrics are only available for the HTTPAction type Synthetic Tests: synthetic.metricsBlocking (bytes), synthetic.metricsDns (bytes), synthetic.metricsConnect (bytes), synthetic.metricsSsl (bytes), \n   synthetic.metricsSending (bytes), synthetic.metricsWaiting (bytes), and synthetic.metricsReceiving (bytes).\n\n   The metric synthetic.customMetrics (list of custom metrics and values) is only available for SSLCertificate and DNS tests.  For SSLCertificate, the custom metrics are returned as metrics.  For DNS, the custom metrics are returned in the *ismDetails* field.\n\n   The metric synthetic.tags adds the latest list of custom properties to the response.\n\n2. *aggregation* Depending on the selected metric, different aggregations are available e.g., SUM, MEAN, P90 (90th percentile), DISTINCT_COUNT, and MAX.  MAX is only allowed for synthetic.tags.\n\n**timeFrame** As in our UI you can specify the timeframe for metrics retrieval.\n```\n  windowSize           to\n     (ms)       (unix-timestamp)\n<----------------------|\n```\nThe timeFrame might be adjusted to fit the metric granularity so that there is no partial bucket. For example, if the query timeFrame is 08:02 - 09:02 and the metric granularity is 5 minutes, the timeFrame will be adjusted to 08:05 - 09:00. The adjusted timeFrame will be returned in the response payload. If the query does not have any metric with granularity, a default granularity will be used for adjustment.\n\n### Optional Parameters\n\n**metrics** By default you will get an aggregated metric for the selected timeframe\n\n* *granularity*\n    * If it is not set you will get an aggregated value for the selected timeframe\n    * If the granularity is set you will get data points with the specified granularity **in seconds**\n    * The granularity should not be greater than the `windowSize` (important: `windowSize` is expressed in **milliseconds**)\n    * The granularity should not be set too small relative to the `windowSize` to avoid creating an excessively large number of data points (max 600)\n    * The granularity values are the same for all metrics\n\n**pagination** if you use pagination you most probably want to fix the timeFrame for the retrieved metrics\n1. *page* select the page number you want to retrieve\n2. *pageSize* set the number of Synthetic test results you want to return with one query\n\n**order** You can order the returned items alphanumerical by label, either ascending or descending\n1. *by* Use the metric name, e.g. \"synthetic.metricsResponseTime\", to order by its value\n2. *direction* either ascending (ASC) or descending (DESC)\n\n**tagFilters** It serves as a filter to narrow down return results.\nIt will be replaced by **tagFilterExpression**.\n\n**tagFilterExpression** It serves as a filter to narrow down return results. Its type can be either EXPRESSION or TAG_FILTER with\nlogical operators AND or OR.\n\nA payload only needs either tagFilters or tagFilterExpression as a filter, not both.\n\nEither tagFilters or tagFilterExpression can specify a custom property by its key and value.\n```\n\"tagFilters\":[{\n  \"name\":\"synthetic.tags\",\n  \"key\":\"location\",\n  \"value\":\"Denver\",\n  \"operator\":\"EQUALS\"\n}]\n```\n\nTo narrow down the result set you have two options to search for a test.\n\n**locationId | applicationId**\n\n* *synthetic.locationId:* filter by locationId\n\n* *synthetic.applicationId:* filter by applicationId\n\n### Defaults\n\n**metrics**\n* *granularity:* 0\n\n**timeFrame**\n```\n\"timeFrame\": {\n\t\"windowSize\": 60000,\n\t\"to\": {current timestamp}\n}\n```\n**locationId | applicationId**\n* no filters are applied in the default call\n\n### Sample payload to get a Synthetic test result\n```\n{\n    \"testId\": [\"tUmWgvzdo1Q1vpVRpzR5\", \"Pg0Q1UqHRd7OMysohVLd\"],\n    \"//comment1\": \"Get test results from last 30 minutes (windowSize), data are aggregated every 10 minutes (granularity)\",\n    \"//comment2\": \"The granularity values for responseTime and responseSize must be the same\"\n    \"metrics\": [\n     {\n        \"aggregation\": \"MEAN\",\n        \"granularity\": 600,    \n        \"metric\": \"synthetic.metricsResponseTime\"\n     },\n     {\n        \"aggregation\": \"MEAN\",\n        \"granularity\": 600,    \n        \"metric\": \"synthetic.metricsResponseSize\"\n     }],\n     \"timeFrame\": {\n       \"to\": 0,\n       \"windowSize\": 1800000  \n     }\n}\n```\n\n## Get a list of Synthetic test playback results (analytic function)\nThe endpoint returns the Synthetic test result data based upon the specified analytic function.\nThe *tagFilterExpression* is applied to the result data and is then grouped by the synthetic.testId before the analytic function is applied. \nOptionally, after the analytic function is applied to the result data, the *tagFilters* can further filter the result. \n\n### Mandatory Parameters\n**analyticFunction** It is a string.  Valid values are *FIRST_VALUE* and *LAST_VALUE*.\n\n**syntheticMetrics** It is an array of metrics. The available metrics for all types of Synthetic Tests: synthetic.id (a string representing the test result ID),\nsynthetic.metricsResponseTime (ms), synthetic.metricsResponseSize (bytes), synthetic.metricsStatusCode (an integer represents an HTTP response code, e.g., 200, 401, 500), synthetic.metricsRequestSize (bytes),\nsynthetic.metricsUploadSpeed (bytes per second), synthetic.metricsDownloadSpeed (bytes per second),\nsynthetic.metricsRedirectTime (ms), synthetic.metricsRedirectCount, synthetic.metricsConnectCount, synthetic.metricsStatus (an integer, 1-success or 0-failure), and synthetic.tags (list of custom properties and values).\n\nThe following metrics are only available for the HTTPAction type Synthetic Tests: synthetic.metricsBlocking (bytes), synthetic.metricsDns (bytes), synthetic.metricsConnect (bytes), synthetic.metricsSsl (bytes),\nsynthetic.metricsSending (bytes), synthetic.metricsWaiting (bytes), and synthetic.metricsReceiving (bytes).\n\nThe metric synthetic.customMetrics (list of custom metrics and values) is only available for SSLCertificate and DNS tests.  For SSLCertificate, the custom metrics are returned as metrics.  For DNS, the custom metrics are returned in the *ismDetails* field.\n\nThe metric synthetic.tags adds the latest list of custom properties to the response.\n\n**timeFrame** As in our UI you can specify the timeframe for metrics retrieval.\n```\n  windowSize           to\n     (ms)       (unix-timestamp)\n<----------------------|\n```\n\n### Optional Parameters\n**includeLocationIdGrouping** A boolean.  The default grouping for the API is synthetic.testId.  \nSpecify *true* to change the grouping to synthetic.testId, synthetic.locationId.  The default for  \nthis parameter is *false*.\n\n**pagination** if you use pagination you most probably want to fix the timeFrame for the retrieved metrics\n1. *page* select the page number you want to retrieve\n2. *pageSize* set the number of Synthetic test results you want to return with one query\n\n**order** You can order the returned items alphanumerical by label, either ascending or descending\n1. *by* Use the metric name, e.g. \"synthetic.metricsResponseTime\" to order by that value\n2. *direction* either ascending (ASC) or descending (DESC)\n\n**tagFilterExpression** It serves as a filter to define the scope of relevant results that will \nbe grouped and then applied to the analytic function. Its type can be either EXPRESSION or \nTAG_FILTER with logical operators *AND* or *OR*.\n\n**tagFilters** The tagFilters are applied to the result set generated by the analytic function.   \nAn example: if there are three tests and their last value status\nare 1, 0, 1 (indicating success, failure, success) and \n**tagFilters** is not specified, then the API with LAST_VALUE will\nreturn three tests with the stated statuses. If **tagFilters** is specified with\nsynthetic.metricsStatus equal to 0 (failed), then the final result set will be the tests that \nfailed the last time that they ran and in this example will be one record consisting\nof the test with status 0.\n\nEither tagFilters or tagFilterExpression can specify a custom property by its key and value.\n```\n\"tagFilters\":[{\n  \"name\":\"synthetic.tags\",\n  \"key\":\"location\",\n  \"value\":\"Denver\",\n  \"operator\":\"EQUALS\"\n}]\n```\n\n### Sample payload to retrieve the response_size and response_time from the last result of each test that ran within the last five minutes.  Include both scheduled and on-demand tests.\n```json\n{\n  \"syntheticMetrics\":[\"synthetic.metricsResponseSize\",\"synthetic.metricsResponseTime\"],\n  \"analyticFunction\": \"LAST_VALUE\",\n  \"order\":{\n    \"by\":\"synthetic.startTime\",\n    \"direction\":\"DESC\"\n  },\n  \"tagFilterExpression\": {\n    \"type\":\"EXPRESSION\",\n    \"logicalOperator\":\"AND\",\n    \"elements\":[{\n      \"stringValue\":\"All\",\n      \"name\":\"synthetic.runType\",\n      \"operator\":\"EQUALS\"\n    }]\n  },\n  \"timeFrame\": {\n    \"to\": 0,\n    \"windowSize\": 300000\n  }\n}\n```\n\n### Sample payload to retrieve the response_size and response_time from the last result of each test that ran within the last five minutes.  Include both scheduled and on-demand tests.  Only return results for tests that failed the last time that they ran.  \n```json\n{\n  \"syntheticMetrics\":[\"synthetic.metricsResponseSize\",\"synthetic.metricsResponseTime\"],\n  \"analyticFunction\": \"LAST_VALUE\",\n  \"order\":{\n    \"by\":\"synthetic.startTime\",\n    \"direction\":\"DESC\"\n  },\n  \"tagFilterExpression\": {\n    \"type\":\"EXPRESSION\",\n    \"logicalOperator\":\"AND\",\n    \"elements\":[{\n      \"stringValue\":\"All\",\n      \"name\":\"synthetic.runType\",\n      \"operator\":\"EQUALS\"\n    }]\n  },\n  \"tagFilters\":[{\n    \"numberValue\": 0,\n    \"name\":\"synthetic.metricsStatus\",\n    \"operator\":\"EQUALS\"\n  }],\n  \"timeFrame\": {\n    \"to\": 0,\n    \"windowSize\": 300000\n  }\n}\n```\n\n## Get a list of Synthetic test playback results (no aggregation)\n### Mandatory Parameters\n**syntheticMetrics** It is an array of metrics. The available metrics for all types of Synthetic Tests: synthetic.id (a string representing the test result ID), \nsynthetic.metricsResponseTime (ms), synthetic.metricsResponseSize (bytes), synthetic.metricsStatusCode (an integer represents an HTTP response code, e.g., 200, 401, 500), synthetic.metricsRequestSize (bytes),\nsynthetic.metricsUploadSpeed (bytes per second), synthetic.metricsDownloadSpeed (bytes per second),\nsynthetic.metricsRedirectTime (ms), synthetic.metricsRedirectCount, synthetic.metricsConnectCount, synthetic.metricsStatus (an integer, 1-success or 0-failure), and synthetic.tags (list of custom properties and values).\n\nThe following metrics are only available for the HTTPAction type Synthetic Tests: synthetic.metricsBlocking (bytes), synthetic.metricsDns (bytes), synthetic.metricsConnect (bytes), synthetic.metricsSsl (bytes),\nsynthetic.metricsSending (bytes), synthetic.metricsWaiting (bytes), and synthetic.metricsReceiving (bytes).\n\nThe metric synthetic.customMetrics (list of custom metrics and values) is only available for SSLCertificate and DNS tests.  For SSLCertificate, the custom metrics are returned as metrics.  For DNS, the custom metrics are returned in the *ismDetails* field.\n\nThe metric synthetic.tags adds the latest list of custom properties to the response.\n\n**timeFrame** As in our UI you can specify the timeframe for metrics retrieval.\n```\n  windowSize           to\n     (ms)       (unix-timestamp)\n<----------------------|\n```\n\n### Optional Parameters\n**pagination** if you use pagination you most probably want to fix the timeFrame for the retrieved metrics\n1. *page* select the page number you want to retrieve\n2. *pageSize* set the number of Synthetic test results you want to return with one query\n\n**order** You can order the returned items alphanumerical by label, either ascending or descending\n1. *by* Use the metric name, e.g. \"synthetic.metricsResponseTime\" to order by that value\n2. *direction* either ascending (ASC) or descending (DESC)\n\n**tagFilters** It serves as a filter to narrow down return results. \nIt will be replaced by **tagFilterExpression**.\n\n**tagFilterExpression** It serves as a filter to narrow down return results. Its type can be either EXPRESSION or TAG_FILTER with \nlogical operators AND or OR.\n\nA payload only needs either tagFilters or tagFilterExpression as a filter, not both.\n\nEither tagFilters or tagFilterExpression can specify a custom property by its key and value.\n```\n\"tagFilters\":[{\n  \"name\":\"synthetic.tags\",\n  \"key\":\"location\",\n  \"value\":\"Denver\",\n  \"operator\":\"EQUALS\"\n}]\n```\n\n### Sample payload to get a list of Synthetic test results with tagFilters\n```json\n{\n  \"syntheticMetrics\":[\"synthetic.metricsResponseTime\",\"synthetic.metricsResponseSize\"],\n  \"order\":{\n    \"by\":\"synthetic.metricsResponseTime\",\n    \"direction\":\"DESC\"\n  },\n  \"tagFilters\":[{\n    \"stringValue\":\"hYziqsaXSJmQsehOWg1S\",\n    \"name\":\"synthetic.testId\",\n    \"operator\":\"EQUALS\"\n  }],\n  \"timeFrame\": {\n    \"to\": 0,\n    \"windowSize\": 1800000\n  }\n}\n```\n\n### Sample payload to get a list of Synthetic test results with tagFilterExpression\n```json\n{\n  \"syntheticMetrics\":[\"synthetic.metricsResponseTime\",\"synthetic.metricsResponseSize\"],\n  \"order\":{\n    \"by\":\"synthetic.metricsResponseTime\",\n    \"direction\":\"DESC\"\n  },\n  \"tagFilterExpression\": { \n    \"type\":\"EXPRESSION\",\n    \"logicalOperator\":\"AND\",\n    \"elements\":[{\n      \"stringValue\":\"hYziqsaXSJmQsehOWg1S\",\n      \"name\":\"synthetic.testId\",\n      \"operator\":\"EQUALS\"\n    }, {\n      \"name\": \"synthetic.locationId\", \n      \"operator\": \"EQUALS\", \n      \"stringValue\": \"abcdefgXSJmQsehOWg1S\"\n    }]\n  },\n  \"timeFrame\": {\n    \"to\": 0,\n    \"windowSize\": 1800000\n  }\n}\n```\n\n### Sample payload to get the custom metrics of a Synthetic SSLCertificate test\n```json\n{\n  \"syntheticMetrics\":[\"synthetic.customMetrics\"],\n  \"tagFilters\":[{\n    \"stringValue\":\"dk6yzb9fxCDlB6axIhUu\",\n    \"name\":\"synthetic.testId\",\n    \"operator\":\"EQUALS\"\n  }],\n  \"timeFrame\": {\n    \"to\": 0,\n    \"windowSize\": 172800000\n  }\n}\n```\n\n## Get a list of Synthetic tests with Success Rate and Average Response Time data\nThe endpoint returns a list of Synthetic tests with Success Rate and Average Response Time result data\n\n### Mandatory Parameters\n\n**metrics**\n1. *metric* select a particular metric. Right now, only synthetic.metricsResponseTime (ms) is supported.\n2. *aggregation* MEAN\n3. *granularity* 60\n\n**timeFrame** As in our UI you can specify the timeframe for metrics retrieval.\n```\n  windowSize           to\n     (ms)       (unix-timestamp)\n<----------------------|\n\n\"timeFrame\": {\n\t\"windowSize\": 60000,\n\t\"to\": {current timestamp}\n}\n```\n\n### Optional Parameters\n\n**pagination** if you use pagination you most probably want to fix the timeFrame for the retrieved metrics\n1. *page* select the page number you want to retrieve\n2. *pageSize* set the number of Synthetic test results you want to return with one query\n\n**order** You can order the returned items alphanumerical by label, either ascending or descending\n1. *by* Use the metric name, \"synthetic.metricsResponseTime\", to order by its value\n2. *direction* either ascending (ASC) or descending (DESC)\n\n**tagFilters** It serves as a filter to narrow down return results. The name of a tagFilter is one of the following: \nsynthetic.syntheticType, synthetic.locationId, and synthetic.applicationId.\nIt will be replaced by **tagFilterExpression**.\n```\n\"tagFilters\":[{\n  \"stringValue\":\"hYziqsaXSJmQsehOWg1S\",\n  \"name\":\"synthetic.applicationId\",\n  \"operator\":\"EQUALS\"\n}]\n```\n\n**tagFilterExpression** It serves as a filter to narrow down return results. Its type can be either EXPRESSION or TAG_FILTER with\nlogical operators AND or OR.\n```\n\"tagFilterExpression\": { \n  \"type\":\"EXPRESSION\",\n  \"logicalOperator\":\"AND\",\n  \"elements\":[{\n    \"name\": \"synthetic.metricsStatus\", \n    \"operator\": \"EQUALS\", \n    \"numberValue\": 1\n  }, {\n    \"name\": \"synthetic.locationId\", \n    \"operator\": \"EQUALS\", \n    \"stringValue\":\"WnjlKKbgzLDnyGra6PAs\"\n  }]\n}\n```\n\nA payload only needs either tagFilters or tagFilterExpression as a filter, not both.\n\nEither tagFilters or tagFilterExpression can specify a custom property by its key and value.\n```\n\"tagFilters\":[{\n  \"name\":\"synthetic.tags\",\n  \"key\":\"location\",\n  \"value\":\"Denver\",\n  \"operator\":\"EQUALS\"\n}]\n```\n\nTo narrow down the result set you have three options to search for a test.\n\n**syntheticType | locationId | applicationId**\n\n* *synthetic.syntheticType:* filter by syntheticType, either HTTPAction or HTTPScript\n\n* *synthetic.locationId:* filter by locationId\n\n* *synthetic.applicationId:* filter by applicationId\n\n\nTests can also be filtered by their active state (`true`/`false`) using the custom property label `synthetic.testActive`.\n```\n\"tagFilters\": [{ \n  \"name\":\"synthetic.testActive\", \n  \"operator\":\"EQUALS\",\n  \"booleanValue\": false \n}]\n```\n\n### Defaults\n\n**syntheticType | locationId | applicationId**\n* no filters are applied in the default call\n\n### Sample payload to get a list of active Synthetic tests with SuccessRate and Average Response Time results\n```\n{\n    \"metrics\": [\n     {\n        \"aggregation\": \"MEAN\",\n        \"granularity\": 60,    \n        \"metric\": \"synthetic.metricsResponseTime\"\n     }],\n     \"tagFilterExpression\": { \n        \"type\":\"EXPRESSION\",\n        \"logicalOperator\":\"AND\",\n        \"elements\":[{\n          \"name\": \"synthetic.locationId\", \n          \"operator\": \"EQUALS\", \n          \"stringValue\": \"abcdefgXSJmQsehOWg1S\"\n        }, {\n          \"name\": \"synthetic.testActive\",\n          \"operator\": \"EQUALS\",\n          \"booleanValue\": true\n        }]\n     },\n     \"timeFrame\": {\n       \"to\": 0,\n       \"windowSize\": 3600000  \n     }\n}\n```\n\n## Get a list of Synthetic locations with Last Test Run on (each location) data\nThe endpoint returns a list of Synthetic locations with Last Test Run on (each location) result data\n\n### Mandatory Parameters\n\n**timeFrame** As in our UI you can specify the timeframe for metrics retrieval.\n```\n  windowSize           to\n     (ms)       (unix-timestamp)\n<----------------------|\n\n\"timeFrame\": {\n\t\"windowSize\": 60000,\n\t\"to\": {current timestamp}\n}\n```\n\n### Optional Parameters\n\n**pagination** if you use pagination you should use the same timeFrame for all of the pages you want to query\n1. *page* select the page number you want to retrieve\n2. *pageSize* set the number of Synthetic locations you want to return with one query\n\n**order** You can order the returned items alphanumerically by label, either ascending or descending\n1. *by* Use the metric name, e.g., \"location_name\", to order by its value\n2. *direction* either ascending (ASC) or descending (DESC)\n\n   The sorting can be done on the following metrics: location_name, location_label, status, type, total_tests,\n   last_test_run, and namespace\n\n**tagFilters** It serves as a filter to narrow down return results. The name of a tagFilter is one of the following: \nsynthetic.locationName, synthetic.locationLabel, and synthetic.locationId.\nIt will be replaced by **tagFilterExpression**.\n```\n\"tagFilters\":[{\n  \"stringValue\":\"hYziqsaXSJmQsehOWg1S\",\n  \"name\":\"synthetic.locationId\",\n  \"operator\":\"EQUALS\"\n}]\n```\n\n**tagFilterExpression** It serves as a filter to narrow down return results. Its type can be either EXPRESSION or TAG_FILTER with\nlogical operators AND or OR.\n```\n\"tagFilterExpression\": { \n  \"type\":\"EXPRESSION\",\n  \"logicalOperator\":\"OR\",\n  \"elements\":[{\n    \"name\": \"synthetic.locationId\", \n    \"operator\": \"EQUALS\", \n    \"stringValue\":\"WnjlKKbgzLDnyGra6PAs\"\n  }]\n}\n```\n\nA payload only needs either tagFilters or tagFilterExpression as a filter, not both.\n\n### Sample payload to get a list of Synthetic locations with Last Test Run on (each location) data\n```\n{\n    \"order\": {\n     \t\"by\": \"status\", \n     \t\"direction\": \"Desc\"\n     },\n     \"timeFrame\": {\n       \"to\": 0,\n       \"windowSize\": 3600000  \n     }\n}\n```\n\n## Get Synthetic test playback result detail data\n\n### Query Parameters\n**type** The type of the detailed data. Its value is one of these types: SUBTRANSACTIONS, LOGS, and HAR.\n\n**name** The name of the file to be retrieved, if more than one file available for the same type. Used when the type equals to LOGS or IMAGES\n\n## Download a Synthetic test playback result detail data file\n\n### Query Parameter\n**type** The type of a single compressed file. Its value is one of these types: SUBTRANSACTIONS, LOGS, IMAGES, VIDEOS, and HAR.\n"
+paths:
+  /api/synthetics/results:
+    post:
+      description: 'Get a list of aggregated playback results metrics for Synthetic tests matching the specified parameters
+
+        For more information on Synthetic Test Playback Results please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-test-playback-results.'
+      operationId: getSyntheticResult
+      requestBody:
+        content:
+          application/json:
+            example:
+              pagination:
+                page: 1
+                pageSize: 3
+              metrics:
+              - metric: synthetic.metricsResponseTime
+                aggregation: SUM
+              order:
+                by: synthetic.startTime
+                direction: DESC
+              timeFrame:
+                to: 0
+                windowSize: 144000000
+            schema:
+              $ref: '#/components/schemas/GetTestResult'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                testResult:
+                - testId: 6GwdCuiMjGdMrtz8THjo
+                  testName: rumattach-BasicNavTest
+                  locationId:
+                  - f7cEoG61DJfVyWcDnWsc
+                  metrics:
+                  - synthetic.metricsResponseTime: 1276
+                - testId: OCnmrLSlNgzntI68094j
+                  testName: test-javascript-bundled
+                  locationId:
+                  - wHICfVoIpiHbwawo5xQ6
+                  metrics:
+                  - synthetic.metricsResponseTime: 14
+                - testId: 9i6gpys6whaYtN5k9VeD
+                  testName: My_Test_ReadFile
+                  locationId:
+                  - DemoPoP1_saas_instana_test
+                  metrics:
+                  - synthetic.metricsResponseTime: 7
+                page: 1
+                pageSize: 3
+                totalHits: 2212
+              schema:
+                $ref: '#/components/schemas/TestResult'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get Synthetic test playback results
+      tags:
+      - Synthetic Test Playback Results
+      x-ibm-ahub-byok: true
+  /api/synthetics/results/analytic:
+    post:
+      description: 'Get a list of playback results metrics for Synthetic tests matching the specified parameters for the specified analytic
+
+        For more information on Synthetic Test Playback Results please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-test-playback-results.'
+      operationId: getSyntheticResultAnalytic
+      requestBody:
+        content:
+          application/json:
+            example:
+              pagination:
+                page: 1
+                pageSize: 3
+              syntheticMetrics:
+              - synthetic.metricsResponseTime
+              - status
+              - synthetic.errors
+              order:
+                by: start_time
+                direction: DESC
+              timeFrame:
+                to: 0
+                windowSize: 144000000
+              TagFilterExpression:
+                type: EXPRESSION
+                elements:
+                - type: EXPRESSION
+                  elements:
+                  - name: synthetic.errors
+                    stringValue: Exception
+                    operator: CONTAINS
+                  logicalOperator: OR
+                logicalOperator: OR
+              analyticFunction: LAST_VALUE
+            schema:
+              $ref: '#/components/schemas/GetTestResultAnalytic'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                items:
+                - testResultCommonProperties:
+                    testId: 9i6gpys6whaYtN5k9VeD
+                    testName: My_Test_ReadFile
+                    locationId: DemoPoP1_saas_instana_test
+                    clientId: saas_instana_test
+                    id: 8f3bedbb-e278-4584-81b8-6efe07286a55
+                    errors:
+                    - "{timeStamp=1706131087368, errorType=Exception, errorMessage=access to path /etc/pop/redispass/redis-password is denied, stackTrace=Error: access to path /etc/pop/redispass/redis-password is denied\n    at /opt/ibm/microservice/javascript-playback/bin/vm/runner.bundle.js:2:1750914\n    at Array.forEach (<anonymous>)\n    at s (/opt/ibm/microservice/javascript-playback/bin/vm/runner.bundle.js:2:1750876)\n    at Object.openSync (/opt/ibm/microservice/javascript-playback/bin/vm/runner.bundle.js:2:1751693)\n    at VM Wrapper.apply (vm/bridge.js:468:15)\n    at /tmp/9i6gpys6whaYtN5k9VeD/script.js:7:13\n    at /tmp/9i6gpys6whaYtN5k9VeD/script.js:21:3\n    at VM Wrapper.apply (/opt/ibm/microservice/javascript-playback/bin/vm/runner.bundle.js:2:1806330)\n    at k.run (/opt/ibm/microservice/javascript-playback/bin/vm/runner.bundle.js:2:1771939)\n    at Object.e.exports.execute (/opt/ibm/microservice/javascript-playback/bin/vm/runner.bundle.js:2:1739863)\n    at process.<anonymous> (/opt/ibm/microservice/javascript-playback/bin/vm/runner.bundle.js:2:2197562)\n    at Object.onceWrapper (node:events:628:26)\n    at process.emit (node:events:513:28)\n    at emit (node:internal/child_process:946:14)\n    at processTicksAndRejections (node:internal/process/task_queues:84:21)}"
+                    locationDisplayLabel: DemoPoP1(vm)
+                  metrics:
+                    response_time:
+                    - - 1706131087358
+                      - 9
+                    status:
+                    - - 1706131087358
+                      - 0
+                - testResultCommonProperties:
+                    testId: QRN50tqvJPnwKIjn2qKx
+                    testName: Demo_IBM_simple_ping
+                    locationId: DemoPoP1_saas_instana_test
+                    clientId: saas_instana_test
+                    id: 7f503812-c428-4ea8-995d-dbdf97c145b7
+                    errors:
+                    - '{timeStamp=1706131070262, errorType=Exception, errorMessage=Ping: http://httpbin.org/status/200%2C400 -> Expected a success status (status < 400) but got 400, stackTrace=}'
+                    locationDisplayLabel: DemoPoP1(vm)
+                  metrics:
+                    response_time:
+                    - - 1706131070111
+                      - 149
+                    status:
+                    - - 1706131070111
+                      - 0
+                - testResultCommonProperties:
+                    testId: mfwdxHpvwXM1PGUBAFeP
+                    testName: test-disable-api-simple-jul17
+                    locationId: f7cEoG61DJfVyWcDnWsc
+                    clientId: saas_instana_test
+                    id: a1a4ed1c-7c87-45d5-bf45-3f3c462445d7
+                    errors:
+                    - "{timeStamp=1706131069537, errorType=Exception, errorMessage=Unable to parse response body as JSON: Unexpected token < in JSON at position 0, stackTrace=Error: Unable to parse response body as JSON: Unexpected token < in JSON at position 0\n    at /opt/ibm/microservice/javascript-playback/bin/index.js:2:1057667\n    at k.<anonymous> (/opt/ibm/microservice/javascript-playback/bin/index.js:2:1058257)\n    at runMicrotasks (<anonymous>)\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)}"
+                    locationDisplayLabel: Test-Pop-101
+                  metrics:
+                    response_time:
+                    - - 1706131069036
+                      - 490
+                    status:
+                    - - 1706131069036
+                      - 0
+                page: 1
+                pageSize: 3
+                totalHits: 14305
+              schema:
+                $ref: '#/components/schemas/TestResultListResult'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get a list of Synthetic tests based on the specified analytic function
+      tags:
+      - Synthetic Test Playback Results
+      x-ibm-ahub-byok: true
+  /api/synthetics/results/list:
+    post:
+      description: 'Get a list of playback results metrics for Synthetic tests matching the specified parameters
+
+        For more information on Synthetic Test Playback Results please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-test-playback-results.'
+      operationId: getSyntheticResultList
+      requestBody:
+        content:
+          application/json:
+            example:
+              pagination:
+                page: 1
+                pageSize: 3
+              syntheticMetrics:
+              - synthetic.metricsResponseTime
+              - status
+              - synthetic.errors
+              order:
+                by: start_time
+                direction: DESC
+              timeFrame:
+                to: 0
+                windowSize: 144000000
+              TagFilterExpression:
+                type: EXPRESSION
+                elements:
+                - type: EXPRESSION
+                  elements:
+                  - name: synthetic.errors
+                    stringValue: Exception
+                    operator: CONTAINS
+                  logicalOperator: OR
+                logicalOperator: OR
+            schema:
+              $ref: '#/components/schemas/GetTestResultList'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                items:
+                - testResultCommonProperties:
+                    testId: 9i6gpys6whaYtN5k9VeD
+                    testName: My_Test_ReadFile
+                    locationId: DemoPoP1_saas_instana_test
+                    clientId: saas_instana_test
+                    id: 8f3bedbb-e278-4584-81b8-6efe07286a55
+                    errors:
+                    - "{timeStamp=1706131087368, errorType=Exception, errorMessage=access to path /etc/pop/redispass/redis-password is denied, stackTrace=Error: access to path /etc/pop/redispass/redis-password is denied\n    at /opt/ibm/microservice/javascript-playback/bin/vm/runner.bundle.js:2:1750914\n    at Array.forEach (<anonymous>)\n    at s (/opt/ibm/microservice/javascript-playback/bin/vm/runner.bundle.js:2:1750876)\n    at Object.openSync (/opt/ibm/microservice/javascript-playback/bin/vm/runner.bundle.js:2:1751693)\n    at VM Wrapper.apply (vm/bridge.js:468:15)\n    at /tmp/9i6gpys6whaYtN5k9VeD/script.js:7:13\n    at /tmp/9i6gpys6whaYtN5k9VeD/script.js:21:3\n    at VM Wrapper.apply (/opt/ibm/microservice/javascript-playback/bin/vm/runner.bundle.js:2:1806330)\n    at k.run (/opt/ibm/microservice/javascript-playback/bin/vm/runner.bundle.js:2:1771939)\n    at Object.e.exports.execute (/opt/ibm/microservice/javascript-playback/bin/vm/runner.bundle.js:2:1739863)\n    at process.<anonymous> (/opt/ibm/microservice/javascript-playback/bin/vm/runner.bundle.js:2:2197562)\n    at Object.onceWrapper (node:events:628:26)\n    at process.emit (node:events:513:28)\n    at emit (node:internal/child_process:946:14)\n    at processTicksAndRejections (node:internal/process/task_queues:84:21)}"
+                    locationDisplayLabel: DemoPoP1(vm)
+                  metrics:
+                    response_time:
+                    - - 1706131087358
+                      - 9
+                    status:
+                    - - 1706131087358
+                      - 0
+                - testResultCommonProperties:
+                    testId: QRN50tqvJPnwKIjn2qKx
+                    testName: Demo_IBM_simple_ping
+                    locationId: DemoPoP1_saas_instana_test
+                    clientId: saas_instana_test
+                    id: 7f503812-c428-4ea8-995d-dbdf97c145b7
+                    errors:
+                    - '{timeStamp=1706131070262, errorType=Exception, errorMessage=Ping: http://httpbin.org/status/200%2C400 -> Expected a success status (status < 400) but got 400, stackTrace=}'
+                    locationDisplayLabel: DemoPoP1(vm)
+                  metrics:
+                    response_time:
+                    - - 1706131070111
+                      - 149
+                    status:
+                    - - 1706131070111
+                      - 0
+                - testResultCommonProperties:
+                    testId: mfwdxHpvwXM1PGUBAFeP
+                    testName: test-disable-api-simple-jul17
+                    locationId: f7cEoG61DJfVyWcDnWsc
+                    clientId: saas_instana_test
+                    id: a1a4ed1c-7c87-45d5-bf45-3f3c462445d7
+                    errors:
+                    - "{timeStamp=1706131069537, errorType=Exception, errorMessage=Unable to parse response body as JSON: Unexpected token < in JSON at position 0, stackTrace=Error: Unable to parse response body as JSON: Unexpected token < in JSON at position 0\n    at /opt/ibm/microservice/javascript-playback/bin/index.js:2:1057667\n    at k.<anonymous> (/opt/ibm/microservice/javascript-playback/bin/index.js:2:1058257)\n    at runMicrotasks (<anonymous>)\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)}"
+                    locationDisplayLabel: Test-Pop-101
+                  metrics:
+                    response_time:
+                    - - 1706131069036
+                      - 490
+                    status:
+                    - - 1706131069036
+                      - 0
+                page: 1
+                pageSize: 3
+                totalHits: 14305
+              schema:
+                $ref: '#/components/schemas/TestResultListResult'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get a list of Synthetic test playback results
+      tags:
+      - Synthetic Test Playback Results
+      x-ibm-ahub-byok: true
+  /api/synthetics/results/locationsummarylist:
+    post:
+      description: 'Get summary information for Synthetic locations matching the specified parameters
+
+        For more information on Synthetic Test Playback Results please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-test-playback-results.'
+      operationId: getLocationSummaryList
+      requestBody:
+        content:
+          application/json:
+            example:
+              timeFrame:
+                to: null
+                windowSize: 300000
+              pagination:
+                page: 1
+                pageSize: 3
+            schema:
+              $ref: '#/components/schemas/GetTestResultBase'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                items:
+                - id: wFulJMRXA3bZgAlhCuZV
+                  label: test101-pop
+                  displayLabel: west-12(Idaho)
+                  type: Private
+                  status: Online
+                  linkedTests: 0
+                  lastRunOn: 0
+                  namespace: my-kedatest
+                  clusterName: test101-pop
+                  description: PoP in region test101 for my-kedatest
+                  popSnapshotId: null
+                  popVersion: 1.1.2
+                - id: 0po5d5MxSZx91moqCbri
+                  label: apminstana-pop
+                  displayLabel: apminstana-pop
+                  type: Private
+                  status: Online
+                  linkedTests: 12
+                  lastRunOn: 0
+                  namespace: redwood
+                  clusterName: apminstana-pop
+                  description: This is a Synthetic Point of Presence
+                  popSnapshotId: ZFOBIU_Stg9FWs4DMRVY7VTSmBs
+                  entityHealthInfo:
+                    maxSeverity: 0
+                    openIssues: []
+                  popVersion: 1.1.1
+                - id: c7sXV7jZcuiD2ewGAjYI
+                  label: Aggie
+                  displayLabel: Aggie popLoc
+                  type: Private
+                  status: Offline
+                  linkedTests: 9
+                  lastRunOn: 0
+                  namespace: poploc
+                  clusterName: instana-pop-deployment
+                  description: My City Kubecost
+                  popSnapshotId: null
+                  popVersion: 1.0.15
+                page: 1
+                pageSize: 3
+                totalHits: 47
+              schema:
+                $ref: '#/components/schemas/TestResultListResult'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get a list of Synthetic locations with last run test on each location data
+      tags:
+      - Synthetic Test Playback Results
+      x-ibm-ahub-byok: true
+  /api/synthetics/results/testsummarylist:
+    post:
+      description: 'Get a summary of the playback results metrics and success rate for Synthetic tests matching the specified parameters
+
+        For more information on Synthetic Test Playback Results please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-test-playback-results.'
+      operationId: getTestSummaryList
+      requestBody:
+        content:
+          application/json:
+            example:
+              metrics:
+              - aggregation: MEAN
+                metric: success_rate
+                granularity: 600
+              TagFilterExpression:
+                type: EXPRESSION
+                elements:
+                - name: synthetic.testActive
+                  booleanValue: true
+                  operator: EQUALS
+                logicalOperator: AND
+              timeFrame:
+                to: 0
+                windowSize: 1800000
+              pagination:
+                page: 1
+                pageSize: 3
+            schema:
+              $ref: '#/components/schemas/GetTestSummaryResult'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                items:
+                - testResultCommonProperties:
+                    testId: 0FzZz41QwOxPjOUE0VhU
+                    testName: 260-browserwebpage
+                    clientId: saas_instana_test
+                    testCommonProperties:
+                      id: 0FzZz41QwOxPjOUE0VhU
+                      label: 260-browserwebpage
+                      type: Webpage Simple
+                      frequency: 3
+                      active: true
+                      locationIds:
+                      - KHphVmZqqRf9Kp2xSoud
+                      - cs1RvxTXJcavxnbQ6fBE
+                      locationLabels:
+                      - microk8s_PoP
+                      - mini_PoP2_BrowserTest
+                      locationDisplayLabels:
+                      - MicroK8s PoP
+                      - mini_PoP2_BrowserTest
+                      locationStatusList:
+                      - locationId: KHphVmZqqRf9Kp2xSoud
+                        totalTestRuns: 10
+                        successRuns: 10
+                        locationDisplayLabel: MicroK8s PoP
+                        successRate: 1
+                      - locationId: cs1RvxTXJcavxnbQ6fBE
+                        totalTestRuns: 0
+                        successRuns: 0
+                        locationDisplayLabel: mini_PoP2_BrowserTest
+                        successRate: 0
+                      createdAt: 1697175933150
+                      modifiedAt: 1700456221719
+                  metrics:
+                    total_test_runs:
+                    - - 1706132249095
+                      - 10
+                    successful_test_runs:
+                    - - 1706132249095
+                      - 10
+                    response_time:
+                    - - 1706132249095
+                      - 372.9
+                    success_rate:
+                    - - 1706132249095
+                      - 1
+                - testResultCommonProperties:
+                    testId: 0OKldV7M44UfDxmNt1Ef
+                    testName: Syne2eHttpActionTest
+                    clientId: saas_instana_test
+                    testCommonProperties:
+                      id: 0OKldV7M44UfDxmNt1Ef
+                      label: Syne2eHttpActionTest
+                      type: API Simple
+                      frequency: 5
+                      active: true
+                      locationIds:
+                      - 18WyhtDb5jpVOsjlNdeV
+                      locationLabels:
+                      - Syne2e
+                      locationDisplayLabels:
+                      - E2ETest PoP
+                      locationStatusList:
+                      - locationId: 18WyhtDb5jpVOsjlNdeV
+                        totalTestRuns: 6
+                        successRuns: 6
+                        locationDisplayLabel: E2ETest PoP
+                        successRate: 1
+                      createdAt: 1703867554340
+                      modifiedAt: 1703867554340
+                  metrics:
+                    total_test_runs:
+                    - - 1706132249095
+                      - 6
+                    successful_test_runs:
+                    - - 1706132249095
+                      - 6
+                    response_time:
+                    - - 1706132249095
+                      - 157.5
+                    success_rate:
+                    - - 1706132249095
+                      - 1
+                - testResultCommonProperties:
+                    testId: 0qB3qb9659JBJ86bflnf
+                    testName: Syne2eHttpActionTest
+                    clientId: saas_instana_test
+                    testCommonProperties:
+                      id: 0qB3qb9659JBJ86bflnf
+                      label: Syne2eHttpActionTest
+                      type: API Simple
+                      frequency: 5
+                      active: true
+                      locationIds:
+                      - 18WyhtDb5jpVOsjlNdeV
+                      locationLabels:
+                      - Syne2e
+                      locationDisplayLabels:
+                      - E2ETest PoP
+                      locationStatusList:
+                      - locationId: 18WyhtDb5jpVOsjlNdeV
+                        totalTestRuns: 6
+                        successRuns: 6
+                        locationDisplayLabel: E2ETest PoP
+                        successRate: 1
+                      createdAt: 1702269153825
+                      modifiedAt: 1702269153825
+                  metrics:
+                    total_test_runs:
+                    - - 1706132249095
+                      - 6
+                    successful_test_runs:
+                    - - 1706132249095
+                      - 6
+                    response_time:
+                    - - 1706132249095
+                      - 178.66666666666666
+                    success_rate:
+                    - - 1706132249095
+                      - 1
+                page: 1
+                pageSize: 3
+                totalHits: 567
+              schema:
+                $ref: '#/components/schemas/TestResultListResult'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get a list of Synthetic tests with success rate and average response time data
+      tags:
+      - Synthetic Test Playback Results
+      x-ibm-ahub-byok: true
+  /api/synthetics/results/{testid}/{testresultid}:
+    get:
+      description: 'Gets the list of detailed data file names associated to a Synthetic playback result
+
+        For more information on Synthetic Test Playback Results please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-test-playback-results.'
+      operationId: getSyntheticResultMetadata
+      parameters:
+      - description: Test id of the test result detailed description to be retrieved
+        example: AMl0Y7tsvpp8XXrXt1XO
+        in: path
+        name: testid
+        required: true
+        schema:
+          type: string
+      - description: Test result id of the test result detailed description to be retrieved
+        example: 5623c161-31d6-49b8-b314-91d4fb598f55
+        in: path
+        name: testresultid
+        required: true
+        schema:
+          type: string
+      - description: Start time of the test result detailed description
+        example: 1730295066008
+        in: query
+        name: startTime
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                testId: AMl0Y7tsvpp8XXrXt1XO
+                testResultId: 5623c161-31d6-49b8-b314-91d4fb598f55
+                startTime: 1730295066008
+                metadata:
+                  logs.tgz:
+                  - console.log
+              schema:
+                $ref: '#/components/schemas/TestResultMetadata'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get Synthetic test playback detail result description(metadata)
+      tags:
+      - Synthetic Test Playback Results
+      x-ibm-ahub-byok: true
+  /api/synthetics/results/{testid}/{testresultid}/detail:
+    get:
+      description: 'Download the contents of the Synthetic the playback result detail data file matching the specified file type
+
+        For more information on Synthetic Test Playback Results please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-test-playback-results.'
+      operationId: getSyntheticResultDetailData
+      parameters:
+      - description: Test id of the test result detailed file contents to be retrieved
+        example: AMl0Y7tsvpp8XXrXt1XO
+        in: path
+        name: testid
+        required: true
+        schema:
+          type: string
+      - description: Test result id of the  test result detailed file to be retrieved
+        example: 5623c161-31d6-49b8-b314-91d4fb598f55
+        in: path
+        name: testresultid
+        required: true
+        schema:
+          type: string
+      - description: Type of the test result detailed file contents
+        example: LOGS
+        in: query
+        name: type
+        required: true
+        schema:
+          type: string
+          enum:
+          - HAR
+          - LOGS
+          - SUBTRANSACTIONS
+      - description: Name of the test result detailed file, if more than one file available for the same type. Can be used when parameter type=LOGS
+        example: console.log
+        in: query
+        name: name
+        schema:
+          type: string
+      - description: Start time of the test result detailed file contents
+        example: 1730295066008
+        in: query
+        name: startTime
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                testId: AMl0Y7tsvpp8XXrXt1XO
+                testResultId: 5623c161-31d6-49b8-b314-91d4fb598f55
+                logs: '2024-01-18T19:55:02.162Z [SyntheticPoP] synthetic playback starts
+
+                  2024-01-18T19:55:02.169Z [SyntheticPoP] http request undefined https://www.ibm.com/
+
+                  2024-01-18T19:55:02.319Z [SyntheticPoP] http response 303 for https://www.ibm.com/
+
+                  2024-01-18T19:55:02.430Z [SyntheticPoP] http response 200 for https://www.ibm.com/us-en
+
+                  2024-01-18T19:55:02.478Z http request 1/2: 200
+
+                  2024-01-18T19:56:01.103Z [SyntheticPoP] synthetic playback ends
+
+                  '
+                logFiles:
+                  console.log: '2024-01-18T19:55:02.162Z [SyntheticPoP] synthetic playback starts
+
+                    2024-01-18T19:55:02.169Z [SyntheticPoP] http request undefined https://www.ibm.com/
+
+                    2024-01-18T19:55:02.319Z [SyntheticPoP] http response 303 for https://www.ibm.com/
+
+                    2024-01-18T19:55:02.430Z [SyntheticPoP] http response 200 for https://www.ibm.com/us-en
+
+                    2024-01-18T19:55:02.478Z http request 1/2: 200
+
+                    2024-01-18T19:56:01.103Z [SyntheticPoP] synthetic playback ends
+
+                    '
+              schema:
+                $ref: '#/components/schemas/TestResultDetailData'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get Synthetic test playback result detail data
+      tags:
+      - Synthetic Test Playback Results
+      x-ibm-ahub-byok: true
+  /api/synthetics/results/{testid}/{testresultid}/file:
+    get:
+      operationId: getSyntheticResultDetailDataFile
+      parameters:
+      - description: Test id of the test result detailed file to be retrieved
+        example: AMl0Y7tsvpp8XXrXt1XO
+        in: path
+        name: testid
+        required: true
+        schema:
+          type: string
+      - description: Test result id of the  test result detailed file to be retrieved
+        example: 5623c161-31d6-49b8-b314-91d4fb598f55
+        in: path
+        name: testresultid
+        required: true
+        schema:
+          type: string
+      - description: Type of the test result detailed file
+        example: LOGS
+        in: query
+        name: type
+        required: true
+        schema:
+          type: string
+          enum:
+          - HAR
+          - IMAGES
+          - LOGS
+          - SUBTRANSACTIONS
+          - VIDEOS
+      - description: Start time of the test result detailed file
+        example: 1730295066008
+        in: query
+        name: startTime
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          content:
+            application/octet-stream: {}
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Download the synthetic test playback result detail data file
+      tags:
+      - Synthetic Test Playback Results
+      x-ibm-ahub-byok: true
+components:
+  schemas:
+    TestResultListResult:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestResultListItem'
+        page:
+          type: integer
+          format: int32
+          description: Page Number
+          minimum: 1
+        pageSize:
+          type: integer
+          format: int32
+          minimum: 1
+        totalHits:
+          type: integer
+          format: int64
+          minimum: 0
+      required:
+      - items
+    TestResultSubtransaction:
+      type: object
+      properties:
+        metrics:
+          type: object
+          additionalProperties:
+            type: object
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+      required:
+      - metrics
+      - properties
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    TagFilter:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/TagFilterExpressionElement'
+      - type: object
+        properties:
+          entity:
+            type: string
+            description: SOURCE or DESTINATION tag in case of a call tag. For Infrastructure, always set to NOT_APPLICABLE.
+            enum:
+            - NOT_APPLICABLE
+            - DESTINATION
+            - SOURCE
+          key:
+            type: string
+            description: Tag key in case of a key/value tag.
+            maxLength: 512
+            minLength: 0
+          name:
+            type: string
+            description: Name of the tag.
+            maxLength: 128
+            minLength: 0
+          operator:
+            type: string
+            enum:
+            - EQUALS
+            - CONTAINS
+            - LESS_THAN
+            - LESS_OR_EQUAL_THAN
+            - GREATER_THAN
+            - GREATER_OR_EQUAL_THAN
+            - NOT_EMPTY
+            - NOT_EQUAL
+            - NOT_CONTAIN
+            - IS_EMPTY
+            - NOT_BLANK
+            - IS_BLANK
+            - STARTS_WITH
+            - ENDS_WITH
+            - NOT_STARTS_WITH
+            - NOT_ENDS_WITH
+            - REGEX_MATCH
+          value:
+            type: object
+            description: Tag value to filter on. Can be a string, number, or boolean value.
+      required:
+      - entity
+      - name
+      - operator
+    TestResultListItem:
+      type: object
+      properties:
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+        testResultCommonProperties:
+          $ref: '#/components/schemas/TestResultCommonProperties'
+      required:
+      - metrics
+      - testResultCommonProperties
+    GetTestResult:
+      type: object
+      properties:
+        applicationId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        locationId:
+          type: array
+          items:
+            type: string
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyntheticMetricConfiguration'
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        serviceId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagFilter'
+        testId:
+          type: array
+          items:
+            type: string
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+      required:
+      - metrics
+    TestResult:
+      type: object
+      properties:
+        testResult:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestResultItem'
+        testResultItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestResultItem'
+          writeOnly: true
+    TimeFrame:
+      type: object
+      description: Time range for which the data should be retrieved.
+      properties:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          maximum: 2678400000
+          minimum: 0
+    TestResultMetadata:
+      type: object
+      properties:
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+        startTime:
+          type: integer
+          format: int64
+        testId:
+          type: string
+        testResultId:
+          type: string
+      required:
+      - testId
+    TestResultItem:
+      type: object
+      properties:
+        applicationId:
+          type: string
+        applicationIds:
+          type: array
+          items:
+            type: string
+        customTags:
+          type: object
+          additionalProperties:
+            type: string
+        locationId:
+          type: array
+          items:
+            type: string
+        metrics:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+        mobileApplicationIds:
+          type: array
+          items:
+            type: string
+        serviceId:
+          type: string
+        testId:
+          type: string
+        testName:
+          type: string
+        websiteIds:
+          type: array
+          items:
+            type: string
+      required:
+      - testId
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          description: Page number for a specific page in the results. For example, if you'd like to retrieve the 5th page out of 10 pages, the value would be 5.
+          minimum: 1
+        pageSize:
+          type: integer
+          format: int32
+          description: 'Set the number of items you want to return with one query. Eg: if you want to retrieve 10 items, the value would be 10.'
+          maximum: 200
+          minimum: 1
+    GetTestResultList:
+      type: object
+      properties:
+        applicationId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        syntheticMetrics:
+          type: array
+          items:
+            type: string
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagFilter'
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+      required:
+      - syntheticMetrics
+    TestCommonProperties:
+      type: object
+      properties:
+        active:
+          type: boolean
+        applicationId:
+          type: string
+        applicationIds:
+          type: array
+          items:
+            type: string
+        applicationLabel:
+          type: string
+        applicationLabels:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: integer
+          format: int64
+        frequency:
+          type: integer
+          format: int32
+        getWebsiteLabels:
+          type: array
+          items:
+            type: string
+        id:
+          type: string
+        label:
+          type: string
+        locationDisplayLabels:
+          type: array
+          items:
+            type: string
+        locationIds:
+          type: array
+          items:
+            type: string
+        locationLabels:
+          type: array
+          items:
+            type: string
+        locationStatusList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocationStatus'
+        mobileApplicationIds:
+          type: array
+          items:
+            type: string
+        mobileApplicationLabels:
+          type: array
+          items:
+            type: string
+        modifiedAt:
+          type: integer
+          format: int64
+        serviceId:
+          type: string
+        type:
+          type: string
+        websiteIds:
+          type: array
+          items:
+            type: string
+        websiteLabels:
+          type: array
+          items:
+            type: string
+          writeOnly: true
+      required:
+      - active
+      - frequency
+      - id
+      - label
+      - type
+    SyntheticMetricConfiguration:
+      type: object
+      properties:
+        aggregation:
+          type: string
+          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        granularity:
+          type: integer
+          format: int32
+          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
+        metric:
+          type: string
+          description: 'Set a particular metric, eg: `latency`.'
+      required:
+      - aggregation
+      - metric
+    LocationStatus:
+      type: object
+      properties:
+        locationDisplayLabel:
+          type: string
+        locationId:
+          type: string
+        successRate:
+          type: number
+          format: double
+        successRuns:
+          type: integer
+          format: int64
+        totalTestRuns:
+          type: integer
+          format: int64
+      required:
+      - locationId
+    TestResultDetailData:
+      type: object
+      properties:
+        har:
+          type: object
+          additionalProperties:
+            type: object
+        imageFiles:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+              format: byte
+        logFiles:
+          type: object
+          additionalProperties:
+            type: string
+        logs:
+          type: string
+        subtransactionAvgMetrics:
+          type: object
+          additionalProperties:
+            type: object
+        subtransactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestResultSubtransaction'
+        testId:
+          type: string
+        testResultId:
+          type: string
+        videos:
+          type: array
+          items:
+            type: string
+            format: byte
+    Order:
+      type: object
+      description: 'Specifies the ordering of the results.
+
+        It contains fields that define the sorting criteria, the collation for sorting, and the direction in which the results should be ordered.
+
+        '
+      properties:
+        by:
+          type: string
+          description: If the granularity is set to `1` you can use the metric name eg. `latency.p95` to order by that value.
+        collation:
+          type: string
+          description: Language code used for sorting. Ignored for infrastructure queries.
+        direction:
+          type: string
+          description: The order in which results will be sorted, either `ASC` for ascending or `DESC` for descending.
+          enum:
+          - ASC
+          - DESC
+      required:
+      - by
+      - direction
+    GetTestResultBase:
+      type: object
+      properties:
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagFilter'
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+    TestLastError:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+        startTime:
+          type: integer
+          format: int64
+    GetTestSummaryResult:
+      type: object
+      properties:
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyntheticMetricConfiguration'
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagFilter'
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+      required:
+      - metrics
+    GetTestResultAnalytic:
+      type: object
+      properties:
+        analyticFunction:
+          type: string
+        includeLocationIdGrouping:
+          type: boolean
+          writeOnly: true
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        syntheticMetrics:
+          type: array
+          items:
+            type: string
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagFilter'
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+      required:
+      - analyticFunction
+      - syntheticMetrics
+    TestResultCommonProperties:
+      type: object
+      properties:
+        clientId:
+          type: string
+        customTags:
+          type: object
+          additionalProperties:
+            type: string
+        dnsQueryType:
+          type: string
+        dnsServerName:
+          type: string
+        errors:
+          type: array
+          items:
+            type: string
+        id:
+          type: string
+        ismDetails:
+          type: object
+          additionalProperties:
+            type: string
+        lastErrors:
+          $ref: '#/components/schemas/TestLastError'
+        locationDisplayLabel:
+          type: string
+        locationId:
+          type: string
+        runType:
+          type: string
+        sslDaysRemaining:
+          type: string
+        testCommonProperties:
+          $ref: '#/components/schemas/TestCommonProperties'
+        testId:
+          type: string
+        testLastError:
+          $ref: '#/components/schemas/TestLastError'
+        testName:
+          type: string
+      required:
+      - clientId
+      - testId
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage

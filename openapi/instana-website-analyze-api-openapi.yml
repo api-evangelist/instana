@@ -1,0 +1,1102 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation Website Analyze API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: Website Analyze
+  description: "The following four endpoints expose our analyze functionality.\n\n## Mandatory Parameters :\n\n**type** \n\n**group (only for group Endpoints)** It is mandatory to select a tag by which the beacons are grouped for the distinct endpoint call\n* *groupByTag* select a tag by which the beacons are grouped \n  * a full list of available tags can be retrieved from the [website tag catalog](#operation/getWebsiteCatalogTags)\n* *groupByTagSecondLevelKey* tags of type KEY_VALUE_PAIR need a second parameter e.g for `beacon.meta` you would need provide the label you want to groupBy here.\n\n\n## Optional Parameters:\n\n**pagination**\n* *offset* set the starting point for the data retrieval\n* *retrievalSize* you set the number of returned values\n* *ingestionTime* if you want to paginate through your result set you are interested in having the data for a fixed time point, the results set has a `cursor` class that has a ingestionTime property that indicates what you have to enter here.\n\n**order**\n\n**timeFrame** As in our UI you can specify the timeframe for metrics retrieval.\n```\n  windowSize           to\n     (ms)       (unix-timestamp)\n<----------------------|\n```\n\n**tagFilterExpression** As in the UI you are able to filter your query using tags and operators such as `AND` and `OR`. To get a list of all available tags you can query the [tag catalog](#operation/getWebsiteCatalogTags)\n* *name* The name of the tag as returned by the catalog, e.g `beacon.meta`, `beacon.http.path`\n* *value* The filter value of the tag, possible types are:\n  * \"STRING\" alphanumerical values, valid operators: \"EQUALS\", \"CONTAINS\", \"NOT_EQUAL\", \"NOT_CONTAIN\", \"NOT_EMPTY\",  \"IS_EMPTY\"\n  * \"NUMBER\" numerical values, valid operators: \"EQUALS\", \"LESS_THAN\" \"GREATER_THAN\"\n  * \"KEY_VALUE_PAIR\" of you are using meta tags `beacon.meta` you can filter for those by setting `yourMetaTagName=foo` in the value field, valid operators: \"EQUALS\", \"CONTAINS\", \"NOT_EQUAL\", \"NOT_CONTAIN\", \"NOT_EMPTY\",  \"IS_EMPTY\"\n* *operator* one of the valid operators for the type of the selected tag\n\n**metrics** A list of metric objects that define which metric should be returned, with the defined aggregation. Each metrics objects consists of minimum two items:\n1. *metric* select a particular metric, available metrics in this context are\n   * Latency Mean\n   * Error Rate\n2. *aggregation* depending on the selected metric different aggregations are available e.g. SUM, MEAN, P95. The aforementioned [catalog endpoint](#operation/getWebsiteCatalogMetrics) gives you the metrics with the available aggregations.\n3. *granularity* \n   * If it is not set you will get a an aggregated value for the selected timeframe\n   * If the granularity is set you will get data points with the specified granularity **in seconds**\n    * The granularity should not be greater than the `windowSize` (important: `windowSize` is expressed in **milliseconds**)\n    * The granularity should not be set too small relative to the `windowSize` to avoid creating an excessively large number of data points (max 600)\n \n\n## Defaults:\n\n**timeFrame**\n```\n\"timeFrame\": {\n\t\"windowSize\": 60000,\n\t\"to\": {current timestamp}\n}\n```\n"
+paths:
+  /api/website-monitoring/analyze/beacon-groups:
+    post:
+      description: 'API request to get grouped website monitoring beacon metrics.
+
+        For more information on Website Analyze please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Websites+&+Mobile+Apps.'
+      operationId: getBeaconGroups
+      parameters:
+      - in: query
+        name: fillTimeSeries
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            example:
+              metrics:
+              - metric: beaconCount
+                aggregation: SUM
+                granularity: 60
+              group:
+                groupByTag: beacon.page.name
+              tagFilterExpression:
+                type: EXPRESSION
+                logicalOperator: AND
+                elements:
+                - type: TAG_FILTER
+                  name: beacon.website.name
+                  operator: EQUALS
+                  entity: NOT_APPLICABLE
+                  value: robot-shop
+                - type: TAG_FILTER
+                  name: beacon.location.path
+                  operator: EQUALS
+                  entity: NOT_APPLICABLE
+                  value: /checkout
+              timeFrame:
+                to: null
+                windowSize: 3600000
+              type: PAGELOAD
+            schema:
+              $ref: '#/components/schemas/GetWebsiteBeaconGroups'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                items:
+                - name: Check Out
+                  earliestTimestamp: 1707019058453
+                  cursor:
+                    '@class': .IngestionOffsetCursor
+                    ingestionTime: 1707022593250
+                    offset: 1
+                  metrics:
+                    beaconCount.sum.60:
+                    - - 1707019020000
+                      - 1
+                    - - 1707019080000
+                      - 3
+                canLoadMore: false
+                totalHits: 1
+                totalRepresentedItemCount: 1
+                totalRetainedItemCount: 1
+                adjustedTimeframe:
+                  windowSize: 3600000
+                  to: 1707022620000
+              schema:
+                $ref: '#/components/schemas/WebsiteBeaconGroupsResult'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get grouped beacon metrics
+      tags:
+      - Website Analyze
+      x-ibm-ahub-byok: true
+  /api/website-monitoring/analyze/beacons:
+    post:
+      description: 'API request to get all website monitoring beacons with matching type.
+
+        For more information on Website Analyze please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Websites+&+Mobile+Apps.'
+      operationId: getBeacons
+      requestBody:
+        content:
+          application/json:
+            example:
+              tagFilterExpression:
+                type: TAG_FILTER
+                name: beacon.website.name
+                operator: EQUALS
+                entity: NOT_APPLICABLE
+                value: robot-shop
+              timeFrame:
+                to: null
+                windowSize: 3600000
+              type: PAGELOAD
+            schema:
+              $ref: '#/components/schemas/GetWebsiteBeacons'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                items:
+                - beacon:
+                    websiteId: Example website ID
+                    websiteLabel: robot-shop
+                    page: Products
+                    phase: pageLoad
+                    timestamp: 1707023459363
+                    clockSkew: 356
+                    duration: 240
+                    batchSize: 1
+                    accurateTimingsAvailable: true
+                    deprecations: []
+                    pageLoadId: 0cea1830450a460
+                    sessionId: 899e5d28e5c6402
+                    beaconId: 00cea1830450a460
+                    backendTraceId: ef968a97dd967268
+                    type: pageLoad
+                    customEventName: ''
+                    meta:
+                      stage: production
+                      status: silver
+                    locationUrl: http://robotshop.instana.com/products
+                    locationOrigin: http://robotshop.instana.com
+                    locationPath: /products
+                    errorCount: 0
+                    errorMessage: ''
+                    errorId: ''
+                    errorType: ''
+                    parsedStackTrace: []
+                    componentStack: ''
+                    userIp: 195.140.0.0
+                    userId: Example User Id
+                    userName: Example User Name
+                    userEmail: example@example.com
+                    userLanguages:
+                    - en-GB
+                    deviceType: ''
+                    connectionType: 4g
+                    browserName: Chrome
+                    browserVersion: '73'
+                    osName: Windows
+                    osVersion: '10'
+                    windowHidden: false
+                    windowWidth: 1149
+                    windowHeight: 1008
+                    latitude: 51.5088
+                    longitude: -0.093
+                    accuracyRadius: 20
+                    city: London
+                    subdivision: England
+                    subdivisionCode: ENG
+                    country: United Kingdom
+                    countryCode: GB
+                    continent: Europe
+                    continentCode: EU
+                    httpCallUrl: ''
+                    httpCallOrigin: ''
+                    httpCallPath: ''
+                    httpCallMethod: ''
+                    httpCallStatus: -1
+                    httpCallCorrelationAttempted: false
+                    httpCallAsynchronous: false
+                    initiator: html
+                    resourceType: document
+                    cacheInteraction: ''
+                    encodedBodySize: -1
+                    decodedBodySize: -1
+                    transferSize: -1
+                    unloadTime: 0
+                    redirectTime: 0
+                    appCacheTime: 0
+                    dnsTime: 0
+                    tcpTime: 0
+                    sslTime: 0
+                    requestTime: 42
+                    responseTime: 1
+                    processingTime: -1
+                    onLoadTime: 1
+                    backendTime: 51
+                    frontendTime: -1
+                    domTime: -1
+                    childrenTime: 5
+                    firstPaintTime: 331
+                    firstContentfulPaintTime: 331
+                    largestContentfulPaintTime: 331
+                    firstInputDelayTime: -1
+                    cumulativeLayoutShift: -1
+                    cspBlockedUri: ''
+                    cspEffectiveDirective: ''
+                    cspOriginalPolicy: ''
+                    cspDisposition: ''
+                    cspSample: ''
+                    cspSourceFile: ''
+                    cspLineNumber: -1
+                    cspColumnNumber: -1
+                    snippetVersion: '2'
+                    httpCallHeaders: {}
+                  cursor:
+                    '@class': .IngestionOffsetCursor
+                    ingestionTime: 1707023459959
+                    offset: 1
+              schema:
+                $ref: '#/components/schemas/WebsiteBeaconResult'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get all beacons
+      tags:
+      - Website Analyze
+      x-ibm-ahub-byok: true
+components:
+  schemas:
+    DeprecatedTagFilter:
+      type: object
+      properties:
+        entity:
+          type: string
+          enum:
+          - NOT_APPLICABLE
+          - DESTINATION
+          - SOURCE
+        name:
+          type: string
+        operator:
+          type: string
+          enum:
+          - EQUALS
+          - CONTAINS
+          - LESS_THAN
+          - LESS_OR_EQUAL_THAN
+          - GREATER_THAN
+          - GREATER_OR_EQUAL_THAN
+          - NOT_EMPTY
+          - NOT_EQUAL
+          - NOT_CONTAIN
+          - IS_EMPTY
+          - NOT_BLANK
+          - IS_BLANK
+          - STARTS_WITH
+          - ENDS_WITH
+          - NOT_STARTS_WITH
+          - NOT_ENDS_WITH
+          - REGEX_MATCH
+        value:
+          type: string
+      required:
+      - name
+      - operator
+      - value
+    WebsiteMonitoringMetricsConfiguration:
+      type: object
+      properties:
+        aggregation:
+          type: string
+          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        granularity:
+          type: integer
+          format: int32
+          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
+        metric:
+          type: string
+          description: 'Set a particular metric, eg: `latency`.'
+      required:
+      - aggregation
+      - metric
+    AdjustedTimeframe:
+      type: object
+      description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
+
+        For example, In request payload, if timeframe is 08:03 - 14:03, which is a 6 hour window size. It is adjusted to 08:05 - 14:00
+
+        Another example, In request payload, if timeframe is 08:20 - 08:20 (next day) which is a 24h window size. It is adjusted to 08:30 - 08:00 (next day)
+
+        '
+      properties:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          minimum: 0
+      required:
+      - to
+    WebsiteMonitoringBeacon:
+      type: object
+      properties:
+        accuracyRadius:
+          type: integer
+          format: int64
+          minimum: -1
+        accurateTimingsAvailable:
+          type: boolean
+        agentVersion:
+          type: string
+        appCacheTime:
+          type: integer
+          format: int64
+          minimum: -1
+        backendTime:
+          type: integer
+          format: int64
+          minimum: -1
+        backendTraceId:
+          type: string
+        batchSize:
+          type: integer
+          format: int64
+          minimum: 1
+        beaconId:
+          type: string
+        browserName:
+          type: string
+        browserVersion:
+          type: string
+        bytesIngested:
+          type: integer
+          format: int64
+        cacheInteraction:
+          type: string
+        childrenTime:
+          type: integer
+          format: int64
+          minimum: -1
+        city:
+          type: string
+        clockSkew:
+          type: integer
+          format: int64
+          minimum: -1
+        componentStack:
+          type: string
+        connectionType:
+          type: string
+        continent:
+          type: string
+        continentCode:
+          type: string
+        country:
+          type: string
+        countryCode:
+          type: string
+        cspBlockedUri:
+          type: string
+        cspColumnNumber:
+          type: integer
+          format: int64
+        cspDisposition:
+          type: string
+        cspEffectiveDirective:
+          type: string
+        cspLineNumber:
+          type: integer
+          format: int64
+        cspOriginalPolicy:
+          type: string
+        cspSample:
+          type: string
+        cspSourceFile:
+          type: string
+        cumulativeLayoutShift:
+          type: number
+          format: double
+        customEventName:
+          type: string
+        customMetric:
+          type: number
+          format: double
+        decodedBodySize:
+          type: integer
+          format: int64
+          minimum: -1
+        deprecations:
+          type: array
+          items:
+            type: string
+          maxItems: 16
+          minItems: 0
+          uniqueItems: true
+        deviceType:
+          type: string
+        dnsTime:
+          type: integer
+          format: int64
+          minimum: -1
+        domTime:
+          type: integer
+          format: int64
+          minimum: -1
+        duration:
+          type: integer
+          format: int64
+          minimum: 0
+        encodedBodySize:
+          type: integer
+          format: int64
+          minimum: -1
+        errorCount:
+          type: integer
+          format: int64
+          minimum: 0
+        errorId:
+          type: string
+        errorMessage:
+          type: string
+        errorType:
+          type: string
+        firstContentfulPaintTime:
+          type: integer
+          format: int64
+          minimum: -1
+        firstInputDelayTime:
+          type: integer
+          format: int64
+          minimum: -1
+        firstPaintTime:
+          type: integer
+          format: int64
+          minimum: -1
+        frontendTime:
+          type: integer
+          format: int64
+          minimum: -1
+        graphqlOperationName:
+          type: string
+        graphqlOperationType:
+          type: string
+        httpCallAsynchronous:
+          type: boolean
+        httpCallCorrelationAttempted:
+          type: boolean
+        httpCallHeaders:
+          type: object
+          additionalProperties:
+            type: string
+        httpCallMethod:
+          type: string
+        httpCallOrigin:
+          type: string
+        httpCallPath:
+          type: string
+        httpCallStatus:
+          type: integer
+          format: int32
+          maximum: 599
+          minimum: -1
+        httpCallUrl:
+          type: string
+        initiator:
+          type: string
+        interactionNextPaint:
+          type: integer
+          format: int64
+        internalMeta:
+          type: object
+          additionalProperties:
+            type: string
+        label:
+          type: string
+        largestContentfulPaintTime:
+          type: integer
+          format: int64
+          minimum: -1
+        latitude:
+          type: number
+          format: double
+        locationOrigin:
+          type: string
+        locationPath:
+          type: string
+        locationUrl:
+          type: string
+        longitude:
+          type: number
+          format: double
+        meta:
+          type: object
+          additionalProperties:
+            type: string
+        onLoadTime:
+          type: integer
+          format: int64
+          minimum: -1
+        osName:
+          type: string
+        osVersion:
+          type: string
+        page:
+          type: string
+        pageLoadId:
+          type: string
+        parentBeaconId:
+          type: string
+        parsedStackTrace:
+          type: array
+          items:
+            $ref: '#/components/schemas/JsStackTraceLine'
+          maxItems: 64
+          minItems: 0
+        phase:
+          type: string
+        processingTime:
+          type: integer
+          format: int64
+          minimum: -1
+        redirectTime:
+          type: integer
+          format: int64
+          minimum: -1
+        requestTime:
+          type: integer
+          format: int64
+          minimum: -1
+        resourceType:
+          type: string
+        responseTime:
+          type: integer
+          format: int64
+          minimum: -1
+        sessionId:
+          type: string
+        snippetVersion:
+          type: string
+        sslTime:
+          type: integer
+          format: int64
+          minimum: -1
+        stackTrace:
+          type: string
+        stackTraceParsingStatus:
+          type: integer
+          format: int32
+          minimum: -1
+        stackTraceReadability:
+          type: integer
+          format: int32
+          minimum: 0
+        subdivision:
+          type: string
+        subdivisionCode:
+          type: string
+        tcpTime:
+          type: integer
+          format: int64
+          minimum: -1
+        timestamp:
+          type: integer
+          format: int64
+          minimum: 1
+        transferSize:
+          type: integer
+          format: int64
+          minimum: -1
+        type:
+          type: string
+        unloadTime:
+          type: integer
+          format: int64
+          minimum: -1
+        useFeatures:
+          type: array
+          items:
+            type: string
+          maxItems: 15
+          minItems: 0
+        userEmail:
+          type: string
+        userId:
+          type: string
+        userIp:
+          type: string
+        userLanguages:
+          type: array
+          items:
+            type: string
+          maxItems: 5
+          minItems: 0
+        userName:
+          type: string
+        websiteId:
+          type: string
+        websiteLabel:
+          type: string
+        windowHeight:
+          type: integer
+          format: int32
+          minimum: -1
+        windowHidden:
+          type: boolean
+        windowWidth:
+          type: integer
+          format: int32
+          minimum: -1
+      required:
+      - beaconId
+      - locationOrigin
+      - locationUrl
+      - pageLoadId
+      - type
+      - websiteId
+      - websiteLabel
+    WebsiteBeaconGroupsItem:
+      type: object
+      description: 'Represents an array of call group item containing several attributes that describe its properties.
+
+        The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
+
+        '
+      properties:
+        cursor:
+          $ref: '#/components/schemas/IngestionOffsetCursor'
+        earliestTimestamp:
+          type: integer
+          format: int64
+          minimum: 0
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+        name:
+          type: string
+      required:
+      - cursor
+      - metrics
+      - name
+    GetWebsiteBeaconGroups:
+      type: object
+      properties:
+        group:
+          $ref: '#/components/schemas/WebsiteBeaconTagGroup'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebsiteMonitoringMetricsConfiguration'
+          maxItems: 5
+          minItems: 1
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/CursorPagination'
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeprecatedTagFilter'
+          maxItems: 32
+          minItems: 0
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+        type:
+          type: string
+          enum:
+          - PAGELOAD
+          - RESOURCELOAD
+          - HTTPREQUEST
+          - ERROR
+          - CUSTOM
+          - PAGE_CHANGE
+      required:
+      - group
+      - metrics
+      - type
+    CursorPagination:
+      type: object
+      description: 'Details for controlling the pagination of the API response.
+
+        This object allows you to define the starting point for retrieving records, how many records to skip, and the size of the result set.
+
+        '
+      properties:
+        ingestionTime:
+          type: integer
+          format: int64
+          description: 'The timestamp indicating the starting point from which data was ingested.
+
+            The format of the timestamp is in Unix epoch Time.
+
+            For example, `Thursday, 5 September 2024 07:03:13 GMT` can be represented as `1725519793`.
+
+            '
+        offset:
+          type: integer
+          format: int32
+          description: 'The number of records to be skipped from the `ingestionTime`.
+
+            For example: when `offset` is 20 and `ingestionTime` is 1725519793, the API response should have records starting from the 21st record after the specified `ingestionTime`.
+
+            Note that if `offset` value is not empty, `ingestionTime` can''t be empty.
+
+            '
+        retrievalSize:
+          type: integer
+          format: int32
+          description: 'The number of records to retrieve in a single request.
+
+            For example, when retrievalSize is set to 30, offset is 20, and ingestionTime is 1725519793, the API request will fetch 30 records starting from the 21st record after the specified `ingestionTime`.
+
+            Minimum value is 1 and maximum value is 200.
+
+            '
+          maximum: 200
+          minimum: 1
+    WebsiteBeaconGroupsResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        canLoadMore:
+          type: boolean
+          description: Determine if additional data is available when a new query is made using the cursor from the last item in the `items` list.
+        items:
+          type: array
+          description: 'Represents an array of call group item containing several attributes that describe its properties.
+
+            The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
+
+            '
+          items:
+            $ref: '#/components/schemas/WebsiteBeaconGroupsItem'
+        totalHits:
+          type: integer
+          format: int64
+          description: The total number of items that match a given filter
+          minimum: 0
+        totalRepresentedItemCount:
+          type: integer
+          format: int64
+          description: For calls and EUM beacons, one row can represent multiple real items (batched call, sample multiplicity)
+          minimum: 0
+        totalRetainedItemCount:
+          type: integer
+          format: int64
+          description: For calls and EUM beacons, only a subset is retained for historic data. Each retained row can represent multiple real items due to batching.
+          minimum: 0
+      required:
+      - items
+    Order:
+      type: object
+      description: 'Specifies the ordering of the results.
+
+        It contains fields that define the sorting criteria, the collation for sorting, and the direction in which the results should be ordered.
+
+        '
+      properties:
+        by:
+          type: string
+          description: If the granularity is set to `1` you can use the metric name eg. `latency.p95` to order by that value.
+        collation:
+          type: string
+          description: Language code used for sorting. Ignored for infrastructure queries.
+        direction:
+          type: string
+          description: The order in which results will be sorted, either `ASC` for ascending or `DESC` for descending.
+          enum:
+          - ASC
+          - DESC
+      required:
+      - by
+      - direction
+    IngestionOffsetCursor:
+      type: object
+      description: Cursor to use between successive queries
+    GetWebsiteBeacons:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/CursorPagination'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeprecatedTagFilter'
+          maxItems: 32
+          minItems: 0
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+        type:
+          type: string
+          enum:
+          - PAGELOAD
+          - RESOURCELOAD
+          - HTTPREQUEST
+          - ERROR
+          - CUSTOM
+          - PAGE_CHANGE
+      required:
+      - type
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    ImpactedBeaconInfo:
+      type: object
+      properties:
+        country:
+          type: string
+        label:
+          type: string
+        subdivision:
+          type: string
+        userEmail:
+          type: string
+        userName:
+          type: string
+    WebsiteBeaconResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        canLoadMore:
+          type: boolean
+          description: Determine if additional data is available when a new query is made using the cursor from the last item in the `items` list.
+        items:
+          type: array
+          description: 'Represents an array of call group item containing several attributes that describe its properties.
+
+            The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
+
+            '
+          items:
+            $ref: '#/components/schemas/WebsiteBeaconsItem'
+        totalHits:
+          type: integer
+          format: int64
+          description: The total number of items that match a given filter
+          minimum: 0
+        totalRepresentedItemCount:
+          type: integer
+          format: int64
+          description: For calls and EUM beacons, one row can represent multiple real items (batched call, sample multiplicity)
+          minimum: 0
+        totalRetainedItemCount:
+          type: integer
+          format: int64
+          description: For calls and EUM beacons, only a subset is retained for historic data. Each retained row can represent multiple real items due to batching.
+          minimum: 0
+      required:
+      - items
+    WebsiteBeaconTagGroup:
+      type: object
+      properties:
+        groupbyTag:
+          type: string
+          description: The name of the group tag (e.g. `agent.tag` or `docker.label`).
+          maxLength: 256
+          minLength: 0
+        groupbyTagEntity:
+          type: string
+          description: 'The entity by which the data should be grouped.
+
+            This field supports three possible values: `NOT_APPLICABLE`, `DESTINATION`, and `SOURCE`.
+
+            `SOURCE`: the tag filter should apply to the source entity.
+
+            `DESTINATION`: the tag filter should apply to the destination entity.
+
+            `NOT_APPLICABLE`: some tags are independent of source or destination, such as tags on the call itself, log tags or trace tags (only destination makes sense because the source is unknown for the root call).
+
+            '
+          enum:
+          - NOT_APPLICABLE
+          - DESTINATION
+          - SOURCE
+        groupbyTagSecondLevelKey:
+          type: string
+          description: If present, it's the 2nd level key part (e.g. `customKey` on `docker.label.customKey`)
+          maxLength: 256
+          minLength: 0
+      required:
+      - groupbyTag
+      - groupbyTagEntity
+    JsStackTraceLine:
+      type: object
+      properties:
+        column:
+          type: integer
+          format: int32
+          minimum: -1
+        file:
+          type: string
+        line:
+          type: integer
+          format: int32
+          minimum: -1
+        name:
+          type: string
+        translationExplanation:
+          type: string
+        translationStatus:
+          type: integer
+          format: int32
+          minimum: -1
+      required:
+      - file
+    TimeFrame:
+      type: object
+      description: Time range for which the data should be retrieved.
+      properties:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          maximum: 2678400000
+          minimum: 0
+    WebsiteBeaconsItem:
+      type: object
+      description: 'Represents an array of call group item containing several attributes that describe its properties.
+
+        The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
+
+        '
+      properties:
+        beacon:
+          $ref: '#/components/schemas/WebsiteMonitoringBeacon'
+        cursor:
+          $ref: '#/components/schemas/IngestionOffsetCursor'
+        impactedBeaconInfo:
+          $ref: '#/components/schemas/ImpactedBeaconInfo'
+      required:
+      - beacon
+      - cursor
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage

@@ -1,0 +1,624 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation API Token API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: API Token
+  description: 'API Tokens are unique strings that are used to authenticate and authorize access to the API. These are used to secure API endpoints and ensure that only authorized users can access certain functions. When you raise a request to the API, you must include the API Token in the request header to verify your identity.
+
+
+    Instana API Tokens are specific to Tenant Unit (TU) and cannot be used across TUs. Each token has its associated set of permissions, which are preselected when you create the token.'
+paths:
+  /api/settings/api-tokens:
+    get:
+      description: 'Get the list of API Tokens for this Tenant-Unit
+
+        For more information on APIToken please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#apitoken.'
+      operationId: getApiTokens
+      responses:
+        '200':
+          content:
+            application/json:
+              example: "[\n    {\n      \"id\": \"tokenId-1(masked)\",\n      \"accessGrantingToken\": \"accessGrantingToken-1(masked)\",\n      \"internalId\": \"internalId-1\",\n      \"name\": \"tokenName-1\",\n      \"createdBy\": \"user1@example.com\",\n      \"createdOn\": timestamp,\n      \"lastUsedOn\": timestamp,\n      \"expiresOn\": null,\n      \"limitedApplicationsScope\": false,\n      \"limitedBizOpsScope\": false,\n      \"limitedWebsitesScope\": false,\n      \"limitedKubernetesScope\": false,\n      \"limitedMobileAppsScope\": false,\n      \"limitedInfrastructureScope\": false,\n      \"limitedSyntheticsScope\": false,\n      \"limitedVsphereScope\": false,\n      \"limitedPhmcScope\": false,\n      \"limitedPvcScope\": false,\n      \"limitedZhmcScope\": false,\n      \"limitedPcfScope\": false,\n      \"limitedOpenstackScope\": false,\n      \"limitedAutomationScope\": false,\n      \"limitedLogsScope\": false,\n      \"canConfigureServiceMapping\": true,\n      \"canConfigureEumApplications\": true,\n      \"canConfigureMobileAppMonitoring\": true,\n      \"canConfigureUsers\": true,\n      \"canInstallNewAgents\": true,\n      \"canConfigureIntegrations\": true,\n      \"canConfigureApiTokens\": true,\n      \"canConfigurePersonalApiTokens\": false,\n      \"canConfigureAgentRunMode\": true,\n      \"canViewAuditLog\": true,\n      \"canConfigureAgents\": true,\n      \"canConfigureAuthenticationMethods\": true,\n      \"canConfigureApplications\": true,\n      \"canConfigureTeams\": true,\n      \"canConfigureReleases\": true,\n      \"canConfigureLogManagement\": true,\n      \"canConfigureDatabaseManagement\": false,\n      \"canCreatePublicCustomDashboards\": true,\n      \"canViewLogs\": true,\n      \"canViewTraceDetails\": true,\n      \"canConfigureSessionSettings\": true,\n      \"canConfigureGlobalAlertPayload\": true,\n      \"canViewAccountAndBillingInformation\": true,\n      \"canEditAllAccessibleCustomDashboards\": true,\n      \"canConfigureAutomationActions\": true,\n      \"canConfigureAutomationPolicies\": true,\n      \"canRunAutomationActions\": true,\n      \"canDeleteAutomationActionHistory\": true,\n      \"canConfigureSyntheticTests\": true,\n      \"canConfigureSyntheticLocations\": true,\n      \"canConfigureSyntheticCredentials\": true,\n      \"canViewSyntheticTests\": true,\n      \"canViewSyntheticLocations\": true,\n      \"canViewSyntheticTestResults\": true,\n      \"canUseSyntheticCredentials\": true,\n      \"canViewBusinessProcesses\": false,\n      \"canViewBusinessProcessDetails\": false,\n      \"canViewBusinessActivities\": false,\n      \"canViewBizAlerts\": false,\n      \"canDeleteLogs\": true,\n      \"canCreateHeapDump\": false,\n      \"canCreateThreadDump\": false,\n      \"canConfigureEventsAndAlerts\": true,\n      \"canConfigureMaintenanceWindows\": true,\n      \"canConfigureApplicationSmartAlerts\": true,\n      \"canConfigureWebsiteSmartAlerts\": true,\n      \"canConfigureMobileAppSmartAlerts\": true,\n      \"canConfigureGlobalApplicationSmartAlerts\": true,\n      \"canConfigureGlobalSyntheticSmartAlerts\": true,\n      \"canConfigureGlobalInfraSmartAlerts\": true,\n      \"canConfigureGlobalLogSmartAlerts\": true,\n      \"canManuallyCloseIssue\": true,\n      \"canViewLogVolume\": true,\n      \"canConfigureLogRetentionPeriod\": true\n    },\n    {\n      \"id\": \"tokenId-2(masked)\",\n      \"accessGrantingToken\": \"accessGrantingToken-2(masked)\",\n      \"internalId\": \"internalId-2\",\n      \"name\": \"tokenName-2\",\n      \"createdBy\": \"user2@example.com\",\n      \"createdOn\": timestamp,\n      \"lastUsedOn\": timestamp,\n      \"limitedApplicationsScope\": false,\n      \"limitedBizOpsScope\": false,\n      \"limitedWebsitesScope\": false,\n      \"limitedKubernetesScope\": false,\n      \"limitedMobileAppsScope\": false,\n      \"limitedInfrastructureScope\": false,\n      \"limitedSyntheticsScope\": false,\n      \"limitedVsphereScope\": false,\n      \"limitedPhmcScope\": false,\n      \"limitedPvcScope\": false,\n      \"limitedZhmcScope\": false,\n      \"limitedPcfScope\": false,\n      \"limitedOpenstackScope\": false,\n      \"limitedAutomationScope\": false,\n      \"limitedLogsScope\": false,\n      \"canConfigureServiceMapping\": true,\n      \"canConfigureEumApplications\": true,\n      \"canConfigureMobileAppMonitoring\": true,\n      \"canConfigureUsers\": true,\n      \"canInstallNewAgents\": true,\n      \"canConfigureIntegrations\": true,\n      \"canConfigureApiTokens\": true,\n      \"canConfigurePersonalApiTokens\": false,\n      \"canConfigureAgentRunMode\": true,\n      \"canViewAuditLog\": true,\n      \"canConfigureAgents\": true,\n      \"canConfigureAuthenticationMethods\": true,\n      \"canConfigureApplications\": true,\n      \"canConfigureTeams\": true,\n      \"canConfigureReleases\": true,\n      \"canConfigureLogManagement\": true,\n      \"canConfigureDatabaseManagement\": false,\n      \"canCreatePublicCustomDashboards\": true,\n      \"canViewLogs\": true,\n      \"canViewTraceDetails\": true,\n      \"canConfigureSessionSettings\": true,\n      \"canConfigureGlobalAlertPayload\": true,\n      \"canViewAccountAndBillingInformation\": true,\n      \"canEditAllAccessibleCustomDashboards\": true,\n      \"canConfigureAutomationActions\": false,\n      \"canConfigureAutomationPolicies\": false,\n      \"canRunAutomationActions\": false,\n      \"canDeleteAutomationActionHistory\": false,\n      \"canConfigureSyntheticTests\": true,\n      \"canConfigureSyntheticLocations\": true,\n      \"canConfigureSyntheticCredentials\": true,\n      \"canViewSyntheticTests\": true,\n      \"canViewSyntheticLocations\": true,\n      \"canViewSyntheticTestResults\": true,\n      \"canUseSyntheticCredentials\": true,\n      \"canViewBusinessProcesses\": false,\n      \"canViewBusinessProcessDetails\": false,\n      \"canViewBusinessActivities\": false,\n      \"canViewBizAlerts\": false,\n      \"canDeleteLogs\": false,\n      \"canCreateHeapDump\": false,\n      \"canCreateThreadDump\": false,\n      \"canConfigureEventsAndAlerts\": true,\n      \"canConfigureMaintenanceWindows\": true,\n      \"canConfigureApplicationSmartAlerts\": true,\n      \"canConfigureWebsiteSmartAlerts\": true,\n      \"canConfigureMobileAppSmartAlerts\": true,\n      \"canConfigureGlobalApplicationSmartAlerts\": true,\n      \"canConfigureGlobalSyntheticSmartAlerts\": true,\n      \"canConfigureGlobalInfraSmartAlerts\": true,\n      \"canConfigureGlobalLogSmartAlerts\": false,\n      \"canManuallyCloseIssue\": false,\n      \"canViewLogVolume\": false,\n      \"canConfigureLogRetentionPeriod\": false\n    }\n]"
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiToken'
+          description: OK
+        '404':
+          description: No API Tokens found
+      security:
+      - ApiKeyAuth:
+        - CanConfigureApiTokens
+      summary: Get all API Tokens
+      tags:
+      - API Token
+      x-ibm-ahub-byok: true
+    post:
+      description: 'Create an API Token on the Tenant-Unit. Each API Token entry also contains a set of permissions
+
+        For more information on APIToken please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#apitoken.'
+      operationId: postApiToken
+      requestBody:
+        content:
+          application/json:
+            example: "{\n  \"accessGrantingToken\": \"accessGrantingToken\",\n  \"name\": \"tokenName\",\n  \"internalId\": \"internalId\",\n  \"canViewAuditLog\": true,\n  \"canConfigureSessionSettings\": true,\n  \"canConfigureApplications\": true,\n  \"canConfigureAgents\": true,\n  \"canConfigureUsers\": true,\n  \"canConfigureEventsAndAlerts\": true,\n}\n"
+            schema:
+              $ref: '#/components/schemas/ApiToken'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: tokenId
+                accessGrantingToken: accessGrantingToken
+                internalId: internalId
+                name: tokenName
+                createdBy: createdBy
+                createdOn: createdOn
+                lastUsedOn: lastUsedOn
+                expiresOn: expiresOn
+                limitedApplicationsScope: false
+                limitedBizOpsScope: false
+                limitedWebsitesScope: false
+                limitedKubernetesScope: false
+                limitedMobileAppsScope: false
+                limitedInfrastructureScope: false
+                limitedSyntheticsScope: false
+                limitedVsphereScope: false
+                limitedPhmcScope: false
+                limitedPvcScope: false
+                limitedZhmcScope: false
+                limitedPcfScope: false
+                limitedOpenstackScope: false
+                limitedAutomationScope: false
+                limitedLogsScope: false
+                canConfigureServiceMapping: false
+                canConfigureEumApplications: false
+                canConfigureMobileAppMonitoring: false
+                canConfigureUsers: true
+                canInstallNewAgents: false
+                canConfigureIntegrations: false
+                canConfigureApiTokens: false
+                canConfigurePersonalApiTokens: false
+                canConfigureAgentRunMode: false
+                canViewAuditLog: true
+                canConfigureAgents: true
+                canConfigureAuthenticationMethods: false
+                canConfigureApplications: true
+                canConfigureTeams: false
+                canConfigureReleases: false
+                canConfigureLogManagement: false
+                canConfigureDatabaseManagement: false
+                canCreatePublicCustomDashboards: false
+                canViewLogs: false
+                canViewTraceDetails: false
+                canConfigureSessionSettings: true
+                canConfigureGlobalAlertPayload: false
+                canViewAccountAndBillingInformation: false
+                canEditAllAccessibleCustomDashboards: false
+                canConfigureAutomationActions: false
+                canConfigureAutomationPolicies: false
+                canRunAutomationActions: false
+                canDeleteAutomationActionHistory: false
+                canConfigureSyntheticTests: false
+                canConfigureSyntheticLocations: false
+                canConfigureSyntheticCredentials: false
+                canViewSyntheticTests: false
+                canViewSyntheticLocations: false
+                canViewSyntheticTestResults: false
+                canUseSyntheticCredentials: false
+                canViewBusinessProcesses: false
+                canViewBusinessProcessDetails: false
+                canViewBusinessActivities: false
+                canViewBizAlerts: false
+                canDeleteLogs: false
+                canCreateHeapDump: false
+                canCreateThreadDump: false
+                canConfigureEventsAndAlerts: true
+                canConfigureMaintenanceWindows: false
+                canConfigureApplicationSmartAlerts: false
+                canConfigureWebsiteSmartAlerts: false
+                canConfigureMobileAppSmartAlerts: false
+                canConfigureGlobalApplicationSmartAlerts: false
+                canConfigureGlobalSyntheticSmartAlerts: false
+                canConfigureGlobalInfraSmartAlerts: false
+                canConfigureGlobalLogSmartAlerts: false
+                canManuallyCloseIssue: false
+                canViewLogVolume: false
+                canConfigureLogRetentionPeriod: false
+              schema:
+                $ref: '#/components/schemas/ApiToken'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureApiTokens
+      summary: Create an API token
+      tags:
+      - API Token
+      x-ibm-ahub-byok: true
+  /api/settings/api-tokens/{internalId}:
+    delete:
+      description: 'Delete the Api Token
+
+        For more information on APIToken please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#apitoken.'
+      operationId: deleteApiToken
+      parameters:
+      - in: path
+        name: internalId
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      security:
+      - ApiKeyAuth:
+        - CanConfigureApiTokens
+      summary: Delete API token
+      tags:
+      - API Token
+      x-ibm-ahub-byok: true
+    get:
+      description: 'Returns API Token details, including the set of permissions
+
+        For more information on APIToken please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#apitoken.'
+      operationId: getApiToken
+      parameters:
+      - in: path
+        name: internalId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example: "{\n      \"id\": \"tokenId(masked)\",\n      \"accessGrantingToken\": \"accessGrantingToken(masked)\",\n      \"internalId\": \"internalId\",\n      \"name\": \"tokenName\",\n      \"createdBy\": \"user@example.com\",\n      \"createdOn\": timestamp,\n      \"lastUsedOn\": timestamp,\n      \"expiresOn\": null,\n      \"limitedApplicationsScope\": false,\n      \"limitedBizOpsScope\": false,\n      \"limitedWebsitesScope\": false,\n      \"limitedKubernetesScope\": false,\n      \"limitedMobileAppsScope\": false,\n      \"limitedInfrastructureScope\": false,\n      \"limitedSyntheticsScope\": false,\n      \"limitedVsphereScope\": false,\n      \"limitedPhmcScope\": false,\n      \"limitedPvcScope\": false,\n      \"limitedZhmcScope\": false,\n      \"limitedPcfScope\": false,\n      \"limitedOpenstackScope\": false,\n      \"limitedAutomationScope\": false,\n      \"limitedLogsScope\": false,\n      \"canConfigureServiceMapping\": true,\n      \"canConfigureEumApplications\": true,\n      \"canConfigureMobileAppMonitoring\": true,\n      \"canConfigureUsers\": true,\n      \"canInstallNewAgents\": true,\n      \"canConfigureIntegrations\": true,\n      \"canConfigureApiTokens\": true,\n      \"canConfigurePersonalApiTokens\": false,\n      \"canConfigureAgentRunMode\": true,\n      \"canViewAuditLog\": true,\n      \"canConfigureAgents\": true,\n      \"canConfigureAuthenticationMethods\": true,\n      \"canConfigureApplications\": true,\n      \"canConfigureTeams\": true,\n      \"canConfigureReleases\": true,\n      \"canConfigureLogManagement\": true,\n      \"canConfigureDatabaseManagement\": false,\n      \"canCreatePublicCustomDashboards\": true,\n      \"canViewLogs\": true,\n      \"canViewTraceDetails\": true,\n      \"canConfigureSessionSettings\": true,\n      \"canConfigureGlobalAlertPayload\": true,\n      \"canViewAccountAndBillingInformation\": true,\n      \"canEditAllAccessibleCustomDashboards\": true,\n      \"canConfigureAutomationActions\": true,\n      \"canConfigureAutomationPolicies\": true,\n      \"canRunAutomationActions\": true,\n      \"canDeleteAutomationActionHistory\": true,\n      \"canConfigureSyntheticTests\": true,\n      \"canConfigureSyntheticLocations\": true,\n      \"canConfigureSyntheticCredentials\": true,\n      \"canViewSyntheticTests\": true,\n      \"canViewSyntheticLocations\": true,\n      \"canViewSyntheticTestResults\": true,\n      \"canUseSyntheticCredentials\": true,\n      \"canViewBusinessProcesses\": false,\n      \"canViewBusinessProcessDetails\": false,\n      \"canViewBusinessActivities\": false,\n      \"canViewBizAlerts\": false,\n      \"canDeleteLogs\": true,\n      \"canCreateHeapDump\": false,\n      \"canCreateThreadDump\": false,\n      \"canConfigureEventsAndAlerts\": true,\n      \"canConfigureMaintenanceWindows\": true,\n      \"canConfigureApplicationSmartAlerts\": true,\n      \"canConfigureWebsiteSmartAlerts\": true,\n      \"canConfigureMobileAppSmartAlerts\": true,\n      \"canConfigureGlobalApplicationSmartAlerts\": true,\n      \"canConfigureGlobalSyntheticSmartAlerts\": true,\n      \"canConfigureGlobalInfraSmartAlerts\": true,\n      \"canConfigureGlobalLogSmartAlerts\": true,\n      \"canManuallyCloseIssue\": true,\n      \"canViewLogVolume\": true,\n      \"canConfigureLogRetentionPeriod\": true\n    }\n"
+              schema:
+                $ref: '#/components/schemas/ApiToken'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureApiTokens
+      summary: Get API token
+      tags:
+      - API Token
+      x-ibm-ahub-byok: true
+    put:
+      description: 'Update API Token- Change Token name and associated permissions
+
+        For more information on APIToken please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#apitoken.'
+      operationId: putApiToken
+      parameters:
+      - in: path
+        name: internalId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example: "{\n  \"accessGrantingToken\": \"accessGrantingToken\",\n  \"name\": \"tokenName\",\n  \"internalId\": \"internalId\",\n  \"canViewAuditLog\": true,\n  \"canConfigureSessionSettings\": true,\n  \"canConfigureApplications\": true,\n  \"canConfigureAgents\": true,\n  \"canConfigureUsers\": true,\n  \"canConfigureEventsAndAlerts\": true,\n}\n"
+            schema:
+              $ref: '#/components/schemas/ApiToken'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: tokenId
+                accessGrantingToken: accessGrantingToken
+                internalId: internalId
+                name: tokenName
+                createdBy: createdBy
+                createdOn: createdOn
+                lastUsedOn: lastUsedOn
+                expiresOn: expiresOn
+                limitedApplicationsScope: false
+                limitedBizOpsScope: false
+                limitedWebsitesScope: false
+                limitedKubernetesScope: false
+                limitedMobileAppsScope: false
+                limitedInfrastructureScope: false
+                limitedSyntheticsScope: false
+                limitedVsphereScope: false
+                limitedPhmcScope: false
+                limitedPvcScope: false
+                limitedZhmcScope: false
+                limitedPcfScope: false
+                limitedOpenstackScope: false
+                limitedAutomationScope: false
+                limitedLogsScope: false
+                canConfigureServiceMapping: false
+                canConfigureEumApplications: false
+                canConfigureMobileAppMonitoring: false
+                canConfigureUsers: true
+                canInstallNewAgents: false
+                canConfigureIntegrations: false
+                canConfigureApiTokens: false
+                canConfigurePersonalApiTokens: false
+                canConfigureAgentRunMode: false
+                canViewAuditLog: true
+                canConfigureAgents: true
+                canConfigureAuthenticationMethods: false
+                canConfigureApplications: true
+                canConfigureTeams: false
+                canConfigureReleases: false
+                canConfigureLogManagement: false
+                canConfigureDatabaseManagement: false
+                canCreatePublicCustomDashboards: false
+                canViewLogs: false
+                canViewTraceDetails: false
+                canConfigureSessionSettings: true
+                canConfigureGlobalAlertPayload: false
+                canViewAccountAndBillingInformation: false
+                canEditAllAccessibleCustomDashboards: false
+                canConfigureAutomationActions: false
+                canConfigureAutomationPolicies: false
+                canRunAutomationActions: false
+                canDeleteAutomationActionHistory: false
+                canConfigureSyntheticTests: false
+                canConfigureSyntheticLocations: false
+                canConfigureSyntheticCredentials: false
+                canViewSyntheticTests: false
+                canViewSyntheticLocations: false
+                canViewSyntheticTestResults: false
+                canUseSyntheticCredentials: false
+                canViewBusinessProcesses: false
+                canViewBusinessProcessDetails: false
+                canViewBusinessActivities: false
+                canViewBizAlerts: false
+                canDeleteLogs: false
+                canCreateHeapDump: false
+                canCreateThreadDump: false
+                canConfigureEventsAndAlerts: true
+                canConfigureMaintenanceWindows: false
+                canConfigureApplicationSmartAlerts: false
+                canConfigureWebsiteSmartAlerts: false
+                canConfigureMobileAppSmartAlerts: false
+                canConfigureGlobalApplicationSmartAlerts: false
+                canConfigureGlobalSyntheticSmartAlerts: false
+                canConfigureGlobalInfraSmartAlerts: false
+                canConfigureGlobalLogSmartAlerts: false
+                canManuallyCloseIssue: false
+                canViewLogVolume: false
+                canConfigureLogRetentionPeriod: false
+              schema:
+                $ref: '#/components/schemas/ApiToken'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureApiTokens
+      summary: Create or update an API token
+      tags:
+      - API Token
+      x-ibm-ahub-byok: true
+components:
+  schemas:
+    ApiToken:
+      type: object
+      properties:
+        accessGrantingToken:
+          type: string
+        canConfigureAgentRunMode:
+          type: boolean
+        canConfigureAgents:
+          type: boolean
+        canConfigureAiAgents:
+          type: boolean
+        canConfigureApdex:
+          type: boolean
+        canConfigureApiTokens:
+          type: boolean
+        canConfigureApplicationSmartAlerts:
+          type: boolean
+        canConfigureApplications:
+          type: boolean
+        canConfigureAuthenticationMethods:
+          type: boolean
+        canConfigureAutomationActions:
+          type: boolean
+        canConfigureAutomationPolicies:
+          type: boolean
+        canConfigureBizops:
+          type: boolean
+        canConfigureDatabaseManagement:
+          type: boolean
+        canConfigureEumApplications:
+          type: boolean
+        canConfigureEventsAndAlerts:
+          type: boolean
+        canConfigureGlobalAlertPayload:
+          type: boolean
+        canConfigureGlobalApplicationSmartAlerts:
+          type: boolean
+        canConfigureGlobalInfraSmartAlerts:
+          type: boolean
+        canConfigureGlobalLogSmartAlerts:
+          type: boolean
+        canConfigureGlobalSyntheticSmartAlerts:
+          type: boolean
+        canConfigureIntegrations:
+          type: boolean
+        canConfigureLLM:
+          type: boolean
+        canConfigureLogManagement:
+          type: boolean
+        canConfigureLogRetentionPeriod:
+          type: boolean
+        canConfigureMaintenanceWindows:
+          type: boolean
+        canConfigureMobileAppMonitoring:
+          type: boolean
+        canConfigureMobileAppSmartAlerts:
+          type: boolean
+        canConfigurePersonalApiTokens:
+          type: boolean
+        canConfigureReleases:
+          type: boolean
+        canConfigureServiceLevelCorrectionWindows:
+          type: boolean
+        canConfigureServiceLevelSmartAlerts:
+          type: boolean
+        canConfigureServiceLevels:
+          type: boolean
+        canConfigureServiceMapping:
+          type: boolean
+        canConfigureSessionSettings:
+          type: boolean
+        canConfigureSubtraces:
+          type: boolean
+        canConfigureSyntheticCredentials:
+          type: boolean
+        canConfigureSyntheticLocations:
+          type: boolean
+        canConfigureSyntheticTests:
+          type: boolean
+        canConfigureTeams:
+          type: boolean
+        canConfigureUsers:
+          type: boolean
+        canConfigureWebsiteSmartAlerts:
+          type: boolean
+        canCreateHeapDump:
+          type: boolean
+        canCreatePublicCustomDashboards:
+          type: boolean
+        canCreateThreadDump:
+          type: boolean
+        canDeleteAutomationActionHistory:
+          type: boolean
+        canDeleteLogs:
+          type: boolean
+        canEditAllAccessibleCustomDashboards:
+          type: boolean
+        canInstallNewAgents:
+          type: boolean
+        canInvokeAlertChannel:
+          type: boolean
+        canManuallyCloseIssue:
+          type: boolean
+        canRunAutomationActions:
+          type: boolean
+        canUseSyntheticCredentials:
+          type: boolean
+        canViewAccountAndBillingInformation:
+          type: boolean
+        canViewAuditLog:
+          type: boolean
+        canViewBizAlerts:
+          type: boolean
+        canViewBusinessActivities:
+          type: boolean
+        canViewBusinessProcessDetails:
+          type: boolean
+        canViewBusinessProcesses:
+          type: boolean
+        canViewLogVolume:
+          type: boolean
+        canViewLogs:
+          type: boolean
+        canViewSyntheticLocations:
+          type: boolean
+        canViewSyntheticTestResults:
+          type: boolean
+        canViewSyntheticTests:
+          type: boolean
+        canViewTraceDetails:
+          type: boolean
+        createdBy:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        expiresOn:
+          type: integer
+          format: int64
+        id:
+          type: string
+        internalId:
+          type: string
+        lastUsedOn:
+          type: integer
+          format: int64
+        limitedAiGatewayScope:
+          type: boolean
+        limitedAlertChannelsScope:
+          type: boolean
+        limitedApplicationsScope:
+          type: boolean
+        limitedAutomationScope:
+          type: boolean
+        limitedBizOpsScope:
+          type: boolean
+        limitedGenAIScope:
+          type: boolean
+        limitedInfrastructureScope:
+          type: boolean
+        limitedKubernetesScope:
+          type: boolean
+        limitedLinuxKVMHypervisorScope:
+          type: boolean
+        limitedLogsScope:
+          type: boolean
+        limitedMobileAppsScope:
+          type: boolean
+        limitedNutanixScope:
+          type: boolean
+        limitedOpenstackScope:
+          type: boolean
+        limitedPcfScope:
+          type: boolean
+        limitedPhmcScope:
+          type: boolean
+        limitedPvcScope:
+          type: boolean
+        limitedServiceLevelScope:
+          type: boolean
+        limitedSyntheticsScope:
+          type: boolean
+        limitedVsphereScope:
+          type: boolean
+        limitedWebsitesScope:
+          type: boolean
+        limitedWindowsHypervisorScope:
+          type: boolean
+        limitedXenServerScope:
+          type: boolean
+        limitedZhmcScope:
+          type: boolean
+        name:
+          type: string
+      required:
+      - accessGrantingToken
+      - internalId
+      - name
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage

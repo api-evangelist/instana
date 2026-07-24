@@ -1,0 +1,897 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation Service Levels Objective(SLO) Configurations API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: Service Levels Objective(SLO) Configurations
+paths:
+  /api/settings/slo:
+    get:
+      operationId: getAllSloConfigs
+      parameters:
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+          format: int32
+          description: Size of the Page
+          example: 1
+      - in: query
+        name: page
+        schema:
+          type: integer
+          format: int32
+          description: Page Number
+          example: 1
+      - in: query
+        name: orderBy
+        schema:
+          type: string
+          description: Order By Value
+          enum:
+          - name
+          - entityType
+          - entityName
+          - blueprint
+          - sloStatus
+          - sloWindowRemain
+          - timeWindow
+          - 'null'
+          example: name
+      - in: query
+        name: orderDirection
+        schema:
+          type: string
+          description: Order Direction of the Result, it could be ascending or descending
+          enum:
+          - ASC
+          - DESC
+          example: ASC
+      - in: query
+        name: query
+        schema:
+          type: string
+          description: Keyword or Query which needs to be searched
+          example: test SLO
+      - in: query
+        name: tag
+        schema:
+          type: array
+          description: List of tags which needs to be searched
+          example: Testing
+          items:
+            type: string
+            description: List of tags which needs to be searched
+            example: Testing
+          uniqueItems: true
+      - in: query
+        name: entityType
+        schema:
+          type: array
+          description: SLO Entity Type which needs to be filtered. (This filter could occurs multiple times.)
+          example: application
+          items:
+            type: string
+            description: SLO Entity Type which needs to be filtered. (This filter could occurs multiple times.)
+            enum:
+            - application
+            - website
+            - synthetic
+            - infrastructure
+            example: application
+          uniqueItems: true
+      - in: query
+        name: blueprint
+        schema:
+          type: array
+          description: SLO blueprint Type which needs to be filtered. (This filter could occurs multiple times.)
+          example: latency
+          items:
+            type: string
+            description: SLO blueprint Type which needs to be filtered. (This filter could occurs multiple times.)
+            enum:
+            - latency
+            - availability
+            - traffic
+            - saturation
+            - custom
+            example: latency
+          uniqueItems: true
+      - in: query
+        name: sloIds
+        schema:
+          type: array
+          description: List of SLO IDs for which details need to be fetched
+          example: SLOdCTspkHlS_OzNOATQWgsuw
+          items:
+            type: string
+            description: List of SLO IDs for which details need to be fetched
+            example: SLOdCTspkHlS_OzNOATQWgsuw
+      - in: query
+        name: sloStatus
+        schema:
+          type: string
+          description: Filter by the SLO status
+          example: green
+      - in: query
+        name: entityIds
+        schema:
+          type: array
+          description: List of entity IDs for which details need to be fetched
+          example: adsewby312sdfd1
+          items:
+            type: string
+            description: List of entity IDs for which details need to be fetched
+            example: adsewby312sdfd1
+      - in: query
+        name: grouped
+        schema:
+          type: boolean
+          description: Boolean operator which specifies if the results are grouped
+          example: false
+      - in: query
+        name: refresh
+        schema:
+          type: boolean
+          description: Boolean operator which specifies if the cache needs to be refreshed
+          example: false
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                items:
+                - id: SLOY2KDCFExTvmsLyf4W067JQ
+                  name: Stans test SLO 2
+                  target: 0.99
+                  lastUpdated: 1680182215442
+                  entity:
+                    type: application
+                    applicationId: VTNvC_sATZqMj4vSZfsjKA
+                    serviceId: null
+                    endpointId: null
+                    boundaryScope: INBOUND
+                    includeInternal: false
+                    includeSynthetic: false
+                    tagFilterExpression: null
+                  rbacTags:
+                  - id: R3_hPrHXSMe0yGsnlFdReA
+                    displayName: team 1
+                  indicator:
+                    type: timeBased
+                    blueprint: latency
+                    threshold: 100
+                    aggregation: P90
+                  timeWindow:
+                    type: rolling
+                    duration: 1
+                    durationUnit: week
+                  tags:
+                  - Stan
+                  - testing
+                - id: SLOsmbQLI8ORcuhF_L-QquFWQ
+                  name: '[Should match no nothing test] website entity tag filter'
+                  target: 0.9999
+                  lastUpdated: 1683792839372
+                  rbacTags:
+                  - id: R3_hPrHXSMe0yGsnlFdReA
+                    displayName: team 1
+                  entity:
+                    type: website
+                    websiteId: XIZGGVT1TX2O-0OFeT2Yig
+                    beaconType: httpRequest
+                    tagFilterExpression:
+                      type: TAG_FILTER
+                      name: beacon.geo.country
+                      stringValue: Moon
+                      numberValue: null
+                      booleanValue: null
+                      key: null
+                      value: Moon
+                      operator: EQUALS
+                      entity: NOT_APPLICABLE
+                  indicator:
+                    type: eventBased
+                    blueprint: latency
+                    threshold: 60000
+                  timeWindow:
+                    type: rolling
+                    duration: 1
+                    durationUnit: week
+                  tags:
+                  - test
+                  - no matches
+                page: 1
+                pageSize: 10000
+                totalHits: 2
+              schema:
+                $ref: '#/components/schemas/PaginatedResult'
+          description: Fetched list of the SLO Configurations Successfully
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get All SLO Configs
+      tags:
+      - Service Levels Objective(SLO) Configurations
+      x-ibm-ahub-byok: true
+    post:
+      operationId: createSloConfig
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: Stans test SLO 4
+              target: 0.99
+              rbacTags:
+              - id: R3_hPrHXSMe0yGsnlFdReA
+                displayName: team 1
+              entity:
+                type: application
+                applicationId: VTNvC_sATZqMj4vSZfsjKA
+                serviceId: null
+                endpointId: null
+                boundaryScope: INBOUND
+                includeInternal: false
+                includeSynthetic: false
+                tagFilterExpression: null
+              indicator:
+                type: timeBased
+                blueprint: latency
+                threshold: 100
+                aggregation: P90
+              timeWindow:
+                type: rolling
+                duration: 1
+                durationUnit: week
+              tags:
+              - Stan
+              - testing
+            schema:
+              $ref: '#/components/schemas/SLOConfigWithRBACTag'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: SLOdCTspkHlS_OzNOATQWgsuw
+                rbacTags:
+                - id: R3_hPrHXSMe0yGsnlFdReA
+                  displayName: team 1
+                createdDate: 1680182236227
+                name: Stans test SLO 4
+                target: 0.99
+                lastUpdated: 1713873207738
+                entity:
+                  type: application
+                  applicationId: VTNvC_sATZqMj4vSZfsjKA
+                  serviceId: null
+                  endpointId: null
+                  boundaryScope: INBOUND
+                  includeInternal: false
+                  includeSynthetic: false
+                  tagFilterExpression: null
+                indicator:
+                  type: timeBased
+                  blueprint: latency
+                  threshold: 100
+                  aggregation: P90
+                timeWindow:
+                  type: rolling
+                  duration: 1
+                  durationUnit: week
+                tags:
+                - Stan
+                - testing
+              schema:
+                $ref: '#/components/schemas/SLOConfigWithRBACTag'
+          description: New SLO Configuration Created Successfully
+        '400':
+          content:
+            application/json:
+              example: '{"errors":["Unknown tag filter: call.error"]}'
+              schema:
+                type: string
+          description: Invalid Tag Filter
+      security:
+      - ApiKeyAuth:
+        - canConfigureServiceLevels
+      summary: Create a new SLO Config
+      tags:
+      - Service Levels Objective(SLO) Configurations
+      x-ibm-ahub-byok: true
+  /api/settings/slo/tags:
+    get:
+      operationId: getAllSloConfigTags
+      parameters:
+      - in: query
+        name: query
+        schema:
+          type: string
+          description: Keyword or Query which needs to be searched
+          example: test SLO
+      - in: query
+        name: tag
+        schema:
+          type: array
+          description: List of tags which needs to be searched
+          example: Testing
+          items:
+            type: string
+            description: List of tags which needs to be searched
+            example: Testing
+          uniqueItems: true
+      - in: query
+        name: entityType
+        schema:
+          type: string
+          description: SLO Entity Type which needs to be filtered
+          enum:
+          - application
+          - website
+          - synthetic
+          - infrastructure
+          example: application
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - andre
+              - test
+              - testing
+              - drinks
+              - got no snacks
+              - timeBased
+              - Stan
+              - no matches
+              - availability
+              - Lab
+              - demo
+              - thiemo
+              - TimeWindow Test
+              - robot-shop
+              - eventBased
+              - got snacks
+              - migration
+              - robert-creates-a-new-sli
+              schema:
+                type: array
+                items:
+                  type: string
+          description: Fetched list of SLO Configuration tags Successfully
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get All SLO Config tags
+      tags:
+      - Service Levels Objective(SLO) Configurations
+      x-ibm-ahub-byok: true
+  /api/settings/slo/{id}:
+    delete:
+      operationId: deleteSloConfig
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          description: Service Levels Objective Configuration ID
+          example: SLOdCTspkHlS_OzNOATQWgsuw
+      responses:
+        '204':
+          description: SLO Configuration Deleted Successfully
+      security:
+      - ApiKeyAuth:
+        - canConfigureServiceLevels
+      summary: Delete an existing SLO Config
+      tags:
+      - Service Levels Objective(SLO) Configurations
+      x-ibm-ahub-byok: true
+    get:
+      operationId: getSloConfigById
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          description: Service Levels Objective Configuration ID
+          example: SLOdCTspkHlS_OzNOATQWgsuw
+      - in: query
+        name: refresh
+        schema:
+          type: boolean
+          description: Boolean operator which specifies if the cache needs to be refreshed
+          example: false
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: SLOdCTspkHlS_OzNOATQWgsuw
+                rbacTags:
+                - id: R3_hPrHXSMe0yGsnlFdReA
+                  displayName: team 1
+                createdDate: 1680182236227
+                name: Stans test SLO 4
+                target: 0.99
+                lastUpdated: 1713873207738
+                entity:
+                  type: application
+                  applicationId: VTNvC_sATZqMj4vSZfsjKA
+                  serviceId: null
+                  endpointId: null
+                  boundaryScope: INBOUND
+                  includeInternal: false
+                  includeSynthetic: false
+                  tagFilterExpression: null
+                indicator:
+                  type: timeBased
+                  blueprint: latency
+                  threshold: 100
+                  aggregation: P90
+                timeWindow:
+                  type: rolling
+                  duration: 1
+                  durationUnit: week
+                tags:
+                - Stan
+                - testing
+              schema:
+                $ref: '#/components/schemas/SLOConfigWithRBACTag'
+          description: Fetched SLO Configuration Successfully
+        '404':
+          content:
+            application/json:
+              example:
+                errors:
+                - The sloConfiguration you are looking for does not exist.
+              schema:
+                type: string
+          description: SLO Configuration Not Found
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get an existing SLO Config
+      tags:
+      - Service Levels Objective(SLO) Configurations
+      x-ibm-ahub-byok: true
+    put:
+      operationId: updateSloConfig
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          description: Service Levels Objective Configuration ID
+          example: SLOdCTspkHlS_OzNOATQWgsuw
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: Stans test SLO 4
+              target: 0.99
+              rbacTags:
+              - id: R3_hPrHXSMe0yGsnlFdReA
+                displayName: team 1
+              entity:
+                type: application
+                applicationId: VTNvC_sATZqMj4vSZfsjKA
+                serviceId: null
+                endpointId: null
+                boundaryScope: INBOUND
+                includeInternal: false
+                includeSynthetic: false
+                tagFilterExpression: null
+              indicator:
+                type: timeBased
+                blueprint: latency
+                threshold: 100
+                aggregation: P90
+              timeWindow:
+                type: rolling
+                duration: 1
+                durationUnit: week
+              tags:
+              - Stan
+              - testing
+            schema:
+              $ref: '#/components/schemas/SLOConfigWithRBACTag'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: SLOdCTspkHlS_OzNOATQWgsuw
+                rbacTags:
+                - id: R3_hPrHXSMe0yGsnlFdReA
+                  displayName: team 1
+                createdDate: 1680182236227
+                name: Stans test SLO 4
+                target: 0.99
+                lastUpdated: 1713873207738
+                entity:
+                  type: application
+                  applicationId: VTNvC_sATZqMj4vSZfsjKA
+                  serviceId: null
+                  endpointId: null
+                  boundaryScope: INBOUND
+                  includeInternal: false
+                  includeSynthetic: false
+                  tagFilterExpression: null
+                indicator:
+                  type: timeBased
+                  blueprint: latency
+                  threshold: 100
+                  aggregation: P90
+                timeWindow:
+                  type: rolling
+                  duration: 1
+                  durationUnit: week
+                tags:
+                - Stan
+                - testing
+              schema:
+                $ref: '#/components/schemas/SLOConfigWithRBACTag'
+          description: Updated SLO Configuration Successfully
+        '400':
+          content:
+            application/json:
+              example:
+                errors:
+                - 'SloConfiguration with id: GC8r6gbZT4WIhtsMx_YgLg was not found'
+              schema:
+                type: string
+          description: Bad Request
+      security:
+      - ApiKeyAuth:
+        - canConfigureServiceLevels
+      summary: Update an existing SLO Config
+      tags:
+      - Service Levels Objective(SLO) Configurations
+      x-ibm-ahub-byok: true
+components:
+  schemas:
+    SloEntity:
+      type: object
+      description: Entity of the Service Levels Objective Configuration, it could be either Application nor Website
+      discriminator:
+        mapping:
+          application: '#/components/schemas/ApplicationSloEntity'
+          infrastructure: '#/components/schemas/InfraSloEntity'
+          synthetic: '#/components/schemas/SyntheticSloEntity'
+          website: '#/components/schemas/WebsiteSloEntity'
+        propertyName: type
+      properties:
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        type:
+          type: string
+      required:
+      - type
+    ServiceLevelIndicator:
+      type: object
+      description: Indicator of the Service Levels Objective Configuration, it indicates the type of metric by which the SLO should be evaluated
+      discriminator:
+        mapping:
+          availability: '#/components/schemas/AvailabilityBlueprintIndicator'
+          custom: '#/components/schemas/CustomBlueprintIndicator'
+          latency: '#/components/schemas/LatencyBlueprintIndicator'
+          saturation: '#/components/schemas/SaturationBlueprintIndicator'
+          traffic: '#/components/schemas/TrafficBlueprintIndicator'
+        propertyName: blueprint
+      properties:
+        aggregation:
+          type: string
+          description: Aggregation Type for the Threshold Value
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        blueprint:
+          type: string
+          enum:
+          - latency
+          - availability
+          - traffic
+          - saturation
+          - custom
+        operator:
+          type: string
+          description: Operator for the Threshold Value
+          enum:
+          - '>'
+          - '>='
+          - <
+          - <=
+        serviceLevelsMeasurement:
+          type: string
+          description: Defines Measurement Type of SLO
+          enum:
+          - eventBased
+          - timeBased
+          - erroneous
+          - all
+        threshold:
+          type: number
+          format: double
+          description: Threshold Value for the Blueprint
+        type:
+          type: string
+          enum:
+          - eventBased
+          - timeBased
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    ApiTag:
+      type: object
+      properties:
+        displayName:
+          type: string
+          maxLength: 256
+          minLength: 0
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+      required:
+      - displayName
+      - id
+    TimeWindow:
+      type: object
+      description: Time Window type of the SLO, it could be Fixed or Rolling
+      discriminator:
+        mapping:
+          fixed: '#/components/schemas/FixedTimeWindow'
+          rolling: '#/components/schemas/RollingTimeWindow'
+        propertyName: type
+      properties:
+        duration:
+          type: integer
+          format: int32
+          description: Duration of the Time Window
+        durationUnit:
+          type: string
+          description: Unit of the Time Window Duration
+          enum:
+          - millisecond
+          - second
+          - minute
+          - hour
+          - day
+          - week
+          - month
+        timezone:
+          type: string
+          description: Timezone string
+        type:
+          type: string
+      required:
+      - duration
+      - durationUnit
+      - type
+    SLOConfigWithRBACTag:
+      type: object
+      properties:
+        createdDate:
+          type: string
+          format: date-time
+          description: Created date of Service Levels Objective Configuration
+        entity:
+          $ref: '#/components/schemas/SloEntity'
+        id:
+          type: string
+          description: Service Levels Objective Configuration ID
+          maxLength: 64
+          minLength: 0
+        indicator:
+          $ref: '#/components/schemas/ServiceLevelIndicator'
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Last updated date of Service Levels Objective Configuration
+        name:
+          type: string
+          description: Name of the Service Levels Objective Configuration
+        rbacTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTag'
+          uniqueItems: true
+        tags:
+          type: array
+          description: List of tags associated with Service Levels Objective Configuration
+          items:
+            type: string
+            description: List of tags associated with Service Levels Objective Configuration
+        target:
+          type: number
+          format: double
+          description: Service Levels Objective Configuration Target
+          exclusiveMaximum: false
+          exclusiveMinimum: true
+          maximum: 0.9999
+          minimum: 0
+        timeWindow:
+          $ref: '#/components/schemas/TimeWindow'
+      required:
+      - entity
+      - indicator
+      - name
+      - tags
+      - target
+      - timeWindow
+    PaginatedResult:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+        page:
+          type: integer
+          format: int32
+          description: Page Number
+          minimum: 1
+        pageSize:
+          type: integer
+          format: int32
+          minimum: 1
+        totalHits:
+          type: integer
+          format: int64
+          minimum: 0
+      required:
+      - items
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage

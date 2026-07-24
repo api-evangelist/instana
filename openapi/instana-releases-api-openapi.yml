@@ -1,0 +1,447 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation Releases API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: Releases
+  description: "These APIs can be used to create, update, delete and fetch releases.\n\n## Mandatory Parameters when sending a request:\n\n1. **Create release**\n    - `name` and `start` are mandatory parameters to create a release with Global scope.\n    - `applications` is a mandatory parameter **along with** Global scope mandatory parameters to create a release with Application Perspective scope.\n    - `services.name` is a mandatory parameter **along with** Global scope mandatory parameters to create a release with Service scope.\n    - `services.scopedTo.applications` is a mandatory parameter **along with Service scope** mandatory parameters to create a release with Service within an Application Perspective scope.\n\n2. **Delete release**\n    - `releaseId` is a mandatory path parameter.\n\n3. **Get release**\n    - `releaseId` is a mandatory path parameter.\n\n4. **Update release**\n    - `releaseId` is a mandatory path parameter.\n    - Same mandatory parameters as **Create release**."
+paths:
+  /api/releases:
+    get:
+      operationId: getAllReleases
+      parameters:
+      - in: query
+        name: from
+        schema:
+          type: integer
+          format: int64
+          description: The timestamp from where one wants to fetch the release markers.
+      - in: query
+        name: to
+        schema:
+          type: integer
+          format: int64
+          description: The timestamp till where one wants to fetch the release markers.
+      - in: query
+        name: maxResults
+        schema:
+          type: integer
+          format: int32
+          description: The maximum number of release markers to be fetched
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: Tiu16hLCTniHDtHb_uDV1w
+                name: demo-app/main-**
+                start: 1709091782000
+                lastUpdated: 1709091782533
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReleaseWithMetadata'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureReleases
+      summary: Get all releases
+      tags:
+      - Releases
+      x-ibm-ahub-byok: true
+      description: Use this API endpoint to retrieve a list of all releases.
+    post:
+      operationId: postRelease
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Release'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseWithMetadata'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureReleases
+      summary: Create release
+      tags:
+      - Releases
+      x-ibm-ahub-byok: true
+      description: "Use this API endpoint to create a release. Release can be created with four different scopes: \n\n1. Global\n    - Release marker is shown on all dashboard pages for Application perspectives, Services, and Endpoints.\n\n2. Application Perspective\n    - Release marker is shown on the dashboard for the Application perspective.\n\n3. Service\n    - Release marker is shown on the dashboards for the Service and all Application perspective dashboards that contain the Service.\n\n4. Service within an Application Perspective\n    - Release Marker will be shown only for the Service within the given Application perspective, but not for other services within the Application perspective."
+  /api/releases/{releaseId}:
+    delete:
+      operationId: deleteRelease
+      parameters:
+      - in: path
+        name: releaseId
+        required: true
+        schema:
+          type: string
+          description: The unique release id which one wants to delete.
+          example: XK1e1TE3T9SHKugndn_soQ
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      security:
+      - ApiKeyAuth:
+        - CanConfigureReleases
+      summary: Delete release
+      tags:
+      - Releases
+      x-ibm-ahub-byok: true
+      description: Use this API endpoint to delete a release.
+    get:
+      operationId: getRelease
+      parameters:
+      - description: The unique release id which one wants to retrieve.
+        example: XK1e1TF3T9SHKugndn_soQ
+        in: path
+        name: releaseId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: XK1e1TF3T9SHKugndn_soQ
+                name: demo-app/main-**
+                start: 1706674621000
+                lastUpdated: 1706674621604
+              schema:
+                $ref: '#/components/schemas/ReleaseWithMetadata'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureReleases
+      summary: Get release
+      tags:
+      - Releases
+      x-ibm-ahub-byok: true
+      description: Use this API endpoint to retrieve a particular release.
+    put:
+      operationId: putRelease
+      parameters:
+      - in: path
+        name: releaseId
+        required: true
+        schema:
+          type: string
+          description: The unique release id which one wants to update.
+          example: XK1e1TQ3T9SHKugndn_soQ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Release'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseWithMetadata'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureReleases
+      summary: Update release
+      tags:
+      - Releases
+      x-ibm-ahub-byok: true
+      description: Use this API endpoint to update a release.
+components:
+  schemas:
+    ReleaseWithMetadata:
+      type: object
+      properties:
+        applications:
+          type: array
+          description: The list of application perspectives where the release can be viewed.
+          items:
+            $ref: '#/components/schemas/ApplicationScopeWithMetadata'
+          maxItems: 10
+          minItems: 0
+        id:
+          type: string
+          description: 'A unique id for a release. For example: `l1wgr3DsQkGLf8u18JiGsg`.'
+          maxLength: 64
+          minLength: 0
+        lastUpdated:
+          type: integer
+          format: int64
+          description: 'The timestamp for when the same release is updated. The time measured is in milliseconds. For example: `1742369990000` is `Wednesday, 19 March 2025 07:39:50 GMT`.'
+          minimum: 1
+        name:
+          type: string
+          description: 'The name of the release. For example: `frontend/release-2000`.'
+          maxLength: 256
+          minLength: 0
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseScope'
+          writeOnly: true
+        services:
+          type: array
+          description: The list of services where the release can be viewed.
+          items:
+            $ref: '#/components/schemas/ServiceScopeWithMetadata'
+          maxItems: 10
+          minItems: 0
+        start:
+          type: integer
+          format: int64
+          description: 'The timestamp for when the release is created. The time measured is in milliseconds. For example: `1742349976000` is `Wednesday, 19 March 2025 02:06:16 GMT`.'
+          minimum: 1
+      required:
+      - id
+      - name
+    ServiceScope:
+      type: object
+      description: The list of services where the release can be viewed.
+      properties:
+        name:
+          type: string
+          description: 'Name of the Service. Eg: `payment`.'
+          maxLength: 256
+          minLength: 0
+        scopedTo:
+          $ref: '#/components/schemas/ServiceScopedTo'
+      required:
+      - name
+    ServiceScopedToWithMetadata:
+      type: object
+      description: The release marker would be present in the service but not for other services within the Application perspective.
+      properties:
+        applications:
+          type: array
+          description: 'The list of application perspectives where the service is present. '
+          items:
+            $ref: '#/components/schemas/ApplicationScopeWithMetadata'
+          maxItems: 10
+          minItems: 1
+      required:
+      - applications
+    ApplicationScope:
+      type: object
+      description: The list of application perspectives where the release can be viewed.
+      properties:
+        name:
+          type: string
+          description: 'Name of the Application Perspective. Eg: `app1`.'
+          maxLength: 256
+          minLength: 0
+      required:
+      - name
+    ReleaseScope:
+      type: object
+      properties:
+        applicationId:
+          type: string
+        applicationName:
+          type: string
+        serviceId:
+          type: string
+        serviceName:
+          type: string
+    ServiceScopedTo:
+      type: object
+      description: 'The list of application perspectives where the service is present. '
+      properties:
+        applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationScope'
+          maxItems: 10
+          minItems: 1
+      required:
+      - applications
+    ApplicationScopeWithMetadata:
+      type: object
+      description: The list of application perspectives where the release can be viewed.
+      properties:
+        id:
+          type: string
+          description: 'Unique ID of the Application Perspective. Eg: `Av62RoIKQv-A3n6DbMQh9g`.'
+        name:
+          type: string
+          description: 'Name of the Application Perspective. Eg: `app1`.'
+      required:
+      - id
+    ServiceScopeWithMetadata:
+      type: object
+      description: The list of services where the release can be viewed.
+      properties:
+        id:
+          type: string
+          description: 'Unique ID of the Service. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.'
+        name:
+          type: string
+          description: 'Name of the Service. Eg: `payment`.'
+        scopedTo:
+          $ref: '#/components/schemas/ServiceScopedToWithMetadata'
+      required:
+      - id
+    Release:
+      type: object
+      properties:
+        applications:
+          type: array
+          description: The list of application perspectives where the release can be viewed.
+          items:
+            $ref: '#/components/schemas/ApplicationScope'
+          maxItems: 10
+          minItems: 0
+        name:
+          type: string
+          description: 'The name of the release. For example: `frontend/release-2000`.'
+          maxLength: 256
+          minLength: 0
+        services:
+          type: array
+          description: The list of services where the release can be viewed.
+          items:
+            $ref: '#/components/schemas/ServiceScope'
+          maxItems: 10
+          minItems: 0
+        start:
+          type: integer
+          format: int64
+          description: 'The timestamp for when the release is created. The time measured is in milliseconds. For example: `1742349976000` is `Wednesday, 19 March 2025 02:06:16 GMT`.'
+          minimum: 1
+      required:
+      - name
+      - start
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage

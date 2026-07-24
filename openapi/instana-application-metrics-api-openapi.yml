@@ -1,0 +1,1088 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation Application Metrics API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: Application Metrics
+  description: "The endpoints of this group retrieve the metrics for defined applications, discovered services and endpoints.\r\n### Mandatory Parameters\r\n\r\n**metrics** A list of metric objects that define which metric should be returned, with the defined aggregation. Each metrics objects consists of minimum two items:\r\n1. *metric* select a particular metric to get a list of available metrics query the [catalog endpoint](#operation/getApplicationCatalogMetrics).\r\n2. *aggregation* depending on the selected metric different aggregations are available e.g. SUM, MEAN, P95. The aforementioned [catalog endpoint](#operation/getApplicationCatalogMetrics) gives you the metrics with the available aggregations.\r\n\r\n**Note**: The above mentioned list of available metrics with its supported metrics can also be found in the section **Supported Aggregation on Application metrics** below.\r\n\r\n### Optional Parameters\r\n\r\n**metrics** Default you will get an aggregated metric with for the selected timeframe \r\n\r\n* *granularity* \r\n   * If it is not set you will get a an aggregated value for the selected timeframe\r\n   * If the granularity is set you will get data points with the specified granularity **in seconds**\r\n    * The granularity should not be greater than the `windowSize` (important: `windowSize` is expressed in **milliseconds**)\r\n    * The granularity should not be set too small relative to the `windowSize` to avoid creating an excessively large number of data points (max 600)\r\n   \r\n**pagination** if you use pagination you most probably want to fix the timeFrame for the retrieved metrics\r\n1. *page* select the page number you want to retrieve\r\n2. *pageSize* set the number of applications you want to return with one query\r\n\r\n**order** You can order the returned items alphanumerical by label, either ascending or descending\r\n1. *by* if the granularity is set to 1 you can use the metric name eg. \"latency.p95\" to order by that value\r\n1. *direction* either ascending or descending\r\n\r\n**timeFrame** As in our UI you can specify the timeframe for metrics retrieval.\r\n```\r\n  windowSize           to\r\n     (ms)       (unix-timestamp)\r\n<----------------------|\r\n```\r\n\r\nThe timeFrame might be adjusted to fit the metric granularity so that there is no partial bucket. For example, if the query timeFrame is 08:02 - 09:02 and the metric granularity is 5 minutes, the timeFrame will be adjusted to 08:05 - 09:00. The adjusted timeFrame will be returned in the response payload. If the query does not have any metric with granularity, a default granularity will be used for adjustment.\r\n\r\nTo narrow down the result set you have four options to search for an application.\r\n\r\n**nameFilter | applicationId | serviceId | endpointId**\r\n\r\n* *nameFilter:* filter by name with \"contains\" semantic.\r\n\r\n* *applicationId:* search directly for an application by applicationId \r\n\r\n* *serviceId:* search for applications that include a particular service by serviceId\r\n\r\n* *endpointId:* search for applications that include a particular endpoint by endpointId\r\n\r\n### Defaults\r\n\r\n**metrics**\r\n* *granularity:* 1\r\n\r\n**order**\r\n* by application label ascending.\r\n\r\n**timeFrame**\r\n```\r\n\"timeFrame\": {\r\n\t\"windowSize\": 60000,\r\n\t\"to\": {current timestamp}\r\n}\r\n```\r\n**nameFilter | applicationId | serviceId | endpointId**\r\n* no filters are applied in the default call\r\n\r\n\r\n## Supported Aggregation on Application Metrics\r\n\r\n| Metric           | Description                                                                                | Allowed Aggregations |\r\n|------------------|--------------------------------------------------------------------------------------------|----------------------|\r\n| `calls`          | Number of received calls                                                                   | `PER_SECOND`, `SUM`  |\r\n| `erroneousCalls` | The number of erroneous calls                                                              |`PER_SECOND`, `SUM`   |\r\n| `latency`        | Latency of received calls in milliseconds                                                  | `P25`, `P50`, `P75`, `P90`, `P95`, `P98`, `P99`, `SUM`, `MEAN`, `MAX`, `MIN`        |\r\n| `errors`         | Error rate of received calls. A value between 0 and 1                                      | `MEAN`               |\r\n| `applications`   | The number of Application Perspectives                                                     |`DISTINCT_COUNT`      |\r\n| `services`       | The number of Services                                                                     |`DISTINCT_COUNT`      |\r\n| `endpoints`      | The number of Endpoints                                                                    |`DISTINCT_COUNT`      |\r\n| `http.1xx`       | Counts the number of occurrences of HTTP status codes where 100 <= status code <= 199      |`PER_SECOND`, `SUM`   |\r\n| `http.2xx`       | Counts the number of occurrences of HTTP status codes where 200 <= status code <= 299      |`PER_SECOND`, `SUM`   |\r\n| `http.3xx`       | Counts the number of occurrences of HTTP status codes where 300 <= status code <= 399      |`PER_SECOND`, `SUM`   |\r\n| `http.4xx`       | Counts the number of occurrences of HTTP status codes where 400 <= status code <= 499      |`PER_SECOND`, `SUM`   |\r\n| `http.5xx`       | Counts the number of occurrences of HTTP status codes where 500 <= status code <= 599      |`PER_SECOND`, `SUM`   |\r\n"
+paths:
+  /api/application-monitoring/metrics/applications:
+    post:
+      description: 'Use this API endpoint if one wants to retrieve one or more supported aggregation of supported metrics for an Application Perspective.
+
+        For eg: retrieve `MEAN` aggregation of `latency` metric for an Application Perspective `app`.
+
+        For more information on supported metrics, refer `Get Metric catalog`.
+
+
+        For more information on Application Metrics please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-metrics.'
+      operationId: getApplicationMetrics
+      parameters:
+      - description: If enabled, fill the missing data points in the metric result with timestamp and value 0.
+        in: query
+        name: fillTimeSeries
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            examples:
+              metrics/applications:
+                description: 'Attribute in "order by" should
+
+                  be provided in "metrics" as well
+
+                  '
+                value:
+                  metrics:
+                  - aggregation: MEAN
+                    metric: latency
+                  order:
+                    by: latency
+                    direction: DESC
+                  pagination:
+                    page: 1
+                    pageSize: 1
+                  timeFrame:
+                    to: 1646037122400
+                    windowSize: 3600000
+            schema:
+              $ref: '#/components/schemas/GetApplications'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                items:
+                - application:
+                    id: Jv83WpUmSKiiCWIpi-reSQ
+                    label: demoApp
+                    boundaryScope: ALL
+                    entityType: APPLICATION
+                  metrics:
+                    latency.mean:
+                    - - 1669190580000
+                      - 4
+                page: 1
+                pageSize: 1
+                totalHits: 1616
+                adjustedTimeframe:
+                  windowSize: 3600000
+                  to: 1646037120000
+              schema:
+                $ref: '#/components/schemas/ApplicationMetricResult'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get Application Metrics
+      tags:
+      - Application Metrics
+      x-ibm-ahub-byok: true
+  /api/application-monitoring/metrics/endpoints:
+    post:
+      description: 'Use this API endpoint if one wants to retrieve one or more supported aggregation of supported metrics for an Endpoint.
+
+        For eg: retrieve `MEAN` aggregation of `latency` metric for an Endpoint `GET /api/foo`.
+
+        For more information on supported metrics, refer `Get Metric catalog`.
+
+
+        For more information on Application Metrics please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-metrics.'
+      operationId: getEndpointsMetrics
+      parameters:
+      - description: If enabled, fill the missing data points in the metric result with timestamp and value 0.
+        in: query
+        name: fillTimeSeries
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            examples:
+              metrics/endpoints:
+                description: 'Order by is supported for following attributes: endpointLabel or valid metrics if provided such as latency.mean
+
+                  '
+                value:
+                  applicationBoundaryScope: ALL
+                  endpointId: murzTwzJlGyqc_CFtEKx8INVCfY
+                  excludeSynthetic: true
+                  metrics:
+                  - aggregation: MEAN
+                    metric: latency
+                  order:
+                    by: latency.mean
+                    direction: ASC
+                  pagination:
+                    page: 1
+                    pageSize: 1
+                  timeFrame:
+                    to: 1669190589000
+                    windowSize: 3600000
+            schema:
+              $ref: '#/components/schemas/GetEndpoints'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                items:
+                - endpoint:
+                    id: murzTwzJlGyqc_CFtEKx8INVCfY
+                    label: robot-shop
+                    type: MESSAGING
+                    serviceId: 05b145cfb6fbc24d08a8e01155c0aa2bf8460c87
+                    technologies:
+                    - golangRuntimePlatform
+                    - kubernetesService
+                    syntheticType: NON_SYNTHETIC
+                    synthetic: false
+                    entityType: ENDPOINT
+                  metrics:
+                    latency.mean:
+                    - - 1669190580000
+                      - 2434.5625
+                page: 1
+                pageSize: 1
+                totalHits: 1
+                adjustedTimeframe:
+                  windowSize: 3600000
+                  to: 1669190580000
+              schema:
+                $ref: '#/components/schemas/EndpointMetricResult'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get Endpoint metrics
+      tags:
+      - Application Metrics
+      x-ibm-ahub-byok: true
+  /api/application-monitoring/metrics/services:
+    post:
+      description: 'Use this API endpoint if one wants to retrieve one or more supported aggregation of supported metrics for a Service.
+
+        For eg: retrieve `MEAN` aggregation of `latency` metric for a Service `payment`.
+
+        For more information on supported metrics, refer `Get Metric catalog`.
+
+
+        For more information on Application Metrics please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-metrics.'
+      operationId: getServicesMetrics
+      parameters:
+      - description: If enabled, fill the missing data points in the metric result with timestamp and value 0.
+        in: query
+        name: fillTimeSeries
+        schema:
+          type: boolean
+      - in: query
+        name: includeSnapshotIds
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            examples:
+              metrics/services:
+                description: "Order by is supported for following attributes: types, technologies, serviceLabel and\n valid metrics if provided such as latency.mean\n"
+                value:
+                  applicationBoundaryScope: ALL
+                  contextScope: NONE
+                  metrics:
+                  - aggregation: mean
+                    metric: latency
+                  order:
+                    by: latency.mean
+                    direction: DESC
+                  pagination:
+                    page: 1
+                    pageSize: 1
+                  serviceId: c467ca0fa21477fee3cde75a140b2963307388a7
+                  technologies:
+                  - springbootApplicationContainer
+                  timeFrame:
+                    to: 1669190589000
+                    windowSize: 3600000
+            schema:
+              $ref: '#/components/schemas/GetServices'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                items:
+                - service:
+                    id: c467ca0fa21477fee3cde75a140b2963307388a7
+                    label: discount
+                    types:
+                    - HTTP
+                    technologies:
+                    - springbootApplicationContainer
+                    snapshotIds: []
+                    entityType: SERVICE
+                  metrics:
+                    endpoints.distinct_count:
+                    - - 1669190580000
+                      - 4
+                page: 1
+                pageSize: 1
+                totalHits: 1
+                adjustedTimeframe:
+                  windowSize: 3600000
+                  to: 1669190580000
+              schema:
+                $ref: '#/components/schemas/ServiceMetricResult'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get Service metrics
+      tags:
+      - Application Metrics
+      x-ibm-ahub-byok: true
+  /api/application-monitoring/v2/metrics:
+    post:
+      description: 'Use this API endpoint if one wants to retrieve one or more supported aggregation of supported metrics for a combination of entities.
+
+        For eg: retrieve `MEAN` aggregation of `latency` metric for an Endpoint `GET /api/foo`, Service `payment` and Application Perspective `app`.
+
+        Consider this API endpoint an upgraded version of `Get Application Metrics`, `Get Endpoint metrics` and `Get Service metrics`.
+
+        For more information on supported metrics, refer `Get Metric catalog`.
+
+
+        For more information on Application Metrics please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-metrics.'
+      operationId: getApplicationDataMetricsV2
+      requestBody:
+        content:
+          application/json:
+            example:
+              includeInternal: true
+              includeSynthetic: true
+              metrics:
+              - aggregation: MEAN
+                metric: latency
+              tagFilterExpression:
+                type: TAG_FILTER
+                name: service.name
+                operator: EQUALS
+                entity: DESTINATION
+                value: warehouse
+              timeFrame:
+                to: 1669190589000
+                windowSize: 3600000
+            schema:
+              $ref: '#/components/schemas/GetApplicationMetrics'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                metrics:
+                  latency.mean:
+                  - - 1669190580000
+                    - 106.85055708882756
+                adjustedTimeframe:
+                  windowSize: 3600000
+                  to: 1669190580000
+              schema:
+                $ref: '#/components/schemas/MetricAPIResult'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get Application Data Metrics
+      tags:
+      - Application Metrics
+      x-ibm-ahub-byok: true
+components:
+  schemas:
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    AdjustedTimeframe:
+      type: object
+      description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
+
+        For example, In request payload, if timeframe is 08:03 - 14:03, which is a 6 hour window size. It is adjusted to 08:05 - 14:00
+
+        Another example, In request payload, if timeframe is 08:20 - 08:20 (next day) which is a 24h window size. It is adjusted to 08:30 - 08:00 (next day)
+
+        '
+      properties:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          minimum: 0
+      required:
+      - to
+    GetApplicationMetrics:
+      type: object
+      properties:
+        includeInternal:
+          type: boolean
+          writeOnly: true
+        includeSynthetic:
+          type: boolean
+          writeOnly: true
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppDataMetricConfiguration'
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+      required:
+      - metrics
+      - timeFrame
+    TimeFrame:
+      type: object
+      description: Time range for which the data should be retrieved.
+      properties:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          maximum: 2678400000
+          minimum: 0
+    GetEndpoints:
+      type: object
+      properties:
+        applicationBoundaryScope:
+          type: string
+          description: "Use when querying calls of an application:\n `INBOUND`: only inbound calls \n `ALL`: all the calls to that application (inbound + internal)"
+          enum:
+          - ALL
+          - INBOUND
+        applicationId:
+          type: string
+          description: 'An Instana generated unique identifier for an Application. If specified, the list of results will be filtered for the specified Application ID. Eg: `Av62RoIKQv-A3n6DbMQh9g`.
+
+            One can see the application id from Instana UI by going to an Application Perspective page. In the URL, there will be `appId=Av62RoIKQv-A3n6DbMQh9g`.
+
+            Alternatively, one can use `Get applications` API endpoint to get the application id in `id` parameter.
+
+            '
+          maxLength: 64
+          minLength: 0
+        endpointId:
+          type: string
+          description: 'An Instana generated unique identifier for an Endpoint. If specified, the list of results will be filtered for the specified Endpoint ID. Eg `NCRq5oYnan5x-PkdTPQwLLUdu5M`.
+
+            One can see the endpoint id from Instana UI by going to an Endpoint page. In the URL, there will be `endpointId=NCRq5oYnan5x-PkdTPQwLLUdu5M`.
+
+            Alternatively, one can use `Get endpoints` API endpoint to get the endpoint id in `id` parameter.
+
+            '
+          maxLength: 64
+          minLength: 0
+        endpointTypes:
+          type: array
+          description: A list of endpoint types, each of which is a string. An endpoint can specified for a database, an SDK, etc.
+          items:
+            type: string
+            description: A list of endpoint types, each of which is a string. An endpoint can specified for a database, an SDK, etc.
+            enum:
+            - UNDEFINED
+            - RPC
+            - EVENT
+            - GRAPHQL
+            - BATCH
+            - SHELL
+            - HTTP
+            - SDK
+            - OPENTELEMETRY
+            - INTERNAL
+            - DATABASE
+            - MESSAGING
+            - PAGE
+            - PAGE_RESOURCE
+          maxItems: 8
+          minItems: 0
+          uniqueItems: true
+        excludeSynthetic:
+          type: boolean
+          description: A variable used to specify whether synthetic endpoints should be excluded. If set to 'true', synthetic endpoints will be excluded from the result.
+        metrics:
+          type: array
+          description: 'A list of objects each of which defines a metric and the (statistical) aggregation -- MEAN, SUM, MAX, etc -- that should be used to summarize it for the defined time frame. Eg: `[{ ''metric'': ''latency'', ''aggregation'': ''MEAN''}]`. To know more about supported metrics and its aggregation, See `Get Metric catalog`.'
+          items:
+            $ref: '#/components/schemas/AppDataMetricConfiguration'
+          maxItems: 5
+          minItems: 1
+        nameFilter:
+          type: string
+          description: 'filter by endpoint name with `contains` semantic. Eg: Let''s say there are 2 Endpoint names `GET /api/fetch` and `GET /api/update`, you can set `GET /api/` here to include the two Endpoints.'
+          maxLength: 256
+          minLength: 0
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        serviceId:
+          type: string
+          description: 'An Instana generated unique identifier for a Service. If specified, the list of results will be filtered for the specified Service ID. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
+
+            One can see the service id from Instana UI by going to a Service page. In the URL, there will be `serviceId=3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
+
+            Alternatively, one can use `Get services` API endpoint to get the service id in `id` parameter.
+
+            '
+          maxLength: 64
+          minLength: 0
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+      required:
+      - metrics
+    EndpointItem:
+      type: object
+      properties:
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+      required:
+      - endpoint
+      - metrics
+    EndpointMetricResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/EndpointItem'
+        page:
+          type: integer
+          format: int32
+          description: Page Number
+          minimum: 1
+        pageSize:
+          type: integer
+          format: int32
+          minimum: 1
+        totalHits:
+          type: integer
+          format: int64
+          minimum: 0
+      required:
+      - items
+    MetricAPIResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+      required:
+      - metrics
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          description: Page number for a specific page in the results. For example, if you'd like to retrieve the 5th page out of 10 pages, the value would be 5.
+          minimum: 1
+        pageSize:
+          type: integer
+          format: int32
+          description: 'Set the number of items you want to return with one query. Eg: if you want to retrieve 10 items, the value would be 10.'
+          maximum: 200
+          minimum: 1
+    ApplicationItem:
+      type: object
+      properties:
+        application:
+          $ref: '#/components/schemas/Application'
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+      required:
+      - application
+      - metrics
+    AppDataMetricConfiguration:
+      type: object
+      properties:
+        aggregation:
+          type: string
+          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        granularity:
+          type: integer
+          format: int32
+          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
+        metric:
+          type: string
+          description: 'Set a particular metric, eg: `latency`.'
+        numeratorTagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+      required:
+      - aggregation
+      - metric
+    GetApplications:
+      type: object
+      properties:
+        applicationBoundaryScope:
+          type: string
+          description: "Use when querying calls of an application:\n `INBOUND`: only inbound calls \n `ALL`: all the calls to that application (inbound + internal)"
+          enum:
+          - ALL
+          - INBOUND
+        applicationId:
+          type: string
+          description: 'An Instana generated unique identifier for an Application. If specified, the list of results will be filtered for the specified Application ID. Eg: `Av62RoIKQv-A3n6DbMQh9g`.
+
+            One can see the application id from Instana UI by going to an Application Perspective page. In the URL, there will be `appId=Av62RoIKQv-A3n6DbMQh9g`.
+
+            Alternatively, one can use `Get applications` API endpoint to get the application id in `id` parameter.
+
+            '
+          maxLength: 64
+          minLength: 0
+        endpointId:
+          type: string
+          description: 'An Instana generated unique identifier for an Endpoint. If specified, the list of results will be filtered for the specified Endpoint ID. Eg `NCRq5oYnan5x-PkdTPQwLLUdu5M`.
+
+            One can see the endpoint id from Instana UI by going to an Endpoint page. In the URL, there will be `endpointId=NCRq5oYnan5x-PkdTPQwLLUdu5M`.
+
+            Alternatively, one can use `Get endpoints` API endpoint to get the endpoint id in `id` parameter.
+
+            '
+          maxLength: 64
+          minLength: 0
+        endpointTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - UNDEFINED
+            - RPC
+            - EVENT
+            - GRAPHQL
+            - BATCH
+            - SHELL
+            - HTTP
+            - SDK
+            - OPENTELEMETRY
+            - INTERNAL
+            - DATABASE
+            - MESSAGING
+            - PAGE
+            - PAGE_RESOURCE
+          uniqueItems: true
+          writeOnly: true
+        metrics:
+          type: array
+          description: 'A list of objects each of which defines a metric and the (statistical) aggregation -- MEAN, SUM, MAX, etc -- that should be used to summarize it for the defined time frame. Eg: `[{ ''metric'': ''latency'', ''aggregation'': ''MEAN''}]`. To know more about supported metrics and its aggregation, See `Get Metric catalog`.'
+          items:
+            $ref: '#/components/schemas/AppDataMetricConfiguration'
+          maxItems: 5
+          minItems: 1
+        nameFilter:
+          type: string
+          description: 'filter by name with `contains` semantic. Eg: Let''s say there are 2 names `app1` and `app2`, you can set `app`` here to include the two names'
+          maxLength: 256
+          minLength: 0
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        serviceId:
+          type: string
+          description: 'An Instana generated unique identifier for a Service. If specified, the list of results will be filtered for the specified Service ID. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
+
+            One can see the service id from Instana UI by going to a Service page. In the URL, there will be `serviceId=3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
+
+            Alternatively, one can use `Get services` API endpoint to get the service id in `id` parameter.
+
+            '
+          maxLength: 64
+          minLength: 0
+        technologies:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          writeOnly: true
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+      required:
+      - metrics
+    GetServices:
+      type: object
+      properties:
+        applicationBoundaryScope:
+          type: string
+          description: "Use when querying calls of an application:\n `INBOUND`: only inbound calls \n `ALL`: all the calls to that application (inbound + internal)"
+          enum:
+          - ALL
+          - INBOUND
+        applicationId:
+          type: string
+          description: 'An Instana generated unique identifier for an Application. If specified, the list of results will be filtered for the specified Application ID. Eg: `Av62RoIKQv-A3n6DbMQh9g`.
+
+            One can see the application id from Instana UI by going to an Application Perspective page. In the URL, there will be `appId=Av62RoIKQv-A3n6DbMQh9g`.
+
+            Alternatively, one can use `Get applications` API endpoint to get the application id in `id` parameter.
+
+            '
+          maxLength: 64
+          minLength: 0
+        contextScope:
+          type: string
+          description: "separate filtering and group by service id field\n - upstream is filtered on destination service and groups on source service\n - downstream is filtered on source service and groups on destination service\n - none is filtered on destination service and no grouping"
+          enum:
+          - NONE
+          - UPSTREAM
+          - DOWNSTREAM
+        metrics:
+          type: array
+          description: 'A list of objects each of which defines a metric and the (statistical) aggregation -- MEAN, SUM, MAX, etc -- that should be used to summarize it for the defined time frame. Eg: `[{ ''metric'': ''latency'', ''aggregation'': ''MEAN''}]`. To know more about supported metrics and its aggregation, See `Get Metric catalog`.'
+          items:
+            $ref: '#/components/schemas/AppDataMetricConfiguration'
+          maxItems: 5
+          minItems: 1
+        nameFilter:
+          type: string
+          description: 'filter by name with `contains` semantic. Eg: Let''s say there are 2 service names `ecomm-order` and `ecomm-deliver`, you can set `ecomm-` here to include the two Services.'
+          maxLength: 256
+          minLength: 0
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        serviceId:
+          type: string
+          description: 'An Instana generated unique identifier for a Service. If specified, the list of results will be filtered for the specified Service ID. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
+
+            One can see the service id from Instana UI by going to a Service page. In the URL, there will be `serviceId=3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
+
+            Alternatively, one can use `Get services` API endpoint to get the service id in `id` parameter.
+
+            '
+          maxLength: 64
+          minLength: 0
+        technologies:
+          type: array
+          description: A list of technologies to be used for filtering data. For example, technologies could include AWS ECS, Cassandra, DB2, JVM, Kafka, etc. A full list of available technologies can be found in X.
+          items:
+            type: string
+            description: A list of technologies to be used for filtering data. For example, technologies could include AWS ECS, Cassandra, DB2, JVM, Kafka, etc. A full list of available technologies can be found in X.
+          maxItems: 20
+          minItems: 0
+          uniqueItems: true
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+      required:
+      - metrics
+    Endpoint:
+      type: object
+      properties:
+        entityType:
+          type: string
+          description: Since, this is a Endpoint, it will be of type `ENDPOINT`.
+          enum:
+          - APPLICATION
+          - SERVICE
+          - ENDPOINT
+        id:
+          type: string
+          description: 'Unique ID of the Endpoint. Eg: `NCRq5oYnan5x-PkdTPQwLLUdu5M`.'
+        isSynthetic:
+          type: boolean
+          writeOnly: true
+        label:
+          type: string
+          description: 'Name of the Endpoint. Eg: `GET /api/fetch`.'
+        serviceId:
+          type: string
+          description: The serviceId this endpoint belongs to.
+        synthetic:
+          type: boolean
+        syntheticType:
+          type: string
+          enum:
+          - NON_SYNTHETIC
+          - SYNTHETIC
+          - MIXED
+        technologies:
+          type: array
+          description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
+          items:
+            type: string
+            description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
+          uniqueItems: true
+        type:
+          type: string
+          description: The type of the Endpoint.
+          enum:
+          - UNDEFINED
+          - RPC
+          - EVENT
+          - GRAPHQL
+          - BATCH
+          - SHELL
+          - HTTP
+          - SDK
+          - OPENTELEMETRY
+          - INTERNAL
+          - DATABASE
+          - MESSAGING
+          - PAGE
+          - PAGE_RESOURCE
+      required:
+      - id
+      - label
+      - serviceId
+      - technologies
+      - type
+    ApplicationMetricResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationItem'
+        page:
+          type: integer
+          format: int32
+          description: Page Number
+          minimum: 1
+        pageSize:
+          type: integer
+          format: int32
+          minimum: 1
+        totalHits:
+          type: integer
+          format: int64
+          minimum: 0
+      required:
+      - items
+    ServiceItem:
+      type: object
+      properties:
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+        service:
+          $ref: '#/components/schemas/Service'
+      required:
+      - metrics
+      - service
+    ServiceMetricResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceItem'
+        page:
+          type: integer
+          format: int32
+          description: Page Number
+          minimum: 1
+        pageSize:
+          type: integer
+          format: int32
+          minimum: 1
+        totalHits:
+          type: integer
+          format: int64
+          minimum: 0
+      required:
+      - items
+    Order:
+      type: object
+      description: 'Specifies the ordering of the results.
+
+        It contains fields that define the sorting criteria, the collation for sorting, and the direction in which the results should be ordered.
+
+        '
+      properties:
+        by:
+          type: string
+          description: If the granularity is set to `1` you can use the metric name eg. `latency.p95` to order by that value.
+        collation:
+          type: string
+          description: Language code used for sorting. Ignored for infrastructure queries.
+        direction:
+          type: string
+          description: The order in which results will be sorted, either `ASC` for ascending or `DESC` for descending.
+          enum:
+          - ASC
+          - DESC
+      required:
+      - by
+      - direction
+    Service:
+      type: object
+      properties:
+        entityType:
+          type: string
+          description: Since, this is a Service, it will be of type `SERVICE`.
+          enum:
+          - APPLICATION
+          - SERVICE
+          - ENDPOINT
+        id:
+          type: string
+          description: 'Unique ID of the Service. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.'
+        label:
+          type: string
+          description: 'Name of the Service. Eg: `payment`.'
+        snapshotIds:
+          type: array
+          description: A unique identifier the metrics are assigned to.
+          items:
+            type: string
+            description: A unique identifier the metrics are assigned to.
+          uniqueItems: true
+        technologies:
+          type: array
+          description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
+          items:
+            type: string
+            description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
+          uniqueItems: true
+        types:
+          type: array
+          description: 'Shows types of Endpoints a Service can consist of. It may be one or more. Eg: `HTTP` `OPENTELEMETRY` can be in 1 Service.'
+          items:
+            type: string
+            description: 'Shows types of Endpoints a Service can consist of. It may be one or more. Eg: `HTTP` `OPENTELEMETRY` can be in 1 Service.'
+            enum:
+            - UNDEFINED
+            - RPC
+            - EVENT
+            - GRAPHQL
+            - BATCH
+            - SHELL
+            - HTTP
+            - SDK
+            - OPENTELEMETRY
+            - INTERNAL
+            - DATABASE
+            - MESSAGING
+            - PAGE
+            - PAGE_RESOURCE
+          uniqueItems: true
+      required:
+      - id
+      - label
+      - snapshotIds
+      - technologies
+      - types
+    Application:
+      type: object
+      description: Returns a list of Application Perspectives.
+      properties:
+        boundaryScope:
+          type: string
+          description: Here, `ALL` Application Boundary Scope is considered.
+        entityType:
+          type: string
+          description: Since, this is an Application Perspective, it will be of type `APPLICATION`.
+          enum:
+          - APPLICATION
+          - SERVICE
+          - ENDPOINT
+        id:
+          type: string
+          description: 'Unique ID of the Application Perspective. Eg: `Av62RoIKQv-A3n6DbMQh9g`.'
+        label:
+          type: string
+          description: 'Name of the Application Perspective. Eg: `app1`.'
+      required:
+      - boundaryScope
+      - id
+      - label
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage

@@ -1,0 +1,4919 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation Event Settings API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: Event Settings
+paths:
+  /api/events/settings/alertingChannels:
+    get:
+      description: Gets all the alerting channels. Requires the permission called CanConfigureIntegrations.
+      operationId: getAlertingChannels
+      parameters:
+      - description: List of IDs of alert channels defined in Instana. Can be left empty.
+        example: '[YbcFlaG8k5oIkxD0, OYcbU9gdP6OTBThJ, qbhfsL9vTtlaBOAt]'
+        in: query
+        name: ids
+        schema:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: 18iiwkDxHD7_A4mIlouise
+                name: Email Alert Channel
+                customEmailSubjectPrefix: null
+                emails:
+                - youremail@email.com
+                kind: EMAIL
+              - id: 1pFirIMvrZk9NO2R
+                name: Stan Test Slack Channel
+                webhookUrl: https://hooks.slack.com/testwebhook
+                iconUrl: ''
+                channel: team-stan-test-channel
+                emojiRendering: false
+                kind: SLACK
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AbstractIntegration'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureIntegrations
+      summary: Get all Alerting Channels
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    post:
+      description: Creates an alerting channel. Requires the permission called CanConfigureIntegrations.
+      operationId: postAlertingChannel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AbstractIntegration'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: 18iiwkDxHD7_A4mIlouise
+                name: Email Alert Channel
+                customEmailSubjectPrefix: null
+                emails:
+                - youremail@email.com
+                kind: EMAIL
+              schema:
+                $ref: '#/components/schemas/AbstractIntegration'
+          description: created the alert channel setting
+        '302':
+          description: 'Redirect to the integration service for continuing the configuration with the 3rd party system '
+        '400':
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Failed creating the alert channel setting
+      security:
+      - ApiKeyAuth:
+        - CanConfigureIntegrations
+      summary: Create Alert Channel
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/alertingChannels/infos:
+    get:
+      description: Gets the overview information of all alerting channels. Requires the permission called CanConfigureIntegrations.
+      operationId: getAlertingChannelsOverview
+      parameters:
+      - description: List of IDs of alert channels defined in Instana. Can be left empty.
+        example: '[YbcFlaG8k5oIkxD0, OYcbU9gdP6OTBThJ, qbhfsL9vTtlaBOAt]'
+        in: query
+        name: ids
+        schema:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: qbhfsL9vTtlaBOAt
+                kind: WEB_HOOK
+                name: alert-response-generic-webhook
+                properties: {}
+              - id: V_gYaoRFPe6S-T-l
+                kind: OPS_GENIE
+                name: OpsGenie QA
+                properties:
+                  Alias: ''
+                  Tags: k8s-test
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IntegrationOverview'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureIntegrations
+      summary: Get Overview of Alerting Channels
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/alertingChannels/notify/{id}:
+    post:
+      description: Sends alert for a specific event to an alerting channel.  Provided the event Id, an alert could be sent to the alerting channel. This endpoint requires `canInvokeAlertChannel` permission.
+      operationId: sendTestAlertingById
+      parameters:
+      - description: ID of the alerting channel to be notified on.
+        example: YbcFlaG8k5oIkxD0
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManualAlertingChannelConfiguration'
+        required: true
+      responses:
+        default:
+          content:
+            application/json: {}
+          description: default response
+      security:
+      - ApiKeyAuth:
+        - CanConfigureIntegrations
+      summary: Notify manually to Alerting Channel. Requires the permission called CanConfigureIntegrations.
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/alertingChannels/test:
+    put:
+      description: Sends a test alert to an alert channel. This is for testing if an potential alert channel is able to receive alerts from Instana. Requires the permission called CanConfigureIntegrations.
+      operationId: sendTestAlerting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AbstractIntegration'
+            x-example: alertingChannelTestCall
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Failure:
+                  description: Failure
+                  value:
+                    status: failure
+                    message: Alerting channel was unsuccessful.
+                Success:
+                  description: Success
+                  value:
+                    status: success
+                    message: Alerting Channel was successfully triggered, please check the channel!
+          description: Test alerting channel response
+      security:
+      - ApiKeyAuth:
+        - CanConfigureIntegrations
+      summary: Test Alerting Channel
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/alertingChannels/{id}:
+    delete:
+      description: Deletes an alert channel. Requires the permission called CanConfigureIntegrations.
+      operationId: deleteAlertingChannel
+      parameters:
+      - description: ID of the Alerting Channel to delete.
+        example: YbcFlaG8k5oIkxD0
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Successful - no content to return.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureIntegrations
+      summary: Delete Alerting Channel
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    get:
+      description: Gets an alerting channel. Requires the permission called CanConfigureIntegrations.
+      operationId: getAlertingChannel
+      parameters:
+      - description: ID of the Alerting Channel to get.
+        example: YbcFlaG8k5oIkxD0
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: 18iiwkDxHD7_A4mIlouise
+                name: Email Alert Channel
+                customEmailSubjectPrefix: null
+                emails:
+                - youremail@email.com
+                kind: EMAIL
+              schema:
+                $ref: '#/components/schemas/AbstractIntegration'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureIntegrations
+      summary: Get Alerting Channel
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    put:
+      description: Updates an alerting channel. Requires the permission called CanConfigureIntegrations.
+      operationId: putAlertingChannel
+      parameters:
+      - description: ID of the Alerting Channel to update.
+        example: YbcFlaG8k5oIkxD0
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AbstractIntegration'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: 18iiwkDxHD7_A4mIlouise
+                name: Email Alert Channel
+                customEmailSubjectPrefix: null
+                emails:
+                - youremail@email.com
+                kind: EMAIL
+              schema:
+                $ref: '#/components/schemas/AbstractIntegration'
+          description: Updated the alert channel setting
+        '302':
+          description: 'Redirect to the integration service for continuing the configuration with the 3rd party system '
+        '400':
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Failed updating the alert channel setting
+      security:
+      - ApiKeyAuth:
+        - CanConfigureIntegrations
+      summary: Update Alert Channel
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/alerts:
+    get:
+      description: Gets all Alert Configurations
+      operationId: getAlerts
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: 5GJXiK9aciVaBPnu
+                alertName: CMH Alert Test
+                muteUntil: 9007199254740991
+                integrationIds:
+                - GcqLyri-worP8sXX
+                eventFilteringConfiguration:
+                  query: entity.host.fqdn:robot-shop-pink1.fyre.ibm.com
+                  ruleIds:
+                  - roILHzyaMBRDZE3FxaeZ5T_wx4Q
+                  eventTypes: []
+                  applicationAlertConfigIds: []
+                  validVersion: 1
+                customPayloadFields:
+                - type: staticString
+                  key: cmhtest
+                  value: cmhval
+                lastUpdated: 1702590551696
+                invalid: false
+                alertChannelNames:
+                - CMH Email test
+                applicationNames: []
+              - id: E8Z88ThbA7RDPgbz
+                alertName: SQL Server Write txns Alert
+                muteUntil: 0
+                integrationIds:
+                - Hrigl1epXxAc0Tym
+                eventFilteringConfiguration:
+                  query: null
+                  ruleIds:
+                  - v1jc5yEjHRNbX8_i
+                  eventTypes: []
+                  applicationAlertConfigIds: []
+                  validVersion: 1
+                customPayloadFields: []
+                lastUpdated: 1702590551748
+                invalid: false
+                alertChannelNames:
+                - Servicenow Webhook Sunny
+                applicationNames: []
+              - id: Z9eXY8LOfTuAf43e
+                alertName: IBM i All Alerts
+                muteUntil: 0
+                integrationIds: []
+                eventFilteringConfiguration:
+                  query: entity.ibmi.os.hostname:ut31p37.rch.stglabs.ibm.com AND event.text:*
+                  ruleIds: []
+                  eventTypes:
+                  - warning
+                  applicationAlertConfigIds: []
+                  validVersion: 1
+                customPayloadFields: []
+                lastUpdated: 1704894496752
+                invalid: false
+                alertChannelNames: []
+                applicationNames: []
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidatedAlertingConfiguration'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: Get all Alert Configurations
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/alerts/infos:
+    get:
+      description: Gets all alert configurations that relate to the given alert channel.
+      operationId: getAlertingConfigurationInfos
+      parameters:
+      - description: ID of a specific alert channel configuration.
+        example: hu6ynJbwgB4X1rjk
+        in: query
+        name: integrationId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: Xt67tttZF4yzemPQ
+                label: Production Availability Alerts
+                query: entity.zone:prod
+                eventTypes: []
+                selectedEvents: 2
+                enabled: true
+                type: Alert
+                entityId: null
+                invalid: false
+              - id: wNbFtdyvQgeA4k8JdBSsyA
+                label: Database Cluster Alerts
+                query: null
+                eventTypes: null
+                selectedEvents: null
+                enabled: false
+                type: ApplicationSmartAlert
+                entityId: mwVo3lG-TD-4ssDa3w0pGA
+                invalid: false
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidatedAlertingChannelInputInfo'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: All alerting configuration info
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/alerts/{id}:
+    delete:
+      description: Delete a specific Alert Configuration by ID
+      operationId: deleteAlert
+      parameters:
+      - description: ID of a specific Alert Configuration to delete.
+        example: hu6ynJbwgB4X1rjkkw
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Successful - no content to return.
+        '401':
+          description: Unauthorized access - requires user authentication.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: Delete Alert Configuration
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    get:
+      description: Get a specific Alert Configuration by ID.
+      operationId: getAlert
+      parameters:
+      - description: ID of a specific Alert Configuration to retrieve.
+        example: iSjG7UWK3Dy6bDUc
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: iSjG7UWK3Dy6bDUc
+                alertName: test-email-alert
+                muteUntil: 0
+                integrationIds:
+                - B1PdA6BUdA9JJRZG
+                eventFilteringConfiguration:
+                  query: event.text:*BRUCE*
+                  ruleIds: []
+                  eventTypes:
+                  - warning
+                  - incident
+                  - critical
+                  applicationAlertConfigIds: []
+                  validVersion: 1
+                customPayloadFields: []
+                lastUpdated: 1718828552918
+              schema:
+                $ref: '#/components/schemas/AlertingConfigurationWithLastUpdated'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: Get Alert Configuration
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    put:
+      description: Create or update a specific Alert configuration by ID
+      operationId: putAlert
+      parameters:
+      - description: ID of a specific Alert Configuration to create or update.
+        example: hu6ynJbwgB4X1rjk
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              id: hu6ynJbwgB4X1rjk
+              alertName: Alerts Test
+              muteUntil: 9007199254740991
+              integrationIds:
+              - ctCR9Q373YAY27H_
+              - wyAPFbP_xZCeEUn6
+              - M01h5MDfb7YVQPAz
+              - BH4nVcoPdSpJH_4U
+              - ldF14o6dCKmQFJxP
+              - IbQkmZ46_oUGV-L7
+              - wpWi9SYL7cJOu_UZ
+              - ds1Lpvix2WVoWTKg
+              eventFilteringConfiguration:
+                query: null
+                ruleIds: []
+                eventTypes:
+                - incident
+                - critical
+                applicationAlertConfigIds: []
+                validVersion: 1
+              customPayloadFields:
+              - type: staticString
+                key: assignment_group
+                value: ITSM App-Dev
+              - type: staticString
+                key: category
+                value: Software
+              - type: staticString
+                key: change_test
+                value: test kevin
+              - type: staticString
+                key: assigned_to
+                value: Antony Alldis
+            schema:
+              $ref: '#/components/schemas/AlertingConfiguration'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: hu6ynJbwgB4X1rjk
+                alertName: Alerts Test
+                muteUntil: 0
+                integrationIds:
+                - ctCR9Q373YAY27H_
+                - wyAPFbP_xZCeEUn6
+                - M01h5MDfb7YVQPAz
+                - BH4nVcoPdSpJH_4U
+                - ldF14o6dCKmQFJxP
+                - IbQkmZ46_oUGV-L7
+                - wpWi9SYL7cJOu_UZ
+                - ds1Lpvix2WVoWTKg
+                eventFilteringConfiguration:
+                  query: null
+                  ruleIds: []
+                  eventTypes:
+                  - incident
+                  - critical
+                  applicationAlertConfigIds: []
+                  validVersion: 1
+                customPayloadFields:
+                - type: staticString
+                  key: assignment_group
+                  value: ITSM App-Dev
+                - type: staticString
+                  key: category
+                  value: Software
+                - type: staticString
+                  key: change_test
+                  value: test kevin
+                - type: staticString
+                  key: assigned_to
+                  value: Antony Alldis
+              schema:
+                $ref: '#/components/schemas/AlertingConfigurationWithLastUpdated'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '422':
+          description: Unprocessable request - missing/invalid data.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: Create or update Alert Configuration
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/custom-payload-configurations:
+    delete:
+      description: Deletes a Global Custom Payload Configuration.
+      operationId: deleteCustomPayloadConfiguration
+      responses:
+        '204':
+          description: Successful - no content to return.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureGlobalAlertPayload
+      summary: Delete Custom Payload Configuration
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    get:
+      description: Gets All Global Custom Payload Configurations.
+      operationId: getCustomPayloadConfigurations
+      parameters:
+      - in: query
+        name: context
+        schema:
+          type: string
+          default: ALL
+          description: The type of Smart Alert that the custom payload is associated with.
+          enum:
+          - ALL
+          - APPLICATION
+          - WEBSITE
+          - SYNTHETIC
+          - MOBILE_APP
+          - INFRA
+          - LOG
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - fields:
+                - type: dynamic
+                  key: zone
+                  value:
+                    tagName: agent.zone
+                    key: app
+                - type: staticString
+                  key: global_custom_payload
+                  value: 42+1
+                lastUpdated: 1723212859513
+              schema:
+                $ref: '#/components/schemas/CustomPayloadWithVersion'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureGlobalAlertPayload
+      summary: Get All Global Custom Payload Configurations
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    put:
+      description: Creates or Updates Global Custom Payload Configuration.
+      operationId: upsertCustomPayloadConfiguration
+      requestBody:
+        content:
+          application/json:
+            example:
+              fields:
+              - type: staticString
+                key: string
+                value: customValue
+              - type: dynamic
+                key: string
+                value:
+                  tagName: agent.zone
+                  key: string
+            schema:
+              $ref: '#/components/schemas/CustomPayloadConfiguration'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - fields:
+                - type: staticString
+                  key: string
+                  value: customValue
+                - type: dynamic
+                  key: string
+                  value:
+                    tagName: agent.zone
+                    key: string
+                lastUpdated: 1723212859513
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomPayloadWithLastUpdated'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '422':
+          description: Unable to process request, request data is invalid.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureGlobalAlertPayload
+      summary: Create/Update Global Custom Payload Configuration
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/custom-payload-configurations/catalog:
+    get:
+      description: Custom payload tags used to filter, extract and aggregate specific data like AP calls for alert notifications. The catalog defines available tags like application.name and their types, and other attributes.
+      operationId: getCustomPayloadTagCatalog
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - tagTree:
+                - label: Agent
+                  description: null
+                  icon: null
+                  children:
+                  - label: Tag
+                    icon: lib_views_tag
+                    tagName: agent.tag
+                    queryable: true
+                    type: TAG
+                  scoreBoost: null
+                  type: LEVEL
+                  queryable: false
+                tags:
+                - name: azure.appservice.name
+                  label: App Service Name
+                  type: STRING
+                  description: null
+                  canApplyToSource: true
+                  canApplyToDestination: true
+                  idTag: false
+              schema:
+                $ref: '#/components/schemas/TagCatalog'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureGlobalAlertPayload
+      summary: Get Tag Catalog for Custom Payload
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/custom-payload-configurations/v2:
+    put:
+      description: Creates or Updates Global Custom Payload Configuration.
+      operationId: upsertCustomPayloadConfigurationV2
+      requestBody:
+        content:
+          application/json:
+            example: "      \"fields\":\n      [\n        {\n            \"type\": \"staticString\",\n            \"key\": \"string\",\n            \"value\": \"customValue\"\n        },\n        {\n            \"type\": \"dynamic\",\n            \"key\": \"string\",\n            \"value\": {\n                \"tagName\": \"agent.zone\",\n                \"key\": \"string\"\n            }\n        }\n      ],\n      \"version\": 1\n"
+            schema:
+              $ref: '#/components/schemas/CustomPayloadConfiguration'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - fields:
+                - type: staticString
+                  key: string
+                  value: customValue
+                - type: dynamic
+                  key: string
+                  value:
+                    tagName: agent.zone
+                    key: string
+                lastUpdated: 1723212859513
+                version: 1
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomPayloadWithVersion'
+          description: OK
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '409':
+          description: Version conflict.
+        '422':
+          description: Unable to process request, request data is invalid.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureGlobalAlertPayload
+      summary: Create/Update Global Custom Payload Configuration
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/event-specifications/built-in:
+    get:
+      description: Get all built-in event specifications
+      operationId: getBuiltInEventSpecifications
+      parameters:
+      - in: query
+        name: ids
+        schema:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: 5J-4V_gLWm-pofGW8BEoFU7C_6s
+                shortPluginId: otelHost
+                name: CPU spends significant time waiting for input/output
+                description: Assesses whether the system is spending a significant amount of time waiting for input/output operations.
+                hyperParams:
+                - id: CsSGNuJ9MCsYvN5tXoWOPIWGiyM
+                  name: Sliding Window
+                  description: Sliding window
+                  defaultValue: 60000
+                  minValue: 60000
+                  maxValue: 72000000
+                  valueFormat: MILLIS
+                - id: dfLU7K_vx1Qd8FrR4M1XAmiSM0w
+                  name: Maximum wait percentage
+                  description: Specifies the maximum allowable CPU wait percentage. Metric values that exceed this threshold are deemed violations.
+                  defaultValue: 0.25
+                  minValue: 0
+                  maxValue: 1
+                  valueFormat: PERCENTAGE
+                - id: eq_Y3yLA37aralhMCV1AYuEVVoA
+                  name: Allowed CPU Wait violations
+                  description: Specifies the number of permitted CPU Wait violations within the given time window.
+                  defaultValue: 9
+                  minValue: 0
+                  maxValue: 9223372036854776000
+                  valueFormat: NUMBER
+                ruleInputs:
+                - inputKind: METRIC
+                  inputName: cpu.wait
+                severity: 5
+                triggering: false
+                enabled: true
+                hidden: false
+                lastUpdated: 1729198411351
+              - id: kLC5kTFUUM4HiMWEkqlggo6dF-s
+                shortPluginId: ibmCloudEventStream
+                name: Event Stream has more than the recommended number of connected Kafka clients
+                description: Checks whether the number of connected Kafka clients exceeds the recommended maximum
+                hyperParams:
+                - id: qkxsXUDoELI6cHEoWSXQ4FR8-8M
+                  name: Kafka Max Connectd Clients Percent Severe
+                  description: Kafka max connected clients percent critical threshold
+                  defaultValue: 0.95
+                  minValue: 0
+                  maxValue: 1
+                  valueFormat: PERCENTAGE
+                - id: x00McJfR0Y2twIIE8Hf3oxoUEoE
+                  name: Kafka Max Connectd Clients Percent Warning
+                  description: Kafka max connected clients percent warning threshold
+                  defaultValue: 0.9
+                  minValue: 0
+                  maxValue: 1
+                  valueFormat: PERCENTAGE
+                ruleInputs:
+                - inputKind: METRIC
+                  inputName: kafka_recommended_max_connected_clients_percent
+                severity: 5
+                triggering: false
+                enabled: true
+                hidden: false
+                lastUpdated: 1729198411681
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BuiltInEventSpecificationWithLastUpdated'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: All built-in event specification
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/event-specifications/built-in/{eventSpecificationId}:
+    delete:
+      operationId: deleteBuiltInEventSpecification
+      parameters:
+      - in: path
+        name: eventSpecificationId
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Successful - no content to return.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: Delete built-in event specification
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    get:
+      operationId: getBuiltInEventSpecification
+      parameters:
+      - in: path
+        name: eventSpecificationId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuiltInEventSpecification'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: Built-in event specifications
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/event-specifications/built-in/{eventSpecificationId}/disable:
+    post:
+      operationId: disableBuiltInEventSpecification
+      parameters:
+      - in: path
+        name: eventSpecificationId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuiltInEventSpecificationWithLastUpdated'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: Disable built-in event specification
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/event-specifications/built-in/{eventSpecificationId}/enable:
+    post:
+      operationId: enableBuiltInEventSpecification
+      parameters:
+      - in: path
+        name: eventSpecificationId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuiltInEventSpecificationWithLastUpdated'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: Enable built-in event specification
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/event-specifications/custom:
+    get:
+      description: ' This API helps in getting all the custom event specifications.'
+      operationId: getCustomEventSpecifications
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: Yojfl6Yn9SXaFhJG
+                name: DP_Domain_MemoryUsage
+                entityType: ibmDataPowerDomain
+                query: null
+                triggering: true
+                description: Average Memory Usage for the DP Domain >= 0%
+                expirationTime: 60000
+                enabled: true
+                rules:
+                - ruleType: threshold
+                  metricName: currentMemUsage
+                  metricPattern: null
+                  rollup: 0
+                  window: 600000
+                  aggregation: avg
+                  conditionOperator: '>='
+                  conditionValue: 0
+                  severity: 5
+                ruleLogicalOperator: AND
+                lastUpdated: 1670404707763
+                validVersion: 1
+                actions: null
+                migrated: false
+                applicationAlertConfigId: null
+                deleted: false
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomEventSpecificationWithLastUpdated'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: All custom event specifications
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    post:
+      operationId: postCustomEventSpecification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomEventSpecification'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomEventSpecificationWithLastUpdated'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: Create new custom event specification
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+      description: "This endpoint creates a new Custom Event Specification.\n\n## Mandatory Parameters:\n\n- **name:** Name for the custom event\n\n- **entityType:** Name of the available plugins for the selected source\n\n- **rules.ruleType:** Type of the rule being set for the custom event\n\n### Rule-type specific parameters\n\nDepending on the chosen `ruleType`, there are further required parameters:\n\n#### Threshold Rule using a dynamic built-in metric by pattern :\n\n- **rules.conditionOperator:** Conditional operator for the aggregation for the provided time window\n\n- **rules.metricPattern.prefix:** Prefix pattern for the metric\n\n- **rules.metricPattern.operator:** Operator for matching the metric\n\n```\ncurl --request POST 'https://<Host>/api/events/settings/event-specifications/custom' \\\n--header 'Authorization: apiToken <Token>' \\\n--header 'Content-Type: application/json' \\\n--data-raw '{ \"description\":\"Event for OpenAPI documentation\", \"enabled\":true,\"entityType\":\"host\",\"expirationTime\":\"60000\",\"name\":\"Event for OpenAPI documentation\",\n\"query\":<Query>, \n\"rules\":[{\"aggregation\":\"sum\",\"conditionOperator\":\">\", \"conditionValue\":0.1, \"metricName\":null, \"metricPattern\":{\"prefix\":\"fs\", \"postfix\":\"free\", \"operator\":\"endsWith\", \"placeholder\":\"/xvda1\"},\n\"rollup\":null, \"ruleType\":\"threshold\", \"severity\":10, \"window\":30000}], \"triggering\":false\n}'\n```\nThe above example creates a custom event that matches disk devices that end with \"/xvda1\" for the metric \"fs.{device}.free\" for any host in scope.\n\n#### Threshold Rule using fixed metric :\n\n- **rules.conditionOperator:** Conditional operator for the aggregation for the provided time window\n\n- **rules.metricName:** Metric name for the event\n\n```\ncurl --request POST 'https://<Host>/api/events/settings/event-specifications/custom' \\\n--header 'Authorization: apiToken <Token>' \\\n--header 'Content-Type: application/json' \\\n--data-raw '{ \"description\":\"Event for OpenAPI documentation fixed Metric\", \"enabled\":true,\"entityType\":\"host\",\"expirationTime\":\"60000\",\n\"name\":\"Event for OpenAPI documentation fixed metric\",\"rules\":[{\"aggregation\":\"sum\",\"conditionOperator\":\">\", \"conditionValue\":0.1, \"metricName\":\"fs./dev/xvda1.free\", \n\"rollup\":null, \"ruleType\":\"threshold\", \"severity\":10, \"window\":30000}], \"triggering\":false\n}'\n```\n\n#### System Rule:\n\n- **rules.systemRuleId:** Id of the System Rule being set \n\n```\ncurl --request POST 'https://<Host>/api/events/settings/event-specifications/custom' \\\n--header 'Authorization: apiToken <Token>' \\\n--header 'Content-Type: application/json' \\\n--data-raw '{ \"description\":\"Event for OpenAPI documentation System Rule\", \"enabled\":true,\"entityType\":\"any\",\"expirationTime\":\"60000\",\n\"name\":\"Event for OpenAPI documentation System Rule\", \"rules\":[{\"ruleType\":\"system\", \"systemRuleId\":\"entity.offline\",\"severity\":10}], \"triggering\":false\n}'\n```\n\n#### Entity Verification Rule:\n\n- **rules.matchingEntityType:** Type of the Entity\n- **rules.matchingOperator:** Operator for matching the Entity name\n- **rules.matchingEntityLabel:** Name Pattern for the Entity\n\n```\ncurl --request POST 'https://<Host>/api/events/settings/event-specifications/custom' \\\n--header 'Authorization: apiToken <Token>' \\\n--header 'Content-Type: application/json' \\\n--data-raw '{ \"description\":\"Event for OpenAPI Entity Verification Rule\", \"enabled\":true,\"entityType\":\"host\",\"expirationTime\":\"60000\",\n\"name\":\"Event for OpenAPI Entity Verification Rule\",\n\"rules\":[{\"matchingEntityLabel\":\"test\", \"matchingEntityType\":\"jvmRuntimePlatform\",\"matchingOperator\":\"startsWith\",\"offlineDuration\":1800000, \n\"ruleType\":\"entity_verification\",\"severity\": 5}], \"triggering\":false\n}'\n```\n\n### Deprecations:\n\nThe entity types `application`, `service` and `endpoint` are deprecated for custom events and need to be migrated to a Smart Alert soon. We advise to configure a respective Smart Alert instead of a custom Event. For more information please [refer to our documentation](https://www.ibm.com/docs/en/obi/current?topic=applications-smart-alerts).\n"
+  /api/events/settings/event-specifications/custom/systemRules:
+    get:
+      description: This API helps to get all the system rules for custom event specifications.
+      operationId: getSystemRules
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: entity.offline
+                name: Offline event detection (System Rule)
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SystemRuleLabel'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: All system rules for custom event specifications
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/event-specifications/custom/{eventSpecificationId}:
+    delete:
+      operationId: deleteCustomEventSpecification
+      parameters:
+      - in: path
+        name: eventSpecificationId
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Successful - no content to return.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: Delete custom event specification
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+      description: 'This endpoint deletes a Custom Event Specification.
+
+
+        By default, the ID of a deleted configuration cannot be reused anymore to enable links in previous Issues or Incidents to stay valid.
+
+        However, check out the docs for [updating a configuration](#operation/putCustomEventSpecification) how this default behavior can be changed using the `allowRestore` query parameter.
+
+
+
+        ## Mandatory Parameters:
+
+
+        - **eventSpecificationId (Path Parameter):** A unique identifier for the custom event specification to delete.
+
+
+
+        # Example:
+
+
+        ```
+
+        curl --request DELETE ''https://<Host>/api/events/settings/event-specifications/custom/<EventSpecificationId>'' \
+
+        --header ''Authorization: apiToken <Token>'' \
+
+        --header ''Content-Type: application/json''
+
+        ```
+
+        '
+    get:
+      description: This API helps to get the Custom Event specification for the given ID.
+      operationId: getCustomEventSpecification
+      parameters:
+      - description: eventSpecificationId
+        example: Yojfl6Yn9SXaFhJG
+        in: path
+        name: eventSpecificationId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: Yojfl6Yn9SXaFhJG
+                name: DP_Domain_MemoryUsage
+                entityType: ibmDataPowerDomain
+                query: null
+                triggering: true
+                description: Average Memory Usage for the DP Domain >= 0%
+                expirationTime: 60000
+                enabled: true
+                rules:
+                - ruleType: threshold
+                  severity: 5
+                  metricName: currentMemUsage
+                  rollup: 0
+                  window: 600000
+                  metricPattern: null
+                  aggregation: avg
+                  conditionOperator: '>='
+                  conditionValue: 0
+                  metricLabel: Current Memory Usage
+                  metricFormat: PERCENTAGE
+                ruleLogicalOperator: AND
+                lastUpdated: 1670404707763
+                validVersion: 1
+                actions: null
+                migrated: false
+                applicationAlertConfigId: null
+                deleted: false
+              schema:
+                $ref: '#/components/schemas/CustomEventSpecificationWithLastUpdated'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: Custom event specification
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    put:
+      operationId: putCustomEventSpecification
+      parameters:
+      - in: path
+        name: eventSpecificationId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: allowRestore
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomEventSpecification'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomEventSpecificationWithLastUpdated'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: Create or update custom event specification
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+      description: "This endpoint creates or updates a Custom Event Specification.\n\n## Mandatory Parameters:\n\n- **eventSpecificationId (Path Parameter):** A unique identifier for each custom event\n\n- **name:** Name for the custom event\n\n- **entityType:** Name of the available plugins for the selected source\n\n- **rules.ruleType:** Type of the rule being set for the custom event\n\n### Rule-type specific parameters\n\nDepending on the chosen `ruleType`, there are further required parameters:\n\n#### Threshold Rule using a dynamic built-in metric by pattern :\n\n- **rules.conditionOperator:** Conditional operator for the aggregation for the provided time window\n\n- **rules.metricPattern.prefix:** Prefix pattern for the metric\n\n- **rules.metricPattern.operator:** Operator for matching the metric\n\n```\ncurl --request PUT 'https://<Host>/api/events/settings/event-specifications/custom/<EventSpecificationId>' \\\n--header 'Authorization: apiToken <Token>' \\\n--header 'Content-Type: application/json' \\\n--data-raw '{ \"description\":\"Event for OpenAPI documentation\", \"enabled\":true,\"entityType\":\"host\",\"expirationTime\":\"60000\",\"name\":\"Event for OpenAPI documentation\",\n\"query\":<Query>, \n\"rules\":[{\"aggregation\":\"sum\",\"conditionOperator\":\">\", \"conditionValue\":0.1, \"metricName\":null, \"metricPattern\":{\"prefix\":\"fs\", \"postfix\":\"free\", \"operator\":\"endsWith\", \"placeholder\":\"/xvda1\"},\n\"rollup\":null, \"ruleType\":\"threshold\", \"severity\":10, \"window\":30000}], \"triggering\":false\n}'\n```\nThe above example creates a custom event that matches disk devices that end with \"/xvda1\" for the metric \"fs.{device}.free\" for any host in scope.\n\n#### Threshold Rule using fixed metric :\n\n- **rules.conditionOperator:** Conditional operator for the aggregation for the provided time window\n\n- **rules.metricName:** Metric name for the event\n\n```\ncurl --request PUT 'https://<Host>/api/events/settings/event-specifications/custom/<EventSpecificationId>' \\\n--header 'Authorization: apiToken <Token>' \\\n--header 'Content-Type: application/json' \\\n--data-raw '{ \"description\":\"Event for OpenAPI documentation fixed Metric\", \"enabled\":true,\"entityType\":\"host\",\"expirationTime\":\"60000\",\n\"name\":\"Event for OpenAPI documentation fixed metric\",\"rules\":[{\"aggregation\":\"sum\",\"conditionOperator\":\">\", \"conditionValue\":0.1, \"metricName\":\"fs./dev/xvda1.free\", \n\"rollup\":null, \"ruleType\":\"threshold\", \"severity\":10, \"window\":30000}], \"triggering\":false\n}'\n```\n\n#### System Rule:\n\n- **rules.systemRuleId:** Id of the System Rule being set \n\n```\ncurl --request PUT 'https://<Host>/api/events/settings/event-specifications/custom/<EventSpecificationId>' \\\n--header 'Authorization: apiToken <Token>' \\\n--header 'Content-Type: application/json' \\\n--data-raw '{ \"description\":\"Event for OpenAPI documentation System Rule\", \"enabled\":true,\"entityType\":\"any\",\"expirationTime\":\"60000\",\n\"name\":\"Event for OpenAPI documentation System Rule\", \"rules\":[{\"ruleType\":\"system\", \"systemRuleId\":\"entity.offline\",\"severity\":10}], \"triggering\":false\n}'\n```\n\n#### Entity Verification Rule:\n\n- **rules.matchingEntityType:** Type of the Entity\n- **rules.matchingOperator:** Operator for matching the Entity name\n- **rules.matchingEntityLabel:** Name Pattern for the Entity\n\n```\ncurl --request PUT 'https://<Host>/api/events/settings/event-specifications/custom/<EventSpecificationId>' \\\n--header 'Authorization: apiToken <Token>' \\\n--header 'Content-Type: application/json' \\\n--data-raw '{ \"description\":\"Event for OpenAPI Entity Verification Rule\", \"enabled\":true,\"entityType\":\"host\",\"expirationTime\":\"60000\",\n\"name\":\"Event for OpenAPI Entity Verification Rule\",\n\"rules\":[{\"matchingEntityLabel\":\"test\", \"matchingEntityType\":\"jvmRuntimePlatform\",\"matchingOperator\":\"startsWith\",\"offlineDuration\":1800000, \n\"ruleType\":\"entity_verification\",\"severity\": 5}], \"triggering\":false\n}'\n```\n\n## Optional Parameters:\n\n- **allowRestore (Query Parameter):** Allows to restore a custom event specification that was previously deleted or migrated when set to `true`. This allows to have idempotent operations that can be useful in _configuration as code_ scenarios. By default, the ID of a deleted configuration cannot be reused anymore to enable links in previous Issues or Incidents to stay valid.\n\n### Deprecations:\n\nThe entity types `application`, `service` and `endpoint` are deprecated for custom events and need to be migrated to a Smart Alert soon. We advise to configure a respective Smart Alert instead of a custom Event. For more information please [refer to our documentation](https://www.ibm.com/docs/en/obi/current?topic=applications-smart-alerts).\n"
+  /api/events/settings/event-specifications/custom/{eventSpecificationId}/disable:
+    post:
+      operationId: disableCustomEventSpecification
+      parameters:
+      - in: path
+        name: eventSpecificationId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomEventSpecificationWithLastUpdated'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: Disable custom event specification
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/event-specifications/custom/{eventSpecificationId}/enable:
+    post:
+      operationId: enableCustomEventSpecification
+      parameters:
+      - in: path
+        name: eventSpecificationId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomEventSpecificationWithLastUpdated'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: Enable custom event specification
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/event-specifications/infos:
+    get:
+      description: This API helps to get the summary of all build-in and custom event specifications
+      operationId: getEventSpecificationInfos
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: yBGNFSh-pcKzZVBFnxoBu_36Yw4
+                name: Frequent TCP errors
+                description: Checks whether the host has an unusual high number of TCP errors.
+                entityType: host
+                type: BUILT_IN
+                severity: 5
+                triggering: false
+                invalid: false
+                enabled: true
+                migrated: false
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventSpecificationInfo'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: Summary of all built-in and custom event specifications
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    post:
+      description: Summary of all built-in and custom event specifications by IDs
+      operationId: getEventSpecificationInfosByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventSpecificationInfo'
+          description: OK
+      security:
+      - ApiKeyAuth:
+        - CanConfigureCustomAlerts
+      summary: All built-in and custom event specifications
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/manual-close:
+    post:
+      description: Manually close a set of events. A close notification will be sent out and the event state will be updated accordingly for each event
+      operationId: multiCloseEvent
+      requestBody:
+        content:
+          application/json:
+            example:
+              eventIds:
+              - DPmhOKanQ3KmQCCElqOBeg
+              - PRYfcm_7QRid9IRRhW3Y4w
+              username: user123
+              reasonForClosing: Routine maintenance completed
+              closeTimestamp: 1691505637000
+              muteAlerts: true
+            schema:
+              $ref: '#/components/schemas/ManualCloseInfo'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                successfulRequests:
+                - DPmhOKanQ3KmQCCElqOBeg
+                - PRYfcm_7QRid9IRRhW3Y4w
+                failedRequests: []
+              schema:
+                $ref: '#/components/schemas/Json'
+          description: The multi close operation was successful
+        '207':
+          description: At least one of the manual close operations failed
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '501':
+          description: The multi close feature is not enabled.
+      security:
+      - ApiKeyAuth:
+        - CanManuallyCloseIssue
+      summary: Manually closing multiple events
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/manual-close/{eventId}:
+    post:
+      description: Manually close an event (issue or incident). A close notification will be sent out and the event state will be updated accordingly.
+      operationId: manuallyCloseEvent
+      parameters:
+      - example: exampleEventId
+        in: path
+        name: eventId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              username: user123
+              reasonForClosing: Routine maintenance completed
+              closeTimestamp: 1691505637000
+              muteAlerts: true
+            schema:
+              $ref: '#/components/schemas/ManualCloseInfo'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example: "{\n  \"type\": \"issue\",\n  \"key\": \"__6oRuc3-oYSbWm2xjiFW7c-7RjLg__com.instana.forge.application.Endpoint__7-eW690TQA-dH4yxMDFpTQ.6oRuc3-oYSbWm2xjiFW7c-7RjLg57517532\",\n  \"id\": \"GdKPDQV0SR6bc184Hg4wig\",\n  \"problem\": {\n    \"id\": \"3Lp8tyWNTvKdypvFskzDGA\",\n    \"plugin_id\": \"com.instana.forge.application.Endpoint\",\n    \"steady_id\": \"6oRuc3-oYSbWm2xjiFW7c-7RjLg\",\n    \"host_id\": \"\",\n    \"problem_text\": \"_woot\",\n    \"fix_suggestion\": \"Calls are slower or equal to 3440 ms based on latency (90th).\",\n    \"explanation\": \"\",\n    \"severity\": 5,\n    \"experimental\": false\n  },\n  \"state\": \"MANUALLY_CLOSED\",\n  \"metadata\": {\n    \"app20EndpointServiceLabel\": \"otel-shop-shipping\",\n    \"entityLabel\": \"/cities/{code}\",\n    \"incidentNeeded\": false,\n    \"manualCloseReason\": \"Routine maintenance completed\",\n    \"manualCloseTimestamp\": 1730755686351,\n    \"app20EndpointId\": \"6oRuc3-oYSbWm2xjiFW7c-7RjLg\",\n    \"triggeringTime\": 1730754600000,\n    \"entityName\": \"Endpoint\",\n    \"metricAccessId\": \"MjSTRXXEiDXlDRiUUZH_3pKkeNw\",\n    \"windowWarmupTime\": 1200000,\n    \"app20ApplicationId\": \"btg-B701Rx6o9QNXUS4TVw\",\n    \"disableEvent\": false,\n    \"manualCloseUsername\": \"user123\",\n    \"thresholdType\": \"staticThreshold\",\n    \"muteAlerts\": true,\n    \"eventConfigurationType\": \"Application Smart Alert\",\n    \"endpointIds\": [\"6oRuc3-oYSbWm2xjiFW7c-7RjLg\"],\n    \"app20ServiceId\": \"29af274138b88060667309e933725265a7c45208\",\n    \"serviceIds\": [\"29af274138b88060667309e933725265a7c45208\"],\n    \"eventSpecificationId\": \"7-eW690TQA-dH4yxMDFpTQ\",\n    \"alertConfigCreated\": 1662545340108,\n    \"granularity\": 600000,\n    \"metricViolationTimestamps\": [1730754600000],\n    \"custom_issue\": true,\n    \"applicationId\": \"btg-B701Rx6o9QNXUS4TVw\",\n    \"smartAlertInfo\": {\n      \"metricAggregation\": \"P90\",\n      \"metricName\": \"latency\",\n      \"metricValue\": 44300.0,\n      \"thresholdValue\": 3440.0,\n      \"metricUnit\": \"MILLIS\"\n      },\n    \"customPayloads\": {\n      \"appName\": [\"All Services\"],\n      \"podName\": [\"otel-shop-shipping-5b9bd5448d-9r7h9\"]\n    },\n    \"incidents\": [],\n    \"triggering\": false,\n    \"start\": 1730755339666,\n    \"end\": 1730757446576,\n    \"affectedEntities\": [\"MjSTRXXEiDXlDRiUUZH_3pKkeNw\"],\n    \"type\": \"issue\",\n    \"eventMode\": \"ENDPOINT_20\"\n  }\n"
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: The event associated with that event id was successfully closed.
+        '400':
+          description: The manual close information is required.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: The event id refers to an event that is not open.
+      security:
+      - ApiKeyAuth:
+        - CanManuallyCloseIssue
+      summary: Manually close an event.
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/mobile-app-alert-configs:
+    get:
+      description: Gets all the Mobile Smart Alert Configuration pertaining to a specific mobile app.Configurations are sorted by creation date in descending order.
+      operationId: findActiveMobileAppAlertConfigs
+      parameters:
+      - description: The ID of a specific Mobile Application.
+        example: tk2OLeusR3aQJD5h-rBh2A
+        in: query
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      - description: A list of Smart Alert Configuration IDs. This allows Website Smart Alert Configuration of a specific set of Configurations. This query can be repeated to use multiple IDs.
+        example: smRTFp08juKWtn8I
+        in: query
+        name: alertIds
+        schema:
+          type: array
+          items:
+            type: string
+          maxItems: 1000
+          minItems: 0
+          uniqueItems: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - name: 'HTTP Status Code(s): 5XX'
+                description: Occurrences of HTTP Status Code 5XX (Server Error) is above the expectation.
+                mobileAppId: tk2OLeusR3aQJD5h-rBh2A
+                severity: 5
+                triggering: false
+                tagFilterExpression:
+                  type: EXPRESSION
+                  logicalOperator: AND
+                  elements: []
+                rule:
+                  alertType: statusCode
+                  metricName: httpxxx
+                  operator: STARTS_WITH
+                  value: '5'
+                  aggregation: SUM
+                threshold:
+                  type: staticThreshold
+                  operator: '>='
+                  value: 5
+                  lastUpdated: 0
+                alertChannelIds: []
+                granularity: 600000
+                timeThreshold:
+                  type: violationsInSequence
+                  timeWindow: 600000
+                customPayloadFields: []
+                id: qOW5jlR5TQafXKWDIceRkA
+                created: 1707224011842
+                initialCreated: 1707224011842
+                readOnly: false
+                enabled: true
+                completeTagFilterExpression:
+                  type: EXPRESSION
+                  logicalOperator: AND
+                  elements:
+                  - type: TAG_FILTER
+                    name: mobileBeacon.mobileApp.id
+                    stringValue: tk2OLeusR3aQJD5h-rBh2A
+                    numberValue: null
+                    booleanValue: null
+                    key: null
+                    value: tk2OLeusR3aQJD5h-rBh2A
+                    operator: EQUALS
+                    entity: NOT_APPLICABLE
+                  - type: TAG_FILTER
+                    name: mobileBeacon.http.status
+                    stringValue: '5'
+                    numberValue: null
+                    booleanValue: null
+                    key: null
+                    value: '5'
+                    operator: STARTS_WITH
+                    entity: NOT_APPLICABLE
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WithMetadata'
+          description: Success. Returns empty result if mobileAppId is invalid.
+        '403':
+          description: Insufficient permissions.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMobileAppSmartAlerts
+      summary: Get all Mobile Smart Alert Configs
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    post:
+      description: 'Creates a new Mobile Smart Alert Configuration. '
+      operationId: createMobileAppAlertConfig
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: 'HTTP Status Code(s): 5XX'
+              description: Occurrences of HTTP Status Code 5XX (Server Error) is above the expectation.
+              mobileAppId: tk2OLeusR3aQJD5h-rBh2A
+              severity: 5
+              triggering: false
+              tagFilterExpression:
+                type: EXPRESSION
+                logicalOperator: AND
+                elements: []
+              rule:
+                alertType: statusCode
+                metricName: httpxxx
+                operator: STARTS_WITH
+                value: '5'
+                aggregation: SUM
+              threshold:
+                type: staticThreshold
+                operator: '>='
+                value: 5
+                lastUpdated: 0
+              alertChannelIds: []
+              granularity: 600000
+              timeThreshold:
+                type: violationsInSequence
+                timeWindow: 600000
+              customPayloadFields: []
+            schema:
+              $ref: '#/components/schemas/MobileAppAlertConfig'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                name: 'HTTP Status Code(s): 5XX'
+                description: Occurrences of HTTP Status Code 5XX (Server Error) is above the expectation.
+                mobileAppId: tk2OLeusR3aQJD5h-rBh2A
+                severity: 5
+                triggering: false
+                tagFilterExpression:
+                  type: EXPRESSION
+                  logicalOperator: AND
+                  elements: []
+                rule:
+                  alertType: statusCode
+                  metricName: httpxxx
+                  operator: STARTS_WITH
+                  value: '5'
+                  aggregation: SUM
+                threshold:
+                  type: staticThreshold
+                  operator: '>='
+                  value: 5
+                  lastUpdated: 0
+                alertChannelIds: []
+                granularity: 600000
+                timeThreshold:
+                  type: violationsInSequence
+                  timeWindow: 600000
+                customPayloadFields: []
+                id: qOW5jlR5TQafXKWDIceRkA
+                created: 1707224011842
+                initialCreated: 1707224011842
+                readOnly: false
+                enabled: true
+                completeTagFilterExpression:
+                  type: EXPRESSION
+                  logicalOperator: AND
+                  elements:
+                  - type: TAG_FILTER
+                    name: mobileBeacon.mobileApp.id
+                    stringValue: tk2OLeusR3aQJD5h-rBh2A
+                    numberValue: null
+                    booleanValue: null
+                    key: null
+                    value: tk2OLeusR3aQJD5h-rBh2A
+                    operator: EQUALS
+                    entity: NOT_APPLICABLE
+                  - type: TAG_FILTER
+                    name: mobileBeacon.http.status
+                    stringValue: '5'
+                    numberValue: null
+                    booleanValue: null
+                    key: null
+                    value: '5'
+                    operator: STARTS_WITH
+                    entity: NOT_APPLICABLE
+              schema:
+                $ref: '#/components/schemas/WithMetadata'
+          description: Mobile Smart Alert Configuration created.
+        '400':
+          description: Invalid Configuration.
+        '403':
+          description: Insufficient permissions.
+        '422':
+          description: Unprocessable entity.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMobileAppSmartAlerts
+      summary: Create Mobile Smart Alert Config
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/mobile-app-alert-configs/{id}:
+    delete:
+      description: Deletes a Mobile Smart Alert Configuration
+      operationId: deleteMobileAppAlertConfig
+      parameters:
+      - description: ID of a specific Mobile Smart Alert Configuration to delete.
+        example: qOW5jlR5TQafXKWDIceRkA
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Mobile Smart Alert Configuration deleted.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Invalid Configuration ID provided.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMobileAppSmartAlerts
+      summary: Delete Mobile Smart Alert Config
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    get:
+      description: Gets a specific Mobile Smart Alert Configuration. This may return a deleted Configuration.
+      operationId: findMobileAppAlertConfig
+      parameters:
+      - description: ID of a specific Mobile Smart Alert Configuration to retrieve
+        example: qOW5jlR5TQafXKWDIceRkA
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - description: 'A Unix timestamp representing a specific time the Configuration was active. If no timestamp is provided, the latest active version will be retrieved. '
+        example: 1722877985000
+        in: query
+        name: validOn
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                name: 'HTTP Status Code(s): 5XX'
+                description: Occurrences of HTTP Status Code 5XX (Server Error) is above the expectation.
+                mobileAppId: tk2OLeusR3aQJD5h-rBh2A
+                severity: 5
+                triggering: false
+                tagFilterExpression:
+                  type: EXPRESSION
+                  logicalOperator: AND
+                  elements: []
+                rule:
+                  alertType: statusCode
+                  metricName: httpxxx
+                  operator: STARTS_WITH
+                  value: '5'
+                  aggregation: SUM
+                threshold:
+                  type: staticThreshold
+                  operator: '>='
+                  value: 5
+                  lastUpdated: 0
+                alertChannelIds: []
+                granularity: 600000
+                timeThreshold:
+                  type: violationsInSequence
+                  timeWindow: 600000
+                customPayloadFields: []
+                id: qOW5jlR5TQafXKWDIceRkA
+                created: 1707224011842
+                initialCreated: 1707224011842
+                readOnly: false
+                enabled: true
+                completeTagFilterExpression:
+                  type: EXPRESSION
+                  logicalOperator: AND
+                  elements:
+                  - type: TAG_FILTER
+                    name: mobileBeacon.mobileApp.id
+                    stringValue: tk2OLeusR3aQJD5h-rBh2A
+                    numberValue: null
+                    booleanValue: null
+                    key: null
+                    value: tk2OLeusR3aQJD5h-rBh2A
+                    operator: EQUALS
+                    entity: NOT_APPLICABLE
+                  - type: TAG_FILTER
+                    name: mobileBeacon.http.status
+                    stringValue: '5'
+                    numberValue: null
+                    booleanValue: null
+                    key: null
+                    value: '5'
+                    operator: STARTS_WITH
+                    entity: NOT_APPLICABLE
+              schema:
+                $ref: '#/components/schemas/WithMetadata'
+          description: OK
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: The requested Configuration does not exist.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMobileAppSmartAlerts
+      summary: Get Mobile Smart Alert Config
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    post:
+      description: 'Updates an existing Mobile Smart Alert Configuration. '
+      operationId: updateMobileAppAlertConfig
+      parameters:
+      - description: ID of a specific Mobile Smart Alert Configuration to update.
+        example: qOW5jlR5TQafXKWDIceRkA
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: 'HTTP Status Code(s): 5XX'
+              description: Occurrences of HTTP Status Code 5XX (Server Error) is above the expectation.
+              mobileAppId: tk2OLeusR3aQJD5h-rBh2A
+              severity: 5
+              triggering: false
+              tagFilterExpression:
+                type: EXPRESSION
+                logicalOperator: AND
+                elements: []
+              rule:
+                alertType: statusCode
+                metricName: httpxxx
+                operator: STARTS_WITH
+                value: '5'
+                aggregation: SUM
+              threshold:
+                type: staticThreshold
+                operator: '>='
+                value: 5
+                lastUpdated: 0
+              alertChannelIds: []
+              granularity: 600000
+              timeThreshold:
+                type: violationsInSequence
+                timeWindow: 600000
+              customPayloadFields: []
+            schema:
+              $ref: '#/components/schemas/MobileAppAlertConfig'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                name: 'HTTP Status Code(s): 5XX'
+                description: Occurrences of HTTP Status Code 5XX (Server Error) is above the expectation.
+                mobileAppId: tk2OLeusR3aQJD5h-rBh2A
+                severity: 5
+                triggering: false
+                tagFilterExpression:
+                  type: EXPRESSION
+                  logicalOperator: AND
+                  elements: []
+                rule:
+                  alertType: statusCode
+                  metricName: httpxxx
+                  operator: STARTS_WITH
+                  value: '5'
+                  aggregation: SUM
+                threshold:
+                  type: staticThreshold
+                  operator: '>='
+                  value: 5
+                  lastUpdated: 0
+                alertChannelIds: []
+                granularity: 600000
+                timeThreshold:
+                  type: violationsInSequence
+                  timeWindow: 600000
+                customPayloadFields: []
+                id: qOW5jlR5TQafXKWDIceRkA
+                created: 1707224011842
+                initialCreated: 1707224011842
+                readOnly: false
+                enabled: true
+                completeTagFilterExpression:
+                  type: EXPRESSION
+                  logicalOperator: AND
+                  elements:
+                  - type: TAG_FILTER
+                    name: mobileBeacon.mobileApp.id
+                    stringValue: tk2OLeusR3aQJD5h-rBh2A
+                    numberValue: null
+                    booleanValue: null
+                    key: null
+                    value: tk2OLeusR3aQJD5h-rBh2A
+                    operator: EQUALS
+                    entity: NOT_APPLICABLE
+                  - type: TAG_FILTER
+                    name: mobileBeacon.http.status
+                    stringValue: '5'
+                    numberValue: null
+                    booleanValue: null
+                    key: null
+                    value: '5'
+                    operator: STARTS_WITH
+                    entity: NOT_APPLICABLE
+              schema:
+                $ref: '#/components/schemas/WithMetadata'
+          description: Mobile Smart Alert Configuration updated.
+        '204':
+          description: Mobile Smart Alert Configuration did not change.
+        '400':
+          description: Invalid Mobile App ID provided.
+        '403':
+          description: Insufficient permissions.
+        '422':
+          description: Unprocessable entity.
+        '500':
+          description: Internal error.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMobileAppSmartAlerts
+      summary: Update Mobile Smart Alert Config
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/mobile-app-alert-configs/{id}/disable:
+    put:
+      description: Disables a Mobile Smart Alert Configuration.
+      operationId: disableMobileAppAlertConfig
+      parameters:
+      - description: ID of a specific Mobile Smart Alert Configuration to disable.
+        example: qOW5jlR5TQafXKWDIceRkA
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '204':
+          description: Mobile Smart Alert Configuration disabled.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Invalid Configuration ID provided.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMobileAppSmartAlerts
+      summary: Disable Mobile Smart Alert Config
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/mobile-app-alert-configs/{id}/enable:
+    put:
+      description: Enables a Mobile Smart Alert Configuration.
+      operationId: enableMobileAppAlertConfig
+      parameters:
+      - description: ID of a specific Mobile Smart Alert Configuration to enable.
+        example: qOW5jlR5TQafXKWDIceRkA
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '204':
+          description: Mobile Smart Alert Configuration enabled.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Invalid Configuration ID provided.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMobileAppSmartAlerts
+      summary: Enable Mobile Smart Alert Config
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/mobile-app-alert-configs/{id}/restore/{created}:
+    put:
+      description: Restores a Mobile Smart Alert Configuration.
+      operationId: restoreMobileAppAlertConfig
+      parameters:
+      - description: ID of a specific Mobile Smart Alert Configuration to restore.
+        example: qOW5jlR5TQafXKWDIceRkA
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - description: Unix timestamp representing the creation time of a specific Mobile Smart Alert Configuration.
+        example: 1707726529124
+        in: path
+        name: created
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '204':
+          description: Mobile Smart Alert Configuration restored.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Invalid Configuration provided.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMobileAppSmartAlerts
+      summary: Restore Mobile Smart Alert Config
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/mobile-app-alert-configs/{id}/update-baseline:
+    post:
+      description: Recalculates and updates the historic baseline (static seasonal threshold) of a Configuration. The `LastUpdated` field of the Configuration is changed to the current time.
+      operationId: updateMobileAppHistoricBaseline
+      parameters:
+      - description: ID of a specific Mobile Smart Alert Configuration to recalculate.
+        example: qOW5jlR5TQafXKWDIceRkA
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Mobile Smart Alert Configuration baseline successfully recalculated and updated.
+        '204':
+          description: Baseline recalculation completed with no changes needed.
+        '400':
+          description: Invalid configuration type or configuration is read-only.
+        '403':
+          description: Insufficient permissions to access this configuration.
+        '404':
+          description: Mobile Smart Alert Configuration not found.
+        '428':
+          description: Baseline calculation failed due to insufficient data.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMobileAppSmartAlerts
+      summary: Recalculate Mobile Smart Alert Config Baseline
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/mobile-app-alert-configs/{id}/versions:
+    get:
+      description: Gets all versions of a Mobile Smart Alert Configuration. This may return deleted Configurations. Configurations are sorted by creation date in descending order.
+      operationId: findMobileAppAlertConfigVersions
+      parameters:
+      - description: ID of a specific Mobile Smart Alert Configuration to retrieve.
+        example: qOW5jlR5TQafXKWDIceRkA
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: qOW5jlR5TQafXKWDIceRkA
+                created: 1706686318650
+                enabled: true
+                deleted: false
+                changeSummary:
+                  changeType: CREATE
+                  author:
+                    id: 5ee8a3e8cd70020001ecb007
+                    type: USER
+                    fullName: Stan
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConfigVersion'
+          description: OK
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: The requested Configuration does not exist.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureMobileAppSmartAlerts
+      summary: Get Mobile Smart Alert Config Versions
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/website-alert-configs:
+    get:
+      description: Gets all the Website Smart Alert Configuration pertaining to a specific website. Configurations are sorted by creation date in descending order.
+      operationId: findActiveWebsiteAlertConfigs
+      parameters:
+      - description: The ID of a specific Website
+        example: XIZGGVT1TX2O-0OFeT2Yig
+        in: query
+        name: websiteId
+        required: true
+        schema:
+          type: string
+      - description: A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs.
+        example: smRTFp08juKWtn8I
+        in: query
+        name: alertIds
+        schema:
+          type: array
+          items:
+            type: string
+          maxItems: 1000
+          minItems: 0
+          uniqueItems: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - name: onLoad Time (90th) is too high
+                description: The onLoad Time (90th) is above the expectation.
+                websiteId: XIZGGVT1TX2O-0OFeT2Yig
+                severity: 5
+                triggering: false
+                tagFilterExpression:
+                  type: EXPRESSION
+                  logicalOperator: AND
+                  elements: []
+                rule:
+                  alertType: slowness
+                  metricName: onLoadTime
+                  aggregation: P90
+                threshold:
+                  type: historicBaseline
+                  operator: '>='
+                  seasonality: DAILY
+                  baseline:
+                  - - 0
+                    - 239.164
+                    - 6.1026
+                  - - 600000
+                    - 240.0013
+                    - 7.4109
+                  - - 85200000
+                    - 241.3653
+                    - 3
+                  - - 85800000
+                    - 239.4759
+                    - 3.9012
+                  deviationFactor: 3
+                  lastUpdated: 0
+                alertChannelIds: []
+                granularity: 600000
+                timeThreshold:
+                  type: violationsInSequence
+                  timeWindow: 600000
+                customPayloadFields:
+                - type: staticString
+                  key: '1'
+                  value: '2'
+                - type: dynamic
+                  key: '2'
+                  value:
+                    tagName: beacon.website.name
+                    key: null
+                id: G-h5p0znTHan2m2U3c-Z1Q
+                created: 1707726529124
+                initialCreated: 1707726529124
+                readOnly: false
+                enabled: true
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WebsiteAlertConfigWithMetadata'
+          description: Success. Returns empty result if websiteId is invalid.
+        '403':
+          description: Insufficient permissions.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureWebsiteSmartAlerts
+      summary: Get all Website Smart Alert Configs
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    post:
+      description: Creates a new Website Smart Alert Configuration.
+      operationId: createWebsiteAlertConfig
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: onLoad Time (90th) is too high
+              description: The onLoad Time (90th) is above the expectation.
+              websiteId: XIZGGVT1TX2O-0OFeT2Yig
+              severity: 5
+              triggering: false
+              tagFilterExpression:
+                type: EXPRESSION
+                logicalOperator: AND
+                elements: []
+              rule:
+                alertType: slowness
+                metricName: onLoadTime
+                aggregation: P90
+              threshold:
+                type: historicBaseline
+                operator: '>='
+                seasonality: DAILY
+                baseline:
+                - - 0
+                  - 239.164
+                  - 6.1026
+                - - 600000
+                  - 240.0013
+                  - 7.4109
+                - - 85200000
+                  - 241.3653
+                  - 3
+                - - 85800000
+                  - 239.4759
+                  - 3.9012
+                deviationFactor: 3
+                lastUpdated: 0
+              alertChannelIds: []
+              granularity: 600000
+              timeThreshold:
+                type: violationsInSequence
+                timeWindow: 600000
+              customPayloadFields:
+              - type: staticString
+                key: '1'
+                value: '2'
+              - type: dynamic
+                key: '2'
+                value:
+                  tagName: beacon.website.name
+                  key: null
+            schema:
+              $ref: '#/components/schemas/WebsiteAlertConfig'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                name: onLoad Time (90th) is too high
+                description: The onLoad Time (90th) is above the expectation.
+                websiteId: XIZGGVT1TX2O-0OFeT2Yig
+                severity: 5
+                triggering: false
+                tagFilterExpression:
+                  type: EXPRESSION
+                  logicalOperator: AND
+                  elements: []
+                rule:
+                  alertType: slowness
+                  metricName: onLoadTime
+                  aggregation: P90
+                threshold:
+                  type: historicBaseline
+                  operator: '>='
+                  seasonality: DAILY
+                  baseline:
+                  - - 0
+                    - 239.164
+                    - 6.1026
+                  - - 600000
+                    - 240.0013
+                    - 7.4109
+                  - - 85200000
+                    - 241.3653
+                    - 3
+                  - - 85800000
+                    - 239.4759
+                    - 3.9012
+                  deviationFactor: 3
+                  lastUpdated: 0
+                alertChannelIds: []
+                granularity: 600000
+                timeThreshold:
+                  type: violationsInSequence
+                  timeWindow: 600000
+                customPayloadFields:
+                - type: staticString
+                  key: '1'
+                  value: '2'
+                - type: dynamic
+                  key: '2'
+                  value:
+                    tagName: beacon.website.name
+                    key: null
+                id: G-h5p0znTHan2m2U3c-Z1Q
+                created: 1707726529124
+                initialCreated: 1707726529124
+                readOnly: false
+                enabled: true
+              schema:
+                $ref: '#/components/schemas/WebsiteAlertConfigWithMetadata'
+          description: Website Smart Alert Configuration created.
+        '400':
+          description: Invalid configuration.
+        '403':
+          description: Insufficient permissions.
+        '422':
+          description: Unprocessable entity.
+        '428':
+          description: Baseline calculation failed due to insufficient data.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureWebsiteSmartAlerts
+      summary: Create Website Smart Alert Config
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/website-alert-configs/{id}:
+    delete:
+      description: Deletes a Website Smart Alert Configuration.
+      operationId: deleteWebsiteAlertConfig
+      parameters:
+      - description: ID of a specific Website Smart Alert Configuration to delete.
+        example: G-h5p0znTHan2m2U3c-Z1Q
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Website Smart Alert Configuration deleted.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Invalid Configuration ID provided.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureWebsiteSmartAlerts
+      summary: Delete Website Smart Alert Config
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    get:
+      description: Gets a specific Website Smart Alert Configuration. This may return a deleted Configuration.
+      operationId: findWebsiteAlertConfig
+      parameters:
+      - description: ID of a specific Website Smart Alert Configuration to retrieve.
+        example: G-h5p0znTHan2m2U3c-Z1Q
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - description: 'A Unix timestamp representing a specific time the config was active. If no timestamp is provided, the latest active version will be retrieved. '
+        example: 1722877985000
+        in: query
+        name: validOn
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                name: onLoad Time (90th) is too high
+                description: The onLoad Time (90th) is above the expectation.
+                websiteId: XIZGGVT1TX2O-0OFeT2Yig
+                severity: 5
+                triggering: false
+                tagFilterExpression:
+                  type: EXPRESSION
+                  logicalOperator: AND
+                  elements: []
+                rule:
+                  alertType: slowness
+                  metricName: onLoadTime
+                  aggregation: P90
+                threshold:
+                  type: historicBaseline
+                  operator: '>='
+                  seasonality: DAILY
+                  baseline:
+                  - - 0
+                    - 239.164
+                    - 6.1026
+                  - - 600000
+                    - 240.0013
+                    - 7.4109
+                  - - 85200000
+                    - 241.3653
+                    - 3
+                  - - 85800000
+                    - 239.4759
+                    - 3.9012
+                  deviationFactor: 3
+                  lastUpdated: 0
+                alertChannelIds: []
+                granularity: 600000
+                timeThreshold:
+                  type: violationsInSequence
+                  timeWindow: 600000
+                customPayloadFields:
+                - type: staticString
+                  key: '1'
+                  value: '2'
+                - type: dynamic
+                  key: '2'
+                  value:
+                    tagName: beacon.website.name
+                    key: null
+                id: G-h5p0znTHan2m2U3c-Z1Q
+                created: 1707726529124
+                initialCreated: 1707726529124
+                readOnly: false
+                enabled: true
+              schema:
+                $ref: '#/components/schemas/WebsiteAlertConfigWithMetadata'
+          description: OK
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: The requested configuration does not exist.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureWebsiteSmartAlerts
+      summary: Get Website Smart Alert Config
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+    post:
+      description: Updates an existing Website Smart Alert Configuration.
+      operationId: updateWebsiteAlertConfig
+      parameters:
+      - description: ID of a specific Website Smart Alert Configuration to update.
+        example: G-h5p0znTHan2m2U3c-Z1Q
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: onLoad Time (90th) is too high
+              description: The onLoad Time (90th) is above the expectation.
+              websiteId: XIZGGVT1TX2O-0OFeT2Yig
+              severity: 5
+              triggering: false
+              tagFilterExpression:
+                type: EXPRESSION
+                logicalOperator: AND
+                elements: []
+              rule:
+                alertType: slowness
+                metricName: onLoadTime
+                aggregation: P90
+              threshold:
+                type: historicBaseline
+                operator: '>='
+                seasonality: DAILY
+                baseline:
+                - - 0
+                  - 239.164
+                  - 6.1026
+                - - 600000
+                  - 240.0013
+                  - 7.4109
+                - - 85200000
+                  - 241.3653
+                  - 3
+                - - 85800000
+                  - 239.4759
+                  - 3.9012
+                deviationFactor: 3
+                lastUpdated: 0
+              alertChannelIds: []
+              granularity: 600000
+              timeThreshold:
+                type: violationsInSequence
+                timeWindow: 600000
+              customPayloadFields:
+              - type: staticString
+                key: '1'
+                value: '2'
+              - type: dynamic
+                key: '2'
+                value:
+                  tagName: beacon.website.name
+                  key: null
+            schema:
+              $ref: '#/components/schemas/WebsiteAlertConfig'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                name: onLoad Time (90th) is too high
+                description: The onLoad Time (90th) is above the expectation.
+                websiteId: XIZGGVT1TX2O-0OFeT2Yig
+                severity: 5
+                triggering: false
+                tagFilterExpression:
+                  type: EXPRESSION
+                  logicalOperator: AND
+                  elements: []
+                rule:
+                  alertType: slowness
+                  metricName: onLoadTime
+                  aggregation: P90
+                threshold:
+                  type: historicBaseline
+                  operator: '>='
+                  seasonality: DAILY
+                  baseline:
+                  - - 0
+                    - 239.164
+                    - 6.1026
+                  - - 600000
+                    - 240.0013
+                    - 7.4109
+                  - - 85200000
+                    - 241.3653
+                    - 3
+                  - - 85800000
+                    - 239.4759
+                    - 3.9012
+                  deviationFactor: 3
+                  lastUpdated: 0
+                alertChannelIds: []
+                granularity: 600000
+                timeThreshold:
+                  type: violationsInSequence
+                  timeWindow: 600000
+                customPayloadFields:
+                - type: staticString
+                  key: '1'
+                  value: '2'
+                - type: dynamic
+                  key: '2'
+                  value:
+                    tagName: beacon.website.name
+                    key: null
+                id: G-h5p0znTHan2m2U3c-Z1Q
+                created: 1707726529124
+                initialCreated: 1707726529124
+                readOnly: false
+                enabled: true
+              schema:
+                $ref: '#/components/schemas/WebsiteAlertConfigWithMetadata'
+          description: Website Smart Alert Configuration updated.
+        '204':
+          description: Website Smart Alert Configuration did not change.
+        '400':
+          description: Invalid Configuration ID provided.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: The requested configuration does not exist.
+        '422':
+          description: Unprocessable entity.
+        '428':
+          description: Baseline calculation failed due to insufficient data.
+        '500':
+          description: Internal error.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureWebsiteSmartAlerts
+      summary: Update Website Smart Alert Config
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/website-alert-configs/{id}/disable:
+    put:
+      description: Disables a Website Smart Alert Configuration.
+      operationId: disableWebsiteAlertConfig
+      parameters:
+      - description: ID of a specific Website Smart Alert Configuration to disable.
+        example: G-h5p0znTHan2m2U3c-Z1Q
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '204':
+          description: Website Smart Alert Configuration disabled.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Invalid Configuration ID provided.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureWebsiteSmartAlerts
+      summary: Disable Website Smart Alert Config
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/website-alert-configs/{id}/enable:
+    put:
+      description: Enables a website alert configuration.
+      operationId: enableWebsiteAlertConfig
+      parameters:
+      - description: ID of a specific Website Smart Alert Configuration to enable.
+        example: G-h5p0znTHan2m2U3c-Z1Q
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '204':
+          description: Website Smart Alert Configuration enabled.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Invalid Configuration ID provided.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureWebsiteSmartAlerts
+      summary: Enable Website Smart Alert Config
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/website-alert-configs/{id}/restore/{created}:
+    put:
+      description: Restores a deleted Website Smart Alert Configuration.
+      operationId: restoreWebsiteAlertConfig
+      parameters:
+      - description: ID of a specific Website Smart Alert Configuration to restore.
+        example: G-h5p0znTHan2m2U3c-Z1Q
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - description: Unix timestamp representing the creation time of a specific Website Smart Alert Configuration.
+        example: 1707726529124
+        in: path
+        name: created
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '204':
+          description: Website Smart Alert Configuration restored.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Invalid Configuration provided.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureWebsiteSmartAlerts
+      summary: Restore Website Smart Alert Config
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/website-alert-configs/{id}/update-baseline:
+    post:
+      description: Recalculates and updates the historic baseline (static seasonal threshold) of a Configuration. The `LastUpdated` field of the Configuration is changed to the current time.
+      operationId: updateWebsiteHistoricBaseline
+      parameters:
+      - description: ID of a specific Website Smart Alert Configuration to recalculate.
+        example: G-h5p0znTHan2m2U3c-Z1Q
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Website Smart Alert Configuration baseline successfully recalculated and updated.
+        '204':
+          description: Baseline recalculation completed with no changes needed.
+        '400':
+          description: Invalid configuration type or configuration is read-only.
+        '403':
+          description: Insufficient permissions to access this configuration.
+        '404':
+          description: Website Smart Alert Configuration not found.
+        '428':
+          description: Baseline calculation failed due to insufficient data.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureWebsiteSmartAlerts
+      summary: Recalculate Website Smart Alert Config Baseline
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+  /api/events/settings/website-alert-configs/{id}/versions:
+    get:
+      description: Gets all versions of a Website Smart Alert Configuration. This may return deleted Configurations. Configurations are sorted by creation date in descending order.
+      operationId: findWebsiteAlertConfigVersions
+      parameters:
+      - description: ID of a specific Website Smart Alert Configuration to retrieve.
+        example: G-h5p0znTHan2m2U3c-Z1Q
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: G-h5p0znTHan2m2U3c-Z1Q
+                created: 1706709825308
+                enabled: true
+                deleted: false
+                changeSummary:
+                  changeType: CREATE
+                  author:
+                    id: 5ee8a3e8cd70020001ecb007
+                    type: USER
+                    fullName: Stan
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConfigVersion'
+          description: OK
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: The requested Configuration does not exist.
+      security:
+      - ApiKeyAuth:
+        - CanConfigureWebsiteSmartAlerts
+      summary: 'Get Website Smart Alert Config Versions. '
+      tags:
+      - Event Settings
+      x-ibm-ahub-byok: true
+components:
+  schemas:
+    WebsiteTimeThreshold:
+      type: object
+      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
+      discriminator:
+        mapping:
+          userImpactOfViolationsInSequence: '#/components/schemas/UserImpactWebsiteTimeThreshold'
+          violationsInPeriod: '#/components/schemas/ViolationsInPeriodWebsiteTimeThreshold'
+          violationsInSequence: '#/components/schemas/ViolationsInSequenceWebsiteTimeThreshold'
+        propertyName: type
+      properties:
+        timeWindow:
+          type: integer
+          format: int64
+        type:
+          type: string
+      required:
+      - type
+    Json:
+      type: object
+    MobileAppAlertRule:
+      type: object
+      discriminator:
+        mapping:
+          crash: '#/components/schemas/CrashMobileAppAlertRule'
+          customEvent: '#/components/schemas/CustomEventMobileAppAlertRule'
+          slowness: '#/components/schemas/SlownessMobileAppAlertRule'
+          statusCode: '#/components/schemas/StatusCodeMobileAppAlertRule'
+          throughput: '#/components/schemas/ThroughputMobileAppAlertRule'
+        propertyName: alertType
+      properties:
+        aggregation:
+          type: string
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        alertType:
+          type: string
+        metricName:
+          type: string
+      required:
+      - alertType
+      - metricName
+    Author:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - API
+          - USER
+          - INSTANA
+          - UNKNOWN
+    EventFilteringConfiguration:
+      type: object
+      description: Event Filter Configuration for supporting the scope of the Alert Configuration. Applies a filter based on the application perspective or selected entities.
+      properties:
+        applicationAlertConfigIds:
+          type: array
+          items:
+            type: string
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        eventTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - incident
+            - critical
+            - warning
+            - change
+            - online
+            - offline
+            - agent_monitoring_issue
+            - cve_issue
+            - none
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        query:
+          type: string
+          maxLength: 2048
+          minLength: 0
+        ruleIds:
+          type: array
+          items:
+            type: string
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+    ValidatedAlertingConfiguration:
+      type: object
+      properties:
+        alertChannelNames:
+          type: array
+          description: Set of Alert Channel names added in the Alert Configuration.
+          items:
+            type: string
+            description: Set of Alert Channel names added in the Alert Configuration.
+          uniqueItems: true
+        alertName:
+          type: string
+          description: Name of the Alert Configuration.
+          maxLength: 256
+          minLength: 0
+        applicationNames:
+          type: array
+          description: Set of Application Perspective names added in the Alert Configuration.
+          items:
+            type: string
+            description: Set of Application Perspective names added in the Alert Configuration.
+          uniqueItems: true
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/StaticStringField'
+          maxItems: 20
+          minItems: 0
+        eventFilteringConfiguration:
+          $ref: '#/components/schemas/EventFilteringConfiguration'
+        id:
+          type: string
+          description: ID of the Alert Configuration.
+          maxLength: 64
+          minLength: 0
+        includeEntityNameInLegacyAlerts:
+          type: boolean
+          description: To include the entity name in a legacy alert based on built-in/custom events.
+        integrationIds:
+          type: array
+          description: List of Alert Channel IDs added in this Alert Configuration.
+          items:
+            type: string
+            description: List of Alert Channel IDs added in this Alert Configuration.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        invalid:
+          type: boolean
+          description: Flag to show whether the Alert Configuration is valid.
+        lastUpdated:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the time the configuration was last updated.
+          minimum: 1
+        muteUntil:
+          type: integer
+          format: int64
+          description: Timer dictating how long the Alert Configuration will stay muted. A value of `0` means the Alert Configuration is currently enabled. Otherwise, the Alert Configuration is currently disabled (muted).
+      required:
+      - alertName
+      - customPayloadFields
+      - eventFilteringConfiguration
+      - id
+      - integrationIds
+    AlertingConfiguration:
+      type: object
+      properties:
+        alertName:
+          type: string
+          description: Name of the Alert Configuration.
+          maxLength: 256
+          minLength: 0
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/StaticStringField'
+          maxItems: 20
+          minItems: 0
+        eventFilteringConfiguration:
+          $ref: '#/components/schemas/EventFilteringConfiguration'
+        id:
+          type: string
+          description: ID of the Alert Configuration.
+          maxLength: 64
+          minLength: 0
+        includeEntityNameInLegacyAlerts:
+          type: boolean
+          description: To include the entity name in a legacy alert based on built-in/custom events.
+        integrationIds:
+          type: array
+          description: List of Alert Channel IDs added in this Alert Configuration.
+          items:
+            type: string
+            description: List of Alert Channel IDs added in this Alert Configuration.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        muteUntil:
+          type: integer
+          format: int64
+          description: Timer dictating how long the Alert Configuration will stay muted. A value of `0` means the Alert Configuration is currently enabled. Otherwise, the Alert Configuration is currently disabled (muted).
+      required:
+      - alertName
+      - customPayloadFields
+      - eventFilteringConfiguration
+      - id
+      - integrationIds
+    TagFilterExpression:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/TagFilterExpressionElement'
+      - type: object
+        properties:
+          elements:
+            type: array
+            items:
+              $ref: '#/components/schemas/TagFilterExpressionElement'
+          logicalOperator:
+            type: string
+            description: Set AND / OR
+            enum:
+            - AND
+            - OR
+      required:
+      - elements
+      - logicalOperator
+    WebsiteAlertRule:
+      type: object
+      discriminator:
+        mapping:
+          customEvent: '#/components/schemas/CustomEventWebsiteAlertRule'
+          slowness: '#/components/schemas/SlownessWebsiteAlertRule'
+          specificJsError: '#/components/schemas/SpecificJsErrorsWebsiteAlertRule'
+          statusCode: '#/components/schemas/StatusCodeWebsiteAlertRule'
+          throughput: '#/components/schemas/ThroughputWebsiteAlertRule'
+        propertyName: alertType
+      properties:
+        aggregation:
+          type: string
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        alertType:
+          type: string
+        metricName:
+          type: string
+      required:
+      - alertType
+      - metricName
+    BuiltInEventSpecification:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Description of Built-in Event Specification
+          maxLength: 2048
+          minLength: 0
+        enabled:
+          type: boolean
+          description: Flag to show whether the Built-in Event Specification is enabled
+        hidden:
+          type: boolean
+          description: Flag to show whether the Built-in Event Specification is hidden
+        hyperParams:
+          type: array
+          description: List of hyper parameters of the Built-in Event Specification
+          items:
+            $ref: '#/components/schemas/HyperParam'
+          maxItems: 32
+          minItems: 0
+        id:
+          type: string
+          description: ID of Built-in Event Specification
+          maxLength: 2048
+          minLength: 0
+        name:
+          type: string
+          description: Name of Built-in Event Specification
+          maxLength: 256
+          minLength: 0
+        ruleInputs:
+          type: array
+          description: List of input rules of the Built-in Event Specification
+          items:
+            $ref: '#/components/schemas/RuleInput'
+          maxItems: 32
+          minItems: 0
+        severity:
+          type: integer
+          format: int32
+          description: Severity level of Built-in Event Specification
+        shortPluginId:
+          type: string
+          description: ID of short plugin of Built-in Event Specification
+          maxLength: 64
+          minLength: 0
+        triggering:
+          type: boolean
+          description: Flag to show whether the Built-in Event Specification is triggering
+      required:
+      - hyperParams
+      - id
+      - name
+      - ruleInputs
+      - shortPluginId
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    WebsiteAlertConfigWithMetadata:
+      type: object
+      properties:
+        alertChannelIds:
+          type: array
+          deprecated: true
+          description: List of IDs of alert channels defined in Instana. Can be left empty.
+          items:
+            type: string
+            deprecated: true
+            description: List of IDs of alert channels defined in Instana. Can be left empty.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        alertChannels:
+          type: object
+          additionalProperties:
+            type: array
+            description: Set of alert channel IDs associated with the severity.
+            items:
+              type: string
+              description: Set of alert channel IDs associated with the severity.
+            uniqueItems: true
+          description: Set of alert channel IDs associated with the severity.
+        created:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the creation time of this revision.
+          minimum: 1
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        description:
+          type: string
+          description: Description of the website alert configuration. Used as a template for the description of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 65536
+          minLength: 0
+        enabled:
+          type: boolean
+          description: Flag to indicate whether or not the configuration is enabled.
+        gracePeriod:
+          type: integer
+          format: int64
+          description: The duration for which an alert remains open after conditions are no longer violated, with the alert auto-closing once the grace period expires.
+        granularity:
+          type: integer
+          format: int32
+          default: 600000
+          description: The evaluation granularity used for detection of violations of the defined threshold. Defines the size of the tumbling window used.
+          enum:
+          - 60000
+          - 300000
+          - 600000
+          - 900000
+          - 1200000
+          - 1800000
+        id:
+          type: string
+          description: 'ID of this Website Alert Config. '
+          maxLength: 64
+          minLength: 0
+        initialCreated:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the time of the initial revision.
+          minimum: 1
+        name:
+          type: string
+          description: Name of the website alert configuration. Used as a template for the title of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 256
+          minLength: 0
+        readOnly:
+          type: boolean
+          description: Flag to indicate whether or not the configuration is read-only. Read-only access restricts modification of the config.
+        rule:
+          $ref: '#/components/schemas/WebsiteAlertRule'
+        rules:
+          type: array
+          description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
+          items:
+            $ref: '#/components/schemas/RuleWithThresholdWebsiteAlertRule'
+          maxItems: 1
+          minItems: 1
+        severity:
+          type: integer
+          format: int32
+          deprecated: true
+          description: The severity of the alert when triggered, which is either 5 (Warning), or 10 (Critical).
+          maximum: 10
+          minimum: 5
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagFilter'
+          uniqueItems: true
+          writeOnly: true
+        threshold:
+          $ref: '#/components/schemas/Threshold'
+        timeThreshold:
+          $ref: '#/components/schemas/WebsiteTimeThreshold'
+        triggering:
+          type: boolean
+          description: Optional flag to indicate whether an Incident is also triggered or not.
+        websiteId:
+          type: string
+          description: ID of the website that this Smart Alert configuration is applied to.
+          maxLength: 64
+          minLength: 0
+      required:
+      - customPayloadFields
+      - description
+      - granularity
+      - id
+      - name
+      - tagFilterExpression
+      - timeThreshold
+      - websiteId
+    AlertingConfigurationWithLastUpdated:
+      type: object
+      properties:
+        alertName:
+          type: string
+          description: Name of the Alert Configuration.
+          maxLength: 256
+          minLength: 0
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/StaticStringField'
+          maxItems: 20
+          minItems: 0
+        eventFilteringConfiguration:
+          $ref: '#/components/schemas/EventFilteringConfiguration'
+        id:
+          type: string
+          description: ID of the Alert Configuration.
+          maxLength: 64
+          minLength: 0
+        includeEntityNameInLegacyAlerts:
+          type: boolean
+          description: To include the entity name in a legacy alert based on built-in/custom events.
+        integrationIds:
+          type: array
+          description: List of Alert Channel IDs added in this Alert Configuration.
+          items:
+            type: string
+            description: List of Alert Channel IDs added in this Alert Configuration.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        lastUpdated:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the time the configuration was last updated.
+          minimum: 1
+        muteUntil:
+          type: integer
+          format: int64
+          description: Timer dictating how long the Alert Configuration will stay muted. A value of `0` means the Alert Configuration is currently enabled. Otherwise, the Alert Configuration is currently disabled (muted).
+      required:
+      - alertName
+      - customPayloadFields
+      - eventFilteringConfiguration
+      - id
+      - integrationIds
+    StaticStringField:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/CustomPayloadField'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: Custom value for static type custom payload
+      required:
+      - key
+      - value
+    HyperParam:
+      type: object
+      description: List of hyper parameters of the Built-in Event Specification
+      properties:
+        defaultValue:
+          type: number
+          format: double
+        description:
+          type: string
+          maxLength: 2048
+          minLength: 0
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+        maxValue:
+          type: number
+          format: double
+        minValue:
+          type: number
+          format: double
+        name:
+          type: string
+          maxLength: 256
+          minLength: 0
+        valueFormat:
+          type: string
+          description: '|
+
+            * NUMBER: Generic number
+
+            * BYTES: Number of bytes
+
+            * KILO_BYTES: Number of kilobytes
+
+            * MEGA_BYTES: Number of megabytes
+
+            * PERCENTAGE: Percentage in scale [0,1]
+
+            * PERCENTAGE_100: Percentage in scale [0,100]
+
+            * PERCENTAGE_NO_CAPPING: Percentage in scale [0,1] but value could exceed 1 for example when metric is aggregated
+
+            * PERCENTAGE_100_NO_CAPPING: Percentage in scale [0,100] but value could exceed 100 for example when metric is aggregated
+
+            * LATENCY: Time in milliseconds, with value of 0 should not be considered a a strict 0, but considered as < 1ms
+
+            * NANOS: Time in nanoseconds
+
+            * MILLIS: Time in milliseconds
+
+            * MICROS: Time in microseconds
+
+            * SECONDS: Time in seconds
+
+            * RATE: Number of occurrences per second
+
+            * BYTE_RATE: Number of bytes per second
+
+            * UNDEFINED: Metric value unit is not known
+
+            '
+          enum:
+          - NUMBER
+          - BYTES
+          - KILO_BYTES
+          - MEGA_BYTES
+          - PERCENTAGE
+          - PERCENTAGE_100
+          - PERCENTAGE_NO_CAPPING
+          - PERCENTAGE_100_NO_CAPPING
+          - LATENCY
+          - NANOS
+          - MILLIS
+          - MICROS
+          - SECONDS
+          - RATE
+          - BYTE_RATE
+          - UNDEFINED
+      required:
+      - description
+      - id
+      - name
+    ThresholdConfigRule:
+      type: object
+      discriminator:
+        mapping:
+          adaptiveBaseline: '#/components/schemas/AdaptiveThresholdRule'
+          historicBaseline: '#/components/schemas/StaticBaselineThresholdRule'
+          staticThreshold: '#/components/schemas/StaticThresholdRule'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    TagFilter:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/TagFilterExpressionElement'
+      - type: object
+        properties:
+          entity:
+            type: string
+            description: SOURCE or DESTINATION tag in case of a call tag. For Infrastructure, always set to NOT_APPLICABLE.
+            enum:
+            - NOT_APPLICABLE
+            - DESTINATION
+            - SOURCE
+          key:
+            type: string
+            description: Tag key in case of a key/value tag.
+            maxLength: 512
+            minLength: 0
+          name:
+            type: string
+            description: Name of the tag.
+            maxLength: 128
+            minLength: 0
+          operator:
+            type: string
+            enum:
+            - EQUALS
+            - CONTAINS
+            - LESS_THAN
+            - LESS_OR_EQUAL_THAN
+            - GREATER_THAN
+            - GREATER_OR_EQUAL_THAN
+            - NOT_EMPTY
+            - NOT_EQUAL
+            - NOT_CONTAIN
+            - IS_EMPTY
+            - NOT_BLANK
+            - IS_BLANK
+            - STARTS_WITH
+            - ENDS_WITH
+            - NOT_STARTS_WITH
+            - NOT_ENDS_WITH
+            - REGEX_MATCH
+          value:
+            type: object
+            description: Tag value to filter on. Can be a string, number, or boolean value.
+      required:
+      - entity
+      - name
+      - operator
+    CustomPayloadWithVersion:
+      type: object
+      properties:
+        fields:
+          type: array
+          description: Required parameters for custom payload configuration.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        lastUpdated:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the time (in milliseconds) the configuration was last updated.
+          minimum: 1
+        version:
+          type: integer
+          format: int32
+          description: Global custom payloads version.
+      required:
+      - fields
+      - version
+    MetaData:
+      type: object
+      description: Action metadata.
+      properties:
+        ai:
+          type: array
+          description: List of metadata for AI originated actions.
+          items:
+            type: object
+            additionalProperties:
+              type: object
+              description: List of metadata for AI originated actions.
+            description: List of metadata for AI originated actions.
+        aiOriginated:
+          type: boolean
+          description: AI originated action flag. Value is `true` if action is AI generated `false` otherwise.
+        builtIn:
+          type: boolean
+          description: Built-in out of the box action flag. Value is `true` if built-in action `false` otherwise.
+        readOnly:
+          type: boolean
+          description: Read only action flag. Value is `true` if read only `false` otherwise.
+        sensorImported:
+          type: boolean
+          description: Sensor imported action flag. Value is `true` if action is imported from sensor `false` otherwise.
+    Problem:
+      type: object
+      properties:
+        fixSuggestion:
+          type: string
+          maxLength: 65536
+          minLength: 0
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+        problemText:
+          type: string
+          maxLength: 2048
+          minLength: 0
+        severity:
+          type: integer
+          format: int32
+      required:
+      - id
+    MobileAppTimeThreshold:
+      type: object
+      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
+      discriminator:
+        mapping:
+          userImpactOfViolationsInSequence: '#/components/schemas/UserImpactMobileAppTimeThreshold'
+          violationsInPeriod: '#/components/schemas/ViolationsInPeriodMobileAppTimeThreshold'
+          violationsInSequence: '#/components/schemas/ViolationsInSequenceMobileAppTimeThreshold'
+        propertyName: type
+      properties:
+        timeWindow:
+          type: integer
+          format: int64
+        type:
+          type: string
+      required:
+      - type
+    Field:
+      type: object
+      description: List of fields that describe an action.
+      properties:
+        description:
+          type: string
+        encoding:
+          type: string
+        name:
+          type: string
+        secured:
+          type: boolean
+        value:
+          type: string
+      required:
+      - encoding
+      - name
+      - value
+    CustomEventSpecification:
+      type: object
+      properties:
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+        description:
+          type: string
+          maxLength: 32765
+          minLength: 0
+        enabled:
+          type: boolean
+        entityType:
+          type: string
+          maxLength: 64
+          minLength: 0
+        expirationTime:
+          type: integer
+          format: int64
+        name:
+          type: string
+          maxLength: 256
+          minLength: 0
+        query:
+          type: string
+          maxLength: 2048
+          minLength: 0
+        ruleLogicalOperator:
+          type: string
+          description: Set AND / OR
+          enum:
+          - AND
+          - OR
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbstractRule'
+          maxItems: 5
+          minItems: 1
+        transientEventAlertMuted:
+          type: boolean
+        transientEventEnabled:
+          type: boolean
+        transientEventThreshold:
+          type: integer
+          format: int64
+        triggering:
+          type: boolean
+      required:
+      - entityType
+      - name
+      - rules
+    WebsiteAlertConfig:
+      type: object
+      properties:
+        alertChannelIds:
+          type: array
+          deprecated: true
+          description: List of IDs of alert channels defined in Instana. Can be left empty.
+          items:
+            type: string
+            deprecated: true
+            description: List of IDs of alert channels defined in Instana. Can be left empty.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        alertChannels:
+          type: object
+          additionalProperties:
+            type: array
+            description: Set of alert channel IDs associated with the severity.
+            items:
+              type: string
+              description: Set of alert channel IDs associated with the severity.
+            uniqueItems: true
+          description: Set of alert channel IDs associated with the severity.
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        description:
+          type: string
+          description: Description of the website alert configuration. Used as a template for the description of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 65536
+          minLength: 0
+        gracePeriod:
+          type: integer
+          format: int64
+          description: The duration for which an alert remains open after conditions are no longer violated, with the alert auto-closing once the grace period expires.
+        granularity:
+          type: integer
+          format: int32
+          default: 600000
+          description: The evaluation granularity used for detection of violations of the defined threshold. Defines the size of the tumbling window used.
+          enum:
+          - 60000
+          - 300000
+          - 600000
+          - 900000
+          - 1200000
+          - 1800000
+        name:
+          type: string
+          description: Name of the website alert configuration. Used as a template for the title of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 256
+          minLength: 0
+        rule:
+          $ref: '#/components/schemas/WebsiteAlertRule'
+        rules:
+          type: array
+          description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
+          items:
+            $ref: '#/components/schemas/RuleWithThresholdWebsiteAlertRule'
+          maxItems: 1
+          minItems: 1
+        severity:
+          type: integer
+          format: int32
+          deprecated: true
+          description: The severity of the alert when triggered, which is either 5 (Warning), or 10 (Critical).
+          maximum: 10
+          minimum: 5
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagFilter'
+          uniqueItems: true
+          writeOnly: true
+        threshold:
+          $ref: '#/components/schemas/Threshold'
+        timeThreshold:
+          $ref: '#/components/schemas/WebsiteTimeThreshold'
+        triggering:
+          type: boolean
+          description: Optional flag to indicate whether an Incident is also triggered or not.
+        websiteId:
+          type: string
+          description: ID of the website that this Smart Alert configuration is applied to.
+          maxLength: 64
+          minLength: 0
+      required:
+      - customPayloadFields
+      - description
+      - granularity
+      - name
+      - tagFilterExpression
+      - timeThreshold
+      - websiteId
+    SystemRuleLabel:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
+    EventSpecificationInfo:
+      type: object
+      properties:
+        description:
+          type: string
+        enabled:
+          type: boolean
+        entityType:
+          type: string
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+        invalid:
+          type: boolean
+        migrated:
+          type: boolean
+        name:
+          type: string
+          maxLength: 256
+          minLength: 0
+        severity:
+          type: integer
+          format: int32
+        triggering:
+          type: boolean
+        type:
+          type: string
+          enum:
+          - BUILT_IN
+          - CUSTOM
+      required:
+      - entityType
+      - id
+      - name
+      - type
+    Threshold:
+      type: object
+      deprecated: true
+      description: Indicates the type of threshold this alert rule is evaluated on.
+      discriminator:
+        mapping:
+          adaptiveBaseline: '#/components/schemas/AdaptiveBaseline'
+          historicBaseline: '#/components/schemas/HistoricBaseline'
+          staticThreshold: '#/components/schemas/StaticThreshold'
+        propertyName: type
+      properties:
+        operator:
+          type: string
+          enum:
+          - '>'
+          - '>='
+          - <
+          - <=
+        type:
+          type: string
+      required:
+      - operator
+      - type
+    IntegrationOverview:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID of the alert channel
+        kind:
+          type: string
+          description: The type of the Alerting Channel.
+        name:
+          type: string
+          description: The name of the Alerting Channel.
+        properties:
+          type: object
+          additionalProperties:
+            type: string
+            description: Properties of the alert channel in pairs of key/value
+          description: Properties of the alert channel in pairs of key/value
+        rbacTags:
+          type: array
+          description: Team Tags that's assigned to the Alerting Channel
+          items:
+            $ref: '#/components/schemas/ApiTag'
+          uniqueItems: true
+      required:
+      - id
+      - kind
+      - name
+    AbstractIntegration:
+      type: object
+      discriminator:
+        mapping:
+          BIDIRECTIONAL_MS_TEAMS: '#/components/schemas/BidirectionalMsTeamsAppIntegration'
+          BIDIRECTIONAL_SLACK: '#/components/schemas/BidirectionalSlackAppIntegration'
+          EMAIL: '#/components/schemas/EmailIntegration'
+          GOOGLE_CHAT: '#/components/schemas/GoogleChatIntegration'
+          OFFICE_365: '#/components/schemas/Office365Integration'
+          OPS_GENIE: '#/components/schemas/OpsgenieIntegration'
+          PAGER_DUTY: '#/components/schemas/PagerdutyIntegration'
+          PROMETHEUS_WEBHOOK: '#/components/schemas/PrometheusWebhookIntegration'
+          SALESFORCE: '#/components/schemas/SalesforceIntegration'
+          SERVICE_NOW_APPLICATION: '#/components/schemas/ServiceNowEnhancedIntegration'
+          SERVICE_NOW_WEBHOOK: '#/components/schemas/ServiceNowIntegration'
+          SLACK: '#/components/schemas/SlackIntegration'
+          SPLUNK: '#/components/schemas/SplunkIntegration'
+          VICTOR_OPS: '#/components/schemas/VictorOpsIntegration'
+          WATSON_AIOPS_WEBHOOK: '#/components/schemas/WatsonAIOpsWebhookIntegration'
+          WEBEX_TEAMS_WEBHOOK: '#/components/schemas/WebexTeamsWebhookIntegration'
+          WEB_HOOK: '#/components/schemas/WebhookIntegration'
+          Z_CHATOPS: '#/components/schemas/ZChatOpsIntegration'
+        propertyName: kind
+      properties:
+        id:
+          type: string
+          description: Unique ID of the returned Alert Channel
+        kind:
+          type: string
+          description: The type of the Alerting Channel.
+        name:
+          type: string
+          description: The name of the Alerting Channel.
+      required:
+      - id
+      - kind
+      - name
+    TagCatalog:
+      type: object
+      properties:
+        tagTree:
+          type: array
+          description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
+
+            Consider this as the root of the tree where it has tags as attributes or children.
+
+            '
+          items:
+            $ref: '#/components/schemas/TagTreeLevel'
+        tags:
+          type: array
+          description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
+
+            Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
+
+            '
+          items:
+            $ref: '#/components/schemas/Tag'
+      required:
+      - tagTree
+      - tags
+    ManualAlertingChannelConfiguration:
+      type: object
+      properties:
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/StaticStringField'
+          maxItems: 20
+          minItems: 0
+        eventId:
+          type: string
+          description: Id of the event to be notified about.
+          maxLength: 256
+          minLength: 0
+      required:
+      - customPayloadFields
+      - eventId
+    RuleWithThresholdWebsiteAlertRule:
+      type: object
+      description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
+      properties:
+        rule:
+          $ref: '#/components/schemas/WebsiteAlertRule'
+        thresholdOperator:
+          type: string
+          enum:
+          - '>'
+          - '>='
+          - <
+          - <=
+        thresholds:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ThresholdConfigRule'
+      required:
+      - rule
+      - thresholdOperator
+      - thresholds
+    RuleWithThresholdMobileAppAlertRule:
+      type: object
+      description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
+      properties:
+        rule:
+          $ref: '#/components/schemas/MobileAppAlertRule'
+        thresholdOperator:
+          type: string
+          enum:
+          - '>'
+          - '>='
+          - <
+          - <=
+        thresholds:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ThresholdConfigRule'
+      required:
+      - rule
+      - thresholdOperator
+      - thresholds
+    Tag:
+      type: object
+      description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
+
+        Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
+
+        '
+      properties:
+        aliases:
+          type: array
+          description: 'List of other names that can refer to this tag
+
+            '
+          items:
+            type: string
+            description: 'List of other names that can refer to this tag
+
+              '
+          uniqueItems: true
+        availability:
+          type: array
+          description: 'List of product areas this tag is available in
+
+            '
+          items:
+            type: string
+            description: 'List of product areas this tag is available in
+
+              '
+            enum:
+            - INFRASTRUCTURE_METRICS
+            - APPLICATION
+            - WEBSITE
+            - MOBILE_APP
+            - EUM
+            - EUM_IMPACTED_BEACON
+            - EVENT
+            - SLI
+            - SLO
+            - SLO_PREVIEW
+            - USAGE
+            - LOG
+            - SYNTHETICS
+            - SYNTHETICS_DETAIL
+            - APDEX
+            - BIZOPS
+            - BUSINESS_METRICS
+            - SUBTRACE
+            - UNKNOWN
+          uniqueItems: true
+        canApplyToDestination:
+          type: boolean
+          description: 'Whether the tag is available for destination or not.
+
+            If source and destination is false, it means the tag is independent of source and destination. Eg: of such tag is `call.http.path`.
+
+            '
+        canApplyToSource:
+          type: boolean
+          description: 'Whether the tag is available for source or not.
+
+            If source and destination is false, it means the tag is independent of source and destination. Eg: of such tag is `call.http.path`.
+
+            '
+        description:
+          type: string
+          description: The description of the tag if it is provided.
+        idTag:
+          type: boolean
+          description: 'Whether the Tag is a unique ID or not.
+
+            Eg: `idTag` for `endpoint.id` is true but for `call.rpc.method` it is false.
+
+            '
+        label:
+          type: string
+          description: 'The name of the tag which is seen in the UI. Eg: `Call name`'
+          maxLength: 256
+          minLength: 0
+        name:
+          type: string
+          description: 'The name of the tag. Eg: `call.name`'
+        type:
+          type: string
+          description: 'The data type of the tag. Eg: `call.name` accepts `STRING` value.'
+          enum:
+          - BOOLEAN
+          - STRING
+          - NUMBER
+          - STRING_SET
+          - STRING_LIST
+          - KEY_VALUE_PAIR
+          - FLOAT_LIST
+          - KEY_NUMBER_PAIR
+      required:
+      - name
+      - type
+    TagTreeNode:
+      type: object
+      description: Children tags of tagTree
+      discriminator:
+        mapping:
+          LEVEL: '#/components/schemas/TagTreeLevel'
+          TAG: '#/components/schemas/TagTreeTag'
+        propertyName: type
+      properties:
+        icon:
+          type: string
+        label:
+          type: string
+        type:
+          type: string
+          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
+    CustomEventSpecificationWithLastUpdated:
+      type: object
+      properties:
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+        applicationAlertConfigId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        deleted:
+          type: boolean
+        description:
+          type: string
+          maxLength: 32765
+          minLength: 0
+        enabled:
+          type: boolean
+        entityType:
+          type: string
+          maxLength: 64
+          minLength: 0
+        expirationTime:
+          type: integer
+          format: int64
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+        lastUpdated:
+          type: integer
+          format: int64
+          minimum: 1
+        migrated:
+          type: boolean
+        name:
+          type: string
+          maxLength: 256
+          minLength: 0
+        query:
+          type: string
+          maxLength: 2048
+          minLength: 0
+        ruleLogicalOperator:
+          type: string
+          description: Set AND / OR
+          enum:
+          - AND
+          - OR
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbstractRule'
+          maxItems: 5
+          minItems: 1
+        transientEventAlertMuted:
+          type: boolean
+        transientEventEnabled:
+          type: boolean
+        transientEventThreshold:
+          type: integer
+          format: int64
+        triggering:
+          type: boolean
+      required:
+      - entityType
+      - id
+      - name
+      - rules
+    TagTreeLevel:
+      type: object
+      description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
+
+        Consider this as the root of the tree where it has tags as attributes or children.
+
+        '
+      properties:
+        children:
+          type: array
+          description: Children tags of tagTree
+          items:
+            $ref: '#/components/schemas/TagTreeNode'
+        description:
+          type: string
+          description: The description provided, if any.
+          maxLength: 512
+          minLength: 0
+        icon:
+          type: string
+          description: 'Each tag has an Icon which can be seen on the drop down list in Unbounded Analytics.
+
+            If there is an icon, there will be a string associated with it.
+
+            Eg: For for all `TAG` under `Call` tagTreeNode, the `icon` value is `lib_application_call`.
+
+            '
+          maxLength: 128
+          minLength: 0
+        label:
+          type: string
+          description: 'The name of the tagTreeNode. Eg: `Commonly Used`, `Application`.'
+          maxLength: 128
+          minLength: 0
+        queryable:
+          type: boolean
+        scoreBoost:
+          type: integer
+          format: int32
+          description: 'By default it is `null` if it is not set explictily by IBM Instana.
+
+            The purpose of this parameter is to rank the tagTree. For eg: some set of tags are frequently used.
+
+            Tags under `Commonly used` is frequently used, so it will come up on top of the drop down list of `Query Builder` in `Unbounded Analytics`.
+
+            Higher the scoreBoost, higher the ranking.
+
+            '
+        type:
+          type: string
+          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
+      required:
+      - children
+      - label
+    RuleInput:
+      type: object
+      description: List of input rules of the Built-in Event Specification
+      properties:
+        inputKind:
+          type: string
+          enum:
+          - METRIC
+          - SNAPSHOT_FIELD
+          - EVENT
+          - DERIVED_METRIC
+          - METRIC_PATTERN
+        inputName:
+          type: string
+          maxLength: 256
+          minLength: 0
+      required:
+      - inputKind
+      - inputName
+    CustomPayloadConfiguration:
+      type: object
+      properties:
+        fields:
+          type: array
+          description: Required parameters for custom payload configuration.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+      required:
+      - fields
+    CustomPayloadField:
+      type: object
+      description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+      discriminator:
+        mapping:
+          dynamic: '#/components/schemas/DynamicField'
+          staticString: '#/components/schemas/StaticStringField'
+        propertyName: type
+      properties:
+        key:
+          type: string
+          description: A user-specified unique identifier or name for a custom payload entry.
+        type:
+          type: string
+      required:
+      - key
+      - type
+    ConfigVersion:
+      type: object
+      properties:
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummary'
+        created:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the creation time of this revision.
+          minimum: 1
+        deleted:
+          type: boolean
+          deprecated: true
+          description: Flag to indicate whether or not the configuration was deleted.
+        enabled:
+          type: boolean
+          deprecated: true
+          description: Flag to indicate whether or not the configuration is enabled.
+        id:
+          type: string
+          description: ID of this configuration version.
+          maxLength: 64
+          minLength: 0
+      required:
+      - id
+    ChangeSummary:
+      type: object
+      description: Brief summary of changes made in this config version.
+      properties:
+        author:
+          $ref: '#/components/schemas/Author'
+        changeType:
+          type: string
+          enum:
+          - CREATE
+          - UPDATE
+          - DELETE
+          - ENABLE
+          - DISABLE
+          - RESTORE
+          - UNKNOWN
+      required:
+      - author
+      - changeType
+    MobileAppAlertConfig:
+      type: object
+      properties:
+        alertChannelIds:
+          type: array
+          deprecated: true
+          description: List of IDs of alert channels defined in Instana. Can be left empty.
+          items:
+            type: string
+            deprecated: true
+            description: List of IDs of alert channels defined in Instana. Can be left empty.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        alertChannels:
+          type: object
+          additionalProperties:
+            type: array
+            description: Set of alert channel IDs associated with the severity.
+            items:
+              type: string
+              description: Set of alert channel IDs associated with the severity.
+            uniqueItems: true
+          description: Set of alert channel IDs associated with the severity.
+        completeTagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpression'
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        description:
+          type: string
+          description: Description of the mobile app alert configuration. Used as a template for the description of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 65536
+          minLength: 0
+        gracePeriod:
+          type: integer
+          format: int64
+          description: The duration for which an alert remains open after conditions are no longer violated, with the alert auto-closing once the grace period expires.
+        granularity:
+          type: integer
+          format: int32
+          default: 600000
+          description: The evaluation granularity used for detection of violations of the defined threshold. Defines the size of the tumbling window used.
+          enum:
+          - 60000
+          - 300000
+          - 600000
+          - 900000
+          - 1200000
+          - 1800000
+        mobileAppId:
+          type: string
+          description: ID of the mobile app that this Smart Alert configuration is applied to.
+          maxLength: 64
+          minLength: 0
+        name:
+          type: string
+          description: Name of the mobile app alert configuration. Used as a template for the title of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 256
+          minLength: 0
+        rule:
+          $ref: '#/components/schemas/MobileAppAlertRule'
+        rules:
+          type: array
+          description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
+          items:
+            $ref: '#/components/schemas/RuleWithThresholdMobileAppAlertRule'
+          maxItems: 1
+          minItems: 1
+        severity:
+          type: integer
+          format: int32
+          deprecated: true
+          description: The severity of the alert when triggered, which is either 5 (Warning), or 10 (Critical).
+          maximum: 10
+          minimum: 5
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        threshold:
+          $ref: '#/components/schemas/Threshold'
+        timeThreshold:
+          $ref: '#/components/schemas/MobileAppTimeThreshold'
+        triggering:
+          type: boolean
+          description: Optional flag to indicate whether an Incident is also triggered or not.
+      required:
+      - customPayloadFields
+      - description
+      - granularity
+      - mobileAppId
+      - name
+      - tagFilterExpression
+      - timeThreshold
+    ValidatedAlertingChannelInputInfo:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Flag to indicate whether or not the configuration is enabled.
+        entityId:
+          type: string
+          description: The entity ID in case of Smart Alerts, such as for the application, website or mobile app.
+        eventTypes:
+          type: array
+          description: The selected event types, if applicable.
+          items:
+            type: string
+            description: The selected event types, if applicable.
+            enum:
+            - incident
+            - critical
+            - warning
+            - change
+            - online
+            - offline
+            - agent_monitoring_issue
+            - cve_issue
+            - none
+          maxItems: 6
+          minItems: 0
+          uniqueItems: true
+        id:
+          type: string
+          description: ID of the alert configuration.
+          maxLength: 64
+          minLength: 0
+        invalid:
+          type: boolean
+          description: Flag to indicate whether the specified query is invalid.
+        label:
+          type: string
+          description: The name of the alert configuration.
+          maxLength: 256
+          minLength: 0
+        query:
+          type: string
+          description: The DFQ used in the alert configuration, if applicable.
+          maxLength: 2048
+          minLength: 0
+        selectedEvents:
+          type: integer
+          format: int32
+          description: The number of selected events, if applicable.
+        type:
+          type: string
+          description: The alert type.
+          enum:
+          - Alert
+          - WebsiteSmartAlert
+          - MobileSmartAlert
+          - ApplicationSmartAlert
+          - GlobalApplicationSmartAlert
+          - SyntheticSmartAlert
+          - InfraSmartAlert
+          - ServiceLevelSmartAlert
+          - LogSmartAlert
+      required:
+      - id
+      - label
+      - type
+    Event:
+      type: object
+      properties:
+        end:
+          type: integer
+          format: int64
+          minimum: 1
+        endpointServiceId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        entityId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        entityType:
+          type: string
+          enum:
+          - Entity10
+          - App20
+          - Service20
+          - Endpoint20
+          - Website
+          - Synthetic
+          - MobileApp
+          - Log
+        eventConfigurationType:
+          type: string
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+        longFormPluginId:
+          type: string
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+        metricAccessId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        plugin:
+          type: string
+          maxLength: 256
+          minLength: 0
+        problem:
+          $ref: '#/components/schemas/Problem'
+        rca:
+          type: object
+          additionalProperties:
+            type: object
+        shortCode:
+          type: string
+          maxLength: 64
+          minLength: 0
+        start:
+          type: integer
+          format: int64
+          minimum: 1
+        state:
+          type: string
+          maxLength: 8
+          minLength: 0
+        type:
+          type: string
+          maxLength: 64
+          minLength: 0
+      required:
+      - entityId
+      - id
+      - plugin
+      - state
+      - type
+    BuiltInEventSpecificationWithLastUpdated:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Description of Built-in Event Specification
+          maxLength: 2048
+          minLength: 0
+        enabled:
+          type: boolean
+          description: Flag to show whether the Built-in Event Specification is enabled
+        hidden:
+          type: boolean
+          description: Flag to show whether the Built-in Event Specification is hidden
+        hyperParams:
+          type: array
+          description: List of hyper parameters of the Built-in Event Specification
+          items:
+            $ref: '#/components/schemas/HyperParam'
+          maxItems: 32
+          minItems: 0
+        id:
+          type: string
+          description: ID of Built-in Event Specification
+          maxLength: 2048
+          minLength: 0
+        lastUpdated:
+          type: integer
+          format: int64
+          minimum: 1
+        name:
+          type: string
+          description: Name of Built-in Event Specification
+          maxLength: 256
+          minLength: 0
+        ruleInputs:
+          type: array
+          description: List of input rules of the Built-in Event Specification
+          items:
+            $ref: '#/components/schemas/RuleInput'
+          maxItems: 32
+          minItems: 0
+        severity:
+          type: integer
+          format: int32
+          description: Severity level of Built-in Event Specification
+        shortPluginId:
+          type: string
+          description: ID of short plugin of Built-in Event Specification
+          maxLength: 64
+          minLength: 0
+        triggering:
+          type: boolean
+          description: Flag to show whether the Built-in Event Specification is triggering
+      required:
+      - hyperParams
+      - id
+      - name
+      - ruleInputs
+      - shortPluginId
+    AbstractRule:
+      type: object
+      discriminator:
+        mapping:
+          entity_count: '#/components/schemas/EntityCountRule'
+          entity_count_verification: '#/components/schemas/EntityCountVerificationRule'
+          entity_verification: '#/components/schemas/EntityVerificationRule'
+          host_availability: '#/components/schemas/HostAvailabilityRule'
+          system: '#/components/schemas/SystemRule'
+          threshold: '#/components/schemas/ThresholdRule'
+        propertyName: ruleType
+      properties:
+        ruleType:
+          type: string
+        severity:
+          type: integer
+          format: int32
+      required:
+      - ruleType
+    Parameter:
+      type: object
+      description: List of inputs to the action.
+      properties:
+        description:
+          type: string
+          description: Parameter description.
+        hidden:
+          type: boolean
+          description: Is parameter hidden or not.
+        label:
+          type: string
+          description: Parameter label.
+        name:
+          type: string
+          description: Parameter name.
+        required:
+          type: boolean
+          description: Is parameter required or not.
+        secured:
+          type: boolean
+          description: Is parameter secured or not.
+        type:
+          type: string
+          description: Parameter type. Valid values are `static`, `dynamic`, or `vault`. Default value is `static`
+        value:
+          type: string
+          description: Parameter value.
+      required:
+      - label
+      - name
+      - type
+    Action:
+      type: object
+      description: Automation action definition. When this is used in policy creation request, only `id` should be specified.
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: Action created time.
+        description:
+          type: string
+          description: Action description.
+          maxLength: 512
+          minLength: 0
+        fields:
+          type: array
+          description: List of fields that describe an action.
+          items:
+            $ref: '#/components/schemas/Field'
+        id:
+          type: string
+          description: Action identifier.
+          maxLength: 128
+          minLength: 1
+        inputParameters:
+          type: array
+          description: List of inputs to the action.
+          items:
+            $ref: '#/components/schemas/Parameter'
+        metadata:
+          $ref: '#/components/schemas/MetaData'
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Action modified time.
+        name:
+          type: string
+          description: Action name.
+          maxLength: 128
+          minLength: 1
+        tags:
+          type: array
+          description: List of tags added to the action.
+          items:
+            type: string
+            description: List of tags added to the action.
+        type:
+          type: string
+          description: 'Action type can be one of the following values:  SCRIPT, HTTP, ANSIBLE, EXTERNAL, GITHUB, GITLAB, JIRA, MANUAL, DOC_LINK'
+          enum:
+          - SCRIPT
+          - HTTP
+          - ANSIBLE
+          - EXTERNAL
+          - GITHUB
+          - GITLAB
+          - JIRA
+          - MANUAL
+          - DOC_LINK
+          maxLength: 128
+          minLength: 0
+      required:
+      - createdAt
+      - id
+      - modifiedAt
+      - name
+      - type
+    CustomPayloadWithLastUpdated:
+      type: object
+      properties:
+        fields:
+          type: array
+          description: Required parameters for custom payload configuration.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        lastUpdated:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the time (in milliseconds) the configuration was last updated.
+          minimum: 1
+      required:
+      - fields
+    ManualCloseInfo:
+      type: object
+      properties:
+        closeTimestamp:
+          type: integer
+          format: int64
+          description: The closing timestamp.
+        disableEvent:
+          type: boolean
+          description: Flag to indicate whether to disable the event.
+        eventIds:
+          type: array
+          description: The event IDs to manually close, in case of multi close.
+          items:
+            type: string
+            description: The event IDs to manually close, in case of multi close.
+          uniqueItems: true
+        muteAlerts:
+          type: boolean
+          description: Flag to indicate whether to mute alerts.
+        reasonForClosing:
+          type: string
+          description: The reason for manual closing.
+        username:
+          type: string
+          description: The user name.
+          maxLength: 256
+          minLength: 0
+      required:
+      - reasonForClosing
+      - username
+    ApiTag:
+      type: object
+      properties:
+        displayName:
+          type: string
+          maxLength: 256
+          minLength: 0
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+      required:
+      - displayName
+      - id
+    WithMetadata:
+      type: object
+      properties:
+        alertChannelIds:
+          type: array
+          deprecated: true
+          description: List of IDs of alert channels defined in Instana. Can be left empty.
+          items:
+            type: string
+            deprecated: true
+            description: List of IDs of alert channels defined in Instana. Can be left empty.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        alertChannels:
+          type: object
+          additionalProperties:
+            type: array
+            description: Set of alert channel IDs associated with the severity.
+            items:
+              type: string
+              description: Set of alert channel IDs associated with the severity.
+            uniqueItems: true
+          description: Set of alert channel IDs associated with the severity.
+        completeTagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpression'
+        created:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the creation time of this revision.
+          minimum: 1
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        description:
+          type: string
+          description: Description of the mobile app alert configuration. Used as a template for the description of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 65536
+          minLength: 0
+        enabled:
+          type: boolean
+          description: Flag to indicate whether or not the configuration is enabled.
+        gracePeriod:
+          type: integer
+          format: int64
+          description: The duration for which an alert remains open after conditions are no longer violated, with the alert auto-closing once the grace period expires.
+        granularity:
+          type: integer
+          format: int32
+          default: 600000
+          description: The evaluation granularity used for detection of violations of the defined threshold. Defines the size of the tumbling window used.
+          enum:
+          - 60000
+          - 300000
+          - 600000
+          - 900000
+          - 1200000
+          - 1800000
+        id:
+          type: string
+          description: 'ID of this Mobile App Alert Config. '
+          maxLength: 64
+          minLength: 0
+        initialCreated:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the time of the initial revision.
+          minimum: 1
+        mobileAppId:
+          type: string
+          description: ID of the mobile app that this Smart Alert configuration is applied to.
+          maxLength: 64
+          minLength: 0
+        name:
+          type: string
+          description: Name of the mobile app alert configuration. Used as a template for the title of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 256
+          minLength: 0
+        readOnly:
+          type: boolean
+          description: Flag to indicate whether or not the configuration is read-only. Read-only access restricts modification of the config.
+        rule:
+          $ref: '#/components/schemas/MobileAppAlertRule'
+        rules:
+          type: array
+          description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
+          items:
+            $ref: '#/components/schemas/RuleWithThresholdMobileAppAlertRule'
+          maxItems: 1
+          minItems: 1
+        severity:
+          type: integer
+          format: int32
+          deprecated: true
+          description: The severity of the alert when triggered, which is either 5 (Warning), or 10 (Critical).
+          maximum: 10
+          minimum: 5
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        threshold:
+          $ref: '#/components/schemas/Threshold'
+        timeThreshold:
+          $ref: '#/components/schemas/MobileAppTimeThreshold'
+        triggering:
+          type: boolean
+          description: Optional flag to indicate whether an Incident is also triggered or not.
+      required:
+      - customPayloadFields
+      - description
+      - granularity
+      - id
+      - mobileAppId
+      - name
+      - tagFilterExpression
+      - timeThreshold
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage

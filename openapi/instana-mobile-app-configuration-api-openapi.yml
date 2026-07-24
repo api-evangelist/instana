@@ -1,0 +1,1136 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation Mobile App Configuration API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: Mobile App Configuration
+paths:
+  /api/mobile-app-monitoring/config:
+    get:
+      description: API request to get configured mobile apps.
+      operationId: getMobileAppConfig
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: K3bP-bmCRkyimNai9vvq8o
+                name: example_mobile_app
+                rbacTags:
+                - id: test
+                  displayName: test
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MobileApp'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get configured mobile apps
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+    post:
+      description: API request to add new mobile app.
+      operationId: postMobileAppConfig
+      parameters:
+      - description: Name of the mobile app
+        in: query
+        name: name
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+            - id: test
+              displayName: test
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ApiTag'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: K3bP-bmCRkyimNai9vvq8o
+                name: example_mobile_app
+              schema:
+                $ref: '#/components/schemas/MobileApp'
+          description: Mobile App successfully configured
+        '400':
+          description: Missing name query parameter or name already used for a configured mobile app.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - ConfigureMobileAppMonitoring
+      summary: Configure new mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+  /api/mobile-app-monitoring/config/{mobileAppId}:
+    delete:
+      description: API request to remove mobile app.
+      operationId: deleteMobileAppConfig
+      parameters:
+      - description: Mobile App ID
+        example: K3bP-bmCRkyimNai9vvq8o
+        in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Mobile app successfully removed
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - ConfigureMobileAppMonitoring
+      summary: Remove mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+    get:
+      description: API request to get a specific mobile app configuration by ID.
+      operationId: getSingleMobileAppConfig
+      parameters:
+      - description: Mobile App ID
+        example: K3bP-bmCRkyimNai9vvq8o
+        in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: K3bP-bmCRkyimNai9vvq8o
+                name: example_mobile_app
+                rbacTags:
+                - id: test
+                  displayName: test
+              schema:
+                $ref: '#/components/schemas/MobileApp'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get mobile app configuration by ID
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+    put:
+      description: API request to rename mobile app.
+      operationId: renameMobileAppConfig
+      parameters:
+      - description: Mobile App ID
+        example: K3bP-bmCRkyimNai9vvq8o
+        in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      - description: New name of the mobile app
+        in: query
+        name: name
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: K3bP-bmCRkyimNai9vvq8o
+                name: example_mobile_app
+              schema:
+                $ref: '#/components/schemas/MobileApp'
+          description: Mobile app successfully renamed
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - ConfigureMobileAppMonitoring
+      summary: Rename mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+  /api/mobile-app-monitoring/config/{mobileAppId}/geo-location:
+    get:
+      description: API request to get geo location configuration for mobile app.
+      operationId: getMobileAppGeoLocationConfiguration
+      parameters:
+      - in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                geoDetailRemoval: NO_REMOVAL
+                geoMappingRules: []
+              schema:
+                $ref: '#/components/schemas/GeoLocationConfiguration'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - ConfigureMobileAppMonitoring
+      summary: Get geo location configuration for mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+    put:
+      description: API request to update geo location configuration for mobile app.
+      operationId: updateMobileAppGeoLocationConfiguration
+      parameters:
+      - description: Mobile App ID
+        example: iiLxP1zaTuCS7fyk9m4W0W
+        in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeoLocationConfiguration'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeoLocationConfiguration'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - ConfigureMobileAppMonitoring
+      summary: Update geo location configuration for mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+  /api/mobile-app-monitoring/config/{mobileAppId}/geo-mapping-rules:
+    get:
+      description: API request to get custom geo mapping rules for mobile app.
+      operationId: getMobileAppGeoMappingRules
+      parameters:
+      - in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            text/csv: {}
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - ConfigureMobileAppMonitoring
+      summary: Get custom geo mapping rules for mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+    put:
+      description: API request to set custom geo mapping rules for mobile app.
+      operationId: setMobileAppGeoMappingRules
+      parameters:
+      - in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          text/csv:
+            schema:
+              type: string
+      responses:
+        '200':
+          content:
+            text/csv: {}
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '415':
+          description: Unsupported Media Type.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - ConfigureMobileAppMonitoring
+      summary: Set custom geo mapping rules for mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+  /api/mobile-app-monitoring/config/{mobileAppId}/ip-masking:
+    get:
+      description: API request to get IP masking configuration for mobile app.
+      operationId: getMobileAppIpMaskingConfiguration
+      parameters:
+      - in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                ipMasking: DEFAULT
+              schema:
+                $ref: '#/components/schemas/IpMaskingConfiguration'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - ConfigureMobileAppMonitoring
+      summary: Get IP masking configuration for mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+    put:
+      description: API request to update IP masking configuration for mobile app.
+      operationId: updateMobileAppIpMaskingConfiguration
+      parameters:
+      - description: Mobile App ID
+        example: iiLxP1zaTuCS7fyk9m4W0W
+        in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IpMaskingConfiguration'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IpMaskingConfiguration'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - ConfigureMobileAppMonitoring
+      summary: Update IP masking configuration for mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+  /api/mobile-app-monitoring/config/{mobileAppId}/sourcemap-upload:
+    get:
+      description: API request to get all sourcemap configurations for mobile app.
+      operationId: getMobileAppSourceMapFiles
+      parameters:
+      - description: Mobile App ID
+        example: K3bP-bmCRkyimNai9vvq8o
+        in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                configs:
+                - id: 26ae11a865ec8c24
+                  description: InstanaAgentExample_v1
+                  createdAt: 1739864150.9596016
+                  modifiedAt: 1739864314.1402564
+                  metadata:
+                  - type: DWARF
+                    format: TGZ
+                    url: com.instana.ios.InstanaAgentExample/dwarf
+                    size: 2332564
+                    sizeOnDisk: 2324096
+                    blobs:
+                    - blobIndex: 1
+                      size: 2332564
+                      sizeOnDisk: 2324096
+                    meta: null
+              schema:
+                $ref: '#/components/schemas/SourceMapUploadConfigs'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get all sourcemap configurations for mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+    post:
+      description: API request to add sourcemap configuration for mobile app.
+      operationId: postMobileAppSourceMapConfig
+      parameters:
+      - description: Mobile App ID
+        example: K3bP-bmCRkyimNai9vvq8o
+        in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              description: InstanaAgentExample_v2
+            schema:
+              type: object
+              description: Source map upload configuration
+              properties:
+                description:
+                  type: string
+                  description: Name of configuration
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: 1f4acfd2da7c53f1
+                description: InstanaAgentExample_v2
+                createdAt: 1747892306.8642304
+                modifiedAt: 1747892306.8642304
+                metadata: []
+              schema:
+                $ref: '#/components/schemas/SourceMapUploadConfig'
+          description: Mobile App sourcemap configuration added successfully
+        '400':
+          description: Missing description or description already used for a configuration.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '422':
+          description: Unprocessable request - missing/invalid data.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - ConfigureMobileAppMonitoring
+      summary: Add new sourcemap configuration for mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+  /api/mobile-app-monitoring/config/{mobileAppId}/sourcemap-upload/{sourceMapConfigId}:
+    delete:
+      description: API request to delete sourcemap configuration for mobile app.
+      operationId: deleteMobileAppSourceMapUploadConfiguration
+      parameters:
+      - description: Mobile App ID
+        example: K3bP-bmCRkyimNai9vvq8o
+        in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      - description: Source Map Config ID
+        example: 97e0ad312110d3ad
+        in: path
+        name: sourceMapConfigId
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Sourcemap configuration successfully deleted or sourcemap not found
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - ConfigureMobileAppMonitoring
+      summary: Delete sourcemap configuration for mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+    get:
+      description: API request to get sourcemap configuration for mobile app.
+      operationId: getMobileAppSourceMapFile
+      parameters:
+      - description: Mobile App ID
+        example: K3bP-bmCRkyimNai9vvq8o
+        in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      - description: Source Map Config ID
+        example: 97e0ad312110d3ad
+        in: path
+        name: sourceMapConfigId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: 53467e4fb60c1ba2
+                description: InstanaAgentExample_v1
+                createdAt: 1721697722.7669933
+                modifiedAt: 1721698308.4051073
+                metadata:
+                - type: DWARF
+                  format: TGZ
+                  url: com.instana.ios.InstanaAgentExample/dwarf
+                  size: 3301023
+                  sizeOnDisk: 3287984
+                  blobs:
+                  - blobIndex: 1
+                    size: 3301023
+                    sizeOnDisk: 3287984
+                  meta: null
+              schema:
+                $ref: '#/components/schemas/SourceMapUploadConfig'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get sourcemap configuration for mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+  /api/mobile-app-monitoring/config/{mobileAppId}/sourcemap-upload/{sourceMapConfigId}/clear:
+    put:
+      description: API request to clear sourcemap files of a configuration for mobile app.
+      operationId: clearMobileAppSourceMapUploadConfiguration
+      parameters:
+      - description: Mobile App ID
+        example: K3bP-bmCRkyimNai9vvq8o
+        in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      - description: Source Map Config ID
+        example: 97e0ad312110d3ad
+        in: path
+        name: sourceMapConfigId
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Sourcemap files in the sourcemap configuration successfully cleared
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - ConfigureMobileAppMonitoring
+      summary: Clear sourcemap files for sourcemap upload configuration
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+  /api/mobile-app-monitoring/config/{mobileAppId}/sourcemap-upload/{sourceMapConfigId}/commit:
+    put:
+      description: API request to commit sourcemap file upload for mobile app.
+      operationId: commitMobileAppSourceMapFile
+      parameters:
+      - description: Mobile App ID
+        example: K3bP-bmCRkyimNai9vvq8o
+        in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      - description: Source Map Config ID
+        example: 97e0ad312110d3ad
+        in: path
+        name: sourceMapConfigId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fileId:
+                  type: string
+                fileType:
+                  type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: fb3e868cd69f0647
+                description: InstanaAgentExample_v2
+                createdAt: 1747954318.3628924
+                modifiedAt: 1747955097.0266616
+                metadata:
+                - type: DWARF
+                  format: TGZ
+                  url: com.instana.ios.InstanaAgentExample/dwarf
+                  size: 3454658
+                  sizeOnDisk: 3442288
+                  blobs:
+                  - blobIndex: 1
+                    size: 3454658
+                    sizeOnDisk: 3442288
+                  meta: null
+              schema:
+                $ref: '#/components/schemas/SourceMapUploadConfig'
+          description: Successfully committed sourcemap file upload.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - ConfigureMobileAppMonitoring
+      summary: Commit sourcemap file upload for mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+  /api/mobile-app-monitoring/config/{mobileAppId}/sourcemap-upload/{sourceMapConfigId}/form:
+    put:
+      description: API request to upload sourcemap file for mobile app.
+      operationId: uploadMobileAppSourceMapFile
+      parameters:
+      - description: Mobile App ID
+        example: K3bP-bmCRkyimNai9vvq8o
+        in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      - description: Source Map Config ID
+        example: 97e0ad312110d3ad
+        in: path
+        name: sourceMapConfigId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                blobIndex:
+                  type: integer
+                  format: int32
+                  description: Blob index which starts from 1
+                fileFormat:
+                  type: string
+                  description: File format. Example tgz
+                fileId:
+                  type: string
+                  description: Identifier of your app. For example, com.instana.ios.InstanaExampleApp
+                fileType:
+                  type: string
+                  description: dSYM stands for iOS symbol file, R8PG_MAP stands for Android java mapping file
+                sourceMap:
+                  type: string
+                  format: binary
+                  description: Path to your local symbol file
+              required:
+              - blobIndex
+              - fileFormat
+              - fileId
+              - fileType
+              - sourceMap
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                id: 77e4c6c8c9855973
+                description: InstanaAgentExample_v2
+                createdAt: 1747947350.8836377
+                modifiedAt: 1747948462.2585921
+                metadata:
+                - type: DWARF
+                  format: TGZ
+                  url: com.instana.ios.InstanaAgentExample/dwarf
+                  size: 3455633
+                  sizeOnDisk: 3443584
+                  blobs:
+                  - blobIndex: 1
+                    size: 3455633
+                    sizeOnDisk: 3443584
+                  meta: null
+              schema:
+                $ref: '#/components/schemas/SourceMapUploadConfig'
+          description: OK
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '404':
+          description: Resource not found.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - ConfigureMobileAppMonitoring
+      summary: Upload sourcemap file for mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+  /api/mobile-app-monitoring/config/{mobileAppId}/teams:
+    put:
+      description: API request to update teams of a mobile app.
+      operationId: updateMobileAppTeams
+      parameters:
+      - in: path
+        name: mobileAppId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+            - id: test
+              displayName: test
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ApiTag'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - id: test
+                displayName: test
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiTag'
+          description: Mobile App successfully configured
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '403':
+          description: Insufficient permissions.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - ConfigureMobileAppMonitoring
+      summary: Update teams assigned to the mobile app
+      tags:
+      - Mobile App Configuration
+      x-ibm-ahub-byok: true
+components:
+  schemas:
+    GeoSubdivision:
+      type: object
+      properties:
+        code:
+          type: string
+          maxLength: 32
+          minLength: 0
+        name:
+          type: string
+          maxLength: 256
+          minLength: 0
+      required:
+      - name
+    GeoMappingRule:
+      type: object
+      properties:
+        accuracyRadius:
+          type: integer
+          format: int64
+          minimum: -1
+        cidr:
+          type: string
+          maxLength: 128
+          minLength: 0
+        city:
+          type: string
+        continent:
+          type: string
+        continentCode:
+          type: string
+        country:
+          type: string
+        countryCode:
+          type: string
+        latitude:
+          type: number
+          format: double
+        leastSpecificSubdivision:
+          $ref: '#/components/schemas/GeoSubdivision'
+        longitude:
+          type: number
+          format: double
+        subdivisions:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeoSubdivision'
+          maxItems: 8
+          minItems: 0
+      required:
+      - cidr
+      - subdivisions
+    SourceMapFileBlob:
+      type: object
+      properties:
+        blobIndex:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int64
+        sizeOnDisk:
+          type: integer
+          format: int64
+    IpMaskingConfiguration:
+      type: object
+      properties:
+        ipMasking:
+          type: string
+          enum:
+          - DEFAULT
+          - STRICT
+          - REMOVE_ALL_DETAILS
+      required:
+      - ipMasking
+    SourceMapUploadConfig:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        description:
+          type: string
+        id:
+          type: string
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceMapFileMeta'
+          maxItems: 500
+          minItems: 0
+        modifiedAt:
+          type: string
+          format: date-time
+      required:
+      - id
+      - metadata
+    SourceMapFileMeta:
+      type: object
+      properties:
+        blobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceMapFileBlob'
+        format:
+          type: string
+        meta:
+          type: string
+        size:
+          type: integer
+          format: int64
+        sizeOnDisk:
+          type: integer
+          format: int64
+        type:
+          type: string
+          enum:
+          - JS_MAP
+          - JS
+          - R8PG_MAP
+          - DWARF
+        url:
+          type: string
+      required:
+      - format
+      - type
+      - url
+    MobileApp:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 128
+          minLength: 0
+        name:
+          type: string
+          maxLength: 128
+          minLength: 0
+      required:
+      - id
+      - name
+    ApiTag:
+      type: object
+      properties:
+        displayName:
+          type: string
+          maxLength: 256
+          minLength: 0
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+      required:
+      - displayName
+      - id
+    GeoLocationConfiguration:
+      type: object
+      properties:
+        geoDetailRemoval:
+          type: string
+          enum:
+          - NO_REMOVAL
+          - REMOVE_COORDINATES
+          - REMOVE_CITY
+          - REMOVE_ALL
+        geoMappingRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeoMappingRule'
+          maxItems: 512
+          minItems: 0
+      required:
+      - geoDetailRemoval
+    SourceMapUploadConfigs:
+      type: object
+      properties:
+        config:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceMapUploadConfig'
+          writeOnly: true
+        configs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceMapUploadConfig'
+          maxItems: 1024
+          minItems: 0
+      required:
+      - configs
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage

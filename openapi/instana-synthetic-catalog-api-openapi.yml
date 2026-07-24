@@ -1,0 +1,661 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@instana.com
+    name: © Instana
+    url: http://instana.com
+  termsOfService: https://www.instana.com/terms-of-use/
+  title: Instana REST API documentation Synthetic Catalog API
+  version: 1.307.1417
+  x-ibm-ahub-try: true
+  x-logo:
+    altText: instana logo
+    backgroundColor: '#FAFBFC'
+    url: header-logo.svg
+  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+servers:
+- description: Instana Backend
+  url: https://{unit}-{tenant}.instana.io
+  variables:
+    tenant:
+      default: tenant
+      description: Customer tenant unit
+    unit:
+      default: unit
+      description: Customer tenant name
+- description: Instana Self-Hosted Backend
+  url: https://{domain}
+  variables:
+    domain:
+      default: example.com
+      description: Customer Self-Hosted domain
+tags:
+- name: Synthetic Catalog
+paths:
+  /api/synthetics/catalog:
+    get:
+      operationId: getSyntheticTagCatalog
+      parameters:
+      - in: query
+        name: useCase
+        required: true
+        schema:
+          type: string
+          enum:
+          - GROUPING
+          - FILTERING
+          - SERVICE_MAPPING
+          - SMART_ALERTS
+          - SMART_ALERTS_LOGS
+          - SMART_ALERTS_ADAPTIVE_BASELINE
+          - SMART_ALERTS_CUSTOM_PAYLOAD
+          - SLI_MANAGEMENT
+          - APPLICATION_CONFIG
+          - APPLICATION_CONFIG_BLUEPRINT
+          - MAINTENANCE_WINDOWS
+          - BIZOPS_CUSTOM_DASHBOARDS_FILTERING
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                tagTree:
+                - label: Commonly Used
+                  description: null
+                  icon: null
+                  children:
+                  - label: Location Label
+                    tagName: synthetic.locationLabel
+                    type: TAG
+                  - label: Synthetic Type Label
+                    tagName: synthetic.typeLabel
+                    type: TAG
+                  - label: Tags
+                    tagName: synthetic.tags
+                    type: TAG
+                  type: LEVEL
+                  queryable: false
+                - label: Application
+                  description: null
+                  icon: null
+                  children:
+                  - label: Application Id
+                    tagName: synthetic.applicationId
+                    type: TAG
+                  type: LEVEL
+                  queryable: false
+                - label: Synthetic Test
+                  description: null
+                  icon: null
+                  children:
+                  - label: Errors
+                    tagName: synthetic.errors
+                    type: TAG
+                  - label: Synthetic Type
+                    tagName: synthetic.syntheticType
+                    type: TAG
+                  - label: Synthetic Type Label
+                    tagName: synthetic.typeLabel
+                    type: TAG
+                  - label: Tags
+                    tagName: synthetic.tags
+                    type: TAG
+                  - label: Test Active
+                    tagName: synthetic.testActive
+                    type: TAG
+                  - label: Test Id
+                    tagName: synthetic.testId
+                    type: TAG
+                  - label: Test Name
+                    tagName: synthetic.testName
+                    type: TAG
+                  type: LEVEL
+                  queryable: false
+                - label: Location
+                  description: null
+                  icon: null
+                  children:
+                  - label: Location Id
+                    tagName: synthetic.locationId
+                    type: TAG
+                  - label: Location Label
+                    tagName: synthetic.locationLabel
+                    type: TAG
+                  - label: Location Type
+                    tagName: synthetic.locationType
+                    type: TAG
+                  type: LEVEL
+                  queryable: false
+                tags:
+                - name: synthetic.locationId
+                  label: Location Id
+                  type: STRING
+                  description: null
+                  canApplyToSource: false
+                  canApplyToDestination: false
+                  idTag: false
+                - name: synthetic.locationLabel
+                  label: Location Label
+                  type: STRING
+                  description: null
+                  canApplyToSource: false
+                  canApplyToDestination: false
+                  idTag: false
+                - name: synthetic.syntheticType
+                  label: Synthetic Type
+                  type: STRING
+                  description: null
+                  canApplyToSource: false
+                  canApplyToDestination: false
+                  idTag: false
+                - name: synthetic.typeLabel
+                  label: Synthetic Type Label
+                  type: STRING
+                  description: null
+                  canApplyToSource: false
+                  canApplyToDestination: false
+                  idTag: false
+                - name: synthetic.applicationId
+                  label: Application Id
+                  type: STRING
+                  description: null
+                  canApplyToSource: false
+                  canApplyToDestination: false
+                  idTag: false
+                - name: synthetic.tags
+                  label: Tags
+                  type: KEY_VALUE_PAIR
+                  description: null
+                  canApplyToSource: false
+                  canApplyToDestination: false
+                  idTag: false
+                - name: synthetic.testId
+                  label: Test Id
+                  type: STRING
+                  description: null
+                  canApplyToSource: false
+                  canApplyToDestination: false
+                  idTag: false
+                - name: synthetic.testName
+                  label: Test Name
+                  type: STRING
+                  description: null
+                  canApplyToSource: false
+                  canApplyToDestination: false
+                  idTag: false
+                - name: synthetic.errors
+                  label: Errors
+                  type: STRING_LIST
+                  description: null
+                  canApplyToSource: false
+                  canApplyToDestination: false
+                  idTag: false
+                - name: synthetic.testActive
+                  label: Test Active
+                  type: BOOLEAN
+                  description: null
+                  canApplyToSource: false
+                  canApplyToDestination: false
+                  idTag: false
+                - name: synthetic.locationType
+                  label: Location Type
+                  type: STRING
+                  description: null
+                  canApplyToSource: false
+                  canApplyToDestination: false
+                  idTag: false
+              schema:
+                $ref: '#/components/schemas/TagCatalog'
+          description: OK
+        '400':
+          description: Bad request.
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get synthetic tag catalog
+      tags:
+      - Synthetic Catalog
+      x-ibm-ahub-byok: true
+  /api/synthetics/catalog/metrics:
+    get:
+      operationId: getSyntheticCatalogMetrics
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+              - metricId: synthetic.metricResponseTime
+                label: Response Time
+                formatter: MILLIS
+                description: Script response time in milliseconds
+                aggregations:
+                - MEAN
+                - 25th
+                - 50th
+                - 75th
+                - 90th
+                - 95th
+                - 98th
+                - 99th
+                - SUM
+                defaultAggregation: null
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MetricDescription'
+          description: OK
+        '401':
+          description: Unauthorized access - requires user authentication.
+        '500':
+          description: Internal server error.
+      security:
+      - ApiKeyAuth:
+        - Default
+      summary: Get Metric catalog
+      tags:
+      - Synthetic Catalog
+      x-ibm-ahub-byok: true
+components:
+  schemas:
+    MetricDescription:
+      type: object
+      properties:
+        aggregations:
+          type: array
+          description: 'The types of aggregations that can be applied to a series of values.
+
+            For example, `P25` is 25th percentile. Note that not all aggregations are available for metrics.
+
+            For example, `Trace count` has only `SUM` as an aggregation whereas `Call Count` has two aggregations, `SUM` and `PER_SECOND`.
+
+            '
+          items:
+            type: string
+            description: 'The types of aggregations that can be applied to a series of values.
+
+              For example, `P25` is 25th percentile. Note that not all aggregations are available for metrics.
+
+              For example, `Trace count` has only `SUM` as an aggregation whereas `Call Count` has two aggregations, `SUM` and `PER_SECOND`.
+
+              '
+            enum:
+            - SUM
+            - MEAN
+            - MAX
+            - MIN
+            - P25
+            - P50
+            - P75
+            - P90
+            - P95
+            - P98
+            - P99
+            - P99_9
+            - P99_99
+            - DISTINCT_COUNT
+            - SUM_POSITIVE
+            - PER_SECOND
+            - INCREASE
+          uniqueItems: true
+        defaultAggregation:
+          type: string
+          description: The preselected aggregation for a metric. For example, for `Call latency` the default aggregation is `MEAN`.
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        description:
+          type: string
+          description: A description of the metric. For example, for `Call count` metric, the description would be something like `Number of received calls`
+        formatter:
+          type: string
+          description: '* `NUMBER`: Generic number
+
+            * `BYTES`: Number of bytes
+
+            * `KILO_BYTES`: Number of kilobytes
+
+            * `MEGA_BYTES`: Number of megabytes
+
+            * `PERCENTAGE`: Percentage in scale [0,1]
+
+            * `PERCENTAGE_100`: Percentage in scale [0,100]
+
+            * `PERCENTAGE_NO_CAPPING`: Percentage in scale [0,1] but value could exceed 1 for example when metric is aggregated
+
+            * `PERCENTAGE_100_NO_CAPPING`: Percentage in scale [0,100] but value could exceed 100 for example when metric is aggregated
+
+            * `LATENCY`: Time in milliseconds, with value of 0 should not be considered a a strict 0, but considered as < 1ms
+
+            * `NANOS`: Time in nanoseconds
+
+            * `MILLIS`: Time in milliseconds
+
+            * `MICROS`: Time in microseconds
+
+            * `SECONDS`: Time in seconds
+
+            * `RATE`: Number of occurrences per second
+
+            * `BYTE_RATE`: Number of bytes per second
+
+            * `UNDEFINED`: Metric value unit is not known
+
+            '
+        label:
+          type: string
+          description: The name of the metric. For example, `Call count`, `Erroneous calls`, `Service count` etc.
+        metricId:
+          type: string
+          description: The unique id of the metric. For example, `calls`, `erroneousCalls`, `latency` etc.
+      required:
+      - aggregations
+      - formatter
+      - label
+      - metricId
+    TagCatalog:
+      type: object
+      properties:
+        tagTree:
+          type: array
+          description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
+
+            Consider this as the root of the tree where it has tags as attributes or children.
+
+            '
+          items:
+            $ref: '#/components/schemas/TagTreeLevel'
+        tags:
+          type: array
+          description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
+
+            Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
+
+            '
+          items:
+            $ref: '#/components/schemas/Tag'
+      required:
+      - tagTree
+      - tags
+    Tag:
+      type: object
+      description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
+
+        Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
+
+        '
+      properties:
+        aliases:
+          type: array
+          description: 'List of other names that can refer to this tag
+
+            '
+          items:
+            type: string
+            description: 'List of other names that can refer to this tag
+
+              '
+          uniqueItems: true
+        availability:
+          type: array
+          description: 'List of product areas this tag is available in
+
+            '
+          items:
+            type: string
+            description: 'List of product areas this tag is available in
+
+              '
+            enum:
+            - INFRASTRUCTURE_METRICS
+            - APPLICATION
+            - WEBSITE
+            - MOBILE_APP
+            - EUM
+            - EUM_IMPACTED_BEACON
+            - EVENT
+            - SLI
+            - SLO
+            - SLO_PREVIEW
+            - USAGE
+            - LOG
+            - SYNTHETICS
+            - SYNTHETICS_DETAIL
+            - APDEX
+            - BIZOPS
+            - BUSINESS_METRICS
+            - SUBTRACE
+            - UNKNOWN
+          uniqueItems: true
+        canApplyToDestination:
+          type: boolean
+          description: 'Whether the tag is available for destination or not.
+
+            If source and destination is false, it means the tag is independent of source and destination. Eg: of such tag is `call.http.path`.
+
+            '
+        canApplyToSource:
+          type: boolean
+          description: 'Whether the tag is available for source or not.
+
+            If source and destination is false, it means the tag is independent of source and destination. Eg: of such tag is `call.http.path`.
+
+            '
+        description:
+          type: string
+          description: The description of the tag if it is provided.
+        idTag:
+          type: boolean
+          description: 'Whether the Tag is a unique ID or not.
+
+            Eg: `idTag` for `endpoint.id` is true but for `call.rpc.method` it is false.
+
+            '
+        label:
+          type: string
+          description: 'The name of the tag which is seen in the UI. Eg: `Call name`'
+          maxLength: 256
+          minLength: 0
+        name:
+          type: string
+          description: 'The name of the tag. Eg: `call.name`'
+        type:
+          type: string
+          description: 'The data type of the tag. Eg: `call.name` accepts `STRING` value.'
+          enum:
+          - BOOLEAN
+          - STRING
+          - NUMBER
+          - STRING_SET
+          - STRING_LIST
+          - KEY_VALUE_PAIR
+          - FLOAT_LIST
+          - KEY_NUMBER_PAIR
+      required:
+      - name
+      - type
+    TagTreeNode:
+      type: object
+      description: Children tags of tagTree
+      discriminator:
+        mapping:
+          LEVEL: '#/components/schemas/TagTreeLevel'
+          TAG: '#/components/schemas/TagTreeTag'
+        propertyName: type
+      properties:
+        icon:
+          type: string
+        label:
+          type: string
+        type:
+          type: string
+          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
+    TagTreeLevel:
+      type: object
+      description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
+
+        Consider this as the root of the tree where it has tags as attributes or children.
+
+        '
+      properties:
+        children:
+          type: array
+          description: Children tags of tagTree
+          items:
+            $ref: '#/components/schemas/TagTreeNode'
+        description:
+          type: string
+          description: The description provided, if any.
+          maxLength: 512
+          minLength: 0
+        icon:
+          type: string
+          description: 'Each tag has an Icon which can be seen on the drop down list in Unbounded Analytics.
+
+            If there is an icon, there will be a string associated with it.
+
+            Eg: For for all `TAG` under `Call` tagTreeNode, the `icon` value is `lib_application_call`.
+
+            '
+          maxLength: 128
+          minLength: 0
+        label:
+          type: string
+          description: 'The name of the tagTreeNode. Eg: `Commonly Used`, `Application`.'
+          maxLength: 128
+          minLength: 0
+        queryable:
+          type: boolean
+        scoreBoost:
+          type: integer
+          format: int32
+          description: 'By default it is `null` if it is not set explictily by IBM Instana.
+
+            The purpose of this parameter is to rank the tagTree. For eg: some set of tags are frequently used.
+
+            Tags under `Commonly used` is frequently used, so it will come up on top of the drop down list of `Query Builder` in `Unbounded Analytics`.
+
+            Higher the scoreBoost, higher the ranking.
+
+            '
+        type:
+          type: string
+          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
+      required:
+      - children
+      - label
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: authorization
+      type: apiKey
+      description: "## Example\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n"
+x-tagGroups:
+- name: Websites & Mobile Apps
+  tags:
+  - Website Metrics
+  - Website Catalog
+  - Website Analyze
+  - Website Configuration
+  - Mobile App Metrics
+  - Mobile App Catalog
+  - Mobile App Analyze
+  - Mobile App Configuration
+  - End User Monitoring
+- name: Applications
+  tags:
+  - Application Metrics
+  - Application Resources
+  - Application Catalog
+  - Application Analyze
+  - Application Settings
+  - Application Topology
+  - Application Alert Configuration
+  - Global Application Alert Configuration
+- name: Infrastructure
+  tags:
+  - Infrastructure Analyze
+  - Infrastructure Metrics
+  - Infrastructure Resources
+  - Infrastructure Catalog
+  - Infrastructure Topology
+- name: Logging
+  tags:
+  - Logging Analyze
+- name: Synthetic Monitoring
+  tags:
+  - Synthetic Catalog
+  - Synthetic Metrics
+  - Synthetic Settings
+  - Synthetic Test Playback Results
+  - Synthetic Alert Configuration
+- name: Logs
+  tags:
+  - Log Alert Configuration
+- name: Events
+  tags:
+  - Events
+  - Event Settings
+- name: Automation
+  tags:
+  - Action Catalog
+  - Action History
+  - Policies
+- name: Service Levels
+  tags:
+  - SLI Settings
+  - SLI Report
+  - Apdex Settings
+  - Apdex Report
+  - Service Levels Objective(SLO) Configurations
+  - Service Levels Objective(SLO) Report
+  - Service Levels Alert Configuration
+  - SLO Correction Configurations
+  - SLO Correction Windows
+- name: AI Management
+  tags:
+  - AI Management
+- name: Settings
+  tags:
+  - Custom Dashboards
+  - User
+  - Groups
+  - Teams
+  - Roles
+  - Audit Log
+  - API Token
+  - Maintenance Configuration
+  - Synthetic Calls
+  - Session Settings
+  - Automation Settings
+  - Authentication
+- name: Open Beta Features
+  tags:
+  - Infrastructure Analyze
+- name: Closed Beta Features
+  tags:
+  - Infrastructure Alert Configuration
+- name: Instana
+  tags:
+  - Releases
+  - Host Agent
+  - Health
+  - Usage
