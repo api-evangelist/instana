@@ -1,0 +1,2039 @@
+{
+  "item": [
+    {
+      "id": "20eea7c8-42c8-4be9-bb8b-51824615ed28",
+      "name": "Policies",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8b037ddb-8d1f-46ca-9612-05b59c325ef9",
+          "name": "Get all automation policies.",
+          "request": {
+            "name": "Get all automation policies.",
+            "description": {
+              "content": "Returns all the automation policies filtered by the values in optional query parameters. When using personal access tokens, the user must have at least `Viewer` access for Automation and the automation policies returned are also filtered based on the access set in `Limited access` permission settings.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "automation",
+                "policies"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "triggerType",
+                  "value": "<string>",
+                  "description": "Filter policies by the event or alert type that can trigger a policy. This is an optional parameter. Valid values are customEvent, builtinEvent, applicationSmartAlert, globalApplicationSmartAlert, websiteSmartAlert, infraSmartAlert, mobileAppSmartAlert, syntheticsSmartAlert, logSmartAlert, sloSmartAlert"
+                },
+                {
+                  "disabled": false,
+                  "key": "triggerId",
+                  "value": "<string>",
+                  "description": "Trigger identifier. This is an optional parameter."
+                },
+                {
+                  "disabled": false,
+                  "key": "executionType",
+                  "value": "<string>",
+                  "description": "Filter policies by policy execution type. This is an optional parameter.  Valid values are automatic or manual"
+                },
+                {
+                  "disabled": false,
+                  "key": "actionId",
+                  "value": "<string>",
+                  "description": "Filter policies by action ID. This is an optional parameter."
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4f1f890b-4af6-4eda-aab5-4bd699cf0092",
+              "name": "Automation policies list filtered by the values in query parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "triggerType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "triggerId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "executionType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"a14700b0-401b-47eb-a751-deda0035fde3\",\n    \"name\": \"Policy for test\",\n    \"description\": \"Policy for test\",\n    \"trigger\": {\n      \"type\": \"customEvent\",\n      \"id\": \"C3Ha8PffQHfJ0Hk6\",\n      \"name\": \"Test Event\"\n    },\n    \"typeConfigurations\": [\n      {\n        \"name\": \"manual\",\n        \"runnable\": {\n          \"type\": \"action\",\n          \"id\": \"d473c1b0-0740-4d08-95fe-31e5d0a9faff\",\n          \"runConfiguration\": {\n            \"actions\": [\n              {\n                \"action\": {\n                  \"id\": \"d473c1b0-0740-4d08-95fe-31e5d0a9faff\",\n                  \"name\": \"Hello World\",\n                  \"description\": \"Simple script action for testing\",\n                  \"type\": \"SCRIPT\",\n                  \"fields\": [\n                    {\n                      \"name\": \"subtype\",\n                      \"description\": \"script subtype\",\n                      \"encoding\": \"base64\",\n                      \"value\": \"YmFzaA==\",\n                      \"secured\": false\n                    },\n                    {\n                      \"name\": \"script_ssh\",\n                      \"description\": \"script content\",\n                      \"encoding\": \"base64\",\n                      \"value\": \"ZWNobyBoZWxsbyB3b3JsZA==\",\n                      \"secured\": false\n                    },\n                    {\n                      \"name\": \"timeout\",\n                      \"description\": \"timeout of the action execution in seconds\",\n                      \"encoding\": \"ascii\",\n                      \"value\": \"\",\n                      \"secured\": false\n                    }\n                  ],\n                  \"inputParameters\": [],\n                  \"tags\": [\n                    \"Test\",\n                    \"idempotent\"\n                  ],\n                  \"createdAt\": 1694442511.129923,\n                  \"modifiedAt\": 1703191040.321448\n                }\n              }\n            ]\n          }\n        }\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f2e5b47a-b492-4e7c-ac15-294954a12d0a",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "triggerType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "triggerId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "executionType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5038da9a-41d5-42c9-9e21-8b3b68f92811",
+              "name": "Failed to retrieve the automation policies.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "triggerType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "triggerId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "executionType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "58e3ff92-0965-49d3-aea4-2eb61d444b6b",
+          "name": "Create an automation policy.",
+          "request": {
+            "name": "Create an automation policy.",
+            "description": {
+              "content": "Creates a new automation policy. Policy creation requires `Configuration of automation policies` permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "automation",
+                "policies"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"trigger\": {\n    \"type\": \"<string>\",\n    \"description\": \"<string>\",\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"scheduling\": {\n      \"startTime\": \"<dateTime>\",\n      \"recurrentRule\": \"<string>\"\n    }\n  },\n  \"typeConfigurations\": [\n    {\n      \"name\": \"<string>\",\n      \"runnable\": {\n        \"id\": \"<string>\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"type\": \"<string>\"\n      },\n      \"condition\": {\n        \"query\": \"<string>\"\n      }\n    },\n    {\n      \"name\": \"<string>\",\n      \"runnable\": {\n        \"id\": \"<string>\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"type\": \"<string>\"\n      },\n      \"condition\": {\n        \"query\": \"<string>\"\n      }\n    }\n  ],\n  \"description\": \"<string>\",\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "53d77b07-e4e0-4da6-ba7c-1e66d7465c30",
+              "name": "New policy created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"builtin-action-custom-event\",\n  \"trigger\": {\n    \"name\": \"test event\",\n    \"type\": \"customEvent\",\n    \"id\": \"2X5r-Un18MIE59rE\"\n  },\n  \"typeConfigurations\": [\n    {\n      \"name\": \"manual\",\n      \"runnable\": {\n        \"type\": \"action\",\n        \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"action\": {\n                \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\"\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"a14700b0-401b-47eb-a751-deda0035fde3\",\n  \"name\": \"Policy for test\",\n  \"description\": \"Policy for test\",\n  \"trigger\": {\n    \"type\": \"customEvent\",\n    \"id\": \"C3Ha8PffQHfJ0Hk6\",\n    \"name\": \"Test Event\"\n  },\n  \"typeConfigurations\": [\n    {\n      \"name\": \"manual\",\n      \"runnable\": {\n        \"type\": \"action\",\n        \"id\": \"d473c1b0-0740-4d08-95fe-31e5d0a9faff\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"action\": {\n                \"id\": \"d473c1b0-0740-4d08-95fe-31e5d0a9faff\",\n                \"name\": \"Hello World\",\n                \"description\": \"Simple script action for testing\",\n                \"type\": \"SCRIPT\",\n                \"fields\": [\n                  {\n                    \"name\": \"subtype\",\n                    \"description\": \"script subtype\",\n                    \"encoding\": \"base64\",\n                    \"value\": \"YmFzaA==\",\n                    \"secured\": false\n                  },\n                  {\n                    \"name\": \"script_ssh\",\n                    \"description\": \"script content\",\n                    \"encoding\": \"base64\",\n                    \"value\": \"ZWNobyBoZWxsbyB3b3JsZA==\",\n                    \"secured\": false\n                  },\n                  {\n                    \"name\": \"timeout\",\n                    \"description\": \"timeout of the action execution in seconds\",\n                    \"encoding\": \"ascii\",\n                    \"value\": \"\",\n                    \"secured\": false\n                  }\n                ],\n                \"inputParameters\": [],\n                \"tags\": [\n                  \"Test\"\n                ],\n                \"createdAt\": 1694442511.129923,\n                \"modifiedAt\": 1703191040.321448\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29c646eb-099e-4af7-8d3c-9c59ab63a859",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"builtin-action-custom-event\",\n  \"trigger\": {\n    \"name\": \"test event\",\n    \"type\": \"customEvent\",\n    \"id\": \"2X5r-Un18MIE59rE\"\n  },\n  \"typeConfigurations\": [\n    {\n      \"name\": \"manual\",\n      \"runnable\": {\n        \"type\": \"action\",\n        \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"action\": {\n                \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\"\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e63db900-83fe-45dd-96d9-14d4d4afe31d",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"builtin-action-custom-event\",\n  \"trigger\": {\n    \"name\": \"test event\",\n    \"type\": \"customEvent\",\n    \"id\": \"2X5r-Un18MIE59rE\"\n  },\n  \"typeConfigurations\": [\n    {\n      \"name\": \"manual\",\n      \"runnable\": {\n        \"type\": \"action\",\n        \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"action\": {\n                \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\"\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "80098a5b-bdd0-4270-9cb3-164957d8467c",
+              "name": "Invalid input value.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"builtin-action-custom-event\",\n  \"trigger\": {\n    \"name\": \"test event\",\n    \"type\": \"customEvent\",\n    \"id\": \"2X5r-Un18MIE59rE\"\n  },\n  \"typeConfigurations\": [\n    {\n      \"name\": \"manual\",\n      \"runnable\": {\n        \"type\": \"action\",\n        \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"action\": {\n                \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\"\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Precondition Failed",
+              "code": 412,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5ac06a53-e862-4dfc-a4de-b6aa189a0b41",
+              "name": "Internal Server Error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"builtin-action-custom-event\",\n  \"trigger\": {\n    \"name\": \"test event\",\n    \"type\": \"customEvent\",\n    \"id\": \"2X5r-Un18MIE59rE\"\n  },\n  \"typeConfigurations\": [\n    {\n      \"name\": \"manual\",\n      \"runnable\": {\n        \"type\": \"action\",\n        \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"action\": {\n                \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\"\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9d6e9d56-ee24-45a8-bb20-bc0b57e5a614",
+          "name": "Create automation policies.",
+          "request": {
+            "name": "Create automation policies.",
+            "description": {
+              "content": "Creates a list of automation policies. Policy creation requires `Configuration of automation policies` permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "automation",
+                "policies",
+                "bulk"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"name\": \"<string>\",\n    \"trigger\": {\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"scheduling\": {\n        \"startTime\": \"<dateTime>\",\n        \"recurrentRule\": \"<string>\"\n      }\n    },\n    \"typeConfigurations\": [\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      }\n    ],\n    \"description\": \"<string>\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  {\n    \"name\": \"<string>\",\n    \"trigger\": {\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"scheduling\": {\n        \"startTime\": \"<dateTime>\",\n        \"recurrentRule\": \"<string>\"\n      }\n    },\n    \"typeConfigurations\": [\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      }\n    ],\n    \"description\": \"<string>\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c2e4320c-cd0c-436d-9ddc-5aaf7bf1ea9c",
+              "name": "Created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"name\": \"<string>\",\n    \"trigger\": {\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"scheduling\": {\n        \"startTime\": \"<dateTime>\",\n        \"recurrentRule\": \"<string>\"\n      }\n    },\n    \"typeConfigurations\": [\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      }\n    ],\n    \"description\": \"<string>\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  {\n    \"name\": \"<string>\",\n    \"trigger\": {\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"scheduling\": {\n        \"startTime\": \"<dateTime>\",\n        \"recurrentRule\": \"<string>\"\n      }\n    },\n    \"typeConfigurations\": [\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      }\n    ],\n    \"description\": \"<string>\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"name\": \"<string>\",\n    \"trigger\": {\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"scheduling\": {\n        \"startTime\": \"<dateTime>\",\n        \"recurrentRule\": \"<string>\"\n      }\n    },\n    \"typeConfigurations\": [\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      }\n    ],\n    \"description\": \"<string>\",\n    \"id\": \"string\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  {\n    \"name\": \"<string>\",\n    \"trigger\": {\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"scheduling\": {\n        \"startTime\": \"<dateTime>\",\n        \"recurrentRule\": \"<string>\"\n      }\n    },\n    \"typeConfigurations\": [\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      }\n    ],\n    \"description\": \"<string>\",\n    \"id\": \"string\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b59a0252-9d88-4a17-a817-b40213a4fb38",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"name\": \"<string>\",\n    \"trigger\": {\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"scheduling\": {\n        \"startTime\": \"<dateTime>\",\n        \"recurrentRule\": \"<string>\"\n      }\n    },\n    \"typeConfigurations\": [\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      }\n    ],\n    \"description\": \"<string>\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  {\n    \"name\": \"<string>\",\n    \"trigger\": {\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"scheduling\": {\n        \"startTime\": \"<dateTime>\",\n        \"recurrentRule\": \"<string>\"\n      }\n    },\n    \"typeConfigurations\": [\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      }\n    ],\n    \"description\": \"<string>\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b28e3293-1bf1-4d0d-9971-d8764c6ca587",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"name\": \"<string>\",\n    \"trigger\": {\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"scheduling\": {\n        \"startTime\": \"<dateTime>\",\n        \"recurrentRule\": \"<string>\"\n      }\n    },\n    \"typeConfigurations\": [\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      }\n    ],\n    \"description\": \"<string>\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  {\n    \"name\": \"<string>\",\n    \"trigger\": {\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"scheduling\": {\n        \"startTime\": \"<dateTime>\",\n        \"recurrentRule\": \"<string>\"\n      }\n    },\n    \"typeConfigurations\": [\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      }\n    ],\n    \"description\": \"<string>\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f3951619-70fe-427e-b5d0-8dd085176e62",
+              "name": "Invalid input value.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"name\": \"<string>\",\n    \"trigger\": {\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"scheduling\": {\n        \"startTime\": \"<dateTime>\",\n        \"recurrentRule\": \"<string>\"\n      }\n    },\n    \"typeConfigurations\": [\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      }\n    ],\n    \"description\": \"<string>\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  {\n    \"name\": \"<string>\",\n    \"trigger\": {\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"scheduling\": {\n        \"startTime\": \"<dateTime>\",\n        \"recurrentRule\": \"<string>\"\n      }\n    },\n    \"typeConfigurations\": [\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      }\n    ],\n    \"description\": \"<string>\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Precondition Failed",
+              "code": 412,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fee24c55-407f-4d32-b077-aae6b443a96b",
+              "name": "Internal Server Error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"name\": \"<string>\",\n    \"trigger\": {\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"scheduling\": {\n        \"startTime\": \"<dateTime>\",\n        \"recurrentRule\": \"<string>\"\n      }\n    },\n    \"typeConfigurations\": [\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      }\n    ],\n    \"description\": \"<string>\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  {\n    \"name\": \"<string>\",\n    \"trigger\": {\n      \"type\": \"<string>\",\n      \"description\": \"<string>\",\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"scheduling\": {\n        \"startTime\": \"<dateTime>\",\n        \"recurrentRule\": \"<string>\"\n      }\n    },\n    \"typeConfigurations\": [\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"runnable\": {\n          \"id\": \"<string>\",\n          \"runConfiguration\": {\n            \"actions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"<string>\"\n        },\n        \"condition\": {\n          \"query\": \"<string>\"\n        }\n      }\n    ],\n    \"description\": \"<string>\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a32a8585-a320-4500-b7d8-db3da66335aa",
+          "name": "Deletes an automation policy by identifier.",
+          "request": {
+            "name": "Deletes an automation policy by identifier.",
+            "description": {
+              "content": "Deletes an automation policy by identifier. Policy deletion requires `Configuration of automation policies` permission. When using personal tokens the automation policies deleted are based on the access set in `Limited access` permission settings.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "automation",
+                "policies",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Automation policy ID to delete"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "85120477-ab34-46ec-8b86-15be7813479c",
+              "name": "Automation policy successfully deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Automation policy ID to delete"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "886f51a2-c9b1-4ce6-9e69-846631c20278",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Automation policy ID to delete"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "622ffe6f-b725-4303-860b-0ce75b5ab7db",
+              "name": "Automation policy does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Automation policy ID to delete"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Precondition Failed",
+              "code": 412,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "752bd571-b8aa-4b43-bf71-f9ac80a8d91e",
+          "name": "Get an automation policy by ID.",
+          "request": {
+            "name": "Get an automation policy by ID.",
+            "description": {
+              "content": "Returns the automation policy filtered by the ID in request parameter. When using personal access tokens, the user must have at least `Viewer` access for Automation and the automation policies returned are also filtered based on the access set in `Limited access` permission settings.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "automation",
+                "policies",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Automation policy ID"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7f32c163-0187-401f-91ec-ab8927371844",
+              "name": "Automation policy filtered by the ID in request parameter.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Automation policy ID"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"a14700b0-401b-47eb-a751-deda0035fde3\",\n  \"name\": \"Policy for test\",\n  \"description\": \"Policy for test\",\n  \"trigger\": {\n    \"type\": \"customEvent\",\n    \"id\": \"C3Ha8PffQHfJ0Hk6\",\n    \"name\": \"Test Event\"\n  },\n  \"typeConfigurations\": [\n    {\n      \"name\": \"manual\",\n      \"runnable\": {\n        \"type\": \"action\",\n        \"id\": \"d473c1b0-0740-4d08-95fe-31e5d0a9faff\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"action\": {\n                \"id\": \"d473c1b0-0740-4d08-95fe-31e5d0a9faff\",\n                \"name\": \"Hello World\",\n                \"description\": \"Simple script action for testing\",\n                \"type\": \"SCRIPT\",\n                \"fields\": [\n                  {\n                    \"name\": \"subtype\",\n                    \"description\": \"script subtype\",\n                    \"encoding\": \"base64\",\n                    \"value\": \"YmFzaA==\",\n                    \"secured\": false\n                  },\n                  {\n                    \"name\": \"script_ssh\",\n                    \"description\": \"script content\",\n                    \"encoding\": \"base64\",\n                    \"value\": \"ZWNobyBoZWxsbyB3b3JsZA==\",\n                    \"secured\": false\n                  },\n                  {\n                    \"name\": \"timeout\",\n                    \"description\": \"timeout of the action execution in seconds\",\n                    \"encoding\": \"ascii\",\n                    \"value\": \"\",\n                    \"secured\": false\n                  }\n                ],\n                \"inputParameters\": [],\n                \"tags\": [\n                  \"Test\"\n                ],\n                \"createdAt\": 1694442511.129923,\n                \"modifiedAt\": 1703191040.321448\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d6807627-2caf-4b4a-bd25-9f8c5ee42336",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Automation policy ID"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "195331ba-1ae7-4596-a9e9-4ba9d60caa37",
+              "name": "Automation policy not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Automation policy ID"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5e3c94c0-f9c0-4066-b32b-8e6401d2eeee",
+          "name": "Updates an automation policy by identifier.",
+          "request": {
+            "name": "Updates an automation policy by identifier.",
+            "description": {
+              "content": "Updates an automation policy by identifier. Policy updates requires `Configuration of automation policies` permission. When using personal tokens the automation policies updated are based on the access set in `Limited access` permission settings.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "automation",
+                "policies",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"trigger\": {\n    \"type\": \"<string>\",\n    \"description\": \"<string>\",\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"scheduling\": {\n      \"startTime\": \"<dateTime>\",\n      \"recurrentRule\": \"<string>\"\n    }\n  },\n  \"typeConfigurations\": [\n    {\n      \"name\": \"<string>\",\n      \"runnable\": {\n        \"id\": \"<string>\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"type\": \"<string>\"\n      },\n      \"condition\": {\n        \"query\": \"<string>\"\n      }\n    },\n    {\n      \"name\": \"<string>\",\n      \"runnable\": {\n        \"id\": \"<string>\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"type\": \"<string>\"\n      },\n      \"condition\": {\n        \"query\": \"<string>\"\n      }\n    }\n  ],\n  \"description\": \"<string>\",\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bf11b492-8d21-4a78-859d-af6e0f1dcfd3",
+              "name": "Automation policy successfully updated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"builtin-action-custom-event\",\n  \"trigger\": {\n    \"name\": \"test event\",\n    \"type\": \"customEvent\",\n    \"id\": \"2X5r-Un18MIE59rE\"\n  },\n  \"typeConfigurations\": [\n    {\n      \"name\": \"manual\",\n      \"runnable\": {\n        \"type\": \"action\",\n        \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"action\": {\n                \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\"\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"a14700b0-401b-47eb-a751-deda0035fde3\",\n  \"name\": \"Policy for test\",\n  \"description\": \"Policy for test\",\n  \"trigger\": {\n    \"type\": \"customEvent\",\n    \"id\": \"C3Ha8PffQHfJ0Hk6\",\n    \"name\": \"Test Event\"\n  },\n  \"typeConfigurations\": [\n    {\n      \"name\": \"manual\",\n      \"runnable\": {\n        \"type\": \"action\",\n        \"id\": \"d473c1b0-0740-4d08-95fe-31e5d0a9faff\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"action\": {\n                \"id\": \"d473c1b0-0740-4d08-95fe-31e5d0a9faff\",\n                \"name\": \"Hello World\",\n                \"description\": \"Simple script action for testing\",\n                \"type\": \"SCRIPT\",\n                \"fields\": [\n                  {\n                    \"name\": \"subtype\",\n                    \"description\": \"script subtype\",\n                    \"encoding\": \"base64\",\n                    \"value\": \"YmFzaA==\",\n                    \"secured\": false\n                  },\n                  {\n                    \"name\": \"script_ssh\",\n                    \"description\": \"script content\",\n                    \"encoding\": \"base64\",\n                    \"value\": \"ZWNobyBoZWxsbyB3b3JsZA==\",\n                    \"secured\": false\n                  },\n                  {\n                    \"name\": \"timeout\",\n                    \"description\": \"timeout of the action execution in seconds\",\n                    \"encoding\": \"ascii\",\n                    \"value\": \"\",\n                    \"secured\": false\n                  }\n                ],\n                \"inputParameters\": [],\n                \"tags\": [\n                  \"Test\"\n                ],\n                \"createdAt\": 1694442511.129923,\n                \"modifiedAt\": 1703191040.321448\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c56f4392-6a3e-4dd3-978b-d85d6f1ca625",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"builtin-action-custom-event\",\n  \"trigger\": {\n    \"name\": \"test event\",\n    \"type\": \"customEvent\",\n    \"id\": \"2X5r-Un18MIE59rE\"\n  },\n  \"typeConfigurations\": [\n    {\n      \"name\": \"manual\",\n      \"runnable\": {\n        \"type\": \"action\",\n        \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"action\": {\n                \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\"\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "aa3c0f27-26a6-4a89-9f74-95a2a72879c3",
+              "name": "Invalid input value.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"builtin-action-custom-event\",\n  \"trigger\": {\n    \"name\": \"test event\",\n    \"type\": \"customEvent\",\n    \"id\": \"2X5r-Un18MIE59rE\"\n  },\n  \"typeConfigurations\": [\n    {\n      \"name\": \"manual\",\n      \"runnable\": {\n        \"type\": \"action\",\n        \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"action\": {\n                \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\"\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Precondition Failed",
+              "code": 412,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d3e0e92d-589c-4578-99ef-afd6777022c9",
+              "name": "Server Error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "policies",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"builtin-action-custom-event\",\n  \"trigger\": {\n    \"name\": \"test event\",\n    \"type\": \"customEvent\",\n    \"id\": \"2X5r-Un18MIE59rE\"\n  },\n  \"typeConfigurations\": [\n    {\n      \"name\": \"manual\",\n      \"runnable\": {\n        \"type\": \"action\",\n        \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\",\n        \"runConfiguration\": {\n          \"actions\": [\n            {\n              \"action\": {\n                \"id\": \"c5ba4453-0bc2-3c3e-bdbe-b3ce68239145\"\n              }\n            }\n          ]\n        }\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Customer tenant unit",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "tenant",
+      "key": "tenant"
+    },
+    {
+      "description": {
+        "content": "Customer tenant name",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "unit",
+      "key": "unit"
+    },
+    {
+      "type": "string",
+      "value": "https://{{unit}}-{{tenant}}.instana.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "21c180ce-44b9-4736-aa23-77e35c3267b1",
+    "name": "Instana REST API documentation Policies API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n\n\nContact Support:\n Name: © Instana\n Email: support@instana.com",
+      "type": "text/plain"
+    }
+  }
+}

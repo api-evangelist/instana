@@ -1,0 +1,462 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Groups API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Groups",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/groups",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Retrieve the list of all groups on the tenant together with the `Permission Set` for the tenant unit.\n\nThe `Permission Set` object contains a set of permissions applied to the group.\n\nIn case `permissions` include the entry e.g. `LIMITED_APPLICATIONS_SCOPE`, this group will have limited access to application area.\n\nThe areas are included inside the `permissionSet`.\n\nThe scopeRoleId is a fixed value for each area type:\n\n| Area                    | value         |\n| ----------------------- | -----"
+        },
+        {
+          "info": {
+            "name": "Create group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/groups",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a group on the tenant. Each group entry also needs a `Permission Set` per unit.\n\nThe `Permission Set` object contains a set of permissions applied to the group.\n\nIn case `permissions` include the entry e.g. `LIMITED_APPLICATIONS_SCOPE`, this group will have limited access to application area.\n\nPossible access permissions values are:\n\n- `ACCESS_APPLICATIONS`\n- `ACCESS_INFRASTRUCTURE`\n- `ACCESS_KUBERNETES`\n- `ACCESS_MOBILE_APPS`\n- `ACCESS_WEBSITES`\n- `LIMITED_APPLICATIONS_SCOPE`\n- `LIMITED"
+        },
+        {
+          "info": {
+            "name": "Delete groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/groups/delete",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete multiple groups\nFor more information on groups please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#groups."
+        },
+        {
+          "info": {
+            "name": "Get groups of a single user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/groups/user/:email",
+            "params": [
+              {
+                "name": "email",
+                "value": "username@example.com",
+                "type": "path",
+                "description": "Email of the user for retrieval"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns a list of all groups a user belongs to. This includes data from these groups, the `members`, the `name` and the `Permission set`."
+        },
+        {
+          "info": {
+            "name": "Add permissions to group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/groups/:groupId/permissions",
+            "params": [
+              {
+                "name": "groupId",
+                "value": "groupId",
+                "type": "path",
+                "description": "Id of the group to add permissions"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Add a permission to a group. Permissions are strings associated with the group that some resources requires to fulfill requests.\n\nExamples of `Permissions`:\n\n- `ACCESS_APPLICATIONS`\n- `ACCESS_INFRASTRUCTURE`\n- `ACCESS_KUBERNETES`\n- `ACCESS_MOBILE_APPS`\n- `ACCESS_WEBSITES`\n- `CAN_CONFIGURE_AGENT_RUN_MODE`\n- `CAN_CONFIGURE_AGENTS`\n- `CAN_CONFIGURE_API_TOKENS`\n- `CAN_CONFIGURE_APPLICATIONS`\n- `CAN_CONFIGURE_AUTHENTICATION_METHODS`\n- `CAN_CONFIGURE_CUSTOM_ALERTS`\n- `CAN_CONFIGURE_EUM_APPLICATIONS`\n-"
+        },
+        {
+          "info": {
+            "name": "Add users to group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/groups/:groupId/users",
+            "params": [
+              {
+                "name": "groupId",
+                "value": "groupId",
+                "type": "path",
+                "description": "Id of the group to add users"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Add one or more users to a group. The array contains the ids of the users to be added."
+        },
+        {
+          "info": {
+            "name": "Get group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/groups/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "groupId",
+                "type": "path",
+                "description": "Id of the group for retrieval"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns group data, including the `Permission set`. See [get groups](#operation/getGroups) for more details."
+        },
+        {
+          "info": {
+            "name": "Update group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/groups/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "groupId",
+                "type": "path",
+                "description": "Id of the group to update"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Add a permission to a group. Permissions are strings associated with the group that some resources requires to fulfill requests.\n\nExamples of `Permissions`:\n\n- `ACCESS_APPLICATIONS`\n- `ACCESS_INFRASTRUCTURE`\n- `ACCESS_KUBERNETES`\n- `ACCESS_MOBILE_APPS`\n- `ACCESS_WEBSITES`\n- `CAN_CONFIGURE_AGENT_RUN_MODE`\n- `CAN_CONFIGURE_AGENTS`\n- `CAN_CONFIGURE_API_TOKENS`\n- `CAN_CONFIGURE_APPLICATIONS`\n- `CAN_CONFIGURE_AUTHENTICATION_METHODS`\n- `CAN_CONFIGURE_CUSTOM_ALERTS`\n- `CAN_CONFIGURE_EUM_APPLICATIONS`\n-"
+        },
+        {
+          "info": {
+            "name": "Delete group",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/groups/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "groupId",
+                "type": "path",
+                "description": "Id of the group to delete"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete the group data.\nFor more information on groups please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#groups."
+        },
+        {
+          "info": {
+            "name": "Remove user from group",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/groups/:id/user/:userId",
+            "params": [
+              {
+                "name": "id",
+                "value": "groupId",
+                "type": "path",
+                "description": "Id of the group to remove user from"
+              },
+              {
+                "name": "userId",
+                "value": "userId",
+                "type": "path",
+                "description": "Id of the user to remove"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Remove the user from a group.\nFor more information on groups please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#groups."
+        },
+        {
+          "info": {
+            "name": "Get all group mappings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/mappings",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "If mappings between groups on the identity provider (LDAP, OIDC, SAML) and Instana groups where configured, this will return a list of those mappings.\n\nThis can be configured through the [api](#operation/createGroupMapping) or on Instana graphical user interface at Settings > Authentication > IDENTITY PROVIDERS > Group Mapping."
+        },
+        {
+          "info": {
+            "name": "Create group mapping",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/mappings",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a mapping between a group from the IdP (LDAP, OIDC, SAML) and an Instana group.\n\nIf the IdP is configured and mappings are enabled, the `key` `value` pairs a user sent by the idp will be evaluated every time this user logs in.\n\nIf they match the mapping, the user will be assigned to the group corresponding to the `groupId`.\n\nInside the payload, the `id` for the mapping is ignored, and instead, Instana generates a new id."
+        },
+        {
+          "info": {
+            "name": "Delete multiple group mappings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/mappings/delete",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete multiple group mappings"
+        },
+        {
+          "info": {
+            "name": "Check user restrictions for empty Idp group mapping",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/mappings/identityProvider/restrictEmptyIdpGroups",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns `RestrictEmptyIdpGroups` value indicating if access is denied for empty Idp group mapping. `RestrictEmptyIdpGroups = true` indicates that the tenant is locked and only those users are allowed access that have at least one working mapping rule applied to them during the login process."
+        },
+        {
+          "info": {
+            "name": "Allow/Restrict users with empty Idp group mapping",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/mappings/identityProvider/restrictEmptyIdpGroups",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Set the RestrictEmptyIdpGroups value as true/false. See [Check user restrictions for empty Idp group mapping](#operation/getIdentityProviderPatch) for more details."
+        },
+        {
+          "info": {
+            "name": "Get all group mappings overview",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/mappings/overview",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all group mappings overview"
+        },
+        {
+          "info": {
+            "name": "Get group mapping",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/mappings/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get group mapping"
+        },
+        {
+          "info": {
+            "name": "Update group mapping",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/mappings/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "mappingId",
+                "type": "path",
+                "description": "Id of the group mapping to update"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "See [creating group mapping](#operation/createGroupMapping)"
+        },
+        {
+          "info": {
+            "name": "Delete group mapping",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/rbac/mappings/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "mappingId",
+                "type": "path",
+                "description": "Id of the group mapping to delete"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete group mapping"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

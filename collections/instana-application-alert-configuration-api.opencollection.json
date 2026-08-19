@@ -1,0 +1,298 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Application Alert Configuration API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Application Alert Configuration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all Smart Alert Configs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/application-alert-configs",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "IYS1XOEcTNiT1eOD8pxgXg",
+                "type": "query",
+                "description": "The ID of a specific Application."
+              },
+              {
+                "name": "alertIds",
+                "value": "IYS1XOEcTNiT1eOD8pxgXg",
+                "type": "query",
+                "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets all the Smart Alert Configurations pertaining to a specific application. Configurations are sorted by creation date in descending order.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Create Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/application-alert-configs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a new Smart Alert Configuration.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Get Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/application-alert-configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "DKp0JArJRAiQIav9CoKSWQ",
+                "type": "path",
+                "description": "ID of a specific Smart Alert Configuration to retrieve."
+              },
+              {
+                "name": "validOn",
+                "value": "1706617456952",
+                "type": "query",
+                "description": "A Unix timestamp representing a specific time the Configuration was active. If no timestamp is provided, the latest active version will be retrieved. "
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets a specific Smart Alert Configuration. This may return a deleted Configuration.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Update Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/application-alert-configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "DKp0JArJRAiQIav9CoKSWQ",
+                "type": "path",
+                "description": "ID of a specific Smart Alert Configuration to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Updates an existing Smart Alert Configuration.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Delete Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/application-alert-configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "DKp0JArJRAiQIav9CoKSWQ",
+                "type": "path",
+                "description": "ID of a specific Smart Alert Configuration to delete."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Deletes an Smart Alert Configuration.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Disable Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/application-alert-configs/:id/disable",
+            "params": [
+              {
+                "name": "id",
+                "value": "DKp0JArJRAiQIav9CoKSWQ",
+                "type": "path",
+                "description": "ID of a specific Smart Alert Configuration to disable."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Disables an Smart Alert Configuration.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Enable Application Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/application-alert-configs/:id/enable",
+            "params": [
+              {
+                "name": "id",
+                "value": "DKp0JArJRAiQIav9CoKSWQ",
+                "type": "path",
+                "description": "ID of a specific Smart Alert Configuration to enable."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Enables an Smart Alert Configuration.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Restore Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/application-alert-configs/:id/restore/:created",
+            "params": [
+              {
+                "name": "id",
+                "value": "DKp0JArJRAiQIav9CoKSWQ",
+                "type": "path",
+                "description": "ID of a specific Smart Alert Configuration to restore."
+              },
+              {
+                "name": "created",
+                "value": "1707726529124",
+                "type": "path",
+                "description": "Unix timestamp representing the creation time of a specific Smart Alert Configuration."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Restores a deleted Smart Alert Configuration.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Recalculate Smart Alert Config Baseline",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/application-alert-configs/:id/update-baseline",
+            "params": [
+              {
+                "name": "id",
+                "value": "DKp0JArJRAiQIav9CoKSWQ",
+                "type": "path",
+                "description": "ID of a specific Smart Alert Configuration to recalculate."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Recalculates and updates the historic baseline (static seasonal threshold) of a Configuration. The `LastUpdated` field of the Configuration is changed to the current time.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Get Smart Alert Config Versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/application-alert-configs/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "DKp0JArJRAiQIav9CoKSWQ",
+                "type": "path",
+                "description": "ID of a specific Smart Alert Configuration to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets all versions of an Smart Alert Configuration. This may return deleted Configurations. Configurations are sorted by creation date in descending order.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

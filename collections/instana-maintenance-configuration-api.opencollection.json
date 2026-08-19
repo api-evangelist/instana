@@ -1,0 +1,260 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Maintenance Configuration API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Maintenance Configuration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "All maintenance configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/maintenance",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nFor more information on Maintenance Configurations please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#maintenance-configurations."
+        },
+        {
+          "info": {
+            "name": "Maintenance configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/maintenance/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "MPhKWoXRp0PBelqk",
+                "type": "path",
+                "description": "ID of the Maintenance Window Configuration to get."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nFor more information on Maintenance Configurations please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#maintenance-configurations."
+        },
+        {
+          "info": {
+            "name": "Create or update maintenance configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/maintenance/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "MPhKWoXRp0PBelqk",
+                "type": "path",
+                "description": "ID of the Maintenance Window Configuration to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nFor more information on Maintenance Configurations please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#maintenance-configurations."
+        },
+        {
+          "info": {
+            "name": "Delete maintenance configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/maintenance/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "MPhKWoXRp0PBelqk",
+                "type": "path",
+                "description": "ID of the Maintenance Window Configuration to delete."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nFor more information on Maintenance Configurations please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#maintenance-configurations."
+        },
+        {
+          "info": {
+            "name": "All maintenance configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/v2/maintenance",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves all available maintenance configurations.  "
+        },
+        {
+          "info": {
+            "name": "Get maintenance configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/v2/maintenance/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "8924aa6b",
+                "type": "path",
+                "description": "Id of the Maintenance Window Configuration to get."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves a maintenance configuration given its ID.\n\n### Path Parameters:\n\n- **id:** The ID of the maintenance config to fetch."
+        },
+        {
+          "info": {
+            "name": "Create or update maintenance configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/v2/maintenance/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "8924aa6b",
+                "type": "path",
+                "description": "Id of the Maintenance Window configuration to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint creates or updates a maintenance configuration given its ID.\n\n### Path Parameters:\n\n- **id:** The ID of the maintenance config to create or update.\n\n### Maintenance Configuration Input\nThis is a description for the fields in the request body:\n\n**id**: maintenance configuration unique id  \n**name**: maintenance configuration name  \n**query**: dynamic focus query used to filter alert notifications that will be muted  \n**scheduling**: defines when the maintenance configuration will be"
+        },
+        {
+          "info": {
+            "name": "Delete maintenance configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/v2/maintenance/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "8924aa6b",
+                "type": "path",
+                "description": "Id of the Maintenance Window configuration to delete."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint deletes a maintenance configuration given its ID.\n\n### Path Parameters:\n\n- **id:** The ID of the maintenance config to delete."
+        },
+        {
+          "info": {
+            "name": "Pause maintenance configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/v2/maintenance/:id/pause",
+            "params": [
+              {
+                "name": "id",
+                "value": "8924aa6b",
+                "type": "path",
+                "description": "Id of the Maintenance Window configuration to pause."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint pauses a maintenance configuration given its ID.\n\nWhen you pause a maintenance configuration, you will start receiving alerts again for the scope defined in the maintenance configuration.\n### Path Parameters:\n\n- **id:** The ID of the maintenance config to pause.\n"
+        },
+        {
+          "info": {
+            "name": "Resume maintenance configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/v2/maintenance/:id/resume",
+            "params": [
+              {
+                "name": "id",
+                "value": "8924aa6b",
+                "type": "path",
+                "description": "Id of the Maintenance Window configuration to resume."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint resumes a maintenance configuration given its ID.\n\nIf the maintenance configuration becomes active when you resume the maintenance configuration, you will not receive alerts for the scope defined in the maintenance configuration.\n### Path Parameters:\n\n- **id:** The ID of the maintenance config to resume.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

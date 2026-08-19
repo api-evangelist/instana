@@ -1,0 +1,181 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Policies API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Policies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all automation policies.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/policies",
+            "params": [
+              {
+                "name": "triggerType",
+                "value": "",
+                "type": "query",
+                "description": "Filter policies by the event or alert type that can trigger a policy. This is an optional parameter. Valid values are customEvent, builtinEvent, applicationSmartAlert, globalApplicationSmartAlert, websiteSmartAlert, infraSmartAlert, mobileAppSmartAlert, syntheticsSmartAlert, logSmartAlert, sloSmartAlert"
+              },
+              {
+                "name": "triggerId",
+                "value": "",
+                "type": "query",
+                "description": "Trigger identifier. This is an optional parameter."
+              },
+              {
+                "name": "executionType",
+                "value": "",
+                "type": "query",
+                "description": "Filter policies by policy execution type. This is an optional parameter.  Valid values are automatic or manual"
+              },
+              {
+                "name": "actionId",
+                "value": "",
+                "type": "query",
+                "description": "Filter policies by action ID. This is an optional parameter."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns all the automation policies filtered by the values in optional query parameters. When using personal access tokens, the user must have at least `Viewer` access for Automation and the automation policies returned are also filtered based on the access set in `Limited access` permission settings."
+        },
+        {
+          "info": {
+            "name": "Create an automation policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/policies",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a new automation policy. Policy creation requires `Configuration of automation policies` permission."
+        },
+        {
+          "info": {
+            "name": "Create automation policies.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/policies/bulk",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a list of automation policies. Policy creation requires `Configuration of automation policies` permission."
+        },
+        {
+          "info": {
+            "name": "Get an automation policy by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/policies/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "a14700b0-401b-47eb-a751-deda0035fde3",
+                "type": "path",
+                "description": "Automation policy ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns the automation policy filtered by the ID in request parameter. When using personal access tokens, the user must have at least `Viewer` access for Automation and the automation policies returned are also filtered based on the access set in `Limited access` permission settings."
+        },
+        {
+          "info": {
+            "name": "Updates an automation policy by identifier.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/policies/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Updates an automation policy by identifier. Policy updates requires `Configuration of automation policies` permission. When using personal tokens the automation policies updated are based on the access set in `Limited access` permission settings."
+        },
+        {
+          "info": {
+            "name": "Deletes an automation policy by identifier.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/policies/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "a14700b0-401b-47eb-a751-deda0035fde3",
+                "type": "path",
+                "description": "Automation policy ID to delete"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Deletes an automation policy by identifier. Policy deletion requires `Configuration of automation policies` permission. When using personal tokens the automation policies deleted are based on the access set in `Limited access` permission settings."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

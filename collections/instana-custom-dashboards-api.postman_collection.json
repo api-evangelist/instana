@@ -1,0 +1,1290 @@
+{
+  "item": [
+    {
+      "id": "258f8616-1e2e-432a-9c21-c44ce50728b1",
+      "name": "Custom Dashboards",
+      "description": {
+        "content": "You can use these API endpoints to manage custom dashboards. We recommend\nthat you leverage the `Edit as JSON` feature found within our user interface\nto construct the desired request payloads. Specifically to help you build\ncorrect widget configurations and access rules.\n\nTo identify the correct values for the `relatedId` field of the access rules,\nwe recommend using the `/api/custom-dashboard/shareable-users` and\n`/api/custom-dashboard/shareable-api-tokens` endpoints. These endpoints return\nour internal IDs for users and API tokens.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6c171c65-f78f-42c9-a75c-81f77c03c156",
+          "name": "Get accessible custom dashboards",
+          "request": {
+            "name": "Get accessible custom dashboards",
+            "description": {
+              "content": "Get all accessible custom dashboards details.\nFor more information on custom dashboards please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#custom-dashboards.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "custom-dashboard"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>",
+                  "description": "query"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<integer>",
+                  "description": "pageSize"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "page"
+                },
+                {
+                  "disabled": false,
+                  "key": "withTotalHits",
+                  "value": "<boolean>",
+                  "description": "withTotalHits"
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c541d8d4-c90f-42ae-9c3e-91ae84a0a1e4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-dashboard"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "BeeInstana"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "2"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "withTotalHits",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"gBtvG96xRpScauwsclG-KA\",\n    \"title\": \"BeeInstana - aggregator\",\n    \"annotations\": [\n      \"SHARED\"\n    ]\n  },\n  {\n    \"id\": \"UtaUyPjGSTOAmPFICSbwqw\",\n    \"title\": \"BeeInstana - alerting\",\n    \"annotations\": [\n      \"SHARED\"\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "64ddac1b-a146-4ecf-9f83-65bf85061968",
+          "name": "Add custom dashboard",
+          "request": {
+            "name": "Add custom dashboard",
+            "description": {
+              "content": "\nFor more information on custom dashboards please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#custom-dashboards.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "custom-dashboard"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accessRules\": [\n    {\n      \"accessType\": \"<string>\",\n      \"relationType\": \"<string>\",\n      \"relatedId\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"widgets\": [\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6e382b86-9a80-4d66-a62d-585d4f5c3518",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-dashboard"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accessRules\": [\n    {\n      \"accessType\": \"<string>\",\n      \"relationType\": \"<string>\",\n      \"relatedId\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"widgets\": [\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accessRules\": [\n    {\n      \"accessType\": \"<string>\",\n      \"relationType\": \"<string>\",\n      \"relatedId\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"widgets\": [\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d51e6954-fd4f-4c2b-8ea4-1f755e9f7593",
+              "name": "When attempting to share dashboards without the canCreatePublicCustomDashboards permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-dashboard"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accessRules\": [\n    {\n      \"accessType\": \"<string>\",\n      \"relationType\": \"<string>\",\n      \"relatedId\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"widgets\": [\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "693d3721-6fb0-48e5-8305-3c5ebc0bc041",
+              "name": "When the custom dashboard payload is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-dashboard"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accessRules\": [\n    {\n      \"accessType\": \"<string>\",\n      \"relationType\": \"<string>\",\n      \"relatedId\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"widgets\": [\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "08d70e34-0d17-4234-af4c-12d5abd36828",
+          "name": "Get all API tokens.",
+          "request": {
+            "name": "Get all API tokens.",
+            "description": {
+              "content": "Get all API tokens that have access to shareable custom dashboards.\nFor more information on custom dashboards please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#custom-dashboards.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "custom-dashboard",
+                "shareable-api-tokens"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fbea2ea0-f71f-4f84-9d10-b57504cb4af2",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-dashboard",
+                    "shareable-api-tokens"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"foJfJVpyS5eAQAhfxSRctw\",\n    \"name\": \"New API Token\"\n  },\n  {\n    \"id\": \"O_OKWG48S2WemaL_e3j_vQ\",\n    \"name\": \"New API Token\"\n  },\n  {\n    \"id\": \"ATBzggrzTE-aRpUMBLmG9g\",\n    \"name\": \"New API Token\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e3b64f1f-b1c8-4e6e-98cc-ed07280789ad",
+          "name": "Get all users (without invitations).",
+          "request": {
+            "name": "Get all users (without invitations).",
+            "description": {
+              "content": "Get all users (without invitations) that have access to shareable custom dashboards.\nFor more information on custom dashboards please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#custom-dashboards.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "custom-dashboard",
+                "shareable-users"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9ba9432b-7b85-4a73-9017-45f9b8ac684b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-dashboard",
+                    "shareable-users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"63721be55108940001ead6fa\",\n    \"email\": \"JohnMcClane@instana.com\",\n    \"fullName\": \"John McClane\"\n  },\n  {\n    \"id\": \"6360a5ad034a430001c500d0\",\n    \"email\": \"HansGruber@instana.com\",\n    \"fullName\": \"Hans Gruber\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "07160a30-0411-4b23-b5f2-8c589972a29f",
+          "name": "Remove custom dashboard",
+          "request": {
+            "name": "Remove custom dashboard",
+            "description": {
+              "content": "\nFor more information on custom dashboards please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#custom-dashboards.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "custom-dashboard",
+                ":customDashboardId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "customDashboardId",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b558922b-e394-48d2-b1d7-da2fe7f8aa92",
+              "name": "Custom dashboard successfully removed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-dashboard",
+                    ":customDashboardId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customDashboardId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e667c49f-15e5-474f-83ad-027701004912",
+          "name": "Get custom dashboard",
+          "request": {
+            "name": "Get custom dashboard",
+            "description": {
+              "content": "Get all Custom Dashboard Info for specified customDashboardId.\nFor more information on custom dashboards please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#custom-dashboards.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "custom-dashboard",
+                ":customDashboardId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "customDashboardId",
+                  "description": "(Required) customDashboardId"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0e47de15-dc12-4e9c-b0c5-b93d99d5c932",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-dashboard",
+                    ":customDashboardId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customDashboardId",
+                      "description": "(Required) customDashboardId"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\n  \\\"id\\\": \\\"alHaYV5aSkKku_wcg53teQ\\\",\\n  \\\"title\\\": \\\"{string}\\\",\\n  \\\"accessRules\\\": [\\n    {\\n      \\\"accessType\\\": \\\"READ_WRITE\\\",\\n      \\\"relationType\\\": \\\"USER\\\",\\n      \\\"relatedId\\\": \\\"5ee8a3e8cd70020001ecb007\\\"\\n    },\\n    {\\n      \\\"accessType\\\": \\\"READ\\\",\\n      \\\"relationType\\\": \\\"GLOBAL\\\",\\n      \\\"relatedId\\\": null\\n    }\\n  ],\\n  \\\"widgets\\\": [\\n    {\\n      \\\"id\\\": \\\"dIxxq0LCdqZomve2\\\",\\n      \\\"title\\\": \\\"SUM of bytes received for a particular container\\\",\\n      \\\"width\\\": 2,\\n      \\\"height\\\": 4,\\n      \\\"x\\\": 0,\\n      \\\"y\\\": 0,\\n      \\\"type\\\": \\\"bigNumber\\\",\\n      \\\"config\\\": {\\n        \\\"formatter\\\": \\\"bytes.detailed\\\",\\n        \\\"comparisonDecreaseColor\\\": \\\"greenish\\\",\\n        \\\"metricConfiguration\\\": {\\n          \\\"metric\\\": \\\"network.rx.bytes\\\",\\n          \\\"timeShift\\\": 0,\\n          \\\"tagFilterExpression\\\": {\\n            \\\"name\\\": \\\"docker.containerId\\\",\\n            \\\"type\\\": \\\"TAG_FILTER\\\",\\n            \\\"value\\\": \\\"faaa7f1732d16faa7fc27a0cb49fdf5c07716f3d3be1315e20f24d099657bbe0\\\",\\n            \\\"entity\\\": \\\"NOT_APPLICABLE\\\",\\n            \\\"operator\\\": \\\"EQUALS\\\"\\n          },\\n          \\\"aggregation\\\": \\\"SUM\\\",\\n          \\\"source\\\": \\\"INFRASTRUCTURE_METRICS\\\",\\n          \\\"crossSeriesAggregation\\\": \\\"SUM\\\",\\n          \\\"type\\\": \\\"docker\\\"\\n        },\\n        \\\"comparisonIncreaseColor\\\": \\\"redish\\\"\\n      }\\n    }\\n  ],\\n  \\\"writable\\\": true,\\n  \\\"ownerId\\\": {string}\\n}\\n\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9a3ec84c-7060-4f44-a499-85eb6cd5e7e7",
+          "name": "Update custom dashboard",
+          "request": {
+            "name": "Update custom dashboard",
+            "description": {
+              "content": "\nFor more information on custom dashboards please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#custom-dashboards.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "custom-dashboard",
+                ":customDashboardId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "customDashboardId",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accessRules\": [\n    {\n      \"accessType\": \"<string>\",\n      \"relationType\": \"<string>\",\n      \"relatedId\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"widgets\": [\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    },\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1faca6ce-c51d-4777-9d87-b0318136d628",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-dashboard",
+                    ":customDashboardId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customDashboardId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accessRules\": [\n    {\n      \"accessType\": \"<string>\",\n      \"relationType\": \"<string>\",\n      \"relatedId\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"widgets\": [\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accessRules\": [\n    {\n      \"accessType\": \"<string>\",\n      \"relationType\": \"<string>\",\n      \"relatedId\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"widgets\": [\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fdc7a32a-fcdb-4af3-afa7-a1bebfaaca85",
+              "name": "When attempting to share dashboards without the canCreatePublicCustomDashboards permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-dashboard",
+                    ":customDashboardId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customDashboardId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accessRules\": [\n    {\n      \"accessType\": \"<string>\",\n      \"relationType\": \"<string>\",\n      \"relatedId\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"widgets\": [\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "343052a5-19d5-4bca-b842-fa23fbcea075",
+              "name": "When the custom dashboard payload is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-dashboard",
+                    ":customDashboardId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customDashboardId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accessRules\": [\n    {\n      \"accessType\": \"<string>\",\n      \"relationType\": \"<string>\",\n      \"relatedId\": \"<string>\"\n    }\n  ],\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"widgets\": [\n    {\n      \"config\": \"<object>\",\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"height\": \"<integer>\",\n      \"title\": \"<string>\",\n      \"width\": \"<integer>\",\n      \"x\": \"<integer>\",\n      \"y\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Customer tenant unit",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "tenant",
+      "key": "tenant"
+    },
+    {
+      "description": {
+        "content": "Customer tenant name",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "unit",
+      "key": "unit"
+    },
+    {
+      "type": "string",
+      "value": "https://{{unit}}-{{tenant}}.instana.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "5bf8b8ce-1923-4ea2-b99a-a59702739e2d",
+    "name": "Instana REST API documentation Custom Dashboards API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n\n\nContact Support:\n Name: © Instana\n Email: support@instana.com",
+      "type": "text/plain"
+    }
+  }
+}

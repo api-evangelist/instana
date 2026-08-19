@@ -1,0 +1,80 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Infrastructure Topology API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Infrastructure Topology",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Related hosts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/graph/related-hosts/:snapshotId",
+            "params": [
+              {
+                "name": "snapshotId",
+                "value": "",
+                "type": "path",
+                "description": "Snapshot ID running on the host"
+              },
+              {
+                "name": "windowSize",
+                "value": "",
+                "type": "query",
+                "description": "Size of time window in milliseconds"
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Timestamp since Unix Epoch in milliseconds of the end of the time window"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets the Related Hosts"
+        },
+        {
+          "info": {
+            "name": "Gets the infrastructure topology",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/topology",
+            "params": [
+              {
+                "name": "includeData",
+                "value": "",
+                "type": "query",
+                "description": "Include snapshot data in nodes"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets the infrastructure topology"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

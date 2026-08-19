@@ -1,0 +1,257 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Log Alert Configuration API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Log Alert Configuration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "All Log Alert Configs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/logs",
+            "params": [
+              {
+                "name": "alertIds",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Configs are sorted descending by their created date."
+        },
+        {
+          "info": {
+            "name": "Create Log Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/logs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create Log Alert Config"
+        },
+        {
+          "info": {
+            "name": "Get Log Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/logs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "validOn",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Find a Log Alert Config by ID. This will deliver deleted configs too."
+        },
+        {
+          "info": {
+            "name": "Update Log Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/logs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update Log Alert Config"
+        },
+        {
+          "info": {
+            "name": "Delete Log Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/logs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete Log Alert Config"
+        },
+        {
+          "info": {
+            "name": "Disable Log Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/logs/:id/disable",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Disable Log Alert Config"
+        },
+        {
+          "info": {
+            "name": "Enable Log Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/logs/:id/enable",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Enable Log Alert Config"
+        },
+        {
+          "info": {
+            "name": "Restore Log Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/logs/:id/restore/:created",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "created",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Restore Log Alert Config"
+        },
+        {
+          "info": {
+            "name": "Get versions of Log Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/logs/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Find all versions of a Log Alert Config by ID. This will deliver deleted configs too. Configs are sorted descending by their created date."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

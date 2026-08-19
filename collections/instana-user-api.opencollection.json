@@ -1,0 +1,231 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation User API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "User",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Send user invitations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/invitation/share",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This API endpoint allows to invite users to this tenant.  \nEach user requires the email address and the group to which the user will be added initially.  \n\nInviting users whilst an IdP is configured will always result in failures, as in this case users will be provisioned during the login based on the IdP configuration.  \nDuring the IdP configurations all pending invitations are automatically revoked.\n\nInviting users who are already members of the tenant will also provide an error result.  "
+        },
+        {
+          "info": {
+            "name": "All pending invitations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/invitations",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This API endpoint retrieves the list of all pending invitations.  \nDuring the IdP configuration all pending invitations will be dismissed and whilst an IdP is configured invitations are prevented.  "
+        },
+        {
+          "info": {
+            "name": "Send user invitations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/invitations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This API endpoint allows to invite users to this tenant.  \nEach user requires the email address and the group to which the user will be added initially.  \n\nInviting users whilst an IdP is configured will always result in failures, as in this case users will be provisioned during the login based on the IdP configuration.  \nDuring the IdP configurations all pending invitations are automatically revoked.\n\nInviting users who are already members of the tenant will also provide an error result.  "
+        },
+        {
+          "info": {
+            "name": "Revoke pending invitation",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/invitations",
+            "params": [
+              {
+                "name": "email",
+                "value": "username@example.com",
+                "type": "query",
+                "description": "Email of the invite for removal"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This API endpoint allows to delete an invitation, requires the users’ email as a Query parameter.\n"
+        },
+        {
+          "info": {
+            "name": "All users (without invitations)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/users",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Retrieves all users with access to the tenant. The result will not contain pending invitations."
+        },
+        {
+          "info": {
+            "name": "Remove users from tenant",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/users/delete",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Remove multiple users access to the tenant. Removing a user from a tenant does not delete their user account."
+        },
+        {
+          "info": {
+            "name": "All users (incl. invitations)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/users/overview",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Retrieves all users with access to the tenant. The result will also contain pending invitations."
+        },
+        {
+          "info": {
+            "name": "Change user name of single user",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/users/:email",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Updates the full name of the user."
+        },
+        {
+          "info": {
+            "name": "Get single user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/users/:userId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "userId",
+                "type": "path",
+                "description": "Id of the user for retrieval"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Retrieves the user with access to the tenant."
+        },
+        {
+          "info": {
+            "name": "Remove user from tenant",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/users/:userId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "userId",
+                "type": "path",
+                "description": "Id of the user for removal"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Remove the users access to the tenant. Removing a user from a tenant does not delete their user account."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

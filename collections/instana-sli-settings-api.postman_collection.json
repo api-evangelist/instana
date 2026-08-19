@@ -1,0 +1,1642 @@
+{
+  "item": [
+    {
+      "id": "169dc47e-0d7b-4396-88ef-e84499e8f40e",
+      "name": "SLI Settings",
+      "description": {
+        "content": "## Deprecated Parameters\n**tagFilters** The list of tag filters. It is replaced by **tagFilterExpression**",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3c5abccc-2929-40df-b703-94e541f5d07b",
+          "name": "Get All SLI Configs",
+          "request": {
+            "name": "Get All SLI Configs",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "sli"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e6021c0c-96c0-495e-a81c-dfca79294825",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "sli"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"3J0RDgfyQz-P_hVzbNNb4A\",\n  \"sliName\": \"test-application-sli\",\n  \"initialEvaluationTimestamp\": 1732017600000,\n  \"metricConfiguration\": {\n    \"metricName\": \"latency\",\n    \"metricAggregation\": \"P90\",\n    \"threshold\": 555\n  },\n  \"sliEntity\": {\n    \"sliType\": \"application\",\n    \"applicationId\": \"btg-B709IU6o9QNXUS4TVw\",\n    \"serviceId\": null,\n    \"endpointId\": null,\n    \"boundaryScope\": \"INBOUND\"\n  },\n  \"lastUpdated\": 1732017541059\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4f2d5f42-6789-4b85-9d1c-ca027b46d6b5",
+          "name": "Create SLI Config",
+          "request": {
+            "name": "Create SLI Config",
+            "description": {
+              "content": "This endpoint creates the Service Level Indicator Configuration\n\n## Mandatory Parameters:\n\n- **id** A unique identifier for each SLI configuration\n\n- **sliName:** Name for the SLI configuration\n\n- **sliEntity:** Entity of the SLI configuration\n\n### SLI Entity specific parameters\n\nDepending on the chosen `sliType` in the `sliEntity`, there are further required parameters:\n\n#### Application SLI entity\n\nThis option can be used to create a Time-Based SLI\n\n- **sliEntity.applicationId:** The Id of the Application Perspective\n\n- **sliEntity.boundaryScope:** Boundary scope of the Application Perspective\n\n- **metricConfiguration.metricName:** The metric name on which to compute the SLI\n\n- **metricConfiguration.metricAggregation:** The aggregation of the metric\n\n- **metricConfiguration.threshold:** Threshold for the metric\n\n#### Availability SLI entity\n\nThis opetion can be used to create an Event-Based SLI\n\n- **sliEntity.applicationId:** The Id of the Application Perspective\n\n- **sliEntity.boundaryScope:** Boundary scope of the Application Perspective\n\n## Deprecated Parameters for Availability SLI entity:\n\n- **sliEntity.serviceId:** The ID if the Service in he context of an Application Perspective\n\n- **sliEntity.endpointId:** The ID of an Endpoint belonging to a Service\n\n- **sliEntity.goodEventFilters:** The list of TagFilters to match good events / calls\n\n- **sliEntity.badEventFilters:** The list of TagFilters to match bad events / calls\n\nAll of these filters can be included using the list of TagFilterExpressions via **sliEntity.goodEventFilterExpression** and **sliEntity.badEventFilterExpression**.\nThese parameters will be removed in the upcoming releases.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "sli"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"sliEntity\": {\n    \"sliType\": \"<string>\"\n  },\n  \"sliName\": \"<string>\",\n  \"initialEvaluationTimestamp\": \"<long>\",\n  \"metricConfiguration\": {\n    \"metricName\": \"<string>\",\n    \"metricAggregation\": \"<string>\",\n    \"threshold\": \"<double>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f6a7a157-9ceb-410c-b521-0d1b13ba109e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "sli"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sliName\": \"test-application-sli\",\n  \"metricConfiguration\": {\n    \"metricName\": \"latency\",\n    \"metricAggregation\": \"P90\",\n    \"threshold\": 555\n  },\n  \"sliEntity\": {\n    \"sliType\": \"application\",\n    \"applicationId\": \"btg-B709IU6o9QNXUS4TVw\",\n    \"serviceId\": null,\n    \"endpointId\": null,\n    \"boundaryScope\": \"INBOUND\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"3J0RDgfyQz-P_hVzbNNb4A\",\n  \"sliName\": \"test-application-sli\",\n  \"initialEvaluationTimestamp\": 1732017600000,\n  \"metricConfiguration\": {\n    \"metricName\": \"latency\",\n    \"metricAggregation\": \"P90\",\n    \"threshold\": 555\n  },\n  \"sliEntity\": {\n    \"sliType\": \"application\",\n    \"applicationId\": \"btg-B709IU6o9QNXUS4TVw\",\n    \"serviceId\": null,\n    \"endpointId\": null,\n    \"boundaryScope\": \"INBOUND\"\n  },\n  \"lastUpdated\": 1732017541059\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "66bdb667-797d-4ff4-be04-53d8bf33c455",
+          "name": "Delete SLI Config",
+          "request": {
+            "name": "Delete SLI Config",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "sli",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b38311bd-1b68-4f69-852d-80da45e85831",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "sli",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "deaee3a3-3069-441f-bba5-692c62f5e3f4",
+          "name": "Get SLI Config",
+          "request": {
+            "name": "Get SLI Config",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "sli",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "05e461a5-b4bc-47be-8fc8-bbf9b74a7e69",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "sli",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"3J0RDgfyQz-P_hVzbNNb4A\",\n  \"sliName\": \"test-application-sli\",\n  \"initialEvaluationTimestamp\": 1732017600000,\n  \"metricConfiguration\": {\n    \"metricName\": \"latency\",\n    \"metricAggregation\": \"P90\",\n    \"threshold\": 555\n  },\n  \"sliEntity\": {\n    \"sliType\": \"application\",\n    \"applicationId\": \"btg-B709IU6o9QNXUS4TVw\",\n    \"serviceId\": null,\n    \"endpointId\": null,\n    \"boundaryScope\": \"INBOUND\"\n  },\n  \"lastUpdated\": 1732017541059\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bebb8806-ad02-4cb7-9992-0ec7a74d27ca",
+          "name": "Update SLI Config",
+          "request": {
+            "name": "Update SLI Config",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "sli",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"sliEntity\": {\n    \"sliType\": \"<string>\"\n  },\n  \"sliName\": \"<string>\",\n  \"initialEvaluationTimestamp\": \"<long>\",\n  \"metricConfiguration\": {\n    \"metricName\": \"<string>\",\n    \"metricAggregation\": \"<string>\",\n    \"threshold\": \"<double>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0daff9de-bc1c-44fa-850a-b76e306a141d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "sli",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"3J0RDgfyQz-P_hVzbNNb4A\",\n  \"sliName\": \"test-application-sli\",\n  \"initialEvaluationTimestamp\": 1732017600000,\n  \"metricConfiguration\": {\n    \"metricName\": \"latency\",\n    \"metricAggregation\": \"P90\",\n    \"threshold\": 555\n  },\n  \"sliEntity\": {\n    \"sliType\": \"application\",\n    \"applicationId\": \"btg-B709IU6o9QNXUS4TVw\",\n    \"serviceId\": null,\n    \"endpointId\": null,\n    \"boundaryScope\": \"INBOUND\"\n  },\n  \"lastUpdated\": 1732017541059\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"3J0RDgfyQz-P_hVzbNNb4A\",\n  \"sliName\": \"test-application-sli\",\n  \"initialEvaluationTimestamp\": 1732017600000,\n  \"metricConfiguration\": {\n    \"metricName\": \"latency\",\n    \"metricAggregation\": \"P90\",\n    \"threshold\": 555\n  },\n  \"sliEntity\": {\n    \"sliType\": \"application\",\n    \"applicationId\": \"btg-B709IU6o9QNXUS4TVw\",\n    \"serviceId\": null,\n    \"endpointId\": null,\n    \"boundaryScope\": \"INBOUND\"\n  },\n  \"lastUpdated\": 1732017541059\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "969c8bc1-2f05-4d55-a67c-e1ba95457bf2",
+          "name": "Get All SLI Configs",
+          "request": {
+            "name": "Get All SLI Configs",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "v2",
+                "sli"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "207353cc-3264-4e3b-b6f6-302d30ffba2a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "sli"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"T0yCMBR4G\",\n    \"sliName\": \"Siva SLI test\",\n    \"initialEvaluationTimestamp\": 1637758860000,\n    \"metricConfiguration\": {\n      \"metricName\": \"latency\",\n      \"metricAggregation\": \"P90\",\n      \"threshold\": 100\n    },\n    \"sliEntity\": {\n      \"sliType\": \"application\",\n      \"applicationId\": \"1qvXgVfLTNqi8gGTcCaNUw\",\n      \"serviceId\": \"6097d596c3d9024034b3d03b2b5c43acea65e5a4\",\n      \"endpointId\": \"oETFj2WyPusvXgRW_181J3fH_t8\",\n      \"boundaryScope\": \"INBOUND\"\n    },\n    \"lastUpdated\": 1637758839104\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a9369cac-e867-4e76-8d8a-d30eda4356f0",
+          "name": "Create SLI Config",
+          "request": {
+            "name": "Create SLI Config",
+            "description": {
+              "content": "This endpoint creates the Service Level Indicator Configuration\n\n## Mandatory Parameters:\n\n- **id** A unique identifier for each SLI configuration\n\n- **sliName:** Name for the SLI configuration\n\n- **sliEntity:** Entity of the SLI configuration\n\n### SLI Entity specific parameters\n\nDepending on the chosen `sliType` in the `sliEntity`, there are further required parameters:\n\n#### Application SLI entity\n\nThis option can be used to create a Time-Based SLI\n\n- **sliEntity.applicationId:** The Id of the Application Perspective\n\n- **sliEntity.boundaryScope:** Boundary scope of the Application Perspective\n\n- **metricConfiguration.metricName:** The metric name on which to compute the SLI\n\n- **metricConfiguration.metricAggregation:** The aggregation of the metric\n\n- **metricConfiguration.threshold:** Threshold for the metric\n\n#### Availability SLI entity\n\nThis opetion can be used to create an Event-Based SLI\n\n- **sliEntity.applicationId:** The Id of the Application Perspective\n\n- **sliEntity.boundaryScope:** Boundary scope of the Application Perspective\n\n## Deprecated Parameters for Availability SLI entity:\n\n- **sliEntity.serviceId:** The ID if the Service in he context of an Application Perspective\n\n- **sliEntity.endpointId:** The ID of an Endpoint belonging to a Service\n\n- **sliEntity.goodEventFilters:** The list of TagFilters to match good events / calls\n\n- **sliEntity.badEventFilters:** The list of TagFilters to match bad events / calls\n\nAll of these filters can be included using the list of TagFilterExpressions via **sliEntity.goodEventFilterExpression** and **sliEntity.badEventFilterExpression**.\nThese parameters will be removed in the upcoming releases.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "v2",
+                "sli"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"sliEntity\": {\n    \"sliType\": \"<string>\"\n  },\n  \"sliName\": \"<string>\",\n  \"initialEvaluationTimestamp\": \"<long>\",\n  \"metricConfiguration\": {\n    \"metricName\": \"<string>\",\n    \"metricAggregation\": \"<string>\",\n    \"threshold\": \"<double>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "04317283-01e8-4e1d-b10b-5c499c9eb057",
+              "name": "New SLI Configuration Created Successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "sli"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sliName\": \"test-application-sli\",\n  \"metricConfiguration\": {\n    \"metricName\": \"latency\",\n    \"metricAggregation\": \"P90\",\n    \"threshold\": 555\n  },\n  \"sliEntity\": {\n    \"sliType\": \"application\",\n    \"applicationId\": \"btg-B709IU6o9QNXUS4TVw\",\n    \"serviceId\": null,\n    \"endpointId\": null,\n    \"boundaryScope\": \"INBOUND\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"3J0RDgfyQz-P_hVzbNNb4A\",\n  \"sliName\": \"test-application-sli\",\n  \"initialEvaluationTimestamp\": 1732017600000,\n  \"metricConfiguration\": {\n    \"metricName\": \"latency\",\n    \"metricAggregation\": \"P90\",\n    \"threshold\": 555\n  },\n  \"sliEntity\": {\n    \"sliType\": \"application\",\n    \"applicationId\": \"btg-B709IU6o9QNXUS4TVw\",\n    \"serviceId\": null,\n    \"endpointId\": null,\n    \"boundaryScope\": \"INBOUND\"\n  },\n  \"lastUpdated\": 1732017541059\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5cba2e63-81a0-4fc6-b924-d701644bb3b8",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "sli"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sliName\": \"test-application-sli\",\n  \"metricConfiguration\": {\n    \"metricName\": \"latency\",\n    \"metricAggregation\": \"P90\",\n    \"threshold\": 555\n  },\n  \"sliEntity\": {\n    \"sliType\": \"application\",\n    \"applicationId\": \"btg-B709IU6o9QNXUS4TVw\",\n    \"serviceId\": null,\n    \"endpointId\": null,\n    \"boundaryScope\": \"INBOUND\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"errors\\\":[\\\"Unknown tag filter: call.eron\\\"]}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "21db232e-057c-495e-b125-62ce9e8e4db9",
+              "name": "Unprocessable Entity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "sli"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sliName\": \"test-application-sli\",\n  \"metricConfiguration\": {\n    \"metricName\": \"latency\",\n    \"metricAggregation\": \"P90\",\n    \"threshold\": 555\n  },\n  \"sliEntity\": {\n    \"sliType\": \"application\",\n    \"applicationId\": \"btg-B709IU6o9QNXUS4TVw\",\n    \"serviceId\": null,\n    \"endpointId\": null,\n    \"boundaryScope\": \"INBOUND\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"errors\\\":[\\\"sliEntity.entityId must not be blank\\\"]}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "95ff6f72-7516-4974-aedc-e4a2c3d31836",
+          "name": "Get all SLI configs for entity type and entity id",
+          "request": {
+            "name": "Get all SLI configs for entity type and entity id",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "v2",
+                "sli",
+                ":entityType",
+                ":entityId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entityType",
+                  "description": "(Required) Type of the Entity, whether it is an application or website"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entityId",
+                  "description": "(Required) Unique ID of the Entity"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a810ff66-ef88-4f0a-b696-6f8e464bb7ab",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "sli",
+                    ":entityType",
+                    ":entityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) Type of the Entity, whether it is an application or website"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique ID of the Entity"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"HXcNRWhDSWiZs3HiUAKr7g\",\n    \"sliName\": \"turbo time 1\",\n    \"initialEvaluationTimestamp\": 1648133520000,\n    \"metricConfiguration\": {\n      \"metricName\": \"latency\",\n      \"metricAggregation\": \"P90\",\n      \"threshold\": 300\n    },\n    \"sliEntity\": {\n      \"sliType\": \"application\",\n      \"applicationId\": \"1qvXgVfLTNqi8gGTcCaNUw\",\n      \"serviceId\": null,\n      \"endpointId\": null,\n      \"boundaryScope\": \"INBOUND\"\n    },\n    \"lastUpdated\": 1648133508938\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "eb03cb6d-63d3-44fa-8dde-310824288fa5",
+          "name": "Delete SLI Config",
+          "request": {
+            "name": "Delete SLI Config",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "v2",
+                "sli",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the Service Level Indicator (SLI)"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "44d33832-345c-4049-9828-acdf67a2a789",
+              "name": "SLI Configuration Deleted Successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "sli",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Service Level Indicator (SLI)"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6276f3d2-c15c-4db6-b805-ab7dcc2cd33a",
+          "name": "Get SLI Config",
+          "request": {
+            "name": "Get SLI Config",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "v2",
+                "sli",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the Service Level Indicator (SLI)"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6e0263a1-42a8-407b-ae2b-e1db98658d1e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "sli",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Service Level Indicator (SLI)"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"HXcNRWhDSWiZs3HiUAKr7g\",\n    \"sliName\": \"turbo time 1\",\n    \"initialEvaluationTimestamp\": 1648133520000,\n    \"metricConfiguration\": {\n      \"metricName\": \"latency\",\n      \"metricAggregation\": \"P90\",\n      \"threshold\": 300\n    },\n    \"sliEntity\": {\n      \"sliType\": \"application\",\n      \"applicationId\": \"1qvXgVfLTNqi8gGTcCaNUw\",\n      \"serviceId\": null,\n      \"endpointId\": null,\n      \"boundaryScope\": \"INBOUND\"\n    },\n    \"lastUpdated\": 1648133508938\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "41cfb620-9060-4f0b-b4a5-19a935587ac3",
+              "name": "SLI Configuration Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "sli",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Service Level Indicator (SLI)"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"The SLI Configuration you are looking for does not exist.\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Customer tenant unit",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "tenant",
+      "key": "tenant"
+    },
+    {
+      "description": {
+        "content": "Customer tenant name",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "unit",
+      "key": "unit"
+    },
+    {
+      "type": "string",
+      "value": "https://{{unit}}-{{tenant}}.instana.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "a67c770c-d1ed-44cc-a90c-03e6fc733d82",
+    "name": "Instana REST API documentation SLI Settings API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n\n\nContact Support:\n Name: © Instana\n Email: support@instana.com",
+      "type": "text/plain"
+    }
+  }
+}

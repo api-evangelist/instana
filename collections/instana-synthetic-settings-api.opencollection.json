@@ -1,0 +1,631 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Synthetic Settings API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Synthetic Settings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "All Synthetic credential names",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/credentials",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to retrieve the names of all Synthetic Credentials.\nFor more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings."
+        },
+        {
+          "info": {
+            "name": "Create a Synthetic credential",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/credentials",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to create a Synthetic Credential.\nFor more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings."
+        },
+        {
+          "info": {
+            "name": "All Synthetic credentials",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/credentials/associations",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to retrieve all Synthetic Credentials.\nFor more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings."
+        },
+        {
+          "info": {
+            "name": "A Synthetic credential",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/credentials/associations/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "password4test",
+                "type": "path",
+                "description": "Name of the credential to be retrieved"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to retrieve a Synthetic Credential with matching name.\nFor more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings."
+        },
+        {
+          "info": {
+            "name": "Update a Synthetic credential",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/credentials/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "password4db2",
+                "type": "path",
+                "description": "Name of the credential to be updated"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to update a Synthetic Credential.\nFor more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings."
+        },
+        {
+          "info": {
+            "name": "Patch a Synthetic credential",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/credentials/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "password4test",
+                "type": "path",
+                "description": "Name of the credential to be patched"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Patch a Synthetic credential"
+        },
+        {
+          "info": {
+            "name": "Delete a Synthetic credential",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/credentials/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "password4test",
+                "type": "path",
+                "description": "Name of the credential to be deleted"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to delete a Synthetic Credential.\nFor more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings."
+        },
+        {
+          "info": {
+            "name": "All Synthetic datacenters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/datacenters",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to retrieve all Synthetic Datacenters.\nFor more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings."
+        },
+        {
+          "info": {
+            "name": "A Synthetic datacenter",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/datacenters/:datacenterId",
+            "params": [
+              {
+                "name": "datacenterId",
+                "value": "aws-us-east-1-NVirginia",
+                "type": "path",
+                "description": "Id of the datacenter to be retrieved"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to retrieve a Synthetic Datacenter with matching id.\nFor more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings."
+        },
+        {
+          "info": {
+            "name": "All Synthetic locations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/locations",
+            "params": [
+              {
+                "name": "sort",
+                "value": "+label",
+                "type": "query",
+                "description": "Defines the attribute by which the returned synthetic locations will be ordered by. Order using '+' means ASC and '-' means DESC"
+              },
+              {
+                "name": "offset",
+                "value": "1",
+                "type": "query",
+                "description": "Used in conjunction with limit. Defines how many pages will be skipped before returning the synthetic locations"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Defines the size of a page - the number of synthetic locations that will be returned by the query"
+              },
+              {
+                "name": "filter",
+                "value": "{locationType=Managed}",
+                "type": "query",
+                "description": "Defines the attributes by which the returned synthetic locations will be filtered by. Multiple filter parameters are allowed. See 'Supported filter attributes and operators' for complete list of supported attributes and operators."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves Synthetic Locations.\n\n## Optional Parameters:\n\n- **filter** Filters the Synthetic Locations to retrieve only the ones that match the specified filter condition. \n  Users are allowed to specify more than one filter parameter, and they will be combined in a single expression using logical operator 'AND'.\n  The filter parameter is formatted as '**_{\\<attribute>\\<operator>\\<value}_**'. For example, '_{label=MyPoP}_'\n  \n### Supported filter attributes and operators:\n\n| | = | !"
+        },
+        {
+          "info": {
+            "name": "A Synthetic location",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/locations/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "OjJPXWHmsE9deLzanNAW",
+                "type": "path",
+                "description": "Identifier of the location to be retrieved"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to retrieve a Synthetic Location with matching id.\nFor more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings."
+        },
+        {
+          "info": {
+            "name": "Delete a Synthetic location",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/locations/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "55bzhnXQ9uqwld4Ha3bD",
+                "type": "path",
+                "description": "Identifier of the location to be deleted"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This API endpoint deletes a synthetic location.\n\nNote: Users cannot use this API to delete managed locations. "
+        },
+        {
+          "info": {
+            "name": "All Synthetic tests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/tests",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "pWoK4onRRN-POTz1RU62UQ",
+                "type": "query",
+                "description": "Defines the application id by which the returned synthetic tests will be filtered by. "
+              },
+              {
+                "name": "locationId",
+                "value": "18WyhtDb5jpVOsjlNdeV",
+                "type": "query",
+                "description": "Defines the location id by which the returned synthetic tests will be filtered by. "
+              },
+              {
+                "name": "credentialName",
+                "value": "adminPassword",
+                "type": "query",
+                "description": "Defines the credential name by which the returned synthetic tests will be filtered by. "
+              },
+              {
+                "name": "sort",
+                "value": "+label",
+                "type": "query",
+                "description": "Defines the attribute by which the returned synthetic tests will be ordered by. Order using '+' means ASC and '-' means DESC"
+              },
+              {
+                "name": "offset",
+                "value": "1",
+                "type": "query",
+                "description": "Used in conjunction with limit. Defines how many pages will be skipped before returning the synthetic tests"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Defines the size of a page - the number of synthetic tests that will be returned by the query"
+              },
+              {
+                "name": "filter",
+                "value": "{label=MyTest}",
+                "type": "query",
+                "description": "Defines the attributes by which the returned synthetic tests will be filtered by. Multiple filter parameters are allowed. See 'Supported filter attributes and operators' for complete list of supported attributes and operators."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves Synthetic Tests.\n\n## Optional Parameters:\n\n- **locationId** Filters the Synthetic Tests to retrieve only the ones that are associated to the specified PoP location ID.\n- **filter** Filters the Synthetic Tests to retrieve only the ones that match the specified filter condition. \n  Users are allowed to specify more than one filter parameter, and they will be combined in a single expression using logical operator 'AND'.\n  The filter parameter is formatted as '**_{\\<attribute"
+        },
+        {
+          "info": {
+            "name": "Create a Synthetic test",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/tests",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This API endpoint creates a Synthetic Test.\n\n## Optional Parameters:\n\n- **id** Users are allowed to specify their own id for the test. A test id can contain letters, numbers, underscores, colons and hyphens. Maximum length is 128.\n\n## Sample script and payload: \n- A sample script to create an API Simple test\n\n```\ncurl -k -v -X POST \\\nhttps://<Host>/api/synthetics/settings/tests \\\n-H 'authorization: apiToken <Token>' \\\n-H 'content-type: application/json' \\\n-d '{\n    \"id\":\"test_id:12134-89\",\n    \""
+        },
+        {
+          "info": {
+            "name": "Delete Synthetic tests",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/tests/bulk-delete",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to delete a list of Synthetic Tests."
+        },
+        {
+          "info": {
+            "name": "Update Synthetic tests",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/tests/bulk-update",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to update a list of Synthetic Tests."
+        },
+        {
+          "info": {
+            "name": "All Synthetic test CI/CDs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/tests/ci-cd",
+            "params": [
+              {
+                "name": "filter",
+                "value": "{runType=OnDemand}",
+                "type": "query",
+                "description": "Defines the attributes by which the returned synthetic test CI/CDs will be filtered by. Multiple filter parameters are allowed. See 'Supported filter attributes and operators' for complete list of supported attributes and operators."
+              },
+              {
+                "name": "offset",
+                "value": "1",
+                "type": "query",
+                "description": "Used in conjunction with limit. Defines how many pages will be skipped before returning the synthetic test CI/CDs"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Defines the size of a page - the number of synthetic test CI/CDs that will be returned by the query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves Synthetic Test CI/CDs.\n\n## Optional Parameters:\n\n- **filter** Filters the Synthetic Test CI/CDs to retrieve only the ones that match the specified filter condition.\n  Users are allowed to specify more than one filter parameter, and they will be combined in a single expression using logical operator 'AND'.\n  The filter parameter is formatted as '**_{\\<attribute>\\<operator>\\<value}_**'. For example, '_{runType=CI/CD}_'\n\n### Supported filter attributes and operators:\n\n| | = "
+        },
+        {
+          "info": {
+            "name": "Create a Synthetic test CI/CD",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/tests/ci-cd",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This API endpoint creates an OnDemand Execution of Synthetic Tests to be used on CI/CD Integrations.\n\n## Mandatory Parameters:\n\n- **testId** The id of the test to be executed upon request.\n- **customization.locations** The ids of the locations where the test needs to be executed.\n- \n## Optional Parameters:\n\n- **customization.configuration** An configuration object with properties timeout, retries and retryInterval, used to override the test defined configuration. \n- **customization.customPropert"
+        },
+        {
+          "info": {
+            "name": "A Synthetic test CI/CD.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/tests/ci-cd/:testResultId",
+            "params": [
+              {
+                "name": "testResultId",
+                "value": "0cf1324b-3022-4116-ae03-6c868daa43d4",
+                "type": "path",
+                "description": "The synthetic test result id of the CI/CD to be retrieved"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "A Synthetic test CI/CD."
+        },
+        {
+          "info": {
+            "name": "A Synthetic test",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/tests/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "EFNRoPd39SgZBkULeQIf",
+                "type": "path",
+                "description": "Id of the synthetic test to be retrieved"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to retrieve a Synthetic Test with matching id.\nFor more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings."
+        },
+        {
+          "info": {
+            "name": "Update a Synthetic test",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/tests/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "ic25Vt1T5dgKzi0K7812",
+                "type": "path",
+                "description": "Id of the synthetic test to be updated"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update a Synthetic test"
+        },
+        {
+          "info": {
+            "name": "Patch a Synthetic test",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/tests/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "ic25Vt1T5dgKzi0K7812",
+                "type": "path",
+                "description": "Id of the synthetic test to be patched"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This API endpoint updates selected attributes of a Synthetic Test.\n\n- All attributes listed as in the schema, including the required ones, are optional for this call.\n- Synthetic Test configuration properties set to null will be removed from the configuration.\n- Patching an array attribute will replace the entire array with the full set of values provided.\n- For major updates to the Synthetic Test or to remove main attributes, see \"Update a Synthetic test\"\n\n## Sample script and payload: \n- A sam"
+        },
+        {
+          "info": {
+            "name": "Delete a Synthetic test",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/settings/tests/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "ic25Vt1T5dgKzi0K7812",
+                "type": "path",
+                "description": "Id of the synthetic test to be deleted"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to delete a Synthetic Test.\nFor more information on Synthetic Settings please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-settings."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

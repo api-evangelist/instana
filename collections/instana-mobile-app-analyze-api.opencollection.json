@@ -1,0 +1,67 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Mobile App Analyze API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Mobile App Analyze",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get grouped beacon metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/analyze/beacon-groups",
+            "params": [
+              {
+                "name": "fillTimeSeries",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get grouped mobile app beacon metrics."
+        },
+        {
+          "info": {
+            "name": "Get all beacons",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/analyze/beacons",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get all mobile app beacons with matching type."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

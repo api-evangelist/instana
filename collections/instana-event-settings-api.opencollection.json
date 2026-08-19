@@ -1,0 +1,1407 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Event Settings API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Event Settings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all Alerting Channels",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/alertingChannels",
+            "params": [
+              {
+                "name": "ids",
+                "value": "[YbcFlaG8k5oIkxD0, OYcbU9gdP6OTBThJ, qbhfsL9vTtlaBOAt]",
+                "type": "query",
+                "description": "List of IDs of alert channels defined in Instana. Can be left empty."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets all the alerting channels. Requires the permission called CanConfigureIntegrations."
+        },
+        {
+          "info": {
+            "name": "Create Alert Channel",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/alertingChannels",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates an alerting channel. Requires the permission called CanConfigureIntegrations."
+        },
+        {
+          "info": {
+            "name": "Get Overview of Alerting Channels",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/alertingChannels/infos",
+            "params": [
+              {
+                "name": "ids",
+                "value": "[YbcFlaG8k5oIkxD0, OYcbU9gdP6OTBThJ, qbhfsL9vTtlaBOAt]",
+                "type": "query",
+                "description": "List of IDs of alert channels defined in Instana. Can be left empty."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets the overview information of all alerting channels. Requires the permission called CanConfigureIntegrations."
+        },
+        {
+          "info": {
+            "name": "Notify manually to Alerting Channel. Requires the permission called CanConfigureIntegrations.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/alertingChannels/notify/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "YbcFlaG8k5oIkxD0",
+                "type": "path",
+                "description": "ID of the alerting channel to be notified on."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Sends alert for a specific event to an alerting channel.  Provided the event Id, an alert could be sent to the alerting channel. This endpoint requires `canInvokeAlertChannel` permission."
+        },
+        {
+          "info": {
+            "name": "Test Alerting Channel",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/alertingChannels/test",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Sends a test alert to an alert channel. This is for testing if an potential alert channel is able to receive alerts from Instana. Requires the permission called CanConfigureIntegrations."
+        },
+        {
+          "info": {
+            "name": "Get Alerting Channel",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/alertingChannels/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "YbcFlaG8k5oIkxD0",
+                "type": "path",
+                "description": "ID of the Alerting Channel to get."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets an alerting channel. Requires the permission called CanConfigureIntegrations."
+        },
+        {
+          "info": {
+            "name": "Update Alert Channel",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/alertingChannels/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "YbcFlaG8k5oIkxD0",
+                "type": "path",
+                "description": "ID of the Alerting Channel to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Updates an alerting channel. Requires the permission called CanConfigureIntegrations."
+        },
+        {
+          "info": {
+            "name": "Delete Alerting Channel",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/alertingChannels/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "YbcFlaG8k5oIkxD0",
+                "type": "path",
+                "description": "ID of the Alerting Channel to delete."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Deletes an alert channel. Requires the permission called CanConfigureIntegrations."
+        },
+        {
+          "info": {
+            "name": "Get all Alert Configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/alerts",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets all Alert Configurations"
+        },
+        {
+          "info": {
+            "name": "All alerting configuration info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/alerts/infos",
+            "params": [
+              {
+                "name": "integrationId",
+                "value": "hu6ynJbwgB4X1rjk",
+                "type": "query",
+                "description": "ID of a specific alert channel configuration."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets all alert configurations that relate to the given alert channel."
+        },
+        {
+          "info": {
+            "name": "Get Alert Configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/alerts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "iSjG7UWK3Dy6bDUc",
+                "type": "path",
+                "description": "ID of a specific Alert Configuration to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a specific Alert Configuration by ID."
+        },
+        {
+          "info": {
+            "name": "Create or update Alert Configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/alerts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "hu6ynJbwgB4X1rjk",
+                "type": "path",
+                "description": "ID of a specific Alert Configuration to create or update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create or update a specific Alert configuration by ID"
+        },
+        {
+          "info": {
+            "name": "Delete Alert Configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/alerts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "hu6ynJbwgB4X1rjkkw",
+                "type": "path",
+                "description": "ID of a specific Alert Configuration to delete."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete a specific Alert Configuration by ID"
+        },
+        {
+          "info": {
+            "name": "Get All Global Custom Payload Configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/custom-payload-configurations",
+            "params": [
+              {
+                "name": "context",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets All Global Custom Payload Configurations."
+        },
+        {
+          "info": {
+            "name": "Create/Update Global Custom Payload Configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/custom-payload-configurations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates or Updates Global Custom Payload Configuration."
+        },
+        {
+          "info": {
+            "name": "Delete Custom Payload Configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/custom-payload-configurations",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Deletes a Global Custom Payload Configuration."
+        },
+        {
+          "info": {
+            "name": "Get Tag Catalog for Custom Payload",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/custom-payload-configurations/catalog",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Custom payload tags used to filter, extract and aggregate specific data like AP calls for alert notifications. The catalog defines available tags like application.name and their types, and other attributes."
+        },
+        {
+          "info": {
+            "name": "Create/Update Global Custom Payload Configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/custom-payload-configurations/v2",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates or Updates Global Custom Payload Configuration."
+        },
+        {
+          "info": {
+            "name": "All built-in event specification",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/event-specifications/built-in",
+            "params": [
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all built-in event specifications"
+        },
+        {
+          "info": {
+            "name": "Built-in event specifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/event-specifications/built-in/:eventSpecificationId",
+            "params": [
+              {
+                "name": "eventSpecificationId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Built-in event specifications"
+        },
+        {
+          "info": {
+            "name": "Delete built-in event specification",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/event-specifications/built-in/:eventSpecificationId",
+            "params": [
+              {
+                "name": "eventSpecificationId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete built-in event specification"
+        },
+        {
+          "info": {
+            "name": "Disable built-in event specification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/event-specifications/built-in/:eventSpecificationId/disable",
+            "params": [
+              {
+                "name": "eventSpecificationId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Disable built-in event specification"
+        },
+        {
+          "info": {
+            "name": "Enable built-in event specification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/event-specifications/built-in/:eventSpecificationId/enable",
+            "params": [
+              {
+                "name": "eventSpecificationId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Enable built-in event specification"
+        },
+        {
+          "info": {
+            "name": "All custom event specifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/event-specifications/custom",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": " This API helps in getting all the custom event specifications."
+        },
+        {
+          "info": {
+            "name": "Create new custom event specification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/event-specifications/custom",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint creates a new Custom Event Specification.\n\n## Mandatory Parameters:\n\n- **name:** Name for the custom event\n\n- **entityType:** Name of the available plugins for the selected source\n\n- **rules.ruleType:** Type of the rule being set for the custom event\n\n### Rule-type specific parameters\n\nDepending on the chosen `ruleType`, there are further required parameters:\n\n#### Threshold Rule using a dynamic built-in metric by pattern :\n\n- **rules.conditionOperator:** Conditional operator for t"
+        },
+        {
+          "info": {
+            "name": "All system rules for custom event specifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/event-specifications/custom/systemRules",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This API helps to get all the system rules for custom event specifications."
+        },
+        {
+          "info": {
+            "name": "Custom event specification",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/event-specifications/custom/:eventSpecificationId",
+            "params": [
+              {
+                "name": "eventSpecificationId",
+                "value": "Yojfl6Yn9SXaFhJG",
+                "type": "path",
+                "description": "eventSpecificationId"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This API helps to get the Custom Event specification for the given ID."
+        },
+        {
+          "info": {
+            "name": "Create or update custom event specification",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/event-specifications/custom/:eventSpecificationId",
+            "params": [
+              {
+                "name": "eventSpecificationId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "allowRestore",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint creates or updates a Custom Event Specification.\n\n## Mandatory Parameters:\n\n- **eventSpecificationId (Path Parameter):** A unique identifier for each custom event\n\n- **name:** Name for the custom event\n\n- **entityType:** Name of the available plugins for the selected source\n\n- **rules.ruleType:** Type of the rule being set for the custom event\n\n### Rule-type specific parameters\n\nDepending on the chosen `ruleType`, there are further required parameters:\n\n#### Threshold Rule using a "
+        },
+        {
+          "info": {
+            "name": "Delete custom event specification",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/event-specifications/custom/:eventSpecificationId",
+            "params": [
+              {
+                "name": "eventSpecificationId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint deletes a Custom Event Specification.\n\nBy default, the ID of a deleted configuration cannot be reused anymore to enable links in previous Issues or Incidents to stay valid.\nHowever, check out the docs for [updating a configuration](#operation/putCustomEventSpecification) how this default behavior can be changed using the `allowRestore` query parameter.\n\n\n## Mandatory Parameters:\n\n- **eventSpecificationId (Path Parameter):** A unique identifier for the custom event specification to "
+        },
+        {
+          "info": {
+            "name": "Disable custom event specification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/event-specifications/custom/:eventSpecificationId/disable",
+            "params": [
+              {
+                "name": "eventSpecificationId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Disable custom event specification"
+        },
+        {
+          "info": {
+            "name": "Enable custom event specification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/event-specifications/custom/:eventSpecificationId/enable",
+            "params": [
+              {
+                "name": "eventSpecificationId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Enable custom event specification"
+        },
+        {
+          "info": {
+            "name": "Summary of all built-in and custom event specifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/event-specifications/infos",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This API helps to get the summary of all build-in and custom event specifications"
+        },
+        {
+          "info": {
+            "name": "All built-in and custom event specifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/event-specifications/infos",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Summary of all built-in and custom event specifications by IDs"
+        },
+        {
+          "info": {
+            "name": "Manually closing multiple events",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/manual-close",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Manually close a set of events. A close notification will be sent out and the event state will be updated accordingly for each event"
+        },
+        {
+          "info": {
+            "name": "Manually close an event.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/manual-close/:eventId",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "exampleEventId",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Manually close an event (issue or incident). A close notification will be sent out and the event state will be updated accordingly."
+        },
+        {
+          "info": {
+            "name": "Get all Mobile Smart Alert Configs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/mobile-app-alert-configs",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "tk2OLeusR3aQJD5h-rBh2A",
+                "type": "query",
+                "description": "The ID of a specific Mobile Application."
+              },
+              {
+                "name": "alertIds",
+                "value": "smRTFp08juKWtn8I",
+                "type": "query",
+                "description": "A list of Smart Alert Configuration IDs. This allows Website Smart Alert Configuration of a specific set of Configurations. This query can be repeated to use multiple IDs."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets all the Mobile Smart Alert Configuration pertaining to a specific mobile app.Configurations are sorted by creation date in descending order."
+        },
+        {
+          "info": {
+            "name": "Create Mobile Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/mobile-app-alert-configs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a new Mobile Smart Alert Configuration. "
+        },
+        {
+          "info": {
+            "name": "Get Mobile Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/mobile-app-alert-configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "qOW5jlR5TQafXKWDIceRkA",
+                "type": "path",
+                "description": "ID of a specific Mobile Smart Alert Configuration to retrieve"
+              },
+              {
+                "name": "validOn",
+                "value": "1722877985000",
+                "type": "query",
+                "description": "A Unix timestamp representing a specific time the Configuration was active. If no timestamp is provided, the latest active version will be retrieved. "
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets a specific Mobile Smart Alert Configuration. This may return a deleted Configuration."
+        },
+        {
+          "info": {
+            "name": "Update Mobile Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/mobile-app-alert-configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "qOW5jlR5TQafXKWDIceRkA",
+                "type": "path",
+                "description": "ID of a specific Mobile Smart Alert Configuration to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Updates an existing Mobile Smart Alert Configuration. "
+        },
+        {
+          "info": {
+            "name": "Delete Mobile Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/mobile-app-alert-configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "qOW5jlR5TQafXKWDIceRkA",
+                "type": "path",
+                "description": "ID of a specific Mobile Smart Alert Configuration to delete."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Deletes a Mobile Smart Alert Configuration"
+        },
+        {
+          "info": {
+            "name": "Disable Mobile Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/mobile-app-alert-configs/:id/disable",
+            "params": [
+              {
+                "name": "id",
+                "value": "qOW5jlR5TQafXKWDIceRkA",
+                "type": "path",
+                "description": "ID of a specific Mobile Smart Alert Configuration to disable."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Disables a Mobile Smart Alert Configuration."
+        },
+        {
+          "info": {
+            "name": "Enable Mobile Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/mobile-app-alert-configs/:id/enable",
+            "params": [
+              {
+                "name": "id",
+                "value": "qOW5jlR5TQafXKWDIceRkA",
+                "type": "path",
+                "description": "ID of a specific Mobile Smart Alert Configuration to enable."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Enables a Mobile Smart Alert Configuration."
+        },
+        {
+          "info": {
+            "name": "Restore Mobile Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/mobile-app-alert-configs/:id/restore/:created",
+            "params": [
+              {
+                "name": "id",
+                "value": "qOW5jlR5TQafXKWDIceRkA",
+                "type": "path",
+                "description": "ID of a specific Mobile Smart Alert Configuration to restore."
+              },
+              {
+                "name": "created",
+                "value": "1707726529124",
+                "type": "path",
+                "description": "Unix timestamp representing the creation time of a specific Mobile Smart Alert Configuration."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Restores a Mobile Smart Alert Configuration."
+        },
+        {
+          "info": {
+            "name": "Recalculate Mobile Smart Alert Config Baseline",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/mobile-app-alert-configs/:id/update-baseline",
+            "params": [
+              {
+                "name": "id",
+                "value": "qOW5jlR5TQafXKWDIceRkA",
+                "type": "path",
+                "description": "ID of a specific Mobile Smart Alert Configuration to recalculate."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Recalculates and updates the historic baseline (static seasonal threshold) of a Configuration. The `LastUpdated` field of the Configuration is changed to the current time."
+        },
+        {
+          "info": {
+            "name": "Get Mobile Smart Alert Config Versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/mobile-app-alert-configs/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "qOW5jlR5TQafXKWDIceRkA",
+                "type": "path",
+                "description": "ID of a specific Mobile Smart Alert Configuration to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets all versions of a Mobile Smart Alert Configuration. This may return deleted Configurations. Configurations are sorted by creation date in descending order."
+        },
+        {
+          "info": {
+            "name": "Get all Website Smart Alert Configs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/website-alert-configs",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "XIZGGVT1TX2O-0OFeT2Yig",
+                "type": "query",
+                "description": "The ID of a specific Website"
+              },
+              {
+                "name": "alertIds",
+                "value": "smRTFp08juKWtn8I",
+                "type": "query",
+                "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets all the Website Smart Alert Configuration pertaining to a specific website. Configurations are sorted by creation date in descending order."
+        },
+        {
+          "info": {
+            "name": "Create Website Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/website-alert-configs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a new Website Smart Alert Configuration."
+        },
+        {
+          "info": {
+            "name": "Get Website Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/website-alert-configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "G-h5p0znTHan2m2U3c-Z1Q",
+                "type": "path",
+                "description": "ID of a specific Website Smart Alert Configuration to retrieve."
+              },
+              {
+                "name": "validOn",
+                "value": "1722877985000",
+                "type": "query",
+                "description": "A Unix timestamp representing a specific time the config was active. If no timestamp is provided, the latest active version will be retrieved. "
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets a specific Website Smart Alert Configuration. This may return a deleted Configuration."
+        },
+        {
+          "info": {
+            "name": "Update Website Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/website-alert-configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "G-h5p0znTHan2m2U3c-Z1Q",
+                "type": "path",
+                "description": "ID of a specific Website Smart Alert Configuration to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Updates an existing Website Smart Alert Configuration."
+        },
+        {
+          "info": {
+            "name": "Delete Website Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/website-alert-configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "G-h5p0znTHan2m2U3c-Z1Q",
+                "type": "path",
+                "description": "ID of a specific Website Smart Alert Configuration to delete."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Deletes a Website Smart Alert Configuration."
+        },
+        {
+          "info": {
+            "name": "Disable Website Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/website-alert-configs/:id/disable",
+            "params": [
+              {
+                "name": "id",
+                "value": "G-h5p0znTHan2m2U3c-Z1Q",
+                "type": "path",
+                "description": "ID of a specific Website Smart Alert Configuration to disable."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Disables a Website Smart Alert Configuration."
+        },
+        {
+          "info": {
+            "name": "Enable Website Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/website-alert-configs/:id/enable",
+            "params": [
+              {
+                "name": "id",
+                "value": "G-h5p0znTHan2m2U3c-Z1Q",
+                "type": "path",
+                "description": "ID of a specific Website Smart Alert Configuration to enable."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Enables a website alert configuration."
+        },
+        {
+          "info": {
+            "name": "Restore Website Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/website-alert-configs/:id/restore/:created",
+            "params": [
+              {
+                "name": "id",
+                "value": "G-h5p0znTHan2m2U3c-Z1Q",
+                "type": "path",
+                "description": "ID of a specific Website Smart Alert Configuration to restore."
+              },
+              {
+                "name": "created",
+                "value": "1707726529124",
+                "type": "path",
+                "description": "Unix timestamp representing the creation time of a specific Website Smart Alert Configuration."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Restores a deleted Website Smart Alert Configuration."
+        },
+        {
+          "info": {
+            "name": "Recalculate Website Smart Alert Config Baseline",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/website-alert-configs/:id/update-baseline",
+            "params": [
+              {
+                "name": "id",
+                "value": "G-h5p0znTHan2m2U3c-Z1Q",
+                "type": "path",
+                "description": "ID of a specific Website Smart Alert Configuration to recalculate."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Recalculates and updates the historic baseline (static seasonal threshold) of a Configuration. The `LastUpdated` field of the Configuration is changed to the current time."
+        },
+        {
+          "info": {
+            "name": "Get Website Smart Alert Config Versions. ",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/website-alert-configs/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "G-h5p0znTHan2m2U3c-Z1Q",
+                "type": "path",
+                "description": "ID of a specific Website Smart Alert Configuration to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets all versions of a Website Smart Alert Configuration. This may return deleted Configurations. Configurations are sorted by creation date in descending order."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

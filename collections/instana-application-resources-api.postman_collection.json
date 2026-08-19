@@ -1,0 +1,842 @@
+{
+  "item": [
+    {
+      "id": "b0d79cc6-ded3-40bf-9721-09371829411e",
+      "name": "Application Resources",
+      "description": {
+        "content": "The API endpoints of this group provides insights into resources created and discovered. It includes:\n\n**Application Perspectives**\n\nReturns a list of predefined application perspectives, offering an organized view of application perspectives within the system.\n\n**Discovered Services Inside Application Perspectives**\n\nFetches services identified within the context of specific application perspectives.\n\n**Discovered Services and Endpoints**\n\nProvides a detailed list of endpoints associated with services, enabling deeper visibility into service dependencies and interactions.\n\nIt also provides a detailed list of services.\n\nThese API endpoints collectively serve as a crucial tool for managing and analyzing application-level resource structures.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "eda98493-7060-477d-a96d-9b488dfdc3d0",
+          "name": "Get applications",
+          "request": {
+            "name": "Get applications",
+            "description": {
+              "content": "Use this API endpoint if one wants to retrieve a list of Application Perspectives.\nA use case could be to view the application id of an Application Perspective.\n\nFor more information on Application Resources please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-resources.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "application-monitoring",
+                "applications"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "nameFilter",
+                  "value": "<string>",
+                  "description": "Name of application"
+                },
+                {
+                  "disabled": false,
+                  "key": "windowSize",
+                  "value": "<long>",
+                  "description": "Size of time window in milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<long>",
+                  "description": "Timestamp since Unix Epoch in milliseconds of the end of the time window"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "Page number from results"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<integer>",
+                  "description": "Number of items per page"
+                },
+                {
+                  "disabled": false,
+                  "key": "applicationBoundaryScope",
+                  "value": "<string>",
+                  "description": "Filter for application scope, i.e: INBOUND or ALL"
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "975f67aa-5fc2-4b6a-b831-31c4a638eee6",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "application-monitoring",
+                    "applications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "nameFilter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "windowSize",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "applicationBoundaryScope",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"boundaryScope\": \"INBOUND\",\n      \"entityType\": \"APPLICATION\",\n      \"id\": \"e8krH1wNRV6daAo-NEmG8g\",\n      \"label\": \"Robot Shop\"\n    }\n  ],\n  \"page\": 1,\n  \"pageSize\": 1,\n  \"totalHits\": 1\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "33955455-b637-4d66-9ae9-7795180d2e6b",
+          "name": "Get applications/services",
+          "request": {
+            "name": "Get applications/services",
+            "description": {
+              "content": "Use this API endpoint if one wants to retrieve a list of services in an Application Perspective.\nA use case could be to retrieve all service ids present in an Application Perspective.\n\nFor more information on Application Resources please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-resources.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "application-monitoring",
+                "applications;id=<appId>",
+                "services"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "nameFilter",
+                  "value": "<string>",
+                  "description": "Name of service (partial match allowed)"
+                },
+                {
+                  "disabled": false,
+                  "key": "windowSize",
+                  "value": "<long>",
+                  "description": "Size of time window in milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<long>",
+                  "description": "Timestamp since Unix Epoch in milliseconds of the end of the time window"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "Page number from results"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<integer>",
+                  "description": "Number of items per page"
+                },
+                {
+                  "disabled": false,
+                  "key": "applicationBoundaryScope",
+                  "value": "<string>",
+                  "description": "Filter for application scope, i.e: INBOUND or ALL"
+                },
+                {
+                  "disabled": false,
+                  "key": "includeSnapshotIds",
+                  "value": "<boolean>",
+                  "description": "Include snapshot ids in the results"
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ade220c4-6c35-46ee-9648-df5c5a9f70f1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "application-monitoring",
+                    "applications;id=<appId>",
+                    "services"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "nameFilter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "windowSize",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "applicationBoundaryScope",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeSnapshotIds",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"entityType\": \"SERVICE\",\n      \"id\": \"79f1430f4a42a707a97621ca00617e40bd51c31d\",\n      \"label\": \"www.paypal.com\",\n      \"snapshotIds\": [\n        \"CywiRxmGIwtQIKezVs-XMcTX2xg\"\n      ],\n      \"technologies\": [\n        \"kafkaCluster\"\n      ],\n      \"types\": [\n        \"MESSAGING\"\n      ]\n    }\n  ],\n  \"page\": 1,\n  \"pageSize\": 1,\n  \"totalHits\": 1\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f367c96c-1960-45c3-a2d2-7672a4c529a3",
+          "name": "Get endpoints",
+          "request": {
+            "name": "Get endpoints",
+            "description": {
+              "content": "Use this API endpoint if one wants to retrieve a list of Endpoints.\nA use case could be to view the endpoint id of an Endpoint.\n\nFor more information on Application Resources please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-resources.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "application-monitoring",
+                "applications",
+                "services",
+                "endpoints"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "nameFilter",
+                  "value": "<string>",
+                  "description": "Name of service"
+                },
+                {
+                  "disabled": false,
+                  "key": "types",
+                  "value": "<string>",
+                  "description": "Type of Endpoint"
+                },
+                {
+                  "disabled": false,
+                  "key": "types",
+                  "value": "<string>",
+                  "description": "Type of Endpoint"
+                },
+                {
+                  "disabled": false,
+                  "key": "technologies",
+                  "value": "<string>",
+                  "description": "List of technologies"
+                },
+                {
+                  "disabled": false,
+                  "key": "technologies",
+                  "value": "<string>",
+                  "description": "List of technologies"
+                },
+                {
+                  "disabled": false,
+                  "key": "windowSize",
+                  "value": "<long>",
+                  "description": "Size of time window in milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<long>",
+                  "description": "Timestamp since Unix Epoch in milliseconds of the end of the time window"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "Page number from results"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<integer>",
+                  "description": "Number of items per page"
+                },
+                {
+                  "disabled": false,
+                  "key": "applicationBoundaryScope",
+                  "value": "<string>",
+                  "description": "Filter for application scope, i.e: INBOUND or ALL"
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "779037d0-5b45-40de-a124-5aa858c3d686",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "application-monitoring",
+                    "applications",
+                    "services",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "nameFilter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "technologies",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "windowSize",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "applicationBoundaryScope",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"entityType\": \"ENDPOINT\",\n      \"id\": \"IWeMKSzcvJHijAQoaA-luyHriDQ\",\n      \"label\": \"websites\",\n      \"serviceId\": \"a25c02069636022456e6139ebfe4f4bfec23ae31\",\n      \"synthetic\": false,\n      \"syntheticType\": \"NON_SYNTHETIC\",\n      \"technologies\": [\n        \"postgreSqlDatabase\"\n      ],\n      \"type\": \"DATABASE\"\n    }\n  ],\n  \"page\": 1,\n  \"pageSize\": 1,\n  \"totalHits\": 1\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "816a304d-5180-4b7d-9564-2487c6cc0431",
+          "name": "Get services",
+          "request": {
+            "name": "Get services",
+            "description": {
+              "content": "Use this API endpoint if one wants to retrieve a list of Services.\nA use case could be to view the service id of a Service.\n\nFor more information on Application Resources please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-resources.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "application-monitoring",
+                "services"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "nameFilter",
+                  "value": "<string>",
+                  "description": "Name of service"
+                },
+                {
+                  "disabled": false,
+                  "key": "windowSize",
+                  "value": "<long>",
+                  "description": "Size of time window in milliseconds"
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<long>",
+                  "description": "Timestamp since Unix Epoch in milliseconds of the end of the time window"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "Page number from results"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<integer>",
+                  "description": "Number of items per page"
+                },
+                {
+                  "disabled": false,
+                  "key": "includeSnapshotIds",
+                  "value": "<boolean>",
+                  "description": "Include snapshot ids in the results"
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "05ab4d1d-6f8e-4feb-b8a4-c7824d5fa22f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "application-monitoring",
+                    "services"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "nameFilter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "windowSize",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeSnapshotIds",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"entityType\": \"SERVICE\",\n      \"id\": \"79f1430f4a42a707a97621ca00617e40bd51c31d\",\n      \"label\": \"Robot Shop\",\n      \"snapshotIds\": [\n        \"CywiRxmGIwtQIKezVs-XMcTX2xg\"\n      ],\n      \"technologies\": [\n        \"kafkaCluster\"\n      ],\n      \"types\": [\n        \"MESSAGING\"\n      ]\n    }\n  ],\n  \"page\": 1,\n  \"pageSize\": 1,\n  \"totalHits\": 1\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Customer tenant unit",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "tenant",
+      "key": "tenant"
+    },
+    {
+      "description": {
+        "content": "Customer tenant name",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "unit",
+      "key": "unit"
+    },
+    {
+      "type": "string",
+      "value": "https://{{unit}}-{{tenant}}.instana.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "e18a2d31-9620-4751-9b47-1e7f2eb04681",
+    "name": "Instana REST API documentation Application Resources API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n\n\nContact Support:\n Name: © Instana\n Email: support@instana.com",
+      "type": "text/plain"
+    }
+  }
+}

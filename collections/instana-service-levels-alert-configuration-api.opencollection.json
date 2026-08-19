@@ -1,0 +1,273 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Service Levels Alert Configuration API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Service Levels Alert Configuration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "All Service levels Alert Configs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/service-levels",
+            "params": [
+              {
+                "name": "sloId",
+                "value": "SLOEANnWh9tQOa2h88kGxK6wQ",
+                "type": "query",
+                "description": "Service Levels Objective(SLO) Configuration ID"
+              },
+              {
+                "name": "alertIds",
+                "value": "ln3IGogYS-S7CPqcOQYTNA",
+                "type": "query",
+                "description": "List of Service Levels Alert Configuration IDs"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Configs are sorted descending by their created date."
+        },
+        {
+          "info": {
+            "name": "Create Service levels Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/service-levels",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create Service levels Alert Config"
+        },
+        {
+          "info": {
+            "name": "Get Service levels Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/service-levels/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "ln3IGogYS-S7CPqcOQYTNA",
+                "type": "path",
+                "description": "Service Levels Alert Configuration ID"
+              },
+              {
+                "name": "validOn",
+                "value": "1706617456952",
+                "type": "query",
+                "description": "Service Levels Alert Version Creation Date"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Find a Service levels Alert Config by ID. This will deliver deleted configs too."
+        },
+        {
+          "info": {
+            "name": "Update Service levels Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/service-levels/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "ln3IGogYS-S7CPqcOQYTNA",
+                "type": "path",
+                "description": "Service Levels Alert Configuration ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update Service levels Alert Config"
+        },
+        {
+          "info": {
+            "name": "Delete Service levels Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/service-levels/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "ln3IGogYS-S7CPqcOQYTNA",
+                "type": "path",
+                "description": "Service Levels Alert Configuration ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete Service levels Alert Config"
+        },
+        {
+          "info": {
+            "name": "Disable Service levels Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/service-levels/:id/disable",
+            "params": [
+              {
+                "name": "id",
+                "value": "ln3IGogYS-S7CPqcOQYTNA",
+                "type": "path",
+                "description": "Service Levels Alert Configuration ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Disable Service levels Alert Config"
+        },
+        {
+          "info": {
+            "name": "Enable Service levels Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/service-levels/:id/enable",
+            "params": [
+              {
+                "name": "id",
+                "value": "ln3IGogYS-S7CPqcOQYTNA",
+                "type": "path",
+                "description": "Service Levels Alert Configuration ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Enable Service levels Alert Config"
+        },
+        {
+          "info": {
+            "name": "Restore Service levels Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/service-levels/:id/restore/:created",
+            "params": [
+              {
+                "name": "id",
+                "value": "ln3IGogYS-S7CPqcOQYTNA",
+                "type": "path",
+                "description": "Service Levels Alert Configuration ID"
+              },
+              {
+                "name": "created",
+                "value": "1706617456952",
+                "type": "path",
+                "description": "Service Levels Alert Version Creation Date"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Restore Service levels Alert Config"
+        },
+        {
+          "info": {
+            "name": "Get versions of Service levels Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/service-levels/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "ln3IGogYS-S7CPqcOQYTNA",
+                "type": "path",
+                "description": "Service Levels Alert Configuration ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Find all versions of a Service levels Alert Config by ID. This will deliver deleted configs too. Configs are sorted descending by their created date."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

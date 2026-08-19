@@ -1,0 +1,502 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Website Configuration API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Website Configuration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get configured websites",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get all configured websites details."
+        },
+        {
+          "info": {
+            "name": "Configure new website",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to add new website."
+        },
+        {
+          "info": {
+            "name": "Get configured website",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "1ELrNt-eQ9SlK4D_EgLMiA",
+                "type": "path",
+                "description": "Website ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get configured website details for specified websiteId"
+        },
+        {
+          "info": {
+            "name": "Rename website",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "K3bP-bmCRkyimNai9vvq8o",
+                "type": "path",
+                "description": "Website ID"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to rename website."
+        },
+        {
+          "info": {
+            "name": "Remove website",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "K3bP-bmCRkyimNai9vvq8o",
+                "type": "path",
+                "description": "Website ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to delete website."
+        },
+        {
+          "info": {
+            "name": "Get geo location configuration for website",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId/geo-location",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "1ELrNt-eQ9SlK4D_EgLMiA",
+                "type": "path",
+                "description": "Website ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get geo-location configuration of a website specified by its websiteId"
+        },
+        {
+          "info": {
+            "name": "Update geo location configuration for website",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId/geo-location",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "iiLxP1zaTuCS7fyk9m4W0W",
+                "type": "path",
+                "description": "Website ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to update geo location configuration for website."
+        },
+        {
+          "info": {
+            "name": "Get custom geo mapping rules for website",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId/geo-mapping-rules",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "iiLxP1zaTuCS7fyk9m4W0W",
+                "type": "path",
+                "description": "Website ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get custom geo mapping rules for website."
+        },
+        {
+          "info": {
+            "name": "Set custom geo mapping rules for website",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId/geo-mapping-rules",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "K3bP-bmCRkyimNai9vvq8o",
+                "type": "path",
+                "description": "Website ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to set custom geo mapping rules for website."
+        },
+        {
+          "info": {
+            "name": "Get IP masking configuration for website",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId/ip-masking",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "1ELrNt-eQ9SlK4D_EgLMiA",
+                "type": "path",
+                "description": "Website ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get IP masking configuration of a website specified by its websiteId"
+        },
+        {
+          "info": {
+            "name": "Update IP masking configuration for website",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId/ip-masking",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "iiLxP1zaTuCS7fyk9m4W0W",
+                "type": "path",
+                "description": "Website ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to update IP masking configuration for website."
+        },
+        {
+          "info": {
+            "name": "Get all sourcemap upload configurations for website",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId/sourcemap-upload",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "1ELrNt-eQ9SlK4D_EgLMiA",
+                "type": "path",
+                "description": "Website ID"
+              }
+            ]
+          },
+          "docs": "API request to get all sourcemap upload configurations for website."
+        },
+        {
+          "info": {
+            "name": "Add new sourcemap upload configuration for website",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId/sourcemap-upload",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "1ELrNt-eQ9SlK4D_EgLMiA",
+                "type": "path",
+                "description": "Website ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "API request to add sourcemap upload configuration for website."
+        },
+        {
+          "info": {
+            "name": "Get sourcemap upload configurations for website",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId/sourcemap-upload/:sourceMapConfigId",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "sourceMapConfigId",
+                "value": "97e0ad312110d3ad",
+                "type": "path",
+                "description": "Source Map Config ID"
+              }
+            ]
+          },
+          "docs": "API request to get sourcemap upload configuration for website."
+        },
+        {
+          "info": {
+            "name": "Delete sourcemap upload configuration for website",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId/sourcemap-upload/:sourceMapConfigId",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "1ELrNt-eQ9SlK4D_EgLMiA",
+                "type": "path",
+                "description": "Website ID"
+              },
+              {
+                "name": "sourceMapConfigId",
+                "value": "97e0ad312110d3ad",
+                "type": "path",
+                "description": "Source Map Config ID"
+              }
+            ]
+          },
+          "docs": "API request to delete sourcemap upload configuration for website."
+        },
+        {
+          "info": {
+            "name": "Clear source map files for sourcemap upload configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId/sourcemap-upload/:sourceMapConfigId/clear",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "UhzF-fWORlyVLHDlvutYYQ",
+                "type": "path",
+                "description": "Website ID"
+              },
+              {
+                "name": "sourceMapConfigId",
+                "value": "97e0ad312110d3ad",
+                "type": "path",
+                "description": "Source Map Config ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to clear source map files for sourcemap upload configuration."
+        },
+        {
+          "info": {
+            "name": "Upload sourcemap file for website",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId/sourcemap-upload/:sourceMapConfigId/form",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "UhzF-fWORlyVLHDlvutYYQ",
+                "type": "path",
+                "description": "Website ID"
+              },
+              {
+                "name": "sourceMapConfigId",
+                "value": "97e0ad312110d3ad",
+                "type": "path",
+                "description": "Source Map Config ID"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "fileFormat",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "sourceMap",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "url",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to upload sourcemap file for website."
+        },
+        {
+          "info": {
+            "name": "Update teams assigned to the website",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/config/:websiteId/teams",
+            "params": [
+              {
+                "name": "websiteId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to update teams of a website."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

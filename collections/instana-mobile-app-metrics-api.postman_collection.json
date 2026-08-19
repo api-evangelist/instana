@@ -1,0 +1,828 @@
+{
+  "item": [
+    {
+      "id": "e4a415c1-62eb-4a9a-8600-7c81822a725c",
+      "name": "Mobile App Metrics",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f0edcc3b-73e4-443a-8457-a23ea04cea00",
+          "name": "Get mobile app beacon metrics",
+          "request": {
+            "name": "Get mobile app beacon metrics",
+            "description": {
+              "content": "API request to get mobile app monitoring beacon metrics.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "mobile-app-monitoring",
+                "metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"metrics\": [\n    {\n      \"aggregation\": \"<string>\",\n      \"metric\": \"<string>\",\n      \"granularity\": \"<integer>\",\n      \"numeratorTagFilterExpression\": {\n        \"type\": \"<string>\"\n      }\n    }\n  ],\n  \"type\": \"<string>\",\n  \"tagFilters\": [\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    }\n  ],\n  \"timeFrame\": {\n    \"to\": \"<long>\",\n    \"windowSize\": \"<long>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ae1f88ac-a5ff-454c-8870-b785e328e09d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "mobile-app-monitoring",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metrics\": [\n    {\n      \"aggregation\": \"<string>\",\n      \"metric\": \"<string>\",\n      \"granularity\": \"<integer>\",\n      \"numeratorTagFilterExpression\": {\n        \"type\": \"<string>\"\n      }\n    }\n  ],\n  \"type\": \"<string>\",\n  \"tagFilters\": [\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"entity\": \"<string>\"\n    }\n  ],\n  \"timeFrame\": {\n    \"to\": \"<long>\",\n    \"windowSize\": \"<long>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"empty\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dcf591bd-6044-4656-8681-1c77b169af31",
+          "name": "Get mobile app session",
+          "request": {
+            "name": "Get mobile app session",
+            "description": {
+              "content": "API request to get a mobile app monitoring session.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "mobile-app-monitoring",
+                "session{{id}}{{timestamp}}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "170ae7ec-7a7c-458f-8d2b-34e059aab57e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "mobile-app-monitoring",
+                    "session{{id}}{{timestamp}}"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"agentVersion\": \"1.8.5\",\n    \"mobileAppId\": \"K3bP-bmCRkyimNai9vvq8o\",\n    \"mobileAppLabel\": \"robot-warehouse\",\n    \"timestamp\": 1707025019211,\n    \"clockSkew\": 460,\n    \"ingestionTime\": 1707025019670,\n    \"duration\": 0,\n    \"batchSize\": 1,\n    \"sessionId\": \"9CA9E31D-B0F7-40EC-8D32-FE163A6557AE\",\n    \"beaconId\": \"659302486df75422\",\n    \"parentBeaconId\": \"\",\n    \"backendTraceId\": \"\",\n    \"type\": \"sessionStart\",\n    \"view\": \"Products\",\n    \"customEventName\": \"\",\n    \"meta\": {\n      \"feature.testGroup\": \"sigma\"\n    },\n    \"userIp\": \"149.200.0.0\",\n    \"userId\": \"Example user id\",\n    \"userSessionId\": \"\",\n    \"userName\": \"Example user name\",\n    \"userEmail\": \"example@example.com\",\n    \"userLanguages\": [\n      \"ar-JO\"\n    ],\n    \"useFeatures\": [],\n    \"bundleIdentifier\": \"com.example.shop\",\n    \"appBuild\": \"aba9031kl\",\n    \"appVersion\": \"1.42.3\",\n    \"platform\": \"iOS\",\n    \"osName\": \"iOS\",\n    \"osVersion\": \"16.7.1\",\n    \"deviceManufacturer\": \"Apple\",\n    \"deviceModel\": \"iPhone 13\",\n    \"deviceHardware\": \"iPhone14,5\",\n    \"viewportWidth\": 320,\n    \"viewportHeight\": 680,\n    \"carrier\": \"Orange\",\n    \"connectionType\": \"wifi\",\n    \"effectiveConnectionType\": \"3g\",\n    \"latitude\": 31.9555,\n    \"longitude\": 35.9435,\n    \"accuracyRadius\": 20,\n    \"city\": \"Amman\",\n    \"subdivision\": \"Amman Governorate\",\n    \"subdivisionCode\": \"AM\",\n    \"country\": \"Jordan\",\n    \"countryCode\": \"JO\",\n    \"continent\": \"Asia\",\n    \"continentCode\": \"AS\",\n    \"httpCallUrl\": \"\",\n    \"httpCallOrigin\": \"\",\n    \"httpCallPath\": \"\",\n    \"httpCallMethod\": \"\",\n    \"httpCallHeaders\": {},\n    \"errorCount\": 0,\n    \"errorMessage\": \"\",\n    \"errorId\": \"\",\n    \"errorType\": \"\",\n    \"stackTrace\": \"\",\n    \"stackTraceLine\": [],\n    \"parsedStackTrace\": \"\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "19057f13-bf12-4347-a060-5f383f6683c9",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "mobile-app-monitoring",
+                    "session{{id}}{{timestamp}}"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "208c2b77-3d56-464c-939c-590b6e85b34e",
+              "name": "Unauthorized access - requires user authentication.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "mobile-app-monitoring",
+                    "session{{id}}{{timestamp}}"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "dd457ccc-28c4-4574-b170-cf4ca4b670e3",
+              "name": "Resource not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "mobile-app-monitoring",
+                    "session{{id}}{{timestamp}}"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5915a8d5-bb3a-4a2c-a9a0-015f63632807",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "mobile-app-monitoring",
+                    "session{{id}}{{timestamp}}"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "77cf0df0-94cd-4ff2-a183-8d2d61c3efb0",
+          "name": "Get beacon metrics",
+          "request": {
+            "name": "Get beacon metrics",
+            "description": {
+              "content": "API request to get mobile app monitoring beacon metrics.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "mobile-app-monitoring",
+                "v2",
+                "metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"metrics\": [\n    {\n      \"aggregation\": \"<string>\",\n      \"metric\": \"<string>\",\n      \"granularity\": \"<integer>\",\n      \"numeratorTagFilterExpression\": {\n        \"type\": \"<string>\"\n      }\n    }\n  ],\n  \"type\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeFrame\": {\n    \"to\": \"<long>\",\n    \"windowSize\": \"<long>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fa3856ba-785c-4b5d-83ab-fb787a6b56f4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "mobile-app-monitoring",
+                    "v2",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metrics\": [\n    {\n      \"metric\": \"beaconCount\",\n      \"aggregation\": \"SUM\",\n      \"granularity\": 60\n    }\n  ],\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"AND\",\n    \"elements\": [\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"mobileBeacon.mobileApp.name\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\",\n        \"value\": \"robot-warehouse\"\n      },\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"mobileBeacon.view.name\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\",\n        \"value\": \"Products\"\n      }\n    ]\n  },\n  \"timeFrame\": {\n    \"to\": null,\n    \"windowSize\": 3600000\n  },\n  \"type\": \"SESSION_START\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"metrics\": {\n    \"beaconCount.sum.60\": [\n      [\n        1707026940000,\n        75\n      ],\n      [\n        1707027000000,\n        75\n      ]\n    ]\n  },\n  \"adjustedTimeframe\": {\n    \"windowSize\": 3540000,\n    \"to\": 1707030480000\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e24b7646-ca9b-450c-b694-643723b714b3",
+              "name": "Unauthorized access - requires user authentication.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "mobile-app-monitoring",
+                    "v2",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metrics\": [\n    {\n      \"metric\": \"beaconCount\",\n      \"aggregation\": \"SUM\",\n      \"granularity\": 60\n    }\n  ],\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"AND\",\n    \"elements\": [\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"mobileBeacon.mobileApp.name\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\",\n        \"value\": \"robot-warehouse\"\n      },\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"mobileBeacon.view.name\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\",\n        \"value\": \"Products\"\n      }\n    ]\n  },\n  \"timeFrame\": {\n    \"to\": null,\n    \"windowSize\": 3600000\n  },\n  \"type\": \"SESSION_START\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "75397d86-c707-4ac5-b885-1d2a7bf5d5d9",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "mobile-app-monitoring",
+                    "v2",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metrics\": [\n    {\n      \"metric\": \"beaconCount\",\n      \"aggregation\": \"SUM\",\n      \"granularity\": 60\n    }\n  ],\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"AND\",\n    \"elements\": [\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"mobileBeacon.mobileApp.name\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\",\n        \"value\": \"robot-warehouse\"\n      },\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"mobileBeacon.view.name\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\",\n        \"value\": \"Products\"\n      }\n    ]\n  },\n  \"timeFrame\": {\n    \"to\": null,\n    \"windowSize\": 3600000\n  },\n  \"type\": \"SESSION_START\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Customer tenant unit",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "tenant",
+      "key": "tenant"
+    },
+    {
+      "description": {
+        "content": "Customer tenant name",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "unit",
+      "key": "unit"
+    },
+    {
+      "type": "string",
+      "value": "https://{{unit}}-{{tenant}}.instana.io",
+      "key": "baseUrl"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) Identifier of the session to be retrieved",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": ";id=<string>",
+      "key": "id"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) Timestamp of the session to be retrieved",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": ";timestamp=<long>",
+      "key": "timestamp"
+    }
+  ],
+  "info": {
+    "_postman_id": "3805e450-39ba-4586-a4d0-24d27c31454c",
+    "name": "Instana REST API documentation Mobile App Metrics API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n\n\nContact Support:\n Name: © Instana\n Email: support@instana.com",
+      "type": "text/plain"
+    }
+  }
+}

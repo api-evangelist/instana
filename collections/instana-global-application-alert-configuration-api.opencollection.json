@@ -1,0 +1,273 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Global Application Alert Configuration API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Global Application Alert Configuration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all Global Smart Alert Configs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/applications",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "j02SxMRTSf-NCBXf5IdsjQ",
+                "type": "query",
+                "description": "The ID of a specific global application."
+              },
+              {
+                "name": "alertIds",
+                "value": "IYS1XOEcTNiT1eOD8pxgXg",
+                "type": "query",
+                "description": "A list of Global Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets all Global Smart Alert Configuration. Configurations are sorted by creation date in descending order.\nFor more information on Global Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#global-application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Create Global Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/applications",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a new Global Smart Alert Configuration.\nFor more information on Global Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#global-application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Get Global Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/applications/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "vlFnxhVTS3KVb-wsN26PeQ",
+                "type": "path",
+                "description": "ID of a specific Global Smart Alert Configuration to retrieve."
+              },
+              {
+                "name": "validOn",
+                "value": "1707305626330",
+                "type": "query",
+                "description": "A Unix timestamp representing a specific time the Configuration was active. If no timestamp is provided, the latest active version will be retrieved. "
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets a specific Global Smart Alert Configuration. This may return a deleted Configuration.\nFor more information on Global Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#global-application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Update Global Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/applications/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "vlFnxhVTS3KVb-wsN26PeQ",
+                "type": "path",
+                "description": "ID of a specific Global Smart Alert Configuration to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Updates an existing Global Smart Alert Configuration.\nFor more information on Global Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#global-application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Delete Global Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/applications/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "vlFnxhVTS3KVb-wsN26PeQ",
+                "type": "path",
+                "description": "ID of a specific Global Smart Alert Configuration to delete."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Disables a Global Smart Alert Configuration.\nFor more information on Global Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#global-application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Disable Global Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/applications/:id/disable",
+            "params": [
+              {
+                "name": "id",
+                "value": "vlFnxhVTS3KVb-wsN26PeQ",
+                "type": "path",
+                "description": "ID of a specific Global Smart Alert Configuration to disable."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Disables a Global Smart Alert Configuration.\nFor more information on Global Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#global-application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Enable Global Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/applications/:id/enable",
+            "params": [
+              {
+                "name": "id",
+                "value": "vlFnxhVTS3KVb-wsN26PeQ",
+                "type": "path",
+                "description": "ID of a specific Global Smart Alert Configuration to enable."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Enables a Global Smart Alert Configuration.\nFor more information on Global Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#global-application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Restore Global Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/applications/:id/restore/:created",
+            "params": [
+              {
+                "name": "id",
+                "value": "vlFnxhVTS3KVb-wsN26PeQ",
+                "type": "path",
+                "description": "ID of a specific Global Smart Alert Configuration to restore."
+              },
+              {
+                "name": "created",
+                "value": "1707305626330",
+                "type": "path",
+                "description": "Unix timestamp representing the creation time of a specific Global Smart Alert Configuration."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Restores a deleted Global Smart Alert Configuration.\nFor more information on Global Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#global-application-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Get Global Smart Alert Config Versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/applications/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "vlFnxhVTS3KVb-wsN26PeQ",
+                "type": "path",
+                "description": "ID of a specific Global Smart Alert Configuration to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets all versions of a Global Smart Alert Configuration. This may return deleted Configurations. Configurations are sorted by creation date in descending order.\nFor more information on Global Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#global-application-alert-configuration."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

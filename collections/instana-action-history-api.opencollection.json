@@ -1,0 +1,295 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Action History API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Action History",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the details of automation action run results from action run history.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/actioninstances",
+            "params": [
+              {
+                "name": "windowSize",
+                "value": "10000",
+                "type": "query",
+                "description": "Window size filter in milliseconds (to compute the from date) to get the action run result details"
+              },
+              {
+                "name": "to",
+                "value": "1706713140000",
+                "type": "query",
+                "description": "To date filter in milliseconds (13-digit) to get the action run result details"
+              },
+              {
+                "name": "page",
+                "value": "2",
+                "type": "query",
+                "description": "Page to fetch -- used for paging the action run result records"
+              },
+              {
+                "name": "pageSize",
+                "value": "50",
+                "type": "query",
+                "description": "Number of records to return in each page -- used for paging the action run result records"
+              },
+              {
+                "name": "targetSnapshotId",
+                "value": "nCtEoR6NSPqG61QkIkwwCw",
+                "type": "query",
+                "description": "Target snapshot ID filter to get the action run result details"
+              },
+              {
+                "name": "eventId",
+                "value": "nCtEoR6NSPqG61QkIkwwCw",
+                "type": "query",
+                "description": "Event ID filter to get the action run result details"
+              },
+              {
+                "name": "eventSpecificationId",
+                "value": "1706713140000",
+                "type": "query",
+                "description": "Event specification ID filter to get the action run result details"
+              },
+              {
+                "name": "search",
+                "value": "1706713140000",
+                "type": "query",
+                "description": "Text in action run result name, description and event name filter to get the action run result details"
+              },
+              {
+                "name": "types",
+                "value": "One or more of the following types HTTP, SCRIPT, ANSIBLE, GITHUB, GITLAB, JIRA",
+                "type": "query",
+                "description": "Action type filter to get the action run result details"
+              },
+              {
+                "name": "actionStatuses",
+                "value": "One or more of the following status SUBMITTED, IN_PROGRESS, SUCCESS, FAILED, TIMEOUT",
+                "type": "query",
+                "description": "Action status filter to get the action run result details"
+              },
+              {
+                "name": "actionIds",
+                "value": "",
+                "type": "query",
+                "description": "Action IDs filter to get the action run result details for only these actions"
+              },
+              {
+                "name": "policyId",
+                "value": "nCtEoR6NSPqG61QkIkwwCw",
+                "type": "query",
+                "description": "Policy ID filter to get the action run result details"
+              },
+              {
+                "name": "orderBy",
+                "value": "Name of the action run result column. Default is action run result start date.",
+                "type": "query",
+                "description": "Action run result column to order the result set."
+              },
+              {
+                "name": "orderDirection",
+                "value": "asc or desc",
+                "type": "query",
+                "description": "Sort order direction."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the details of automation action run results from action run history. The results are filtered by the filters in the query parameters. The automation action run result will be fetched only if the action run results were created within the timeframe specified by the `windowSize` and `to` query parameters. The `windowSize` parameter is used to compute the from date (`from = to - windowSize`) of the timeframe. The default value for `windowSize` is 10 minutes and the default value for `to` is cu"
+        },
+        {
+          "info": {
+            "name": "Run an automation action.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/actioninstances",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Submits the automation action for execution on an agent. The automation action to execute and the agent on which to execute the action must be specified as actionId and hostId. For more details on the request payload see the request sample. This call requires `Execution of automation actions`  permission."
+        },
+        {
+          "info": {
+            "name": "Delete automation action run results.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/actioninstances",
+            "params": [
+              {
+                "name": "from",
+                "value": "1706713140000",
+                "type": "query",
+                "description": "From date filter in milliseconds (13-digit) to look up the action run results to delete"
+              },
+              {
+                "name": "to",
+                "value": "1706713140000",
+                "type": "query",
+                "description": "To date filter in milliseconds (13-digit) to look up the action run results to delete"
+              },
+              {
+                "name": "targetSnapshotId",
+                "value": "aCtEoR6NSPqG61QkIkwwCw",
+                "type": "query",
+                "description": "Target snapshot ID to look up the action run results to delete"
+              },
+              {
+                "name": "eventId",
+                "value": "bCtEoR6NSPqG61QkIkwwCw",
+                "type": "query",
+                "description": "Event ID filter to look up the action run results to delete"
+              },
+              {
+                "name": "eventSpecificationId",
+                "value": "1706713140000",
+                "type": "query",
+                "description": "Event specification ID filter to look up the action run results to delete"
+              },
+              {
+                "name": "search",
+                "value": "1706713140000",
+                "type": "query",
+                "description": "Text in action run result name, description and event name to filter the action run results to delete"
+              },
+              {
+                "name": "types",
+                "value": "One or more of the following types HTTP, SCRIPT, ANSIBLE, GITHUB, GITLAB, JIRA",
+                "type": "query",
+                "description": "Action type filter to look up the action run results to delete"
+              },
+              {
+                "name": "actionStatuses",
+                "value": "One or more of the following status SUBMITTED, IN_PROGRESS, SUCCESS, FAILED, TIMEOUT",
+                "type": "query",
+                "description": "Action status filter to look up the action run results to delete"
+              },
+              {
+                "name": "actionIds",
+                "value": "cCtEoR6NSPqG61QkIkwwCw",
+                "type": "query",
+                "description": "List of action IDs  to filter the action run results to delete"
+              },
+              {
+                "name": "policyId",
+                "value": "bCtEoR6NSPqG61QkIkwwCw",
+                "type": "query",
+                "description": "Policy ID filter to look up the action run results to delete"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Deletes the automation action run results from the action run history. The results to delete is filtered by the filter values given in the query parameters. The automation action run result will be deleted only if the action run result was created within the timeframe specified in the `from` and `to` query parameters. This call requires `Deletion of automation action history` permission and, `from` and `to` query parameters."
+        },
+        {
+          "info": {
+            "name": "Get the details of an automation action run result by ID from action run history.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/actioninstances/:actionInstanceId",
+            "params": [
+              {
+                "name": "actionInstanceId",
+                "value": "nCtEoR6NSPqG61QkIkwwCw",
+                "type": "path",
+                "description": "action run result ID to get action run result details"
+              },
+              {
+                "name": "windowSize",
+                "value": "10000",
+                "type": "query",
+                "description": "Window size in milliseconds. This value is used compute the from date `(from = to - windowSize)` to get the action run result details. The default `windowSize` is set to 10 minutes if this value is not provided."
+              },
+              {
+                "name": "to",
+                "value": "1706713140000",
+                "type": "query",
+                "description": "To date filter in milliseconds (13-digit) to get the action run result details. The default `to` date is set to `System.currentTimeMillis()` if this value is not provided."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the details of automation action run result specified in the request path from action run history. The automation action run result will be fetched only if the action run result was created within the timeframe specified by the `windowSize` and `to` query parameters. The `windowSize` parameter is used to compute the from date (`from = to - windowSize`) of the timeframe. The default value for `windowSize` is 10 minutes and the default value for `to` is current system time. To get the automati"
+        },
+        {
+          "info": {
+            "name": "Deletes an automation action run result from the action run history by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/actioninstances/:actionInstanceId",
+            "params": [
+              {
+                "name": "actionInstanceId",
+                "value": "nCtEoR6NSPqG61QkIkwwCw",
+                "type": "path",
+                "description": "Automation action run result ID to delete."
+              },
+              {
+                "name": "from",
+                "value": "1706713140000",
+                "type": "query",
+                "description": "From date filter in milliseconds (13-digit) to look up the action run result ID."
+              },
+              {
+                "name": "to",
+                "value": "1706713190000",
+                "type": "query",
+                "description": "To date filter in milliseconds (13-digit) to look up the action run result ID."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Deletes the automation action run result specified in the request path from the action run history. The automation action run result will be deleted only if the action run result was created within the timeframe specified in the `from` and `to` query parameters. To get the automation action run result ID and the created time, you can run `/api/automation/actioninstances` and `/api/automation/actioninstances/<{actionInstanceId}>` REST calls. This call requires `Deletion of automation action histo"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

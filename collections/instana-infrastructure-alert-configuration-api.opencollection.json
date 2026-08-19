@@ -1,0 +1,267 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Infrastructure Alert Configuration API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Infrastructure Alert Configuration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "All Infra Alert Configs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/infra-alert-configs",
+            "params": [
+              {
+                "name": "alertIds",
+                "value": "[4kxgJAXdSDiu6swQaKXrJw, ZLo28grvQaiMqIaikJK1RQ]",
+                "type": "query",
+                "description": "List of IDs of Infra Smart Alert configurations"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Configs are sorted descending by their created date."
+        },
+        {
+          "info": {
+            "name": "Create Infra Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/infra-alert-configs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create Infra Alert Config"
+        },
+        {
+          "info": {
+            "name": "Get Infra Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/infra-alert-configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "4kxgJAXdSDiu6swQaKXrJw",
+                "type": "path",
+                "description": "ID of the Infra Smart Alert configuration"
+              },
+              {
+                "name": "validOn",
+                "value": "1722877985000",
+                "type": "query",
+                "description": "A Unix timestamp representing a specific time the config was active. If no timestamp is provided, the latest active version will be retrieved. "
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Find a Infra Alert Config by ID. This will deliver deleted configs too."
+        },
+        {
+          "info": {
+            "name": "Update Infra Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/infra-alert-configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "4kxgJAXdSDiu6swQaKXrJw",
+                "type": "path",
+                "description": "ID of the Infra Smart Alert configuration to update"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update Infra Alert Config"
+        },
+        {
+          "info": {
+            "name": "Delete Infra Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/infra-alert-configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "4kxgJAXdSDiu6swQaKXrJw",
+                "type": "path",
+                "description": "ID of the Infra Smart Alert configuration to delete"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete Infra Alert Config"
+        },
+        {
+          "info": {
+            "name": "Disable Infra Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/infra-alert-configs/:id/disable",
+            "params": [
+              {
+                "name": "id",
+                "value": "4kxgJAXdSDiu6swQaKXrJw",
+                "type": "path",
+                "description": "ID of the Infra Smart Alert configuration to disable"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Disable Infra Alert Config"
+        },
+        {
+          "info": {
+            "name": "Enable Infra Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/infra-alert-configs/:id/enable",
+            "params": [
+              {
+                "name": "id",
+                "value": "4kxgJAXdSDiu6swQaKXrJw",
+                "type": "path",
+                "description": "ID of the Infra Smart Alert configuration to enable"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Enable Infra Alert Config"
+        },
+        {
+          "info": {
+            "name": "Restore Infra Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/infra-alert-configs/:id/restore/:created",
+            "params": [
+              {
+                "name": "id",
+                "value": "4kxgJAXdSDiu6swQaKXrJw",
+                "type": "path",
+                "description": "ID of the Infra Smart Alert configuration to restore"
+              },
+              {
+                "name": "created",
+                "value": "1722877985000",
+                "type": "path",
+                "description": "A Unix Timestamp of when the alert was created"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Restore Infra Alert Config"
+        },
+        {
+          "info": {
+            "name": "Get versions of Infra Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/infra-alert-configs/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "4kxgJAXdSDiu6swQaKXrJw",
+                "type": "path",
+                "description": "ID of the Infra Smart Alert configuration"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Find all versions of a Infra Alert Config by ID. This will deliver deleted configs too. Configs are sorted descending by their created date."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

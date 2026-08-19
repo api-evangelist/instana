@@ -1,0 +1,2422 @@
+{
+  "item": [
+    {
+      "id": "cc6840bc-1280-4c26-bcbf-d4332a9113fa",
+      "name": "Infrastructure Alert Configuration",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1ceed77c-a1f3-41fa-b543-55ba4d7d337a",
+          "name": "All Infra Alert Configs",
+          "request": {
+            "name": "All Infra Alert Configs",
+            "description": {
+              "content": "Configs are sorted descending by their created date.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "infra-alert-configs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "List of IDs of Infra Smart Alert configurations"
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "91e66ded-5a50-4ec6-bfef-9e2d0effa063",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "alertIds",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"name\": \"high-mean-memory-usage\",\n    \"description\": \"Something is going wrong in your infrastructure.\",\n    \"severity\": 5,\n    \"tagFilterExpression\": {\n      \"type\": \"EXPRESSION\",\n      \"logicalOperator\": \"AND\",\n      \"elements\": [\n        {\n          \"type\": \"TAG_FILTER\",\n          \"name\": \"kubernetes.cluster.name\",\n          \"stringValue\": \"200_PoP_Cluster\",\n          \"numberValue\": null,\n          \"booleanValue\": null,\n          \"key\": null,\n          \"value\": \"200_PoP_Cluster\",\n          \"operator\": \"EQUALS\",\n          \"entity\": \"NOT_APPLICABLE\"\n        }\n      ]\n    },\n    \"groupBy\": [\n      \"kubernetes.cluster.name\",\n      \"kubernetes.namespace.name\",\n      \"kubernetes.pod.name\"\n    ],\n    \"rule\": {\n      \"alertType\": \"genericRule\",\n      \"metricName\": \"memory.usage\",\n      \"entityType\": \"crio\",\n      \"aggregation\": \"MEAN\",\n      \"crossSeriesAggregation\": \"MEAN\",\n      \"regex\": false\n    },\n    \"threshold\": {\n      \"type\": \"staticThreshold\",\n      \"operator\": \">=\",\n      \"value\": 1,\n      \"lastUpdated\": 1724720573744\n    },\n    \"forecastingConfig\": null,\n    \"alertChannelIds\": [\n      \"VjS1NvcXpOARmTvA\",\n      \"CrLI3QeIZKygaNLH\"\n    ],\n    \"granularity\": 60000,\n    \"timeThreshold\": {\n      \"type\": \"violationsInSequence\",\n      \"timeWindow\": 180000\n    },\n    \"id\": \"4kxgJAXdSDiu6swQaKXrJw\",\n    \"created\": 1724720587414,\n    \"initialCreated\": 1714766649532,\n    \"readOnly\": false,\n    \"enabled\": false,\n    \"customPayloadFields\": [\n      {\n        \"type\": \"staticString\",\n        \"key\": \"testKey\",\n        \"value\": \"team-ar\"\n      }\n    ],\n    \"rules\": [\n      {\n        \"thresholdOperator\": \">=\",\n        \"rule\": {\n          \"alertType\": \"genericRule\",\n          \"metricName\": \"memory.usage\",\n          \"entityType\": \"crio\",\n          \"aggregation\": \"MEAN\",\n          \"crossSeriesAggregation\": \"MEAN\",\n          \"regex\": false\n        },\n        \"thresholds\": {\n          \"WARNING\": {\n            \"type\": \"staticThreshold\",\n            \"value\": 1\n          },\n          \"CRITICAL\": {\n            \"type\": \"staticThreshold\",\n            \"value\": 4\n          }\n        }\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a455ae0f-6467-4617-8ae1-f4d79c0f8610",
+          "name": "Create Infra Alert Config",
+          "request": {
+            "name": "Create Infra Alert Config",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "infra-alert-configs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customPayloadFields\": [\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"granularity\": 600000,\n  \"groupBy\": [\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeThreshold\": {\n    \"type\": \"<string>\",\n    \"timeWindow\": \"<long>\"\n  },\n  \"alertChannelIds\": [\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"alertChannels\": {\n    \"key_0\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"key_1\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"evaluationType\": \"<string>\",\n  \"gracePeriod\": \"<long>\",\n  \"rule\": {\n    \"alertType\": \"<string>\",\n    \"metricName\": \"<string>\",\n    \"aggregation\": \"<string>\",\n    \"crossSeriesAggregation\": \"<string>\",\n    \"entityType\": \"<string>\",\n    \"metricGroupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"metricTagFilterExpression\": {\n      \"type\": \"<string>\"\n    },\n    \"regex\": \"<boolean>\"\n  },\n  \"rules\": [\n    {\n      \"rule\": {\n        \"alertType\": \"<string>\",\n        \"metricName\": \"<string>\",\n        \"aggregation\": \"<string>\",\n        \"crossSeriesAggregation\": \"<string>\",\n        \"entityType\": \"<string>\",\n        \"metricGroupBy\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"metricTagFilterExpression\": {\n          \"type\": \"<string>\"\n        },\n        \"regex\": \"<boolean>\"\n      },\n      \"thresholdOperator\": \"<string>\",\n      \"thresholds\": {\n        \"key_0\": {\n          \"type\": \"<string>\"\n        },\n        \"key_1\": {\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  ],\n  \"severity\": \"<integer>\",\n  \"threshold\": {\n    \"operator\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"triggering\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8103e5d2-2880-49f3-9b79-c867c13619a3",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customPayloadFields\": [\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"granularity\": 600000,\n  \"groupBy\": [\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeThreshold\": {\n    \"type\": \"<string>\",\n    \"timeWindow\": \"<long>\"\n  },\n  \"alertChannelIds\": [\n    \"<string>\"\n  ],\n  \"alertChannels\": {\n    \"key_0\": [\n      \"<string>\"\n    ],\n    \"key_1\": [\n      \"<string>\"\n    ]\n  },\n  \"evaluationType\": \"<string>\",\n  \"gracePeriod\": \"<long>\",\n  \"rule\": {\n    \"alertType\": \"<string>\",\n    \"metricName\": \"<string>\",\n    \"aggregation\": \"<string>\",\n    \"crossSeriesAggregation\": \"<string>\",\n    \"entityType\": \"<string>\",\n    \"metricGroupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"metricTagFilterExpression\": {\n      \"type\": \"<string>\"\n    },\n    \"regex\": \"<boolean>\"\n  },\n  \"rules\": [\n    {\n      \"rule\": {\n        \"alertType\": \"<string>\",\n        \"metricName\": \"<string>\",\n        \"aggregation\": \"<string>\",\n        \"crossSeriesAggregation\": \"<string>\",\n        \"entityType\": \"<string>\",\n        \"metricGroupBy\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"metricTagFilterExpression\": {\n          \"type\": \"<string>\"\n        },\n        \"regex\": \"<boolean>\"\n      },\n      \"thresholdOperator\": \"<string>\",\n      \"thresholds\": {\n        \"key_0\": {\n          \"type\": \"<string>\"\n        },\n        \"key_1\": {\n          \"type\": \"<string>\"\n        },\n        \"key_2\": {\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  ],\n  \"severity\": \"<integer>\",\n  \"threshold\": {\n    \"operator\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"triggering\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"high-mean-memory-usage\",\n  \"description\": \"Something is going wrong in your infrastructure.\",\n  \"severity\": 5,\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"AND\",\n    \"elements\": [\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"kubernetes.cluster.name\",\n        \"stringValue\": \"200_PoP_Cluster\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"200_PoP_Cluster\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\"\n      }\n    ]\n  },\n  \"groupBy\": [\n    \"kubernetes.cluster.name\",\n    \"kubernetes.namespace.name\",\n    \"kubernetes.pod.name\"\n  ],\n  \"rule\": {\n    \"alertType\": \"genericRule\",\n    \"metricName\": \"memory.usage\",\n    \"entityType\": \"crio\",\n    \"aggregation\": \"MEAN\",\n    \"crossSeriesAggregation\": \"MEAN\",\n    \"regex\": false\n  },\n  \"threshold\": {\n    \"type\": \"staticThreshold\",\n    \"operator\": \">=\",\n    \"value\": 1,\n    \"lastUpdated\": 1724720573744\n  },\n  \"forecastingConfig\": null,\n  \"alertChannelIds\": [\n    \"VjS1NvcXpOARmTvA\",\n    \"CrLI3QeIZKygaNLH\"\n  ],\n  \"granularity\": 60000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 180000\n  },\n  \"id\": \"4kxgJAXdSDiu6swQaKXrJw\",\n  \"created\": 1724720587414,\n  \"initialCreated\": 1714766649532,\n  \"readOnly\": false,\n  \"enabled\": false,\n  \"customPayloadFields\": [\n    {\n      \"type\": \"staticString\",\n      \"key\": \"testKey\",\n      \"value\": \"team-ar\"\n    }\n  ],\n  \"rules\": [\n    {\n      \"thresholdOperator\": \">=\",\n      \"rule\": {\n        \"alertType\": \"genericRule\",\n        \"metricName\": \"memory.usage\",\n        \"entityType\": \"crio\",\n        \"aggregation\": \"MEAN\",\n        \"crossSeriesAggregation\": \"MEAN\",\n        \"regex\": false\n      },\n      \"thresholds\": {\n        \"WARNING\": {\n          \"type\": \"staticThreshold\",\n          \"value\": 1\n        },\n        \"CRITICAL\": {\n          \"type\": \"staticThreshold\",\n          \"value\": 4\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "58c4ad8a-8769-4619-91ee-451a4f1688c5",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customPayloadFields\": [\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"granularity\": 600000,\n  \"groupBy\": [\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeThreshold\": {\n    \"type\": \"<string>\",\n    \"timeWindow\": \"<long>\"\n  },\n  \"alertChannelIds\": [\n    \"<string>\"\n  ],\n  \"alertChannels\": {\n    \"key_0\": [\n      \"<string>\"\n    ],\n    \"key_1\": [\n      \"<string>\"\n    ]\n  },\n  \"evaluationType\": \"<string>\",\n  \"gracePeriod\": \"<long>\",\n  \"rule\": {\n    \"alertType\": \"<string>\",\n    \"metricName\": \"<string>\",\n    \"aggregation\": \"<string>\",\n    \"crossSeriesAggregation\": \"<string>\",\n    \"entityType\": \"<string>\",\n    \"metricGroupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"metricTagFilterExpression\": {\n      \"type\": \"<string>\"\n    },\n    \"regex\": \"<boolean>\"\n  },\n  \"rules\": [\n    {\n      \"rule\": {\n        \"alertType\": \"<string>\",\n        \"metricName\": \"<string>\",\n        \"aggregation\": \"<string>\",\n        \"crossSeriesAggregation\": \"<string>\",\n        \"entityType\": \"<string>\",\n        \"metricGroupBy\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"metricTagFilterExpression\": {\n          \"type\": \"<string>\"\n        },\n        \"regex\": \"<boolean>\"\n      },\n      \"thresholdOperator\": \"<string>\",\n      \"thresholds\": {\n        \"key_0\": {\n          \"type\": \"<string>\"\n        },\n        \"key_1\": {\n          \"type\": \"<string>\"\n        },\n        \"key_2\": {\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  ],\n  \"severity\": \"<integer>\",\n  \"threshold\": {\n    \"operator\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"triggering\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1a3c0e4d-6348-442d-b8c6-3b815e940d51",
+          "name": "Delete Infra Alert Config",
+          "request": {
+            "name": "Delete Infra Alert Config",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "infra-alert-configs",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the Infra Smart Alert configuration to delete"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "acba40cb-4599-4d6c-9da9-2126ffaf9620",
+              "name": "Successful - no content to return.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration to delete"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a74c70e1-1c0f-4943-9426-0a1353800064",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration to delete"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "635dce76-482d-4a7f-9a9a-14d62e2400f0",
+              "name": "Resource not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration to delete"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6feb6959-61f9-42bb-8378-ca4c4a4341d8",
+          "name": "Get Infra Alert Config",
+          "request": {
+            "name": "Get Infra Alert Config",
+            "description": {
+              "content": "Find a Infra Alert Config by ID. This will deliver deleted configs too.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "infra-alert-configs",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "validOn",
+                  "value": "<long>",
+                  "description": "A Unix timestamp representing a specific time the config was active. If no timestamp is provided, the latest active version will be retrieved. "
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the Infra Smart Alert configuration"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ce6bf56b-89cf-4c9d-bfa6-772ba4060db1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "validOn",
+                      "value": "1722877985000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"high-mean-memory-usage\",\n  \"description\": \"Something is going wrong in your infrastructure.\",\n  \"severity\": 5,\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"AND\",\n    \"elements\": [\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"kubernetes.cluster.name\",\n        \"stringValue\": \"200_PoP_Cluster\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"200_PoP_Cluster\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\"\n      }\n    ]\n  },\n  \"groupBy\": [\n    \"kubernetes.cluster.name\",\n    \"kubernetes.namespace.name\",\n    \"kubernetes.pod.name\"\n  ],\n  \"rule\": {\n    \"alertType\": \"genericRule\",\n    \"metricName\": \"memory.usage\",\n    \"entityType\": \"crio\",\n    \"aggregation\": \"MEAN\",\n    \"crossSeriesAggregation\": \"MEAN\",\n    \"regex\": false\n  },\n  \"threshold\": {\n    \"type\": \"staticThreshold\",\n    \"operator\": \">=\",\n    \"value\": 1,\n    \"lastUpdated\": 1724720573744\n  },\n  \"forecastingConfig\": null,\n  \"alertChannelIds\": [\n    \"VjS1NvcXpOARmTvA\",\n    \"CrLI3QeIZKygaNLH\"\n  ],\n  \"granularity\": 60000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 180000\n  },\n  \"id\": \"4kxgJAXdSDiu6swQaKXrJw\",\n  \"created\": 1724720587414,\n  \"initialCreated\": 1714766649532,\n  \"readOnly\": false,\n  \"enabled\": false,\n  \"customPayloadFields\": [\n    {\n      \"type\": \"staticString\",\n      \"key\": \"testKey\",\n      \"value\": \"team-ar\"\n    }\n  ],\n  \"rules\": [\n    {\n      \"thresholdOperator\": \">=\",\n      \"rule\": {\n        \"alertType\": \"genericRule\",\n        \"metricName\": \"memory.usage\",\n        \"entityType\": \"crio\",\n        \"aggregation\": \"MEAN\",\n        \"crossSeriesAggregation\": \"MEAN\",\n        \"regex\": false\n      },\n      \"thresholds\": {\n        \"WARNING\": {\n          \"type\": \"staticThreshold\",\n          \"value\": 1\n        },\n        \"CRITICAL\": {\n          \"type\": \"staticThreshold\",\n          \"value\": 4\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8d335368-27c7-4a16-96b0-4956d94c3a09",
+              "name": "Resource not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "validOn",
+                      "value": "1722877985000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "893ee704-f272-4f19-ae72-c1726414fb57",
+          "name": "Update Infra Alert Config",
+          "request": {
+            "name": "Update Infra Alert Config",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "infra-alert-configs",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the Infra Smart Alert configuration to update"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customPayloadFields\": [\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"granularity\": 600000,\n  \"groupBy\": [\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeThreshold\": {\n    \"type\": \"<string>\",\n    \"timeWindow\": \"<long>\"\n  },\n  \"alertChannelIds\": [\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"alertChannels\": {\n    \"key_0\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"key_1\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"evaluationType\": \"<string>\",\n  \"gracePeriod\": \"<long>\",\n  \"rule\": {\n    \"alertType\": \"<string>\",\n    \"metricName\": \"<string>\",\n    \"aggregation\": \"<string>\",\n    \"crossSeriesAggregation\": \"<string>\",\n    \"entityType\": \"<string>\",\n    \"metricGroupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"metricTagFilterExpression\": {\n      \"type\": \"<string>\"\n    },\n    \"regex\": \"<boolean>\"\n  },\n  \"rules\": [\n    {\n      \"rule\": {\n        \"alertType\": \"<string>\",\n        \"metricName\": \"<string>\",\n        \"aggregation\": \"<string>\",\n        \"crossSeriesAggregation\": \"<string>\",\n        \"entityType\": \"<string>\",\n        \"metricGroupBy\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"metricTagFilterExpression\": {\n          \"type\": \"<string>\"\n        },\n        \"regex\": \"<boolean>\"\n      },\n      \"thresholdOperator\": \"<string>\",\n      \"thresholds\": {\n        \"key_0\": {\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  ],\n  \"severity\": \"<integer>\",\n  \"threshold\": {\n    \"operator\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"triggering\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "209fb361-e1b1-43e3-a242-50c3f25fe629",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration to update"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customPayloadFields\": [\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"granularity\": 600000,\n  \"groupBy\": [\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeThreshold\": {\n    \"type\": \"<string>\",\n    \"timeWindow\": \"<long>\"\n  },\n  \"alertChannelIds\": [\n    \"<string>\"\n  ],\n  \"alertChannels\": {\n    \"key_0\": [\n      \"<string>\"\n    ],\n    \"key_1\": [\n      \"<string>\"\n    ]\n  },\n  \"evaluationType\": \"<string>\",\n  \"gracePeriod\": \"<long>\",\n  \"rule\": {\n    \"alertType\": \"<string>\",\n    \"metricName\": \"<string>\",\n    \"aggregation\": \"<string>\",\n    \"crossSeriesAggregation\": \"<string>\",\n    \"entityType\": \"<string>\",\n    \"metricGroupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"metricTagFilterExpression\": {\n      \"type\": \"<string>\"\n    },\n    \"regex\": \"<boolean>\"\n  },\n  \"rules\": [\n    {\n      \"rule\": {\n        \"alertType\": \"<string>\",\n        \"metricName\": \"<string>\",\n        \"aggregation\": \"<string>\",\n        \"crossSeriesAggregation\": \"<string>\",\n        \"entityType\": \"<string>\",\n        \"metricGroupBy\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"metricTagFilterExpression\": {\n          \"type\": \"<string>\"\n        },\n        \"regex\": \"<boolean>\"\n      },\n      \"thresholdOperator\": \"<string>\",\n      \"thresholds\": {\n        \"key_0\": {\n          \"type\": \"<string>\"\n        },\n        \"key_1\": {\n          \"type\": \"<string>\"\n        },\n        \"key_2\": {\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  ],\n  \"severity\": \"<integer>\",\n  \"threshold\": {\n    \"operator\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"triggering\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"high-mean-memory-usage\",\n  \"description\": \"Something is going wrong in your infrastructure.\",\n  \"severity\": 5,\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"AND\",\n    \"elements\": [\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"kubernetes.cluster.name\",\n        \"stringValue\": \"200_PoP_Cluster\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"200_PoP_Cluster\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\"\n      }\n    ]\n  },\n  \"groupBy\": [\n    \"kubernetes.cluster.name\",\n    \"kubernetes.namespace.name\",\n    \"kubernetes.pod.name\"\n  ],\n  \"rule\": {\n    \"alertType\": \"genericRule\",\n    \"metricName\": \"memory.usage\",\n    \"entityType\": \"crio\",\n    \"aggregation\": \"MEAN\",\n    \"crossSeriesAggregation\": \"MEAN\",\n    \"regex\": false\n  },\n  \"threshold\": {\n    \"type\": \"staticThreshold\",\n    \"operator\": \">=\",\n    \"value\": 1,\n    \"lastUpdated\": 1724720573744\n  },\n  \"forecastingConfig\": null,\n  \"alertChannelIds\": [\n    \"VjS1NvcXpOARmTvA\",\n    \"CrLI3QeIZKygaNLH\"\n  ],\n  \"granularity\": 60000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 180000\n  },\n  \"id\": \"4kxgJAXdSDiu6swQaKXrJw\",\n  \"created\": 1724720587414,\n  \"initialCreated\": 1714766649532,\n  \"readOnly\": false,\n  \"enabled\": false,\n  \"customPayloadFields\": [\n    {\n      \"type\": \"staticString\",\n      \"key\": \"testKey\",\n      \"value\": \"team-ar\"\n    }\n  ],\n  \"rules\": [\n    {\n      \"thresholdOperator\": \">=\",\n      \"rule\": {\n        \"alertType\": \"genericRule\",\n        \"metricName\": \"memory.usage\",\n        \"entityType\": \"crio\",\n        \"aggregation\": \"MEAN\",\n        \"crossSeriesAggregation\": \"MEAN\",\n        \"regex\": false\n      },\n      \"thresholds\": {\n        \"WARNING\": {\n          \"type\": \"staticThreshold\",\n          \"value\": 1\n        },\n        \"CRITICAL\": {\n          \"type\": \"staticThreshold\",\n          \"value\": 4\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e357211b-06bd-4a91-b957-30c9ea6fc51b",
+              "name": "Infra Smart Alert did not change",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration to update"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customPayloadFields\": [\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"granularity\": 600000,\n  \"groupBy\": [\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeThreshold\": {\n    \"type\": \"<string>\",\n    \"timeWindow\": \"<long>\"\n  },\n  \"alertChannelIds\": [\n    \"<string>\"\n  ],\n  \"alertChannels\": {\n    \"key_0\": [\n      \"<string>\"\n    ],\n    \"key_1\": [\n      \"<string>\"\n    ]\n  },\n  \"evaluationType\": \"<string>\",\n  \"gracePeriod\": \"<long>\",\n  \"rule\": {\n    \"alertType\": \"<string>\",\n    \"metricName\": \"<string>\",\n    \"aggregation\": \"<string>\",\n    \"crossSeriesAggregation\": \"<string>\",\n    \"entityType\": \"<string>\",\n    \"metricGroupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"metricTagFilterExpression\": {\n      \"type\": \"<string>\"\n    },\n    \"regex\": \"<boolean>\"\n  },\n  \"rules\": [\n    {\n      \"rule\": {\n        \"alertType\": \"<string>\",\n        \"metricName\": \"<string>\",\n        \"aggregation\": \"<string>\",\n        \"crossSeriesAggregation\": \"<string>\",\n        \"entityType\": \"<string>\",\n        \"metricGroupBy\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"metricTagFilterExpression\": {\n          \"type\": \"<string>\"\n        },\n        \"regex\": \"<boolean>\"\n      },\n      \"thresholdOperator\": \"<string>\",\n      \"thresholds\": {\n        \"key_0\": {\n          \"type\": \"<string>\"\n        },\n        \"key_1\": {\n          \"type\": \"<string>\"\n        },\n        \"key_2\": {\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  ],\n  \"severity\": \"<integer>\",\n  \"threshold\": {\n    \"operator\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"triggering\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0c23aeda-150f-443c-84f2-b9fa217fc6c0",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration to update"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customPayloadFields\": [\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"granularity\": 600000,\n  \"groupBy\": [\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeThreshold\": {\n    \"type\": \"<string>\",\n    \"timeWindow\": \"<long>\"\n  },\n  \"alertChannelIds\": [\n    \"<string>\"\n  ],\n  \"alertChannels\": {\n    \"key_0\": [\n      \"<string>\"\n    ],\n    \"key_1\": [\n      \"<string>\"\n    ]\n  },\n  \"evaluationType\": \"<string>\",\n  \"gracePeriod\": \"<long>\",\n  \"rule\": {\n    \"alertType\": \"<string>\",\n    \"metricName\": \"<string>\",\n    \"aggregation\": \"<string>\",\n    \"crossSeriesAggregation\": \"<string>\",\n    \"entityType\": \"<string>\",\n    \"metricGroupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"metricTagFilterExpression\": {\n      \"type\": \"<string>\"\n    },\n    \"regex\": \"<boolean>\"\n  },\n  \"rules\": [\n    {\n      \"rule\": {\n        \"alertType\": \"<string>\",\n        \"metricName\": \"<string>\",\n        \"aggregation\": \"<string>\",\n        \"crossSeriesAggregation\": \"<string>\",\n        \"entityType\": \"<string>\",\n        \"metricGroupBy\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"metricTagFilterExpression\": {\n          \"type\": \"<string>\"\n        },\n        \"regex\": \"<boolean>\"\n      },\n      \"thresholdOperator\": \"<string>\",\n      \"thresholds\": {\n        \"key_0\": {\n          \"type\": \"<string>\"\n        },\n        \"key_1\": {\n          \"type\": \"<string>\"\n        },\n        \"key_2\": {\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  ],\n  \"severity\": \"<integer>\",\n  \"threshold\": {\n    \"operator\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"triggering\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1bc3c24d-89fb-4791-99ac-ebd201366ee2",
+          "name": "Disable Infra Alert Config",
+          "request": {
+            "name": "Disable Infra Alert Config",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "infra-alert-configs",
+                ":id",
+                "disable"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the Infra Smart Alert configuration to disable"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "<string>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a00c1d61-a374-48d9-ac15-b0f765e89a68",
+              "name": "Successful - no content to return.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id",
+                    "disable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration to disable"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0acebc8f-126e-473e-89a9-c543cbb304c2",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id",
+                    "disable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration to disable"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "64ab0158-bf16-4f46-9670-ff9e2e26984e",
+              "name": "Resource not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id",
+                    "disable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration to disable"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "05f328e8-ce61-49fb-a5c3-e8461b1dcfb7",
+          "name": "Enable Infra Alert Config",
+          "request": {
+            "name": "Enable Infra Alert Config",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "infra-alert-configs",
+                ":id",
+                "enable"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the Infra Smart Alert configuration to enable"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "<string>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ff886ca4-85d8-4d3f-9416-ac79e0fd974c",
+              "name": "Successful - no content to return.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id",
+                    "enable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration to enable"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "db7c7cf0-b3d6-4636-81f5-081f7495cb7b",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id",
+                    "enable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration to enable"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f9eb2967-89a9-48e1-ba33-69f398ebd112",
+              "name": "Resource not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id",
+                    "enable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration to enable"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d2ab9570-7b41-4146-8757-57e03a39fc24",
+          "name": "Restore Infra Alert Config",
+          "request": {
+            "name": "Restore Infra Alert Config",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "infra-alert-configs",
+                ":id",
+                "restore",
+                ":created"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the Infra Smart Alert configuration to restore"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "created",
+                  "description": "(Required) A Unix Timestamp of when the alert was created"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "<string>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b8bc9b3f-8f0a-4953-b2df-1ae6485b6e80",
+              "name": "Successful - no content to return.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id",
+                    "restore",
+                    ":created"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration to restore"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "created",
+                      "description": "(Required) A Unix Timestamp of when the alert was created"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "10f9ad87-0a10-4442-8712-39a13e6efb19",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id",
+                    "restore",
+                    ":created"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration to restore"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "created",
+                      "description": "(Required) A Unix Timestamp of when the alert was created"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9a91e0c9-753c-4dc9-8d2c-7f4d7f6950eb",
+              "name": "Resource not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id",
+                    "restore",
+                    ":created"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration to restore"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "created",
+                      "description": "(Required) A Unix Timestamp of when the alert was created"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2a4fb15f-7689-4ecd-9cc6-6e75d402f29b",
+          "name": "Get versions of Infra Alert Config",
+          "request": {
+            "name": "Get versions of Infra Alert Config",
+            "description": {
+              "content": "Find all versions of a Infra Alert Config by ID. This will deliver deleted configs too. Configs are sorted descending by their created date.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "infra-alert-configs",
+                ":id",
+                "versions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the Infra Smart Alert configuration"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7e73435f-58f2-4f12-b668-db5d09f62280",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"4kxgJAXdSDiu6swQaKXrJw\",\n    \"created\": 1724720587414,\n    \"enabled\": false,\n    \"deleted\": false,\n    \"changeSummary\": {\n      \"changeType\": \"DISABLE\",\n      \"author\": {\n        \"id\": \"5ee8a3e8cd70020001ecb007\",\n        \"type\": \"USER\",\n        \"fullName\": \"Stan\"\n      }\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "42ebf9a9-0100-4b10-a8fb-febca076e8ff",
+              "name": "Resource not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "infra-alert-configs",
+                    ":id",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Infra Smart Alert configuration"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Customer tenant unit",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "tenant",
+      "key": "tenant"
+    },
+    {
+      "description": {
+        "content": "Customer tenant name",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "unit",
+      "key": "unit"
+    },
+    {
+      "type": "string",
+      "value": "https://{{unit}}-{{tenant}}.instana.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "031255b7-f421-4656-93e4-d96aa868b39e",
+    "name": "Instana REST API documentation Infrastructure Alert Configuration API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n\n\nContact Support:\n Name: © Instana\n Email: support@instana.com",
+      "type": "text/plain"
+    }
+  }
+}

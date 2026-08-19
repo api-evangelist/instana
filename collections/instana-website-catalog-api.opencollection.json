@@ -1,0 +1,83 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Website Catalog API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Website Catalog",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get website tag catalog",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/catalog",
+            "params": [
+              {
+                "name": "beaconType",
+                "value": "pageLoad",
+                "type": "query",
+                "description": "beaconType"
+              },
+              {
+                "name": "useCase",
+                "value": "GROUPING",
+                "type": "query",
+                "description": "useCase"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get website tag catalog"
+        },
+        {
+          "info": {
+            "name": "Metric catalog",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/catalog/metrics",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves all available metric definitions for website monitoring.\n"
+        },
+        {
+          "info": {
+            "name": "Get all existing website tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/catalog/tags",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves all available tags for your monitored system.\n\nThese tags can be used to group metric results.\n```\n\"group\": {\n  \"groupbyTag\": \"beacon.page.name\"\n}\n```\n\nThese tags can be used to filter metric results.\n```\n\"tagFilters\": [{\n\t\"name\": \"beacon.website.name\",\n\t\"operator\": \"EQUALS\",\n\t\"value\": \"example\"\n}]\n```\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

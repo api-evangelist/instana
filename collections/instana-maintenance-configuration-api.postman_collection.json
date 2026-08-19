@@ -1,0 +1,1821 @@
+{
+  "item": [
+    {
+      "id": "55d3dd2d-cb96-498e-b31e-20b7b09eff9f",
+      "name": "Maintenance Configuration",
+      "description": {
+        "content": "### Maintenance Windows\nMaintenance windows allow you to mute alerts.\n\n### Types of Maintenance Configurations\n**One-Time**: Executed once at a fixed scheduled time, after which the configuration expires.\n\n**Recurrent**: Executed on a schedule basis (e.g., daily, weekly, monthly, or yearly).\n\n### Pausing or Resuming Maintenance Configurations\nMaintenance windows can be paused or resumed.\n\nIf a maintenance configuration is paused, alerts for the events matching the scope of the configuration will no longer be muted. \n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "980faa21-1f0a-4669-af27-41bca5cf0518",
+          "name": "All maintenance configurations",
+          "request": {
+            "name": "All maintenance configurations",
+            "description": {
+              "content": "\nFor more information on Maintenance Configurations please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#maintenance-configurations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "maintenance"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "75d995a5-86fc-4db6-907a-c94f8d1fe5b1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "maintenance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"query\": \"string\",\n    \"status\": \"FINISHED\",\n    \"invalid\": false,\n    \"lastUpdated\": 4916,\n    \"windows\": [\n      {\n        \"id\": \"string\",\n        \"end\": 6138,\n        \"start\": 8717\n      }\n    ]\n  },\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"query\": \"string\",\n    \"status\": \"SCHEDULED\",\n    \"invalid\": false,\n    \"lastUpdated\": 920,\n    \"windows\": [\n      {\n        \"id\": \"s\",\n        \"end\": 5280,\n        \"start\": 4897\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2ed29cb4-fcdb-497d-a0cb-79a30f716d25",
+          "name": "Delete maintenance configuration",
+          "request": {
+            "name": "Delete maintenance configuration",
+            "description": {
+              "content": "\nFor more information on Maintenance Configurations please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#maintenance-configurations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "maintenance",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the Maintenance Window Configuration to delete."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b31dfed0-1d0b-46f4-842b-21ba8a8bbb14",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "maintenance",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Maintenance Window Configuration to delete."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "368fdaf7-0b4e-4290-b013-46987fcc48e4",
+          "name": "Maintenance configuration",
+          "request": {
+            "name": "Maintenance configuration",
+            "description": {
+              "content": "\nFor more information on Maintenance Configurations please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#maintenance-configurations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "maintenance",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the Maintenance Window Configuration to get."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "8bea8566-54c0-48ff-b6c5-da0b5ee26218",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "maintenance",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Maintenance Window Configuration to get."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"query\": \"string\",\n  \"lastUpdated\": 2144,\n  \"windows\": [\n    {\n      \"id\": \"stri\",\n      \"end\": 2233,\n      \"start\": 9431\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cbd29398-eda8-4110-9b0a-1c72cc928c2b",
+          "name": "Create or update maintenance configuration",
+          "request": {
+            "name": "Create or update maintenance configuration",
+            "description": {
+              "content": "\nFor more information on Maintenance Configurations please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#maintenance-configurations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "maintenance",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the Maintenance Window Configuration to update."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"query\": \"<string>\",\n  \"windows\": [\n    {\n      \"id\": \"<string>\",\n      \"end\": \"<long>\",\n      \"start\": \"<long>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c66b4aae-c2c2-4587-b0e1-0a4a78eb41de",
+              "name": "Maintenance config has been created or updated, and successfully scheduled immediately if needed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "maintenance",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Maintenance Window Configuration to update."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"query\": \"<string>\",\n  \"windows\": [\n    {\n      \"id\": \"<string>\",\n      \"end\": \"<long>\",\n      \"start\": \"<long>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a1c34282-a210-4b69-beef-402cf6674f08",
+              "name": "Maintenance config has been created or updated, but could not to be scheduled immediately. It will therefore be scheduled during the next auto-refresh with a delay of up to 4 minutes.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "maintenance",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Maintenance Window Configuration to update."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"query\": \"<string>\",\n  \"windows\": [\n    {\n      \"id\": \"<string>\",\n      \"end\": \"<long>\",\n      \"start\": \"<long>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0299c0bc-eb85-4c4d-a985-05ee40b01ffb",
+              "name": "Invalid JSON or mismatching IDs have been provided",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "maintenance",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the Maintenance Window Configuration to update."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"query\": \"<string>\",\n  \"windows\": [\n    {\n      \"id\": \"<string>\",\n      \"end\": \"<long>\",\n      \"start\": \"<long>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f2b370de-ebf3-4406-9cd2-308111726bab",
+          "name": "All maintenance configurations",
+          "request": {
+            "name": "All maintenance configurations",
+            "description": {
+              "content": "This endpoint retrieves all available maintenance configurations.  ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "v2",
+                "maintenance"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "dd2d978c-2a25-4911-9479-78167ec13de3",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "maintenance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"maintenanceConfigId\",\n    \"name\": \"maintenanceConfig\",\n    \"query\": \"entity.application.id:\\\"anApplicationId\\\"\",\n    \"scheduling\": {\n      \"start\": 1680703219486,\n      \"duration\": {\n        \"amount\": 2,\n        \"unit\": \"HOURS\"\n      },\n      \"rrule\": \"FREQ=DAILY;INTERVAL=1;COUNT=1\",\n      \"timezoneId\": \"UTC\",\n      \"type\": \"RECURRENT\"\n    },\n    \"paused\": false,\n    \"lastUpdated\": 1680703219678,\n    \"state\": \"EXPIRED\",\n    \"validVersion\": 1,\n    \"occurrence\": {\n      \"start\": 1680703219000,\n      \"end\": 1680710419000\n    },\n    \"invalid\": false,\n    \"applicationNames\": [\n      \"anApplicationName\"\n    ]\n  },\n  {\n    \"id\": \"anotherMaintenanceConfigId\",\n    \"name\": \"anotherMaintenanceConfig\",\n    \"query\": \"entity.type:ibmz.db2\",\n    \"scheduling\": {\n      \"start\": 1680703219486,\n      \"duration\": {\n        \"amount\": 2,\n        \"unit\": \"HOURS\"\n      },\n      \"rrule\": \"FREQ=DAILY;INTERVAL=1;COUNT=1\",\n      \"timezoneId\": \"UTC\",\n      \"type\": \"RECURRENT\"\n    },\n    \"paused\": false,\n    \"lastUpdated\": 1680703219678,\n    \"state\": \"EXPIRED\",\n    \"validVersion\": 1,\n    \"occurrence\": {\n      \"start\": 1680703219000,\n      \"end\": 1680710419000\n    },\n    \"invalid\": false,\n    \"applicationNames\": []\n  },\n  {\n    \"id\": \"1698949644924\",\n    \"name\": \"sampleMaintenanceConfig\",\n    \"query\": \"\",\n    \"scheduling\": {\n      \"start\": 1698949644924,\n      \"duration\": {\n        \"amount\": 2,\n        \"unit\": \"HOURS\"\n      },\n      \"rrule\": \"FREQ=WEEKLY;INTERVAL=2;BYDAY=SA;COUNT=10\",\n      \"timezoneId\": \"America/New_York\",\n      \"type\": \"RECURRENT\"\n    },\n    \"paused\": false,\n    \"validVersion\": 1,\n    \"tagFilterExpression\": {\n      \"type\": \"EXPRESSION\",\n      \"logicalOperator\": \"OR\",\n      \"elements\": [\n        {\n          \"type\": \"TAG_FILTER\",\n          \"name\": \"synthetic.locationLabelAggregated\",\n          \"stringValue\": \"us-east\",\n          \"numberValue\": null,\n          \"booleanValue\": null,\n          \"key\": null,\n          \"value\": \"us-east\",\n          \"operator\": \"EQUALS\",\n          \"entity\": \"NOT_APPLICABLE\"\n        },\n        {\n          \"type\": \"TAG_FILTER\",\n          \"name\": \"synthetic.syntheticType\",\n          \"stringValue\": \"HTTPScript\",\n          \"numberValue\": null,\n          \"booleanValue\": null,\n          \"key\": null,\n          \"value\": \"HTTPScript\",\n          \"operator\": \"EQUALS\",\n          \"entity\": \"NOT_APPLICABLE\"\n        }\n      ]\n    },\n    \"tagFilterExpressionEnabled\": true,\n    \"retriggerOpenAlertsEnabled\": true,\n    \"lastUpdated\": 1698949645163,\n    \"state\": \"SCHEDULED\",\n    \"occurrence\": {\n      \"start\": 1699122444000,\n      \"end\": 1699129644000\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c1febf69-ba27-456f-b356-34c44059796c",
+          "name": "Delete maintenance configuration",
+          "request": {
+            "name": "Delete maintenance configuration",
+            "description": {
+              "content": "This endpoint deletes a maintenance configuration given its ID.\n\n### Path Parameters:\n\n- **id:** The ID of the maintenance config to delete.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "v2",
+                "maintenance",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the Maintenance Window configuration to delete."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a6f76dcd-0b63-4021-bee2-34f23408204c",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "maintenance",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the Maintenance Window configuration to delete."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "700b7176-aa1e-4d63-a778-c49cb9153b6e",
+          "name": "Get maintenance configuration",
+          "request": {
+            "name": "Get maintenance configuration",
+            "description": {
+              "content": "This endpoint retrieves a maintenance configuration given its ID.\n\n### Path Parameters:\n\n- **id:** The ID of the maintenance config to fetch.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "v2",
+                "maintenance",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the Maintenance Window Configuration to get."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b126cea4-4534-458b-a28f-e3feeecaf1b8",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "maintenance",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the Maintenance Window Configuration to get."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"maintenanceConfigId\",\n  \"name\": \"maintenanceConfig\",\n  \"query\": \"\",\n  \"scheduling\": {\n    \"start\": 1683864000000,\n    \"duration\": {\n      \"amount\": 24,\n      \"unit\": \"HOURS\"\n    },\n    \"type\": \"ONE_TIME\"\n  },\n  \"paused\": false,\n  \"validVersion\": 1,\n  \"lastUpdated\": 1683901553115,\n  \"state\": \"EXPIRED\",\n  \"occurrence\": {\n    \"start\": 1683864000000,\n    \"end\": 1683950400000\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d149ce73-a425-4ae5-8e0b-b7605ea33641",
+          "name": "Create or update maintenance configuration",
+          "request": {
+            "name": "Create or update maintenance configuration",
+            "description": {
+              "content": "This endpoint creates or updates a maintenance configuration given its ID.\n\n### Path Parameters:\n\n- **id:** The ID of the maintenance config to create or update.\n\n### Maintenance Configuration Input\nThis is a description for the fields in the request body:\n\n**id**: maintenance configuration unique id  \n**name**: maintenance configuration name  \n**query**: dynamic focus query used to filter alert notifications that will be muted  \n**scheduling**: defines when the maintenance configuration will be scheduled\n- **start**: time in milliseconds from epoch\n- **duration**: duration of each maintenance window occurrence in the maintenance configuration\n    - **amount**: the amount of time\n    - **unit**: the unit of time\n- **type**: `ONE_TIME` or `RECURRENT`\n- **rrule**:  for `RECURRENT` mainteance configurations, the RRULE standard from the [iCalendar Spec](https://datatracker.ietf.org/doc/html/rfc5545)\n- **paused**: indicates whether maintenance configuration is paused or not  \n\n**tagFilterExpressionEnabled (OPTIONAL) (Closed Beta)**: indicates whether tagFilterExpression is used to filter alert notifications  \n**tagFilterExpression (OPTIONAL) (Closed Beta)**: tag filter expression used to filter alert notifications that will be muted (this field needs to be provided if **tagFilterExpressionEnabled** is set to true) \n\n### **Scope**\nThere are four supported scopes; application perspective, dynamic focus query, synthetic tests, all entities. Below is the configuration corresponding to each scope:\n\n**1. Application Perspective**  \n&nbsp;&nbsp; dfq: a valid dynamic focus query  \n&nbsp;&nbsp; tfeEnabled: (optional)  \n&nbsp;&nbsp; tfe: (optional)  \n\n**2. Dynamic Focus Query**  \n&nbsp;&nbsp; dfq: a valid dynamic focus query  \n&nbsp;&nbsp; tfeEnabled: (optional)  \n&nbsp;&nbsp; tfe: (optional)  \n\n**3. Synthetic Tests**  \n&nbsp;&nbsp; dfq: \"\"  \n&nbsp;&nbsp; tfeEnabled: true  \n&nbsp;&nbsp; tfe: a valid tag filter expression  \n\n**4. All Entities**  \n&nbsp;&nbsp; dfq: \"\"  \n&nbsp;&nbsp; tfeEnabled: false  \n&nbsp;&nbsp; tfe: null\n\n### **RRULE Support**\nYou can use the [RRULE tool](https://icalendar.org/rrule-tool.html) for generating RRULEs.\n\n\nThe following RRULE tokens are supported: `FREQ`, `UNTIL`, `COUNT`, `INTERVAL`, `BYDAY`, `BYMONTHDAY`, `BYMONTH`.\n\n**Additional Constraints:**\n\n1. For `MONTHLY` and `YEARLY`, you can only specify one value for `BYDAY` and `BYMONTHDAY`.  \n2. The maximum `INTERVAL` allowed is as follows:  \n    - DAILY is 365\n    - WEEKLY is 52\n    - MONTHLY is 12\n    - YEARLY is 1\n3. If an `UNTIL` date is specified, the value needs to be in UTC.\n\n### **Tag Filter Expression Support**\nWe support the following tag filters:\n- synthetic.syntheticType\n- synthetic.testName\n- synthetic.locationLabelAggregated\n- synthetic.tags",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "v2",
+                "maintenance",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the Maintenance Window configuration to update."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"query\": \"<string>\",\n  \"scheduling\": {\n    \"duration\": {\n      \"amount\": \"<long>\",\n      \"unit\": \"<string>\"\n    },\n    \"start\": \"<long>\",\n    \"type\": \"<string>\"\n  },\n  \"paused\": \"<boolean>\",\n  \"retriggerOpenAlertsEnabled\": \"<boolean>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"tagFilterExpressionEnabled\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3968e6b9-1c7d-4fb6-be61-93cfef95f400",
+              "name": "Maintenance config has been created or updated, and successfully scheduled immediately if needed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "maintenance",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the Maintenance Window configuration to update."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"maintenanceConfigID\",\n  \"name\": \"sampleMaintenanceConfig\",\n  \"query\": \"\",\n  \"scheduling\": {\n    \"start\": 1683827571245,\n    \"duration\": {\n      \"amount\": 2,\n      \"unit\": \"HOURS\"\n    },\n    \"type\": \"RECURRENT\",\n    \"rrule\": \"FREQ=WEEKLY;INTERVAL=2;BYDAY=SA;COUNT=10\",\n    \"timezoneId\": \"America/New_York\"\n  },\n  \"tagFilterExpressionEnabled\": true,\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"OR\",\n    \"elements\": [\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"synthetic.locationLabelAggregated\",\n        \"stringValue\": \"us-east\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"us-east\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\"\n      },\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"synthetic.syntheticType\",\n        \"stringValue\": \"HTTPScript\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"HTTPScript\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"maintenanceConfigId\",\n  \"name\": \"maintenanceConfig\",\n  \"query\": \"\",\n  \"scheduling\": {\n    \"start\": 1698938631036,\n    \"duration\": {\n      \"amount\": 2,\n      \"unit\": \"HOURS\"\n    },\n    \"type\": \"ONE_TIME\"\n  },\n  \"paused\": false,\n  \"validVersion\": 1,\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"OR\",\n    \"elements\": [\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"synthetic.locationLabelAggregated\",\n        \"stringValue\": \"us-east\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"us-east\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\"\n      },\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"synthetic.syntheticType\",\n        \"stringValue\": \"HTTPScript\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"HTTPScript\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\"\n      }\n    ]\n  },\n  \"tagFilterExpressionEnabled\": true,\n  \"retriggerOpenAlertsEnabled\": true,\n  \"lastUpdated\": 1698938631408,\n  \"state\": \"ACTIVE\",\n  \"occurrence\": {\n    \"start\": 1698938631036,\n    \"end\": 1698945831036\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7bf730fa-3982-4f68-8915-b3f5964ac621",
+              "name": "Maintenance config has been created or updated, but could not to be scheduled immediately. It will therefore be scheduled during the next auto-refresh with a delay of up to 4 minutes.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "maintenance",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the Maintenance Window configuration to update."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"maintenanceConfigID\",\n  \"name\": \"sampleMaintenanceConfig\",\n  \"query\": \"\",\n  \"scheduling\": {\n    \"start\": 1683827571245,\n    \"duration\": {\n      \"amount\": 2,\n      \"unit\": \"HOURS\"\n    },\n    \"type\": \"RECURRENT\",\n    \"rrule\": \"FREQ=WEEKLY;INTERVAL=2;BYDAY=SA;COUNT=10\",\n    \"timezoneId\": \"America/New_York\"\n  },\n  \"tagFilterExpressionEnabled\": true,\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"OR\",\n    \"elements\": [\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"synthetic.locationLabelAggregated\",\n        \"stringValue\": \"us-east\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"us-east\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\"\n      },\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"synthetic.syntheticType\",\n        \"stringValue\": \"HTTPScript\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"HTTPScript\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "eac94384-4a6f-4947-a850-0d20a2773ef7",
+              "name": "The provided maintenance configuration is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "maintenance",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the Maintenance Window configuration to update."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"maintenanceConfigID\",\n  \"name\": \"sampleMaintenanceConfig\",\n  \"query\": \"\",\n  \"scheduling\": {\n    \"start\": 1683827571245,\n    \"duration\": {\n      \"amount\": 2,\n      \"unit\": \"HOURS\"\n    },\n    \"type\": \"RECURRENT\",\n    \"rrule\": \"FREQ=WEEKLY;INTERVAL=2;BYDAY=SA;COUNT=10\",\n    \"timezoneId\": \"America/New_York\"\n  },\n  \"tagFilterExpressionEnabled\": true,\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"OR\",\n    \"elements\": [\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"synthetic.locationLabelAggregated\",\n        \"stringValue\": \"us-east\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"us-east\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\"\n      },\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"synthetic.syntheticType\",\n        \"stringValue\": \"HTTPScript\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"HTTPScript\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "63615797-3f0b-4bfa-a24b-a2b8c018d29f",
+              "name": "The provided maintenance configuration is incomplete or cannot be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "maintenance",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the Maintenance Window configuration to update."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"maintenanceConfigID\",\n  \"name\": \"sampleMaintenanceConfig\",\n  \"query\": \"\",\n  \"scheduling\": {\n    \"start\": 1683827571245,\n    \"duration\": {\n      \"amount\": 2,\n      \"unit\": \"HOURS\"\n    },\n    \"type\": \"RECURRENT\",\n    \"rrule\": \"FREQ=WEEKLY;INTERVAL=2;BYDAY=SA;COUNT=10\",\n    \"timezoneId\": \"America/New_York\"\n  },\n  \"tagFilterExpressionEnabled\": true,\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"OR\",\n    \"elements\": [\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"synthetic.locationLabelAggregated\",\n        \"stringValue\": \"us-east\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"us-east\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\"\n      },\n      {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"synthetic.syntheticType\",\n        \"stringValue\": \"HTTPScript\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"HTTPScript\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"NOT_APPLICABLE\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4106017f-5e57-463c-9a56-97e4eea0af25",
+          "name": "Pause maintenance configuration",
+          "request": {
+            "name": "Pause maintenance configuration",
+            "description": {
+              "content": "This endpoint pauses a maintenance configuration given its ID.\n\nWhen you pause a maintenance configuration, you will start receiving alerts again for the scope defined in the maintenance configuration.\n### Path Parameters:\n\n- **id:** The ID of the maintenance config to pause.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "v2",
+                "maintenance",
+                ":id",
+                "pause"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the Maintenance Window configuration to pause."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7473a2b2-a27d-43d4-8ef1-5ad28e6719be",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "maintenance",
+                    ":id",
+                    "pause"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the Maintenance Window configuration to pause."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"maintenanceConfigId\",\n  \"name\": \"maintenanceConfig\",\n  \"query\": \"entity.application.id:\\\"anApplicationId\\\"\",\n  \"scheduling\": {\n    \"start\": 1684251745262,\n    \"duration\": {\n      \"amount\": 2,\n      \"unit\": \"HOURS\"\n    },\n    \"type\": \"ONE_TIME\"\n  },\n  \"paused\": true,\n  \"validVersion\": 1,\n  \"lastUpdated\": 1684251750475,\n  \"state\": \"PAUSED\",\n  \"occurrence\": {\n    \"start\": 1684251745262,\n    \"end\": 1684258945262\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "45ea5875-bf67-4c67-9f71-3fbb6ad5e7f6",
+          "name": "Resume maintenance configuration",
+          "request": {
+            "name": "Resume maintenance configuration",
+            "description": {
+              "content": "This endpoint resumes a maintenance configuration given its ID.\n\nIf the maintenance configuration becomes active when you resume the maintenance configuration, you will not receive alerts for the scope defined in the maintenance configuration.\n### Path Parameters:\n\n- **id:** The ID of the maintenance config to resume.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "v2",
+                "maintenance",
+                ":id",
+                "resume"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the Maintenance Window configuration to resume."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a489dfdc-2803-4ad1-b087-403d84324ecd",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "v2",
+                    "maintenance",
+                    ":id",
+                    "resume"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the Maintenance Window configuration to resume."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"maintenanceConfigId\",\n  \"name\": \"maintenanceConfig\",\n  \"query\": \"entity.application.id:\\\"anApplicationId\\\"\",\n  \"scheduling\": {\n    \"start\": 1684251745262,\n    \"duration\": {\n      \"amount\": 2,\n      \"unit\": \"HOURS\"\n    },\n    \"type\": \"ONE_TIME\"\n  },\n  \"paused\": false,\n  \"validVersion\": 1,\n  \"lastUpdated\": 1684251933433,\n  \"state\": \"ACTIVE\",\n  \"occurrence\": {\n    \"start\": 1684251745262,\n    \"end\": 1684258945262\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Customer tenant unit",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "tenant",
+      "key": "tenant"
+    },
+    {
+      "description": {
+        "content": "Customer tenant name",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "unit",
+      "key": "unit"
+    },
+    {
+      "type": "string",
+      "value": "https://{{unit}}-{{tenant}}.instana.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "948747de-61bb-45d0-b93c-b744d494baf8",
+    "name": "Instana REST API documentation Maintenance Configuration API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n\n\nContact Support:\n Name: © Instana\n Email: support@instana.com",
+      "type": "text/plain"
+    }
+  }
+}

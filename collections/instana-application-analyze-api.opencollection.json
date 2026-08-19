@@ -1,0 +1,190 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Application Analyze API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Application Analyze",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Resolve Trace IDs from Monitoring Beacons.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/analyze/backend-correlation",
+            "params": [
+              {
+                "name": "correlationId",
+                "value": "0v7f55879ca12345",
+                "type": "query",
+                "description": "Here, the `backendTraceId` is typically used which can be obtained from the `Get all beacons` API endpoint for website and mobile app monitoring.\nFor XHR, fetch, or HTTP beacons, the `beaconId` retrieved from the same API endpoint can also serve as the `correlationId`.\n"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Resolves backend trace IDs using correlation IDs from website and mobile app monitoring beacons.\nFor more information on Application Analyze please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-analyze."
+        },
+        {
+          "info": {
+            "name": "Get grouped call metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/analyze/call-groups",
+            "params": [
+              {
+                "name": "fillTimeSeries",
+                "value": "",
+                "type": "query",
+                "description": "If enabled, fill the missing data points in the metric result with timestamp and value 0."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves the metrics for calls.\r\n\r\n## Deprecated Parameters\r\n**tagFilters:** The list of tag filters. It is replaced by **tagFilterExpression**, **includeInternal** and **includeSynthetic**.\r\n\r\n## Supported Aggregation on Get Grouped call metrics\r\n\r\n| Metric           | Description                                                                                | Allowed Aggregations |\r\n|------------------|-----------------------------------------------------------------------------"
+        },
+        {
+          "info": {
+            "name": "Get grouped trace metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/analyze/trace-groups",
+            "params": [
+              {
+                "name": "fillTimeSeries",
+                "value": "",
+                "type": "query",
+                "description": "If enabled, fill the missing data points in the metric result with timestamp and value 0."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "The API endpoint retrieves metrics for traces that are grouped in the endpoint or service name.\n\nThe supported `groupbyTag` are `trace.endpoint.name` and `trace.service.name`. \n\n## Supported Aggregation on Get grouped trace metrics\n\n| Metric           | Description                                                                                | Allowed Aggregations |\n|------------------|--------------------------------------------------------------------------------------------|-----------------"
+        },
+        {
+          "info": {
+            "name": "Get all traces",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/analyze/traces",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use the endpoint to retrieve a list of traces.\r\n\r\n**Deprecated Parameter:** `tagFilters` is deprecated. It is replaced by `tagFilterExpression`.\r\n"
+        },
+        {
+          "info": {
+            "name": "Get trace detail",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/v2/analyze/traces/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "retrievalSize",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ingestionTime",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to retrive comprehensive details of a particular trace.\nFor more information on Application Analyze please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-analyze."
+        },
+        {
+          "info": {
+            "name": "Get call detail",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/v2/analyze/traces/:traceId/calls/:callId/details",
+            "params": [
+              {
+                "name": "traceId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "callId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint to retrieve a vast information about a call present in a trace.\n\nFor more information on Application Analyze please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-analyze."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

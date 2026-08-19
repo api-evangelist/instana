@@ -1,0 +1,256 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Application Resources API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Application Resources",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get applications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/applications",
+            "params": [
+              {
+                "name": "nameFilter",
+                "value": "",
+                "type": "query",
+                "description": "Name of application"
+              },
+              {
+                "name": "windowSize",
+                "value": "",
+                "type": "query",
+                "description": "Size of time window in milliseconds"
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Timestamp since Unix Epoch in milliseconds of the end of the time window"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number from results"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of items per page"
+              },
+              {
+                "name": "applicationBoundaryScope",
+                "value": "",
+                "type": "query",
+                "description": "Filter for application scope, i.e: INBOUND or ALL"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to retrieve a list of Application Perspectives.\nA use case could be to view the application id of an Application Perspective.\n\nFor more information on Application Resources please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-resources."
+        },
+        {
+          "info": {
+            "name": "Get applications/services",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/applications;id=<appId>/services",
+            "params": [
+              {
+                "name": "nameFilter",
+                "value": "",
+                "type": "query",
+                "description": "Name of service (partial match allowed)"
+              },
+              {
+                "name": "windowSize",
+                "value": "",
+                "type": "query",
+                "description": "Size of time window in milliseconds"
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Timestamp since Unix Epoch in milliseconds of the end of the time window"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number from results"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of items per page"
+              },
+              {
+                "name": "applicationBoundaryScope",
+                "value": "",
+                "type": "query",
+                "description": "Filter for application scope, i.e: INBOUND or ALL"
+              },
+              {
+                "name": "includeSnapshotIds",
+                "value": "",
+                "type": "query",
+                "description": "Include snapshot ids in the results"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to retrieve a list of services in an Application Perspective.\nA use case could be to retrieve all service ids present in an Application Perspective.\n\nFor more information on Application Resources please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-resources."
+        },
+        {
+          "info": {
+            "name": "Get endpoints",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/applications/services/endpoints",
+            "params": [
+              {
+                "name": "nameFilter",
+                "value": "",
+                "type": "query",
+                "description": "Name of service"
+              },
+              {
+                "name": "types",
+                "value": "",
+                "type": "query",
+                "description": "Type of Endpoint"
+              },
+              {
+                "name": "technologies",
+                "value": "",
+                "type": "query",
+                "description": "List of technologies"
+              },
+              {
+                "name": "windowSize",
+                "value": "",
+                "type": "query",
+                "description": "Size of time window in milliseconds"
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Timestamp since Unix Epoch in milliseconds of the end of the time window"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number from results"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of items per page"
+              },
+              {
+                "name": "applicationBoundaryScope",
+                "value": "",
+                "type": "query",
+                "description": "Filter for application scope, i.e: INBOUND or ALL"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to retrieve a list of Endpoints.\nA use case could be to view the endpoint id of an Endpoint.\n\nFor more information on Application Resources please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-resources."
+        },
+        {
+          "info": {
+            "name": "Get services",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/services",
+            "params": [
+              {
+                "name": "nameFilter",
+                "value": "",
+                "type": "query",
+                "description": "Name of service"
+              },
+              {
+                "name": "windowSize",
+                "value": "",
+                "type": "query",
+                "description": "Size of time window in milliseconds"
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Timestamp since Unix Epoch in milliseconds of the end of the time window"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number from results"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of items per page"
+              },
+              {
+                "name": "includeSnapshotIds",
+                "value": "",
+                "type": "query",
+                "description": "Include snapshot ids in the results"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to retrieve a list of Services.\nA use case could be to view the service id of a Service.\n\nFor more information on Application Resources please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-resources."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

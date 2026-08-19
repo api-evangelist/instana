@@ -1,0 +1,3225 @@
+{
+  "item": [
+    {
+      "id": "781a42ae-f3e4-4665-a481-dea9e6a995e8",
+      "name": "Groups",
+      "description": {
+        "content": "Groups are used to permit individual users to perform specific actions and get visibility to an access scope. Each user can be assigned to multiple groups, every one coming with its associated permissions. In addition a group sets the access scope and you can configure the visible areas for the group members.\n\nWhen you are a member of multiple groups, your permissions have an additive effect.\n\nGranting access to certain entities within Instana (e.g. Applications, Kubernetes Clusters etc.) is done through a corresponding entry in the `permissionSet` payload.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4b5580fb-9d8a-45e7-8375-9770fa8421fa",
+          "name": "Get groups",
+          "request": {
+            "name": "Get groups",
+            "description": {
+              "content": "Retrieve the list of all groups on the tenant together with the `Permission Set` for the tenant unit.\n\nThe `Permission Set` object contains a set of permissions applied to the group.\n\nIn case `permissions` include the entry e.g. `LIMITED_APPLICATIONS_SCOPE`, this group will have limited access to application area.\n\nThe areas are included inside the `permissionSet`.\n\nThe scopeRoleId is a fixed value for each area type:\n\n| Area                    | value         |\n| ----------------------- | ------------- |\n| applicationIds          | -100          |\n| kubernetesClusterUUIDs  | -200          |\n| kubernetesNamespaceUIDs | -300          |\n| websiteIds              | -400          |\n| mobileAppIds            | -500          |\n| infraDfqFilter          | -600          |\n\nFor example:\n\n```\n[\n    {\n        \"id\": \"7hwdhtt7TU2CJDgYXgwwww\",\n        \"name\": \"Scoped Group\",\n        \"members\": [\n            {\n                \"userId\": \"61892cfdfcffab03016b2950\",\n                \"email\": \"jhon@example.com\"\n            }\n        ],\n        \"permissionSet\": {\n        \"permissions\": [\n            \"CAN_VIEW_LOGS\",\n            \"CAN_VIEW_TRACE_DETAILS\",\n            \"CAN_EDIT_ALL_ACCESSIBLE_CUSTOM_DASHBOARDS\",\n            \"ACCESS_APPLICATIONS\",\n            \"LIMITED_APPLICATIONS_SCOPE\",            \n            \"ACCESS_KUBERNETES\",\n            \"LIMITED_KUBERNETES_SCOPE\",\n            \"ACCESS_INFRASTRUCTURE_APPS\",\n            \"LIMITED_INFRASTRUCTURE_SCOPE\",\n            \"LIMITED_WEBSITES_SCOPE\",\n            \n        ],\n        \"applicationIds\": [\n            {\n            \"scopeId\": \"1qvWgVfLTNqi9gGTcCaNUw\",\n            \"scopeRoleId\": \"-100\"\n            }\n        ],\n        \"kubernetesClusterUUIDs\": [\n            {\n            \"scopeId\": \"induced\",\n            \"scopeRoleId\": \"-200\"\n            }\n        ],\n        \"kubernetesNamespaceUIDs\": [],\n        \"websiteIds\": [],\n        \"mobileAppIds\": [],\n        \"infraDfqFilter\": {\n            \"scopeId\": \"production\",\n            \"scopeRoleId\": \"-600\"\n        }\n    }\n]\n```\nIn this case `Scoped Group` has no access to websites due to having `LIMITED_WEBSITES_SCOPE` but not `ACCESS_WEBSITES`.\n\nAlso due to having `LIMITED_APPLICATIONS_SCOPE`, the only visible application is the one with this id: `1qvWgVfLTNqi9gGTcCaNUw`.\n\nSame applies to `kubernetesClusterUUIDs`, `kubernetesNamespaceUIDs` and `infraDfqFilter`, with the only difference is that `infraDfqFilter`\nuses a filter \"production\" instead of an id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "groups"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7f8d9bac-7f58-4c73-aefb-5e21d68d547a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "groups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"groupId1\",\n    \"name\": \"group1\",\n    \"members\": [\n      {\n        \"userId\": \"userId1\",\n        \"email\": \"username1@example.com\"\n      },\n      {\n        \"userId\": \"userId2\",\n        \"email\": \"username2@example.com\"\n      }\n    ]\n  },\n  {\n    \"id\": \"groupId2\",\n    \"name\": \"group2\",\n    \"members\": [\n      {\n        \"userId\": \"userId1\",\n        \"email\": \"username1@example.com\"\n      },\n      {\n        \"userId\": \"userId3\",\n        \"email\": \"username3@example.com\"\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "35b7755e-4137-4127-80db-efd3b5e444d1",
+              "name": "No groups found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "groups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f4b25017-16a3-4b83-95b9-e5a80266f20b",
+          "name": "Create group",
+          "request": {
+            "name": "Create group",
+            "description": {
+              "content": "Creates a group on the tenant. Each group entry also needs a `Permission Set` per unit.\n\nThe `Permission Set` object contains a set of permissions applied to the group.\n\nIn case `permissions` include the entry e.g. `LIMITED_APPLICATIONS_SCOPE`, this group will have limited access to application area.\n\nPossible access permissions values are:\n\n- `ACCESS_APPLICATIONS`\n- `ACCESS_INFRASTRUCTURE`\n- `ACCESS_KUBERNETES`\n- `ACCESS_MOBILE_APPS`\n- `ACCESS_WEBSITES`\n- `LIMITED_APPLICATIONS_SCOPE`\n- `LIMITED_INFRASTRUCTURE_SCOPE`\n- `LIMITED_KUBERNETES_SCOPE`\n- `LIMITED_MOBILE_APPS_SCOPE`\n- `LIMITED_WEBSITES_SCOPE`\n\nThe `id` value for the group is ignored, a new id is generated.\n\nThe `scopeRoleId` is ignored, the id corresponding to the area is used.\n\nThe `scopeId` is the id for the corresponding resource.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "groups"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"members\": [\n    {\n      \"userId\": \"<string>\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\"\n    },\n    {\n      \"userId\": \"<string>\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\"\n    }\n  ],\n  \"name\": \"<string>\",\n  \"permissionSet\": {\n    \"applicationIds\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"businessPerspectiveIds\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"infraDfqFilter\": {\n      \"scopeId\": \"<string>\",\n      \"scopeRoleId\": \"<string>\"\n    },\n    \"kubernetesClusterUUIDs\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"kubernetesNamespaceUIDs\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"mobileAppIds\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"permissions\": [\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"sloIds\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"syntheticCredentialKeys\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"syntheticTestIds\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"websiteIds\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"actionFilter\": {\n      \"scopeId\": \"<string>\",\n      \"scopeRoleId\": \"<string>\"\n    },\n    \"restrictedApplicationFilter\": {\n      \"label\": \"<string>\",\n      \"restrictingApplicationId\": \"<string>\",\n      \"scope\": \"<string>\",\n      \"tagFilterExpression\": {\n        \"type\": \"<string>\"\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "86cc64a8-562b-43f4-a2c0-aec0f7aeda5b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "groups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"group name\",\n  \"members\": [\n    {\n      \"userId\": \"userId\",\n      \"email\": \"username@example.com\"\n    }\n  ],\n  \"permissionSet\": {\n    \"permissions\": [\n      \"CAN_VIEW_LOGS\"\n    ],\n    \"applicationIds\": [\n      {\n        \"scopeId\": \"scopeId1\",\n        \"scopeRoleId\": \"-102\"\n      }\n    ],\n    \"kubernetesClusterUUIDs\": [],\n    \"kubernetesNamespaceUIDs\": [],\n    \"websiteIds\": [],\n    \"mobileAppIds\": [],\n    \"syntheticTestIds\": [\n      {\n        \"scopeId\": \"scopeId10\",\n        \"scopeRoleId\": \"-1\"\n      }\n    ],\n    \"restrictedApplicationFilter\": {\n      \"label\": \"group name\",\n      \"tagFilterExpression\": {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"service.name\",\n        \"stringValue\": \"acceptor\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"acceptor\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"DESTINATION\"\n      },\n      \"scope\": \"INCLUDE_NO_DOWNSTREAM\"\n    },\n    \"infraDfqFilter\": {\n      \"scopeId\": \"\",\n      \"scopeRoleId\": \"-1\"\n    },\n    \"actionFilter\": {\n      \"scopeId\": \"\",\n      \"scopeRoleId\": \"-1\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"group name\",\n  \"members\": [\n    {\n      \"userId\": \"userId\",\n      \"email\": \"username@example.com\"\n    }\n  ],\n  \"permissionSet\": {\n    \"permissions\": [\n      \"CAN_VIEW_LOGS\"\n    ],\n    \"applicationIds\": [\n      {\n        \"scopeId\": \"scopeId1\",\n        \"scopeRoleId\": \"-102\"\n      }\n    ],\n    \"kubernetesClusterUUIDs\": [],\n    \"kubernetesNamespaceUIDs\": [],\n    \"websiteIds\": [],\n    \"mobileAppIds\": [],\n    \"syntheticTestIds\": [\n      {\n        \"scopeId\": \"scopeId10\",\n        \"scopeRoleId\": \"-1\"\n      }\n    ],\n    \"restrictedApplicationFilter\": {\n      \"label\": \"group name\",\n      \"tagFilterExpression\": {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"service.name\",\n        \"stringValue\": \"acceptor\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"acceptor\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"DESTINATION\"\n      },\n      \"scope\": \"INCLUDE_NO_DOWNSTREAM\"\n    },\n    \"infraDfqFilter\": {\n      \"scopeId\": \"\",\n      \"scopeRoleId\": \"-1\"\n    },\n    \"actionFilter\": {\n      \"scopeId\": \"\",\n      \"scopeRoleId\": \"-1\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c4768faf-23f4-4127-be52-67faedd10203",
+          "name": "Delete groups",
+          "request": {
+            "name": "Delete groups",
+            "description": {
+              "content": "Delete multiple groups\nFor more information on groups please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#groups.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "groups",
+                "delete"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  \"<string>\",\n  \"<string>\"\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3bf345ea-3ac4-4a92-9b08-d4af9f18a665",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "groups",
+                    "delete"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"<string>\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6c91ea5d-b966-43b3-9e98-c1e151d6f017",
+          "name": "Get groups of a single user",
+          "request": {
+            "name": "Get groups of a single user",
+            "description": {
+              "content": "Returns a list of all groups a user belongs to. This includes data from these groups, the `members`, the `name` and the `Permission set`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "groups",
+                "user",
+                ":email"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "email",
+                  "description": "(Required) Email of the user for retrieval"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9a04af66-276d-420a-ba82-dab972c8f628",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "groups",
+                    "user",
+                    ":email"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "email",
+                      "description": "(Required) Email of the user for retrieval"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"groupId\",\n    \"name\": \"group name\",\n    \"members\": [\n      {\n        \"userId\": \"userId\",\n        \"email\": \"username@example.com\"\n      }\n    ],\n    \"permissionSet\": {\n      \"permissions\": [\n        \"CAN_VIEW_LOGS\",\n        \"LIMITED_APPLICATIONS_SCOPE\",\n        \"ACCESS_APPLICATIONS\",\n        \"CAN_VIEW_TRACE_DETAILS\"\n      ],\n      \"applicationIds\": [\n        {\n          \"scopeId\": \"scopeId1\",\n          \"scopeRoleId\": \"-102\"\n        }\n      ],\n      \"kubernetesClusterUUIDs\": [],\n      \"kubernetesNamespaceUIDs\": [],\n      \"websiteIds\": [],\n      \"mobileAppIds\": [],\n      \"syntheticTestIds\": [],\n      \"restrictedApplicationFilter\": {\n        \"label\": \"filter name\",\n        \"tagFilterExpression\": {\n          \"type\": \"TAG_FILTER\",\n          \"name\": \"service.name\",\n          \"stringValue\": \"acceptor\",\n          \"numberValue\": null,\n          \"booleanValue\": null,\n          \"key\": null,\n          \"value\": \"acceptor\",\n          \"operator\": \"EQUALS\",\n          \"entity\": \"DESTINATION\"\n        },\n        \"scope\": \"INCLUDE_NO_DOWNSTREAM\"\n      },\n      \"infraDfqFilter\": {\n        \"scopeId\": \"\",\n        \"scopeRoleId\": \"-1\"\n      },\n      \"actionFilter\": {\n        \"scopeId\": \"\",\n        \"scopeRoleId\": \"-1\"\n      }\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2c928433-89c5-46f2-b247-acd1215f0f74",
+              "name": "No groups found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "groups",
+                    "user",
+                    ":email"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "email",
+                      "description": "(Required) Email of the user for retrieval"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c59f66f7-799b-4713-9320-c39cb4508ac2",
+          "name": "Add permissions to group",
+          "request": {
+            "name": "Add permissions to group",
+            "description": {
+              "content": "Add a permission to a group. Permissions are strings associated with the group that some resources requires to fulfill requests.\n\nExamples of `Permissions`:\n\n- `ACCESS_APPLICATIONS`\n- `ACCESS_INFRASTRUCTURE`\n- `ACCESS_KUBERNETES`\n- `ACCESS_MOBILE_APPS`\n- `ACCESS_WEBSITES`\n- `CAN_CONFIGURE_AGENT_RUN_MODE`\n- `CAN_CONFIGURE_AGENTS`\n- `CAN_CONFIGURE_API_TOKENS`\n- `CAN_CONFIGURE_APPLICATIONS`\n- `CAN_CONFIGURE_AUTHENTICATION_METHODS`\n- `CAN_CONFIGURE_CUSTOM_ALERTS`\n- `CAN_CONFIGURE_EUM_APPLICATIONS`\n- `CAN_CONFIGURE_GLOBAL_ALERT_CONFIGS`\n- `CAN_CONFIGURE_GLOBAL_ALERT_PAYLOAD`\n- `CAN_CONFIGURE_INTEGRATIONS`\n- `CAN_CONFIGURE_LOG_MANAGEMENT`\n- `CAN_CONFIGURE_MOBILE_APP_MONITORING`\n- `CAN_CONFIGURE_PERSONAL_API_TOKENS`\n- `CAN_CONFIGURE_RELEASES`\n- `CAN_CONFIGURE_SERVICE_LEVEL_INDICATORS`\n- `CAN_CONFIGURE_SERVICE_MAPPING`\n- `CAN_CONFIGURE_SESSION_SETTINGS`\n- `CAN_CONFIGURE_TEAMS`\n- `CAN_CONFIGURE_USERS`\n- `CAN_CREATE_PUBLIC_CUSTOM_DASHBOARDS`\n- `CAN_EDIT_ALL_ACCESSIBLE_CUSTOM_DASHBOARDS`\n- `CAN_INSTALL_NEW_AGENTS`\n- `CAN_VIEW_ACCOUNT_AND_BILLING_INFORMATION`\n- `CAN_VIEW_AUDIT_LOG`\n- `CAN_VIEW_LOGS`\n- `CAN_VIEW_TRACE_DETAILS`\n- `LIMITED_APPLICATIONS_SCOPE`\n- `LIMITED_INFRASTRUCTURE_SCOPE`\n- `LIMITED_KUBERNETES_SCOPE`\n- `LIMITED_MOBILE_APPS_SCOPE`\n- `LIMITED_WEBSITES_SCOPE`\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "groups",
+                ":groupId",
+                "permissions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "groupId",
+                  "description": "(Required) Id of the group to add permissions"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  \"<string>\",\n  \"<string>\"\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bce134b5-0dcb-4740-aa89-4fa8a998f178",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "groups",
+                    ":groupId",
+                    "permissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "groupId",
+                      "description": "(Required) Id of the group to add permissions"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"CAN_VIEW_SYNTHETIC_TESTS\",\n  \"CAN_VIEW_SYNTHETIC_LOCATIONS\",\n  \"CAN_CONFIGURE_AUTOMATION_ACTIONS\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"groupId\",\n  \"name\": \"group name\",\n  \"members\": [\n    {\n      \"userId\": \"userId1\",\n      \"email\": \"username1@example.com\"\n    }\n  ],\n  \"permissionSet\": {\n    \"permissions\": [\n      \"CAN_VIEW_LOGS\",\n      \"CAN_VIEW_SYNTHETIC_TESTS\",\n      \"CAN_VIEW_SYNTHETIC_LOCATIONS\",\n      \"CAN_CONFIGURE_AUTOMATION_ACTIONS\"\n    ],\n    \"applicationIds\": [],\n    \"kubernetesClusterUUIDs\": [],\n    \"kubernetesNamespaceUIDs\": [],\n    \"websiteIds\": [],\n    \"mobileAppIds\": [],\n    \"syntheticTestIds\": [],\n    \"infraDfqFilter\": {\n      \"scopeId\": \"\",\n      \"scopeRoleId\": \"-1\"\n    },\n    \"actionFilter\": {\n      \"scopeId\": \"\",\n      \"scopeRoleId\": \"-1\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b3b1283c-bb12-4421-bbbc-99bcae3b243b",
+          "name": "Add users to group",
+          "request": {
+            "name": "Add users to group",
+            "description": {
+              "content": "Add one or more users to a group. The array contains the ids of the users to be added.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "groups",
+                ":groupId",
+                "users"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "groupId",
+                  "description": "(Required) Id of the group to add users"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  \"<string>\",\n  \"<string>\"\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cb9e182c-7c8a-46bc-8ffd-e82cbc2e58ef",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "groups",
+                    ":groupId",
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "groupId",
+                      "description": "(Required) Id of the group to add users"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"userId1\",\n  \"userId3\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"groupId\",\n  \"name\": \"group name\",\n  \"members\": [\n    {\n      \"userId\": \"userId1\",\n      \"email\": \"username1@example.com\"\n    },\n    {\n      \"userId\": \"userId2\",\n      \"email\": \"username2@example.com\"\n    },\n    {\n      \"userId\": \"userId3\",\n      \"email\": \"username3@example.com\"\n    }\n  ],\n  \"permissionSet\": {\n    \"permissions\": [\n      \"CAN_VIEW_LOGS\"\n    ],\n    \"applicationIds\": [],\n    \"kubernetesClusterUUIDs\": [],\n    \"kubernetesNamespaceUIDs\": [],\n    \"websiteIds\": [],\n    \"mobileAppIds\": [],\n    \"syntheticTestIds\": [],\n    \"infraDfqFilter\": {\n      \"scopeId\": \"\",\n      \"scopeRoleId\": \"-1\"\n    },\n    \"actionFilter\": {\n      \"scopeId\": \"\",\n      \"scopeRoleId\": \"-1\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4d326172-b3a8-4dd1-99ed-bca22ef94401",
+          "name": "Delete group",
+          "request": {
+            "name": "Delete group",
+            "description": {
+              "content": "Delete the group data.\nFor more information on groups please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#groups.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "groups",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the group to delete"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d5702d6e-5754-4c8e-913b-60f58e89fd03",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "groups",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the group to delete"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bbe5b77b-8936-42e3-9d0e-0fca44351f6c",
+          "name": "Get group",
+          "request": {
+            "name": "Get group",
+            "description": {
+              "content": "Returns group data, including the `Permission set`. See [get groups](#operation/getGroups) for more details.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "groups",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the group for retrieval"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2b8c2e49-dd71-4c5f-a8ad-b7edbd21c342",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "groups",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the group for retrieval"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"groupId\",\n  \"name\": \"group name\",\n  \"members\": [\n    {\n      \"userId\": \"userId\",\n      \"email\": \"username@example.com\"\n    }\n  ],\n  \"permissionSet\": {\n    \"permissions\": [\n      \"ACCESS_INFRASTRUCTURE\",\n      \"LIMITED_WEBSITES_SCOPE\",\n      \"CAN_VIEW_SYNTHETIC_TESTS\",\n      \"CAN_VIEW_SYNTHETIC_LOCATIONS\",\n      \"CAN_VIEW_TRACE_DETAILS\",\n      \"CAN_CONFIGURE_AGENT_RUN_MODE\",\n      \"CAN_CONFIGURE_AUTOMATION_ACTIONS\",\n      \"CAN_CONFIGURE_USERS\",\n      \"ACCESS_SYNTHETICS\",\n      \"CAN_VIEW_LOGS\",\n      \"LIMITED_KUBERNETES_SCOPE\",\n      \"CAN_CONFIGURE_TEAMS\",\n      \"CAN_VIEW_SYNTHETIC_TEST_RESULTS\",\n      \"LIMITED_SYNTHETICS_SCOPE\",\n      \"LIMITED_INFRASTRUCTURE_SCOPE\"\n    ],\n    \"applicationIds\": [\n      {\n        \"scopeId\": \"scopeId1\",\n        \"scopeRoleId\": \"-102\"\n      },\n      {\n        \"scopeId\": \"scopeId2\",\n        \"scopeRoleId\": \"-102\"\n      },\n      {\n        \"scopeId\": \"scopeId3\",\n        \"scopeRoleId\": \"-102\"\n      },\n      {\n        \"scopeId\": \"scopeId4\",\n        \"scopeRoleId\": \"-102\"\n      },\n      {\n        \"scopeId\": \"scopeId5\",\n        \"scopeRoleId\": \"-102\"\n      },\n      {\n        \"scopeId\": \"scopeId6\",\n        \"scopeRoleId\": \"-102\"\n      }\n    ],\n    \"kubernetesClusterUUIDs\": [],\n    \"kubernetesNamespaceUIDs\": [],\n    \"websiteIds\": [],\n    \"mobileAppIds\": [],\n    \"syntheticTestIds\": [\n      {\n        \"scopeId\": \"scopeId10\",\n        \"scopeRoleId\": \"-1\"\n      }\n    ],\n    \"restrictedApplicationFilter\": {\n      \"label\": \"filter name\",\n      \"tagFilterExpression\": {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"service.name\",\n        \"stringValue\": \"acceptor\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"acceptor\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"DESTINATION\"\n      },\n      \"scope\": \"INCLUDE_NO_DOWNSTREAM\"\n    },\n    \"infraDfqFilter\": {\n      \"scopeId\": \"\",\n      \"scopeRoleId\": \"-1\"\n    },\n    \"actionFilter\": {\n      \"scopeId\": \"\",\n      \"scopeRoleId\": \"-1\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bf84874c-fef0-4a5b-b661-bc62ea513df3",
+          "name": "Update group",
+          "request": {
+            "name": "Update group",
+            "description": {
+              "content": "Add a permission to a group. Permissions are strings associated with the group that some resources requires to fulfill requests.\n\nExamples of `Permissions`:\n\n- `ACCESS_APPLICATIONS`\n- `ACCESS_INFRASTRUCTURE`\n- `ACCESS_KUBERNETES`\n- `ACCESS_MOBILE_APPS`\n- `ACCESS_WEBSITES`\n- `CAN_CONFIGURE_AGENT_RUN_MODE`\n- `CAN_CONFIGURE_AGENTS`\n- `CAN_CONFIGURE_API_TOKENS`\n- `CAN_CONFIGURE_APPLICATIONS`\n- `CAN_CONFIGURE_AUTHENTICATION_METHODS`\n- `CAN_CONFIGURE_CUSTOM_ALERTS`\n- `CAN_CONFIGURE_EUM_APPLICATIONS`\n- `CAN_CONFIGURE_GLOBAL_ALERT_CONFIGS`\n- `CAN_CONFIGURE_GLOBAL_ALERT_PAYLOAD`\n- `CAN_CONFIGURE_INTEGRATIONS`\n- `CAN_CONFIGURE_LOG_MANAGEMENT`\n- `CAN_CONFIGURE_MOBILE_APP_MONITORING`\n- `CAN_CONFIGURE_PERSONAL_API_TOKENS`\n- `CAN_CONFIGURE_RELEASES`\n- `CAN_CONFIGURE_SERVICE_LEVEL_INDICATORS`\n- `CAN_CONFIGURE_SERVICE_MAPPING`\n- `CAN_CONFIGURE_SESSION_SETTINGS`\n- `CAN_CONFIGURE_TEAMS`\n- `CAN_CONFIGURE_USERS`\n- `CAN_CREATE_PUBLIC_CUSTOM_DASHBOARDS`\n- `CAN_EDIT_ALL_ACCESSIBLE_CUSTOM_DASHBOARDS`\n- `CAN_INSTALL_NEW_AGENTS`\n- `CAN_VIEW_ACCOUNT_AND_BILLING_INFORMATION`\n- `CAN_VIEW_AUDIT_LOG`\n- `CAN_VIEW_LOGS`\n- `CAN_VIEW_TRACE_DETAILS`\n- `LIMITED_APPLICATIONS_SCOPE`\n- `LIMITED_INFRASTRUCTURE_SCOPE`\n- `LIMITED_KUBERNETES_SCOPE`\n- `LIMITED_MOBILE_APPS_SCOPE`\n- `LIMITED_WEBSITES_SCOPE`\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "groups",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the group to update"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"members\": [\n    {\n      \"userId\": \"<string>\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\"\n    },\n    {\n      \"userId\": \"<string>\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\"\n    }\n  ],\n  \"name\": \"<string>\",\n  \"permissionSet\": {\n    \"applicationIds\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"businessPerspectiveIds\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"infraDfqFilter\": {\n      \"scopeId\": \"<string>\",\n      \"scopeRoleId\": \"<string>\"\n    },\n    \"kubernetesClusterUUIDs\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"kubernetesNamespaceUIDs\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"mobileAppIds\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"permissions\": [\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"sloIds\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"syntheticCredentialKeys\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"syntheticTestIds\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"websiteIds\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeRoleId\": \"<string>\"\n      }\n    ],\n    \"actionFilter\": {\n      \"scopeId\": \"<string>\",\n      \"scopeRoleId\": \"<string>\"\n    },\n    \"restrictedApplicationFilter\": {\n      \"label\": \"<string>\",\n      \"restrictingApplicationId\": \"<string>\",\n      \"scope\": \"<string>\",\n      \"tagFilterExpression\": {\n        \"type\": \"<string>\"\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a11fead2-0a2b-4a7b-822b-8f3b5c033810",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "groups",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the group to update"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"group name\",\n  \"members\": [\n    {\n      \"userId\": \"userId\",\n      \"email\": \"username@example.com\"\n    }\n  ],\n  \"permissionSet\": {\n    \"permissions\": [\n      \"CAN_VIEW_LOGS\"\n    ],\n    \"applicationIds\": [\n      {\n        \"scopeId\": \"scopeId1\",\n        \"scopeRoleId\": \"-102\"\n      }\n    ],\n    \"kubernetesClusterUUIDs\": [],\n    \"kubernetesNamespaceUIDs\": [],\n    \"websiteIds\": [],\n    \"mobileAppIds\": [],\n    \"syntheticTestIds\": [\n      {\n        \"scopeId\": \"scopeId10\",\n        \"scopeRoleId\": \"-1\"\n      }\n    ],\n    \"restrictedApplicationFilter\": {\n      \"label\": \"group name\",\n      \"tagFilterExpression\": {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"service.name\",\n        \"stringValue\": \"acceptor\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"acceptor\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"DESTINATION\"\n      },\n      \"scope\": \"INCLUDE_NO_DOWNSTREAM\"\n    },\n    \"infraDfqFilter\": {\n      \"scopeId\": \"\",\n      \"scopeRoleId\": \"-1\"\n    },\n    \"actionFilter\": {\n      \"scopeId\": \"\",\n      \"scopeRoleId\": \"-1\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"group name\",\n  \"members\": [\n    {\n      \"userId\": \"userId\",\n      \"email\": \"username@example.com\"\n    }\n  ],\n  \"permissionSet\": {\n    \"permissions\": [\n      \"CAN_VIEW_LOGS\"\n    ],\n    \"applicationIds\": [\n      {\n        \"scopeId\": \"scopeId1\",\n        \"scopeRoleId\": \"-102\"\n      }\n    ],\n    \"kubernetesClusterUUIDs\": [],\n    \"kubernetesNamespaceUIDs\": [],\n    \"websiteIds\": [],\n    \"mobileAppIds\": [],\n    \"syntheticTestIds\": [\n      {\n        \"scopeId\": \"scopeId10\",\n        \"scopeRoleId\": \"-1\"\n      }\n    ],\n    \"restrictedApplicationFilter\": {\n      \"label\": \"group name\",\n      \"tagFilterExpression\": {\n        \"type\": \"TAG_FILTER\",\n        \"name\": \"service.name\",\n        \"stringValue\": \"acceptor\",\n        \"numberValue\": null,\n        \"booleanValue\": null,\n        \"key\": null,\n        \"value\": \"acceptor\",\n        \"operator\": \"EQUALS\",\n        \"entity\": \"DESTINATION\"\n      },\n      \"scope\": \"INCLUDE_NO_DOWNSTREAM\"\n    },\n    \"infraDfqFilter\": {\n      \"scopeId\": \"\",\n      \"scopeRoleId\": \"-1\"\n    },\n    \"actionFilter\": {\n      \"scopeId\": \"\",\n      \"scopeRoleId\": \"-1\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cf06454c-ddf6-4bb2-85b3-99f42f0aea4f",
+          "name": "Remove user from group",
+          "request": {
+            "name": "Remove user from group",
+            "description": {
+              "content": "Remove the user from a group.\nFor more information on groups please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#groups.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "groups",
+                ":id",
+                "user",
+                ":userId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the group to remove user from"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "userId",
+                  "description": "(Required) Id of the user to remove"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ab6e6de3-a85c-4917-90bf-d34d696255ee",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "groups",
+                    ":id",
+                    "user",
+                    ":userId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the group to remove user from"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "userId",
+                      "description": "(Required) Id of the user to remove"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a4ebea6f-3f52-44f8-acfe-d8edf104e646",
+          "name": "Get all group mappings",
+          "request": {
+            "name": "Get all group mappings",
+            "description": {
+              "content": "If mappings between groups on the identity provider (LDAP, OIDC, SAML) and Instana groups where configured, this will return a list of those mappings.\n\nThis can be configured through the [api](#operation/createGroupMapping) or on Instana graphical user interface at Settings > Authentication > IDENTITY PROVIDERS > Group Mapping.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "mappings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d2c8c38b-338b-4c72-95ac-e763c5b516cb",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"mappingId\",\n    \"key\": \"roles\",\n    \"value\": \"analyst\",\n    \"groupId\": \"-3\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "686cc70d-a5d4-4b78-934e-769f3d4bb9b6",
+              "name": "No group mapping found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "25256d2f-96b4-4332-9586-7d13ab9332fe",
+          "name": "Create group mapping",
+          "request": {
+            "name": "Create group mapping",
+            "description": {
+              "content": "Creates a mapping between a group from the IdP (LDAP, OIDC, SAML) and an Instana group.\n\nIf the IdP is configured and mappings are enabled, the `key` `value` pairs a user sent by the idp will be evaluated every time this user logs in.\n\nIf they match the mapping, the user will be assigned to the group corresponding to the `groupId`.\n\nInside the payload, the `id` for the mapping is ignored, and instead, Instana generates a new id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "mappings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"groupId\": \"<string>\",\n  \"key\": \"<string>\",\n  \"value\": \"<string>\",\n  \"id\": \"<string>\",\n  \"teamId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a365ea97-cef8-47bd-b48f-568684c4c303",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"key\": \"roles\",\n  \"value\": \"analyst\",\n  \"groupId\": \"-3\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"mappingId\",\n  \"key\": \"roles\",\n  \"value\": \"analyst\",\n  \"groupId\": \"-3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a1bb90a6-f294-4702-93bf-4b0262481542",
+          "name": "Delete multiple group mappings",
+          "request": {
+            "name": "Delete multiple group mappings",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "mappings",
+                "delete"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "<string>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "98ab2a25-42ac-43bc-b992-a1719ec5eeb1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "mappings",
+                    "delete"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"firstid\",\n  \"secondid\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "eeae4773-97aa-439c-b3c2-6d2b65df630c",
+              "name": "invalid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "mappings",
+                    "delete"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"firstid\",\n  \"secondid\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fa2020ea-9304-47f4-a8e1-50c85ecf9e0a",
+          "name": "Check user restrictions for empty Idp group mapping",
+          "request": {
+            "name": "Check user restrictions for empty Idp group mapping",
+            "description": {
+              "content": "Returns `RestrictEmptyIdpGroups` value indicating if access is denied for empty Idp group mapping. `RestrictEmptyIdpGroups = true` indicates that the tenant is locked and only those users are allowed access that have at least one working mapping rule applied to them during the login process.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "mappings",
+                "identityProvider",
+                "restrictEmptyIdpGroups"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b3edda09-a30b-4cd6-b178-60b30c7786a4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "mappings",
+                    "identityProvider",
+                    "restrictEmptyIdpGroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"restrictEmptyIdpGroups\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ff5365bf-21dd-4f1b-a460-18dcb68dfe2f",
+              "name": "No group mapping restriction found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "mappings",
+                    "identityProvider",
+                    "restrictEmptyIdpGroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6153f0c8-6fe4-4f4d-b6fb-a95cf3b6a707",
+          "name": "Allow/Restrict users with empty Idp group mapping",
+          "request": {
+            "name": "Allow/Restrict users with empty Idp group mapping",
+            "description": {
+              "content": "Set the RestrictEmptyIdpGroups value as true/false. See [Check user restrictions for empty Idp group mapping](#operation/getIdentityProviderPatch) for more details.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "mappings",
+                "identityProvider",
+                "restrictEmptyIdpGroups"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restrictEmptyIdpGroups\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "df707216-d224-4059-b142-5070ecf7c576",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "mappings",
+                    "identityProvider",
+                    "restrictEmptyIdpGroups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"restrictEmptyIdpGroups\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "86fe576d-c141-449c-9c19-7d2cceb81336",
+          "name": "Get all group mappings overview",
+          "request": {
+            "name": "Get all group mappings overview",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "mappings",
+                "overview"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e17dd0f7-4878-4858-b579-bc5f1205b791",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "mappings",
+                    "overview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"mappingId\",\n    \"key\": \"roles\",\n    \"value\": \"analyst\",\n    \"role\": \"default\",\n    \"team\": \"testing\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "33b4362a-e6fb-4a8a-a4a4-c469fd5f45e7",
+              "name": "No group mapping overviews found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "mappings",
+                    "overview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e7e33fa9-1732-4345-a960-34edfec9cb0e",
+          "name": "Delete group mapping",
+          "request": {
+            "name": "Delete group mapping",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "mappings",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the group mapping to delete"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1a1744de-7744-4f44-aab8-c30b6434426f",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "mappings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the group mapping to delete"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d57c160d-4e6f-46c0-af4b-e0bd13bbcdc0",
+          "name": "Get group mapping",
+          "request": {
+            "name": "Get group mapping",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "mappings",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9b55f393-7831-49d5-8152-20bd8d5c53a5",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "mappings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"mappingId\",\n  \"key\": \"roles\",\n  \"value\": \"analyst\",\n  \"groupId\": \"-3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2a286d81-682b-4fc1-8b53-1dc1af69ea62",
+              "name": "No group mapping found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "mappings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fdc4030c-480e-4a03-b7c7-0f12f34bcd28",
+          "name": "Update group mapping",
+          "request": {
+            "name": "Update group mapping",
+            "description": {
+              "content": "See [creating group mapping](#operation/createGroupMapping)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "settings",
+                "rbac",
+                "mappings",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the group mapping to update"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"groupId\": \"<string>\",\n  \"key\": \"<string>\",\n  \"value\": \"<string>\",\n  \"id\": \"<string>\",\n  \"teamId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d7793759-0bc0-4d87-9040-4f3d9c7e4f8f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "settings",
+                    "rbac",
+                    "mappings",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the group mapping to update"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"mappingId\",\n  \"key\": \"roles\",\n  \"value\": \"analyst\",\n  \"groupId\": \"-3\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"mappingId\",\n  \"key\": \"roles\",\n  \"value\": \"analyst\",\n  \"groupId\": \"-3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Customer tenant unit",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "tenant",
+      "key": "tenant"
+    },
+    {
+      "description": {
+        "content": "Customer tenant name",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "unit",
+      "key": "unit"
+    },
+    {
+      "type": "string",
+      "value": "https://{{unit}}-{{tenant}}.instana.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "fff58cd3-7b4f-4a3d-bd60-d03aa69417a7",
+    "name": "Instana REST API documentation Groups API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n\n\nContact Support:\n Name: © Instana\n Email: support@instana.com",
+      "type": "text/plain"
+    }
+  }
+}

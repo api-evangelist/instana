@@ -1,0 +1,137 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Apdex Settings API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Apdex Settings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get All Apdex Configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/apdex",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API to Get All Apdex Configurations."
+        },
+        {
+          "info": {
+            "name": "Create Apdex Configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/apdex",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create Apdex Configuration"
+        },
+        {
+          "info": {
+            "name": "Get all Apdex configurations for entity type and entity id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/apdex/:entityType/:entityId",
+            "params": [
+              {
+                "name": "entityType",
+                "value": "APPLICATION",
+                "type": "path",
+                "description": "Type of the Apdex Configuration, it could be APPLICATION or WEBSITE"
+              },
+              {
+                "name": "entityId",
+                "value": "XIZGGVT1TX2O-0OFeT2Yig",
+                "type": "path",
+                "description": "Application or Website ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API to Get All Apdex Configurations for specified entity type and entity id."
+        },
+        {
+          "info": {
+            "name": "Get Apdex Configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/apdex/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "NCAoNKqySWSK1U5GkmyZgQ",
+                "type": "path",
+                "description": "Apdex Configuration ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API to Get Apdex Configuration for specified ID."
+        },
+        {
+          "info": {
+            "name": "Delete Apdex Configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/apdex/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "NCAoNKqySWSK1U5GkmyZgQ",
+                "type": "path",
+                "description": "Apdex Configuration ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete Apdex Configuration"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

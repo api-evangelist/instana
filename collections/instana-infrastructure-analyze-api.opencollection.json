@@ -1,0 +1,102 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Infrastructure Analyze API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Infrastructure Analyze",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get infrastructure entities",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/analyze/entities",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves entities for a given entity type along with the requested metrics.\nFor more information on Infrastructure Analyze please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Infrastructure#infrastructure-analyze."
+        },
+        {
+          "info": {
+            "name": "Get grouped infrastructure entities with aggregated metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/analyze/entity-groups",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint groups entities for a given entity type and aggregates metrics for these groups.\nFor more information on Infrastructure Analyze please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Infrastructure#infrastructure-analyze."
+        },
+        {
+          "info": {
+            "name": "Get available entity types",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/analyze/entity-types",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves available entity types.\nFor more information on Infrastructure Analyze please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Infrastructure#infrastructure-analyze."
+        },
+        {
+          "info": {
+            "name": "Get available metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/analyze/metrics",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves available metrics for an entity type.\nFor more information on Infrastructure Analyze please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Infrastructure#infrastructure-analyze."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

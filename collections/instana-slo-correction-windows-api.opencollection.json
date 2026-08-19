@@ -1,0 +1,71 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation SLO Correction Windows API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "SLO Correction Windows",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generate SLO Correction Windows",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/slo/correction",
+            "params": [
+              {
+                "name": "sloId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "excludeCorrectionId",
+                "value": "N1Xj6q8QTZu_cfJOGqy4mg",
+                "type": "query",
+                "description": "IDs of Correction Configurations to be Excluded from the result"
+              },
+              {
+                "name": "includeCorrectionId",
+                "value": "uvP7Z03pSUuybDT8-WHLDA",
+                "type": "query",
+                "description": "IDs of Correction Configurations to be Included in the result"
+              },
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "from",
+                "value": "1706713140000",
+                "type": "query",
+                "description": "Correction starting timestamp in milliseconds (13-digit)"
+              },
+              {
+                "name": "to",
+                "value": "1706713140000",
+                "type": "query",
+                "description": "Correction ending timestamp in milliseconds (13-digit)"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Generate SLO Correction Windows"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,627 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Application Settings API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Application Settings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "All Application configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/application",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to retrieve a list of all Application Perspectives with their configuration settings.\nThis endpoint requires `canConfigureApplications` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureApplications` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and s"
+        },
+        {
+          "info": {
+            "name": "Add application configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/application",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to create a new Application Perspective. This endpoint requires `canConfigureApplications` permission. \n\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureApplications` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Configuration of applications` to `true"
+        },
+        {
+          "info": {
+            "name": "Application configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/application/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to retrieve an Application Perspective with its configuration setting.\nThis endpoint requires `canConfigureApplications` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureApplications` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Configurati"
+        },
+        {
+          "info": {
+            "name": "Update application configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/application/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to update an existing Application Perspective. This endpoint requires `canConfigureApplications` permission. One can use `Create or update an API token` endpoint to update the permission by setting `canConfigureApplications` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Configuration of applications` to `"
+        },
+        {
+          "info": {
+            "name": "Delete application configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/application/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to delete an Application Perspective. This endpoint requires `canConfigureApplications` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureApplications` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\n\n## Deprecated Parameters\n**matchSpecification:** A binary tree structure of match expression connected with binary"
+        },
+        {
+          "info": {
+            "name": "All Endpoint configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/endpoint",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to retrieve a list of all endpoint configurations.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and"
+        },
+        {
+          "info": {
+            "name": "Create endpoint configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/endpoint",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to create an endpoint configuration of a service.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and "
+        },
+        {
+          "info": {
+            "name": "Endpoint configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/endpoint/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to retrieve the endpoint configuration of a service.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules a"
+        },
+        {
+          "info": {
+            "name": "Update endpoint configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/endpoint/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to update an existing endpoint configuration of a service.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service r"
+        },
+        {
+          "info": {
+            "name": "Delete endpoint configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/endpoint/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to delete an endpoint configuration of a service.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and "
+        },
+        {
+          "info": {
+            "name": "All HTTP endpoint configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/http-endpoint",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This is a deprecated endpoint. Use `All Endpoint configurations` instead.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and endpoint ma"
+        },
+        {
+          "info": {
+            "name": "Create HTTP endpoint configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/http-endpoint",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This is a deprecated endpoint. Use `Create endpoint configuration` instead.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and endpoint "
+        },
+        {
+          "info": {
+            "name": "HTTP Endpoint configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/http-endpoint/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This is a deprecated endpoint. Use `Endpoint configuration` instead.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and endpoint mapping"
+        },
+        {
+          "info": {
+            "name": "Update HTTP endpoint configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/http-endpoint/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This is a deprecated endpoint. Use `Update endpoint configuration` instead.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and endpoint "
+        },
+        {
+          "info": {
+            "name": "Delete HTTP endpoint configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/http-endpoint/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This is a deprecated endpoint. Use `Delete endpoint configuration` instead.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and endpoint "
+        },
+        {
+          "info": {
+            "name": "All manual service configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/manual-service",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API Endpoint if one wants to retrieve a list of all manual service configurations. This endpoint requires `CanConfigureServiceMapping` permission. \n\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service r"
+        },
+        {
+          "info": {
+            "name": "Add manual service configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/manual-service",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to add a manual service configuration. This endpoint requires `CanConfigureServiceMapping` permission. \n\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and endpoint "
+        },
+        {
+          "info": {
+            "name": "Replace all manual service configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/manual-service",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to update more than 1 manual service configurations. This endpoint requires `CanConfigureServiceMapping` permission. \n\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules"
+        },
+        {
+          "info": {
+            "name": "Update manual service configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/manual-service/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to update a manual service configuration.\n\n**This is an experimental endpoint to workaround service mapping issues.**\n\n### Use cases\n\nThe manual service configuration APIs enables mapping calls to services using tag filter expressions based on call tags.\n\nThere are two use cases on the usage of these APIs:\n\n1. Map to an Unmonitored Service with a Custom Name. For example, Map HTTP calls to different Google domains (`www.ibm.com`, `www.ibm.fr`) into a single ser"
+        },
+        {
+          "info": {
+            "name": "Delete manual service configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/manual-service/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to delete a manual service configuration. This endpoint requires `CanConfigureServiceMapping` permission. \n\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and endpoi"
+        },
+        {
+          "info": {
+            "name": "All service configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/service",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to retrive a list of all service configurations.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and e"
+        },
+        {
+          "info": {
+            "name": "Add service configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/service",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to create a custom service rule.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and endpoint mapping`"
+        },
+        {
+          "info": {
+            "name": "Replace all service configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/service",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to modify 1 or more existing service configuration.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules an"
+        },
+        {
+          "info": {
+            "name": "Order of service configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/service/order",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to change the order of service configurations aka custom service rules.\nNote that all service configuration IDs have to be passed in the request to re-order the configurations.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> A"
+        },
+        {
+          "info": {
+            "name": "Service configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/service/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to retrieve a particular custom service rule.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and endp"
+        },
+        {
+          "info": {
+            "name": "Update service configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/service/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to update a particular custom service rule.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and endpoi"
+        },
+        {
+          "info": {
+            "name": "Delete service configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/settings/service/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to delete a service configuration.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and endpoint mappin"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

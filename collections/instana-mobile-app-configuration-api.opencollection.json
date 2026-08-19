@@ -1,0 +1,581 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Mobile App Configuration API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Mobile App Configuration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get configured mobile apps",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get configured mobile apps."
+        },
+        {
+          "info": {
+            "name": "Configure new mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Name of the mobile app"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to add new mobile app."
+        },
+        {
+          "info": {
+            "name": "Get mobile app configuration by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "K3bP-bmCRkyimNai9vvq8o",
+                "type": "path",
+                "description": "Mobile App ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get a specific mobile app configuration by ID."
+        },
+        {
+          "info": {
+            "name": "Rename mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "K3bP-bmCRkyimNai9vvq8o",
+                "type": "path",
+                "description": "Mobile App ID"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "New name of the mobile app"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to rename mobile app."
+        },
+        {
+          "info": {
+            "name": "Remove mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "K3bP-bmCRkyimNai9vvq8o",
+                "type": "path",
+                "description": "Mobile App ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to remove mobile app."
+        },
+        {
+          "info": {
+            "name": "Get geo location configuration for mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId/geo-location",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get geo location configuration for mobile app."
+        },
+        {
+          "info": {
+            "name": "Update geo location configuration for mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId/geo-location",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "iiLxP1zaTuCS7fyk9m4W0W",
+                "type": "path",
+                "description": "Mobile App ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to update geo location configuration for mobile app."
+        },
+        {
+          "info": {
+            "name": "Get custom geo mapping rules for mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId/geo-mapping-rules",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get custom geo mapping rules for mobile app."
+        },
+        {
+          "info": {
+            "name": "Set custom geo mapping rules for mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId/geo-mapping-rules",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to set custom geo mapping rules for mobile app."
+        },
+        {
+          "info": {
+            "name": "Get IP masking configuration for mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId/ip-masking",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get IP masking configuration for mobile app."
+        },
+        {
+          "info": {
+            "name": "Update IP masking configuration for mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId/ip-masking",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "iiLxP1zaTuCS7fyk9m4W0W",
+                "type": "path",
+                "description": "Mobile App ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to update IP masking configuration for mobile app."
+        },
+        {
+          "info": {
+            "name": "Get all sourcemap configurations for mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId/sourcemap-upload",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "K3bP-bmCRkyimNai9vvq8o",
+                "type": "path",
+                "description": "Mobile App ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get all sourcemap configurations for mobile app."
+        },
+        {
+          "info": {
+            "name": "Add new sourcemap configuration for mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId/sourcemap-upload",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "K3bP-bmCRkyimNai9vvq8o",
+                "type": "path",
+                "description": "Mobile App ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to add sourcemap configuration for mobile app."
+        },
+        {
+          "info": {
+            "name": "Get sourcemap configuration for mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId/sourcemap-upload/:sourceMapConfigId",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "K3bP-bmCRkyimNai9vvq8o",
+                "type": "path",
+                "description": "Mobile App ID"
+              },
+              {
+                "name": "sourceMapConfigId",
+                "value": "97e0ad312110d3ad",
+                "type": "path",
+                "description": "Source Map Config ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get sourcemap configuration for mobile app."
+        },
+        {
+          "info": {
+            "name": "Delete sourcemap configuration for mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId/sourcemap-upload/:sourceMapConfigId",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "K3bP-bmCRkyimNai9vvq8o",
+                "type": "path",
+                "description": "Mobile App ID"
+              },
+              {
+                "name": "sourceMapConfigId",
+                "value": "97e0ad312110d3ad",
+                "type": "path",
+                "description": "Source Map Config ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to delete sourcemap configuration for mobile app."
+        },
+        {
+          "info": {
+            "name": "Clear sourcemap files for sourcemap upload configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId/sourcemap-upload/:sourceMapConfigId/clear",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "K3bP-bmCRkyimNai9vvq8o",
+                "type": "path",
+                "description": "Mobile App ID"
+              },
+              {
+                "name": "sourceMapConfigId",
+                "value": "97e0ad312110d3ad",
+                "type": "path",
+                "description": "Source Map Config ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to clear sourcemap files of a configuration for mobile app."
+        },
+        {
+          "info": {
+            "name": "Commit sourcemap file upload for mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId/sourcemap-upload/:sourceMapConfigId/commit",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "K3bP-bmCRkyimNai9vvq8o",
+                "type": "path",
+                "description": "Mobile App ID"
+              },
+              {
+                "name": "sourceMapConfigId",
+                "value": "97e0ad312110d3ad",
+                "type": "path",
+                "description": "Source Map Config ID"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "fileId",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "fileType",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to commit sourcemap file upload for mobile app."
+        },
+        {
+          "info": {
+            "name": "Upload sourcemap file for mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId/sourcemap-upload/:sourceMapConfigId/form",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "K3bP-bmCRkyimNai9vvq8o",
+                "type": "path",
+                "description": "Mobile App ID"
+              },
+              {
+                "name": "sourceMapConfigId",
+                "value": "97e0ad312110d3ad",
+                "type": "path",
+                "description": "Source Map Config ID"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "blobIndex",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "fileFormat",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "fileId",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "fileType",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "sourceMap",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to upload sourcemap file for mobile app."
+        },
+        {
+          "info": {
+            "name": "Update teams assigned to the mobile app",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/config/:mobileAppId/teams",
+            "params": [
+              {
+                "name": "mobileAppId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to update teams of a mobile app."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

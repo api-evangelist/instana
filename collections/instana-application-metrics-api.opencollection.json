@@ -1,0 +1,131 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Application Metrics API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Application Metrics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Application Metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/metrics/applications",
+            "params": [
+              {
+                "name": "fillTimeSeries",
+                "value": "",
+                "type": "query",
+                "description": "If enabled, fill the missing data points in the metric result with timestamp and value 0."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to retrieve one or more supported aggregation of supported metrics for an Application Perspective.\nFor eg: retrieve `MEAN` aggregation of `latency` metric for an Application Perspective `app`.\nFor more information on supported metrics, refer `Get Metric catalog`.\n\nFor more information on Application Metrics please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-metrics."
+        },
+        {
+          "info": {
+            "name": "Get Endpoint metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/metrics/endpoints",
+            "params": [
+              {
+                "name": "fillTimeSeries",
+                "value": "",
+                "type": "query",
+                "description": "If enabled, fill the missing data points in the metric result with timestamp and value 0."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to retrieve one or more supported aggregation of supported metrics for an Endpoint.\nFor eg: retrieve `MEAN` aggregation of `latency` metric for an Endpoint `GET /api/foo`.\nFor more information on supported metrics, refer `Get Metric catalog`.\n\nFor more information on Application Metrics please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-metrics."
+        },
+        {
+          "info": {
+            "name": "Get Service metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/metrics/services",
+            "params": [
+              {
+                "name": "fillTimeSeries",
+                "value": "",
+                "type": "query",
+                "description": "If enabled, fill the missing data points in the metric result with timestamp and value 0."
+              },
+              {
+                "name": "includeSnapshotIds",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to retrieve one or more supported aggregation of supported metrics for a Service.\nFor eg: retrieve `MEAN` aggregation of `latency` metric for a Service `payment`.\nFor more information on supported metrics, refer `Get Metric catalog`.\n\nFor more information on Application Metrics please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-metrics."
+        },
+        {
+          "info": {
+            "name": "Get Application Data Metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/application-monitoring/v2/metrics",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to retrieve one or more supported aggregation of supported metrics for a combination of entities.\nFor eg: retrieve `MEAN` aggregation of `latency` metric for an Endpoint `GET /api/foo`, Service `payment` and Application Perspective `app`.\nConsider this API endpoint an upgraded version of `Get Application Metrics`, `Get Endpoint metrics` and `Get Service metrics`.\nFor more information on supported metrics, refer `Get Metric catalog`.\n\nFor more information on App"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

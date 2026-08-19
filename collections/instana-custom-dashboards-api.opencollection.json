@@ -1,0 +1,193 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Custom Dashboards API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Custom Dashboards",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get accessible custom dashboards",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/custom-dashboard",
+            "params": [
+              {
+                "name": "query",
+                "value": "BeeInstana",
+                "type": "query",
+                "description": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "2",
+                "type": "query",
+                "description": "pageSize"
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "page"
+              },
+              {
+                "name": "withTotalHits",
+                "value": "false",
+                "type": "query",
+                "description": "withTotalHits"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all accessible custom dashboards details.\nFor more information on custom dashboards please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#custom-dashboards."
+        },
+        {
+          "info": {
+            "name": "Add custom dashboard",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/custom-dashboard",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nFor more information on custom dashboards please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#custom-dashboards."
+        },
+        {
+          "info": {
+            "name": "Get all API tokens.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/custom-dashboard/shareable-api-tokens",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all API tokens that have access to shareable custom dashboards.\nFor more information on custom dashboards please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#custom-dashboards."
+        },
+        {
+          "info": {
+            "name": "Get all users (without invitations).",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/custom-dashboard/shareable-users",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all users (without invitations) that have access to shareable custom dashboards.\nFor more information on custom dashboards please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#custom-dashboards."
+        },
+        {
+          "info": {
+            "name": "Get custom dashboard",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/custom-dashboard/:customDashboardId",
+            "params": [
+              {
+                "name": "customDashboardId",
+                "value": "alHaYV5aSkKku_wcg53teQ",
+                "type": "path",
+                "description": "customDashboardId"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all Custom Dashboard Info for specified customDashboardId.\nFor more information on custom dashboards please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#custom-dashboards."
+        },
+        {
+          "info": {
+            "name": "Update custom dashboard",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/custom-dashboard/:customDashboardId",
+            "params": [
+              {
+                "name": "customDashboardId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nFor more information on custom dashboards please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#custom-dashboards."
+        },
+        {
+          "info": {
+            "name": "Remove custom dashboard",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/custom-dashboard/:customDashboardId",
+            "params": [
+              {
+                "name": "customDashboardId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nFor more information on custom dashboards please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#custom-dashboards."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

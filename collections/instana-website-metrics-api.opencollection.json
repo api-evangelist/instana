@@ -1,0 +1,91 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Website Metrics API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Website Metrics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get beacon metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/metrics",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get website monitoring beacon metrics."
+        },
+        {
+          "info": {
+            "name": "Get page load",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/page-load:id:timestamp",
+            "params": [
+              {
+                "name": "id",
+                "value": "63f5b070e8d9a597",
+                "type": "path",
+                "description": "Identifier of the page load to be retrieved"
+              },
+              {
+                "name": "timestamp",
+                "value": "1707012285674",
+                "type": "path",
+                "description": "Timestamp of the page load to be retrieved"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get website monitoring beacons for a page load."
+        },
+        {
+          "info": {
+            "name": "Get beacon metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/website-monitoring/v2/metrics",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get website monitoring beacon metrics."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

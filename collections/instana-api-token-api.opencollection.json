@@ -1,0 +1,132 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation API Token API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "API Token",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all API Tokens",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/api-tokens",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the list of API Tokens for this Tenant-Unit\nFor more information on APIToken please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#apitoken."
+        },
+        {
+          "info": {
+            "name": "Create an API token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/api-tokens",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create an API Token on the Tenant-Unit. Each API Token entry also contains a set of permissions\nFor more information on APIToken please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#apitoken."
+        },
+        {
+          "info": {
+            "name": "Get API token",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/api-tokens/:internalId",
+            "params": [
+              {
+                "name": "internalId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns API Token details, including the set of permissions\nFor more information on APIToken please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#apitoken."
+        },
+        {
+          "info": {
+            "name": "Create or update an API token",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/api-tokens/:internalId",
+            "params": [
+              {
+                "name": "internalId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update API Token- Change Token name and associated permissions\nFor more information on APIToken please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#apitoken."
+        },
+        {
+          "info": {
+            "name": "Delete API token",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/api-tokens/:internalId",
+            "params": [
+              {
+                "name": "internalId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete the Api Token\nFor more information on APIToken please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Settings#apitoken."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

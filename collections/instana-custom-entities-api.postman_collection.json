@@ -1,0 +1,771 @@
+{
+  "item": [
+    {
+      "id": "01a16c38-a06f-4266-a6d8-82a9bf31a475",
+      "name": "Custom Entities",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7808c7cc-2736-41a5-9139-45d196a61594",
+          "name": "List custom Entity Type Definition",
+          "request": {
+            "name": "List custom Entity Type Definition",
+            "description": {
+              "content": "This end point lists custom Entity Type Definition",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "custom-entitytypes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "37af9571-c8c1-4778-bcb5-637e2ef9bbae",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-entitytypes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"identifiers\": [\n      \"string\",\n      \"string\"\n    ],\n    \"label\": \"string\",\n    \"tagFilterExpression\": {\n      \"type\": \"string\"\n    },\n    \"dashboards\": [\n      {\n        \"accessRules\": [\n          {\n            \"accessType\": \"READ_WRITE\",\n            \"relationType\": \"TEAM\",\n            \"relatedId\": \"string\"\n          }\n        ],\n        \"id\": \"string\",\n        \"title\": \"string\",\n        \"widgets\": [\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 6560,\n            \"title\": \"string\",\n            \"width\": 2,\n            \"x\": 8,\n            \"y\": 8452\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 4047,\n            \"title\": \"string\",\n            \"width\": 6,\n            \"x\": 5,\n            \"y\": 3264\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 9572,\n            \"title\": \"string\",\n            \"width\": 9,\n            \"x\": 1,\n            \"y\": 4691\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 6159,\n            \"title\": \"string\",\n            \"width\": 6,\n            \"x\": 3,\n            \"y\": 7259\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 3796,\n            \"title\": \"string\",\n            \"width\": 4,\n            \"x\": 5,\n            \"y\": 137\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 5952,\n            \"title\": \"string\",\n            \"width\": 3,\n            \"x\": 4,\n            \"y\": 6395\n          },\n          {\n            \"config\": {},\n            \"id\": \"st\",\n            \"type\": \"string\",\n            \"height\": 2161,\n            \"title\": \"string\",\n            \"width\": 10,\n            \"x\": 10,\n            \"y\": 9316\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 5569,\n            \"title\": \"string\",\n            \"width\": 4,\n            \"x\": 1,\n            \"y\": 2894\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 3265,\n            \"title\": \"string\",\n            \"width\": 8,\n            \"x\": 0,\n            \"y\": 4722\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 6097,\n            \"title\": \"string\",\n            \"width\": 3,\n            \"x\": 9,\n            \"y\": 303\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 5431,\n            \"title\": \"string\",\n            \"width\": 8,\n            \"x\": 6,\n            \"y\": 8547\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 3408,\n            \"title\": \"string\",\n            \"width\": 8,\n            \"x\": 5,\n            \"y\": 3155\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 6206,\n            \"title\": \"string\",\n            \"width\": 10,\n            \"x\": 5,\n            \"y\": 405\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 4553,\n            \"title\": \"string\",\n            \"width\": 5,\n            \"x\": 5,\n            \"y\": 6392\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 9196,\n            \"title\": \"string\",\n            \"width\": 6,\n            \"x\": 0,\n            \"y\": 106\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 2930,\n            \"title\": \"string\",\n            \"width\": 1,\n            \"x\": 4,\n            \"y\": 3427\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 6944,\n            \"title\": \"string\",\n            \"width\": 3,\n            \"x\": 9,\n            \"y\": 7630\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 3103,\n            \"title\": \"string\",\n            \"width\": 11,\n            \"x\": 0,\n            \"y\": 6269\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 7890,\n            \"title\": \"string\",\n            \"width\": 6,\n            \"x\": 4,\n            \"y\": 9943\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 6177,\n            \"title\": \"string\",\n            \"width\": 3,\n            \"x\": 9,\n            \"y\": 9198\n          }\n        ]\n      },\n      {\n        \"accessRules\": [\n          {\n            \"accessType\": \"READ\",\n            \"relationType\": \"GLOBAL\",\n            \"relatedId\": \"string\"\n          }\n        ],\n        \"id\": \"string\",\n        \"title\": \"string\",\n        \"widgets\": [\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 8482,\n            \"title\": \"string\",\n            \"width\": 6,\n            \"x\": 5,\n            \"y\": 3886\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 4379,\n            \"title\": \"string\",\n            \"width\": 7,\n            \"x\": 10,\n            \"y\": 9336\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 6512,\n            \"title\": \"string\",\n            \"width\": 3,\n            \"x\": 0,\n            \"y\": 845\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 3830,\n            \"title\": \"string\",\n            \"width\": 3,\n            \"x\": 0,\n            \"y\": 8407\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 5858,\n            \"title\": \"string\",\n            \"width\": 8,\n            \"x\": 10,\n            \"y\": 5663\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 8828,\n            \"title\": \"string\",\n            \"width\": 1,\n            \"x\": 10,\n            \"y\": 717\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 4106,\n            \"title\": \"string\",\n            \"width\": 6,\n            \"x\": 4,\n            \"y\": 9910\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 6568,\n            \"title\": \"string\",\n            \"width\": 9,\n            \"x\": 10,\n            \"y\": 1847\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 8859,\n            \"title\": \"string\",\n            \"width\": 7,\n            \"x\": 10,\n            \"y\": 1387\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 9339,\n            \"title\": \"string\",\n            \"width\": 4,\n            \"x\": 4,\n            \"y\": 8514\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 9933,\n            \"title\": \"string\",\n            \"width\": 8,\n            \"x\": 5,\n            \"y\": 3784\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 5573,\n            \"title\": \"string\",\n            \"width\": 3,\n            \"x\": 4,\n            \"y\": 3102\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 396,\n            \"title\": \"string\",\n            \"width\": 9,\n            \"x\": 2,\n            \"y\": 7105\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 3350,\n            \"title\": \"string\",\n            \"width\": 6,\n            \"x\": 9,\n            \"y\": 5617\n          },\n          {\n            \"config\": {},\n            \"id\": \"st\",\n            \"type\": \"string\",\n            \"height\": 8783,\n            \"title\": \"string\",\n            \"width\": 4,\n            \"x\": 5,\n            \"y\": 4105\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 1000,\n            \"title\": \"string\",\n            \"width\": 4,\n            \"x\": 0,\n            \"y\": 2897\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 8380,\n            \"title\": \"string\",\n            \"width\": 10,\n            \"x\": 10,\n            \"y\": 7872\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 6585,\n            \"title\": \"string\",\n            \"width\": 2,\n            \"x\": 8,\n            \"y\": 1216\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 4626,\n            \"title\": \"string\",\n            \"width\": 10,\n            \"x\": 9,\n            \"y\": 7857\n          },\n          {\n            \"config\": {},\n            \"id\": \"string\",\n            \"type\": \"string\",\n            \"height\": 1169,\n            \"title\": \"string\",\n            \"width\": 4,\n            \"x\": 8,\n            \"y\": 6224\n          }\n        ]\n      }\n    ],\n    \"dependencies\": [\n      {\n        \"direction\": \"outgoing\",\n        \"entityType\": \"string\",\n        \"identifiers\": [\n          \"string\"\n        ],\n        \"name\": \"string\",\n        \"separator\": \"string\",\n        \"type\": \"describe\"\n      },\n      {\n        \"direction\": \"outgoing\",\n        \"entityType\": \"string\",\n        \"identifiers\": [\n          \"string\"\n        ],\n        \"name\": \"string\",\n        \"separator\": \"string\",\n        \"type\": \"of\"\n      }\n    ],\n    \"metrics\": [\n      {\n        \"aggregation\": \"AVG\",\n        \"category\": \"string\",\n        \"description\": \"string\",\n        \"formatter\": \"PERCENTAGE_NO_CAPPING\",\n        \"label\": \"string\",\n        \"name\": \"string\",\n        \"section\": \"CLR\",\n        \"source\": \"string\",\n        \"type\": \"string\"\n      },\n      {\n        \"aggregation\": \"AVG\",\n        \"category\": \"string\",\n        \"description\": \"string\",\n        \"formatter\": \"RATE\",\n        \"label\": \"string\",\n        \"name\": \"string\",\n        \"section\": \"TIBCOBW\",\n        \"source\": \"string\",\n        \"type\": \"string\"\n      }\n    ]\n  },\n  \"id\": \"string\",\n  \"created\": 3788,\n  \"version\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c884f131-0e98-4cb5-8f03-86a9f582f9fd",
+          "name": "Create a Custom Entity type",
+          "request": {
+            "name": "Create a Custom Entity type",
+            "description": {
+              "content": "This end point creates a custom entity type",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "custom-entitytypes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifiers\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"label\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"dashboards\": [\n    {\n      \"accessRules\": [\n        {\n          \"accessType\": \"<string>\",\n          \"relationType\": \"<string>\",\n          \"relatedId\": \"<string>\"\n        }\n      ],\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"widgets\": [\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        }\n      ]\n    },\n    {\n      \"accessRules\": [\n        {\n          \"accessType\": \"<string>\",\n          \"relationType\": \"<string>\",\n          \"relatedId\": \"<string>\"\n        }\n      ],\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"widgets\": [\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        }\n      ]\n    }\n  ],\n  \"dependencies\": [\n    {\n      \"direction\": \"<string>\",\n      \"entityType\": \"<string>\",\n      \"identifiers\": [\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"name\": \"<string>\",\n      \"separator\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"direction\": \"<string>\",\n      \"entityType\": \"<string>\",\n      \"identifiers\": [\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"name\": \"<string>\",\n      \"separator\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"metrics\": [\n    {\n      \"aggregation\": \"<string>\",\n      \"category\": \"<string>\",\n      \"description\": \"<string>\",\n      \"formatter\": \"<string>\",\n      \"label\": \"<string>\",\n      \"name\": \"<string>\",\n      \"section\": \"<string>\",\n      \"source\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"aggregation\": \"<string>\",\n      \"category\": \"<string>\",\n      \"description\": \"<string>\",\n      \"formatter\": \"<string>\",\n      \"label\": \"<string>\",\n      \"name\": \"<string>\",\n      \"section\": \"<string>\",\n      \"source\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "762a5866-a835-4b87-8cb5-3b73b1d2b8f1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-entitytypes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identifiers\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"label\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"dashboards\": [\n    {\n      \"accessRules\": [\n        {\n          \"accessType\": \"<string>\",\n          \"relationType\": \"<string>\",\n          \"relatedId\": \"<string>\"\n        }\n      ],\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"widgets\": [\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        }\n      ]\n    }\n  ],\n  \"dependencies\": [\n    {\n      \"direction\": \"<string>\",\n      \"entityType\": \"<string>\",\n      \"identifiers\": [\n        \"<string>\"\n      ],\n      \"name\": \"<string>\",\n      \"separator\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"metrics\": [\n    {\n      \"aggregation\": \"<string>\",\n      \"category\": \"<string>\",\n      \"description\": \"<string>\",\n      \"formatter\": \"<string>\",\n      \"label\": \"<string>\",\n      \"name\": \"<string>\",\n      \"section\": \"<string>\",\n      \"source\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"identifiers\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"label\": \"<string>\",\n    \"tagFilterExpression\": {\n      \"type\": \"<string>\"\n    },\n    \"dashboards\": [\n      {\n        \"accessRules\": [\n          {\n            \"accessType\": \"<string>\",\n            \"relationType\": \"<string>\",\n            \"relatedId\": \"<string>\"\n          }\n        ],\n        \"id\": \"<string>\",\n        \"title\": \"<string>\",\n        \"widgets\": [\n          {\n            \"config\": \"<object>\",\n            \"id\": \"<string>\",\n            \"type\": \"<string>\",\n            \"height\": \"<integer>\",\n            \"title\": \"<string>\",\n            \"width\": \"<integer>\",\n            \"x\": \"<integer>\",\n            \"y\": \"<integer>\"\n          }\n        ]\n      }\n    ],\n    \"dependencies\": [\n      {\n        \"direction\": \"<string>\",\n        \"entityType\": \"<string>\",\n        \"identifiers\": [\n          \"<string>\"\n        ],\n        \"name\": \"<string>\",\n        \"separator\": \"<string>\",\n        \"type\": \"<string>\"\n      }\n    ],\n    \"metrics\": [\n      {\n        \"aggregation\": \"<string>\",\n        \"category\": \"<string>\",\n        \"description\": \"<string>\",\n        \"formatter\": \"<string>\",\n        \"label\": \"<string>\",\n        \"name\": \"<string>\",\n        \"section\": \"<string>\",\n        \"source\": \"<string>\",\n        \"type\": \"<string>\"\n      }\n    ]\n  },\n  \"id\": \"string\",\n  \"created\": 7903,\n  \"version\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2b287ddb-a594-4c6e-ab40-7c554344fa15",
+          "name": "Delete a Custom Entity Type",
+          "request": {
+            "name": "Delete a Custom Entity Type",
+            "description": {
+              "content": "This end point deletes a custom Entity type definition",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "custom-entitytypes",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifiers\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"label\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"dashboards\": [\n    {\n      \"accessRules\": [\n        {\n          \"accessType\": \"<string>\",\n          \"relationType\": \"<string>\",\n          \"relatedId\": \"<string>\"\n        }\n      ],\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"widgets\": [\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        }\n      ]\n    },\n    {\n      \"accessRules\": [\n        {\n          \"accessType\": \"<string>\",\n          \"relationType\": \"<string>\",\n          \"relatedId\": \"<string>\"\n        }\n      ],\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"widgets\": [\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        }\n      ]\n    }\n  ],\n  \"dependencies\": [\n    {\n      \"direction\": \"<string>\",\n      \"entityType\": \"<string>\",\n      \"identifiers\": [\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"name\": \"<string>\",\n      \"separator\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"direction\": \"<string>\",\n      \"entityType\": \"<string>\",\n      \"identifiers\": [\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"name\": \"<string>\",\n      \"separator\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"metrics\": [\n    {\n      \"aggregation\": \"<string>\",\n      \"category\": \"<string>\",\n      \"description\": \"<string>\",\n      \"formatter\": \"<string>\",\n      \"label\": \"<string>\",\n      \"name\": \"<string>\",\n      \"section\": \"<string>\",\n      \"source\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"aggregation\": \"<string>\",\n      \"category\": \"<string>\",\n      \"description\": \"<string>\",\n      \"formatter\": \"<string>\",\n      \"label\": \"<string>\",\n      \"name\": \"<string>\",\n      \"section\": \"<string>\",\n      \"source\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "500437f3-bee3-4905-b741-8918f85337c7",
+              "name": "Entity Deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-entitytypes",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identifiers\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"label\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"dashboards\": [\n    {\n      \"accessRules\": [\n        {\n          \"accessType\": \"<string>\",\n          \"relationType\": \"<string>\",\n          \"relatedId\": \"<string>\"\n        }\n      ],\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"widgets\": [\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        }\n      ]\n    }\n  ],\n  \"dependencies\": [\n    {\n      \"direction\": \"<string>\",\n      \"entityType\": \"<string>\",\n      \"identifiers\": [\n        \"<string>\"\n      ],\n      \"name\": \"<string>\",\n      \"separator\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"metrics\": [\n    {\n      \"aggregation\": \"<string>\",\n      \"category\": \"<string>\",\n      \"description\": \"<string>\",\n      \"formatter\": \"<string>\",\n      \"label\": \"<string>\",\n      \"name\": \"<string>\",\n      \"section\": \"<string>\",\n      \"source\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"identifiers\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"label\": \"<string>\",\n    \"tagFilterExpression\": {\n      \"type\": \"<string>\"\n    },\n    \"dashboards\": [\n      {\n        \"accessRules\": [\n          {\n            \"accessType\": \"<string>\",\n            \"relationType\": \"<string>\",\n            \"relatedId\": \"<string>\"\n          }\n        ],\n        \"id\": \"<string>\",\n        \"title\": \"<string>\",\n        \"widgets\": [\n          {\n            \"config\": \"<object>\",\n            \"id\": \"<string>\",\n            \"type\": \"<string>\",\n            \"height\": \"<integer>\",\n            \"title\": \"<string>\",\n            \"width\": \"<integer>\",\n            \"x\": \"<integer>\",\n            \"y\": \"<integer>\"\n          }\n        ]\n      }\n    ],\n    \"dependencies\": [\n      {\n        \"direction\": \"<string>\",\n        \"entityType\": \"<string>\",\n        \"identifiers\": [\n          \"<string>\"\n        ],\n        \"name\": \"<string>\",\n        \"separator\": \"<string>\",\n        \"type\": \"<string>\"\n      }\n    ],\n    \"metrics\": [\n      {\n        \"aggregation\": \"<string>\",\n        \"category\": \"<string>\",\n        \"description\": \"<string>\",\n        \"formatter\": \"<string>\",\n        \"label\": \"<string>\",\n        \"name\": \"<string>\",\n        \"section\": \"<string>\",\n        \"source\": \"<string>\",\n        \"type\": \"<string>\"\n      }\n    ]\n  },\n  \"id\": \"string\",\n  \"created\": 7903,\n  \"version\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d362b535-e1de-43bd-a737-af577785fa69",
+          "name": "Get custom Entity Types",
+          "request": {
+            "name": "Get custom Entity Types",
+            "description": {
+              "content": "This endpoint gets custom Entity Type by ID",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "custom-entitytypes",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3ce881b8-2982-4164-8b32-a360c1c1b364",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-entitytypes",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"identifiers\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"label\": \"<string>\",\n    \"tagFilterExpression\": {\n      \"type\": \"<string>\"\n    },\n    \"dashboards\": [\n      {\n        \"accessRules\": [\n          {\n            \"accessType\": \"<string>\",\n            \"relationType\": \"<string>\",\n            \"relatedId\": \"<string>\"\n          }\n        ],\n        \"id\": \"<string>\",\n        \"title\": \"<string>\",\n        \"widgets\": [\n          {\n            \"config\": \"<object>\",\n            \"id\": \"<string>\",\n            \"type\": \"<string>\",\n            \"height\": \"<integer>\",\n            \"title\": \"<string>\",\n            \"width\": \"<integer>\",\n            \"x\": \"<integer>\",\n            \"y\": \"<integer>\"\n          }\n        ]\n      }\n    ],\n    \"dependencies\": [\n      {\n        \"direction\": \"<string>\",\n        \"entityType\": \"<string>\",\n        \"identifiers\": [\n          \"<string>\"\n        ],\n        \"name\": \"<string>\",\n        \"separator\": \"<string>\",\n        \"type\": \"<string>\"\n      }\n    ],\n    \"metrics\": [\n      {\n        \"aggregation\": \"<string>\",\n        \"category\": \"<string>\",\n        \"description\": \"<string>\",\n        \"formatter\": \"<string>\",\n        \"label\": \"<string>\",\n        \"name\": \"<string>\",\n        \"section\": \"<string>\",\n        \"source\": \"<string>\",\n        \"type\": \"<string>\"\n      }\n    ]\n  },\n  \"id\": \"string\",\n  \"created\": 7903,\n  \"version\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "567ca85f-fa4f-4c86-aac4-9b4ae648a806",
+          "name": "Update a Custom Entity Type",
+          "request": {
+            "name": "Update a Custom Entity Type",
+            "description": {
+              "content": "This end points updates the definition of a custom entity type",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "custom-entitytypes",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifiers\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"label\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"dashboards\": [\n    {\n      \"accessRules\": [\n        {\n          \"accessType\": \"<string>\",\n          \"relationType\": \"<string>\",\n          \"relatedId\": \"<string>\"\n        }\n      ],\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"widgets\": [\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        }\n      ]\n    },\n    {\n      \"accessRules\": [\n        {\n          \"accessType\": \"<string>\",\n          \"relationType\": \"<string>\",\n          \"relatedId\": \"<string>\"\n        }\n      ],\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"widgets\": [\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        },\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        }\n      ]\n    }\n  ],\n  \"dependencies\": [\n    {\n      \"direction\": \"<string>\",\n      \"entityType\": \"<string>\",\n      \"identifiers\": [\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"name\": \"<string>\",\n      \"separator\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"direction\": \"<string>\",\n      \"entityType\": \"<string>\",\n      \"identifiers\": [\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"name\": \"<string>\",\n      \"separator\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"metrics\": [\n    {\n      \"aggregation\": \"<string>\",\n      \"category\": \"<string>\",\n      \"description\": \"<string>\",\n      \"formatter\": \"<string>\",\n      \"label\": \"<string>\",\n      \"name\": \"<string>\",\n      \"section\": \"<string>\",\n      \"source\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"aggregation\": \"<string>\",\n      \"category\": \"<string>\",\n      \"description\": \"<string>\",\n      \"formatter\": \"<string>\",\n      \"label\": \"<string>\",\n      \"name\": \"<string>\",\n      \"section\": \"<string>\",\n      \"source\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ec6316e5-2c15-476a-b6b3-082abc38a791",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-entitytypes",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identifiers\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"label\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"dashboards\": [\n    {\n      \"accessRules\": [\n        {\n          \"accessType\": \"<string>\",\n          \"relationType\": \"<string>\",\n          \"relatedId\": \"<string>\"\n        }\n      ],\n      \"id\": \"<string>\",\n      \"title\": \"<string>\",\n      \"widgets\": [\n        {\n          \"config\": \"<object>\",\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"height\": \"<integer>\",\n          \"title\": \"<string>\",\n          \"width\": \"<integer>\",\n          \"x\": \"<integer>\",\n          \"y\": \"<integer>\"\n        }\n      ]\n    }\n  ],\n  \"dependencies\": [\n    {\n      \"direction\": \"<string>\",\n      \"entityType\": \"<string>\",\n      \"identifiers\": [\n        \"<string>\"\n      ],\n      \"name\": \"<string>\",\n      \"separator\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"metrics\": [\n    {\n      \"aggregation\": \"<string>\",\n      \"category\": \"<string>\",\n      \"description\": \"<string>\",\n      \"formatter\": \"<string>\",\n      \"label\": \"<string>\",\n      \"name\": \"<string>\",\n      \"section\": \"<string>\",\n      \"source\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"identifiers\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"label\": \"<string>\",\n    \"tagFilterExpression\": {\n      \"type\": \"<string>\"\n    },\n    \"dashboards\": [\n      {\n        \"accessRules\": [\n          {\n            \"accessType\": \"<string>\",\n            \"relationType\": \"<string>\",\n            \"relatedId\": \"<string>\"\n          }\n        ],\n        \"id\": \"<string>\",\n        \"title\": \"<string>\",\n        \"widgets\": [\n          {\n            \"config\": \"<object>\",\n            \"id\": \"<string>\",\n            \"type\": \"<string>\",\n            \"height\": \"<integer>\",\n            \"title\": \"<string>\",\n            \"width\": \"<integer>\",\n            \"x\": \"<integer>\",\n            \"y\": \"<integer>\"\n          }\n        ]\n      }\n    ],\n    \"dependencies\": [\n      {\n        \"direction\": \"<string>\",\n        \"entityType\": \"<string>\",\n        \"identifiers\": [\n          \"<string>\"\n        ],\n        \"name\": \"<string>\",\n        \"separator\": \"<string>\",\n        \"type\": \"<string>\"\n      }\n    ],\n    \"metrics\": [\n      {\n        \"aggregation\": \"<string>\",\n        \"category\": \"<string>\",\n        \"description\": \"<string>\",\n        \"formatter\": \"<string>\",\n        \"label\": \"<string>\",\n        \"name\": \"<string>\",\n        \"section\": \"<string>\",\n        \"source\": \"<string>\",\n        \"type\": \"<string>\"\n      }\n    ]\n  },\n  \"id\": \"string\",\n  \"created\": 7903,\n  \"version\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Customer tenant unit",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "tenant",
+      "key": "tenant"
+    },
+    {
+      "description": {
+        "content": "Customer tenant name",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "unit",
+      "key": "unit"
+    },
+    {
+      "type": "string",
+      "value": "https://{{unit}}-{{tenant}}.instana.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "f91cb4a9-3432-47a9-a1f8-73e71076696b",
+    "name": "Instana REST API documentation Custom Entities API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n\n\nContact Support:\n Name: © Instana\n Email: support@instana.com",
+      "type": "text/plain"
+    }
+  }
+}

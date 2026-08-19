@@ -1,0 +1,165 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Action Catalog API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Action Catalog",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all automation actions.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/actions",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all automation actions. When using personal access tokens, the user must have at least `Viewer` access for Automation and the actions returned are also filtered based on the access set in `Limited access` permission settings."
+        },
+        {
+          "info": {
+            "name": "Get an automation action by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/actions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "d473c1b0-0740-4d08-95fe-31e5d0a9faff",
+                "type": "path",
+                "description": "Automation action ID"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get an automation action by ID specified in the request path. When using personal access tokens, the user must have at least `Viewer` access for Automation and the actions returned are also filtered based on the access set in `Limited access` permission settings."
+        },
+        {
+          "info": {
+            "name": "Get action matches by application ID or snapshot ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/ai/action/match",
+            "params": [
+              {
+                "name": "applicationId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "snapshotId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "windowSize",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get automation actions that match based on application ID or snapshot ID within a specified time window."
+        },
+        {
+          "info": {
+            "name": "Get automation actions that match the incidents or issues.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/ai/action/match",
+            "params": [
+              {
+                "name": "targetSnapshotId",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get automation actions that match the incident or issue data in the request body."
+        },
+        {
+          "info": {
+            "name": "Resolve dynamic parameter values",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/parameters/dynamic",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Resolve dynamic parameter values"
+        },
+        {
+          "info": {
+            "name": "Get tag catalog for dynamic parameters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/automation/parameters/dynamic/catalog",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get tag catalog for dynamic parameters"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

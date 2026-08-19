@@ -1,0 +1,150 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Releases API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Releases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all releases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/releases",
+            "params": [
+              {
+                "name": "from",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "maxResults",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint to retrieve a list of all releases."
+        },
+        {
+          "info": {
+            "name": "Create release",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/releases",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint to create a release. Release can be created with four different scopes: \n\n1. Global\n    - Release marker is shown on all dashboard pages for Application perspectives, Services, and Endpoints.\n\n2. Application Perspective\n    - Release marker is shown on the dashboard for the Application perspective.\n\n3. Service\n    - Release marker is shown on the dashboards for the Service and all Application perspective dashboards that contain the Service.\n\n4. Service within an Application"
+        },
+        {
+          "info": {
+            "name": "Get release",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/releases/:releaseId",
+            "params": [
+              {
+                "name": "releaseId",
+                "value": "XK1e1TF3T9SHKugndn_soQ",
+                "type": "path",
+                "description": "The unique release id which one wants to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint to retrieve a particular release."
+        },
+        {
+          "info": {
+            "name": "Update release",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/releases/:releaseId",
+            "params": [
+              {
+                "name": "releaseId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint to update a release."
+        },
+        {
+          "info": {
+            "name": "Delete release",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/releases/:releaseId",
+            "params": [
+              {
+                "name": "releaseId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint to delete a release."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

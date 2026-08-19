@@ -1,0 +1,251 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation SLI Settings API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "SLI Settings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get All SLI Configs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/sli",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get All SLI Configs"
+        },
+        {
+          "info": {
+            "name": "Create SLI Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/sli",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint creates the Service Level Indicator Configuration\n\n## Mandatory Parameters:\n\n- **id** A unique identifier for each SLI configuration\n\n- **sliName:** Name for the SLI configuration\n\n- **sliEntity:** Entity of the SLI configuration\n\n### SLI Entity specific parameters\n\nDepending on the chosen `sliType` in the `sliEntity`, there are further required parameters:\n\n#### Application SLI entity\n\nThis option can be used to create a Time-Based SLI\n\n- **sliEntity.applicationId:** The Id of the"
+        },
+        {
+          "info": {
+            "name": "Get SLI Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/sli/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get SLI Config"
+        },
+        {
+          "info": {
+            "name": "Update SLI Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/sli/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update SLI Config"
+        },
+        {
+          "info": {
+            "name": "Delete SLI Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/sli/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete SLI Config"
+        },
+        {
+          "info": {
+            "name": "Get All SLI Configs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/v2/sli",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get All SLI Configs"
+        },
+        {
+          "info": {
+            "name": "Create SLI Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/v2/sli",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint creates the Service Level Indicator Configuration\n\n## Mandatory Parameters:\n\n- **id** A unique identifier for each SLI configuration\n\n- **sliName:** Name for the SLI configuration\n\n- **sliEntity:** Entity of the SLI configuration\n\n### SLI Entity specific parameters\n\nDepending on the chosen `sliType` in the `sliEntity`, there are further required parameters:\n\n#### Application SLI entity\n\nThis option can be used to create a Time-Based SLI\n\n- **sliEntity.applicationId:** The Id of the"
+        },
+        {
+          "info": {
+            "name": "Get all SLI configs for entity type and entity id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/v2/sli/:entityType/:entityId",
+            "params": [
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "path",
+                "description": "Type of the Entity, whether it is an application or website"
+              },
+              {
+                "name": "entityId",
+                "value": "DkPX-x9VQuKBKopuilrkYw",
+                "type": "path",
+                "description": "Unique ID of the Entity"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all SLI configs for entity type and entity id"
+        },
+        {
+          "info": {
+            "name": "Get SLI Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/v2/sli/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "HXcNRWhDSWiZs3HiUAKr7g",
+                "type": "path",
+                "description": "ID of the Service Level Indicator (SLI)"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get SLI Config"
+        },
+        {
+          "info": {
+            "name": "Delete SLI Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/v2/sli/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "HXcNRWhDSWiZs3HiUAKr7g",
+                "type": "path",
+                "description": "ID of the Service Level Indicator (SLI)"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete SLI Config"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

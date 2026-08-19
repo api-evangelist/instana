@@ -1,0 +1,73 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Synthetic Calls API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Synthetic Calls",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Synthetic call configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/synthetic-calls",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to get all custom synthetic call configurations.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and e"
+        },
+        {
+          "info": {
+            "name": "Update synthetic call configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/synthetic-calls",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to get all custom synthetic call configurations.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and e"
+        },
+        {
+          "info": {
+            "name": "Delete synthetic call configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/settings/synthetic-calls",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Use this API endpoint if one wants to delete all custom synthetic call configurations.\nThis endpoint requires `CanConfigureServiceMapping` permission.\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules an"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

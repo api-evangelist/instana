@@ -1,0 +1,252 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Infrastructure Resources API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Infrastructure Resources",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Monitored host count",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/monitoring-state",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This API endpoint retrieves the current monitoring state of the system, providing details about the number of monitored hosts and serverless entities. It responds with a JSON object containing this information."
+        },
+        {
+          "info": {
+            "name": "Get a payload for a snapshot",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/payloads/:snapshotId/:payloadKey",
+            "params": [
+              {
+                "name": "snapshotId",
+                "value": "",
+                "type": "path",
+                "description": "Snapshot id."
+              },
+              {
+                "name": "payloadKey",
+                "value": "topqueries",
+                "type": "path",
+                "description": "Payload key. Use [getAvailablePayloadKeysByPluginId](/openapi/#operation/getAvailablePayloadKeysByPluginId) to retrieve the list of possible keys."
+              },
+              {
+                "name": "to",
+                "value": "1689018652000",
+                "type": "query",
+                "description": "End of timeframe expressed as the Unix epoch time in milliseconds."
+              },
+              {
+                "name": "windowSize",
+                "value": "3600000",
+                "type": "query",
+                "description": "Window size in milliseconds."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a payload for a snapshot"
+        },
+        {
+          "info": {
+            "name": "Search snapshots",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/snapshots",
+            "params": [
+              {
+                "name": "query",
+                "value": "entity.zone:myZone*",
+                "type": "query",
+                "description": "query to use to filter snapshot retrieval"
+              },
+              {
+                "name": "to",
+                "value": "1689018652000",
+                "type": "query",
+                "description": "end of timeframe expressed as the Unix epoch time in milliseconds"
+              },
+              {
+                "name": "windowSize",
+                "value": "3600000",
+                "type": "query",
+                "description": "windowSize in milliseconds"
+              },
+              {
+                "name": "size",
+                "value": "100",
+                "type": "query",
+                "description": "maximum number of snapshots to retrieve"
+              },
+              {
+                "name": "plugin",
+                "value": "host",
+                "type": "query",
+                "description": "entity type"
+              },
+              {
+                "name": "offline",
+                "value": "false",
+                "type": "query",
+                "description": "retrieve snapshots which were online during the timeframe, otherwise, return only snapshot which were online at the end of the timeframe"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "These APIs can be used to retrieve information about hosts, processes, JVMs and other entities that we are calling snapshots. A snapshot represents static information about an entity as it was at a specific point in time. To clarify:\r\n**Static information** is any information which is seldom changing, e.g. process IDs, host FQDNs or a list of host hard disks. The counterpart to static information are metrics which have a much higher change rate, e.g. host CPU usage or JVM garbage collection acti"
+        },
+        {
+          "info": {
+            "name": "Get snapshot details for multiple snapshots",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/snapshots",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves detail information for one or more snapshots. timeFrame defaults to the last 10 minutes if not specified."
+        },
+        {
+          "info": {
+            "name": "Get snapshot details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/snapshots/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "snapshot id"
+              },
+              {
+                "name": "to",
+                "value": "1689018652000",
+                "type": "query",
+                "description": "end of timeframe expressed as the Unix epoch time in milliseconds"
+              },
+              {
+                "name": "windowSize",
+                "value": "3600000",
+                "type": "query",
+                "description": "windowSize in milliseconds"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all snapshot information"
+        },
+        {
+          "info": {
+            "name": "Get installed software",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/software/versions",
+            "params": [
+              {
+                "name": "time",
+                "value": "",
+                "type": "query",
+                "description": "Timeframe expressed as the Unix epoch time in milliseconds"
+              },
+              {
+                "name": "discoveryType",
+                "value": "NATIVE_SENSOR",
+                "type": "query",
+                "description": "Filter on discoveryType"
+              },
+              {
+                "name": "softwareType",
+                "value": "DEPENDENCY",
+                "type": "query",
+                "description": "Filter on softwareType"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter on this software name"
+              },
+              {
+                "name": "plugin",
+                "value": "",
+                "type": "query",
+                "description": "Filter on this plugin"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "Filter on this version"
+              },
+              {
+                "name": "vendor",
+                "value": "",
+                "type": "query",
+                "description": "Filter on this vendor"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Retrieve information about the software that are sensed by the agent remotely, natively, or both. This includes runtime and package manager information.\n\nThe `plugin`, `name`, `version`, `discoveryType`, `softwareType` and `vendor` parameters are optional filters that can be used to reduce the result data set.\nThe `snapshotId` in `usedBy` is either of host or container, if available"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

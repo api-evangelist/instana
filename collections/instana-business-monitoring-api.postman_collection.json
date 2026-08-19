@@ -1,0 +1,1172 @@
+{
+  "item": [
+    {
+      "id": "542423d8-86ac-4510-8e06-06d26137def2",
+      "name": "Business Monitoring",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "753fd387-d27f-4df5-97e7-c78a088e24dd",
+          "name": "Get Business Activities",
+          "request": {
+            "name": "Get Business Activities",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "business-monitoring",
+                "activities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order\": {\n    \"by\": \"<string>\",\n    \"direction\": \"<string>\",\n    \"collation\": \"<string>\"\n  },\n  \"pagination\": {\n    \"page\": \"<integer>\",\n    \"pageSize\": \"<integer>\"\n  },\n  \"timeFrame\": {\n    \"to\": \"<long>\",\n    \"windowSize\": \"<long>\"\n  },\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeframe\": {\n    \"to\": \"<long>\",\n    \"windowSize\": \"<long>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3cdc6985-83aa-4a32-9b06-d1754bd9f423",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "business-monitoring",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order\": {\n    \"by\": \"<string>\",\n    \"direction\": \"<string>\",\n    \"collation\": \"<string>\"\n  },\n  \"pagination\": {\n    \"page\": \"<integer>\",\n    \"pageSize\": \"<integer>\"\n  },\n  \"timeFrame\": {\n    \"to\": \"<long>\",\n    \"windowSize\": \"<long>\"\n  },\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeframe\": {\n    \"to\": \"<long>\",\n    \"windowSize\": \"<long>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"cursor\": {},\n  \"businessActivity\": {\n    \"activityType\": \"userTask\",\n    \"activityId\": \"ApproveInvoiceTask\",\n    \"activityName\": \"Approve Invoice\",\n    \"activityStart\": 1680559706000,\n    \"endpointIds\": [\n      \"string\",\n      \"string\"\n    ],\n    \"processDefinitionId\": \"invoice:2:aa2bbbcc-bb04-11ee-9d4e-0242ac110002\",\n    \"processDefinitionName\": \"Invoice Approval\",\n    \"rootProcessInstanceId\": \"486cbb3b-e633-11ee-8707-0242ac110002\"\n  },\n  \"metrics\": {\n    \"key_0\": [\n      [\n        9389.33620316965,\n        3318.859970243957\n      ],\n      [\n        7990.791384050251,\n        4827.748899398382\n      ]\n    ],\n    \"key_1\": [\n      [\n        1688.4423305957507,\n        8862.916781416609\n      ],\n      [\n        2162.9484380888043,\n        9820.581797300627\n      ]\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "05c3d4e6-5a0b-4aa1-bcc0-355173e63477",
+          "name": "Download Business Activities",
+          "request": {
+            "name": "Download Business Activities",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "business-monitoring",
+                "activities",
+                "csv"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "text/csv"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order\": {\n    \"by\": \"<string>\",\n    \"direction\": \"<string>\",\n    \"collation\": \"<string>\"\n  },\n  \"pagination\": {\n    \"page\": \"<integer>\",\n    \"pageSize\": \"<integer>\"\n  },\n  \"timeFrame\": {\n    \"to\": \"<long>\",\n    \"windowSize\": \"<long>\"\n  },\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeframe\": {\n    \"to\": \"<long>\",\n    \"windowSize\": \"<long>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1bd2740d-0180-4cea-890b-82fae4539693",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "business-monitoring",
+                    "activities",
+                    "csv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/csv"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"order\": {\n    \"by\": \"<string>\",\n    \"direction\": \"<string>\",\n    \"collation\": \"<string>\"\n  },\n  \"pagination\": {\n    \"page\": \"<integer>\",\n    \"pageSize\": \"<integer>\"\n  },\n  \"timeFrame\": {\n    \"to\": \"<long>\",\n    \"windowSize\": \"<long>\"\n  },\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeframe\": {\n    \"to\": \"<long>\",\n    \"windowSize\": \"<long>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/csv"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9b255549-3ba3-4c19-8e3a-7a7b3972c3e3",
+          "name": "Get all business perspectives",
+          "request": {
+            "name": "Get all business perspectives",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "business-monitoring",
+                "business-perspectives"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c1787444-6d4d-4f40-99c6-4819d4beba1c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "business-monitoring",
+                    "business-perspectives"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"gBwNFIbjS6Ozwt0a12regg\",\n    \"label\": \"biz-perspective\",\n    \"name\": \"biz-perspective\",\n    \"description\": \"This is an example business perspective\",\n    \"rbacTags\": [\n      {\n        \"id\": \"0xHKaxfaS161Al6Qc23g4w\",\n        \"displayName\": \"team 1\"\n      }\n    ],\n    \"tagFilterExpression\": {\n      \"type\": \"EXPRESSION\",\n      \"logicalOperator\": \"AND\",\n      \"elements\": [\n        {\n          \"type\": \"EXPRESSION\",\n          \"logicalOperator\": \"AND\",\n          \"elements\": [\n            {\n              \"type\": \"EXPRESSION\",\n              \"logicalOperator\": \"OR\",\n              \"elements\": [\n                {\n                  \"type\": \"TAG_FILTER\",\n                  \"name\": \"service.name\",\n                  \"stringValue\": \"my-service-1\",\n                  \"numberValue\": null,\n                  \"booleanValue\": null,\n                  \"key\": null,\n                  \"value\": \"my-service-1\",\n                  \"operator\": \"EQUALS\",\n                  \"entity\": \"DESTINATION\"\n                },\n                {\n                  \"type\": \"TAG_FILTER\",\n                  \"name\": \"service.name\",\n                  \"stringValue\": \"my-service-2\",\n                  \"numberValue\": null,\n                  \"booleanValue\": null,\n                  \"key\": null,\n                  \"value\": \"my-service-2\",\n                  \"operator\": \"EQUALS\",\n                  \"entity\": \"DESTINATION\"\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "139e81b7-a3ef-472d-be63-b04a598eda22",
+          "name": "Create business perspective",
+          "request": {
+            "name": "Create business perspective",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "business-monitoring",
+                "business-perspectives"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a7f7bf24-caca-41ca-bb45-a613fe4ee27b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "business-monitoring",
+                    "business-perspectives"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"label\": \"biz-perspective\",\n  \"name\": \"biz-perspective\",\n  \"description\": \"This is an example business perspective\",\n  \"rbacTags\": [\n    {\n      \"id\": \"0xHKaxfaS161Al6Qc23g4w\",\n      \"displayName\": \"team 1\"\n    }\n  ],\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"AND\",\n    \"elements\": [\n      {\n        \"type\": \"EXPRESSION\",\n        \"logicalOperator\": \"AND\",\n        \"elements\": [\n          {\n            \"type\": \"EXPRESSION\",\n            \"logicalOperator\": \"OR\",\n            \"elements\": [\n              {\n                \"type\": \"TAG_FILTER\",\n                \"name\": \"service.name\",\n                \"stringValue\": \"my-service-1\",\n                \"numberValue\": null,\n                \"booleanValue\": null,\n                \"key\": null,\n                \"value\": \"my-service-1\",\n                \"operator\": \"EQUALS\",\n                \"entity\": \"DESTINATION\"\n              },\n              {\n                \"type\": \"TAG_FILTER\",\n                \"name\": \"service.name\",\n                \"stringValue\": \"my-service-2\",\n                \"numberValue\": null,\n                \"booleanValue\": null,\n                \"key\": null,\n                \"value\": \"my-service-2\",\n                \"operator\": \"EQUALS\",\n                \"entity\": \"DESTINATION\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"gBwNFIbjS6Ozwt0a12regg\",\n  \"label\": \"biz-perspective\",\n  \"name\": \"biz-perspective\",\n  \"description\": \"This is an example business perspective\",\n  \"rbacTags\": [\n    {\n      \"id\": \"0xHKaxfaS161Al6Qc23g4w\",\n      \"displayName\": \"team 1\"\n    }\n  ],\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"AND\",\n    \"elements\": [\n      {\n        \"type\": \"EXPRESSION\",\n        \"logicalOperator\": \"AND\",\n        \"elements\": [\n          {\n            \"type\": \"EXPRESSION\",\n            \"logicalOperator\": \"OR\",\n            \"elements\": [\n              {\n                \"type\": \"TAG_FILTER\",\n                \"name\": \"service.name\",\n                \"stringValue\": \"my-service-1\",\n                \"numberValue\": null,\n                \"booleanValue\": null,\n                \"key\": null,\n                \"value\": \"my-service-1\",\n                \"operator\": \"EQUALS\",\n                \"entity\": \"DESTINATION\"\n              },\n              {\n                \"type\": \"TAG_FILTER\",\n                \"name\": \"service.name\",\n                \"stringValue\": \"my-service-2\",\n                \"numberValue\": null,\n                \"booleanValue\": null,\n                \"key\": null,\n                \"value\": \"my-service-2\",\n                \"operator\": \"EQUALS\",\n                \"entity\": \"DESTINATION\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "04d5d830-ac9f-4996-8726-4e8251b115cd",
+          "name": "Delete business perspective",
+          "request": {
+            "name": "Delete business perspective",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "business-monitoring",
+                "business-perspectives",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f8851832-9dc7-4f75-83c8-2a69992b9dc8",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "business-monitoring",
+                    "business-perspectives",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a22ea35a-7d11-4bf0-acc9-870134f2fb5c",
+          "name": "Get business perspective",
+          "request": {
+            "name": "Get business perspective",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "business-monitoring",
+                "business-perspectives",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "26b4836a-bb20-4087-9947-3f4d8a60a44f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "business-monitoring",
+                    "business-perspectives",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"gBwNFIbjS6Ozwt0a12regg\",\n  \"label\": \"biz-perspective\",\n  \"name\": \"biz-perspective\",\n  \"description\": \"This is an example business perspective\",\n  \"rbacTags\": [\n    {\n      \"id\": \"0xHKaxfaS161Al6Qc23g4w\",\n      \"displayName\": \"team 1\"\n    }\n  ],\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"AND\",\n    \"elements\": [\n      {\n        \"type\": \"EXPRESSION\",\n        \"logicalOperator\": \"AND\",\n        \"elements\": [\n          {\n            \"type\": \"EXPRESSION\",\n            \"logicalOperator\": \"OR\",\n            \"elements\": [\n              {\n                \"type\": \"TAG_FILTER\",\n                \"name\": \"service.name\",\n                \"stringValue\": \"my-service-1\",\n                \"numberValue\": null,\n                \"booleanValue\": null,\n                \"key\": null,\n                \"value\": \"my-service-1\",\n                \"operator\": \"EQUALS\",\n                \"entity\": \"DESTINATION\"\n              },\n              {\n                \"type\": \"TAG_FILTER\",\n                \"name\": \"service.name\",\n                \"stringValue\": \"my-service-2\",\n                \"numberValue\": null,\n                \"booleanValue\": null,\n                \"key\": null,\n                \"value\": \"my-service-2\",\n                \"operator\": \"EQUALS\",\n                \"entity\": \"DESTINATION\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fead3df2-300d-4ffc-a99d-751878895b3e",
+          "name": "Update business perspective",
+          "request": {
+            "name": "Update business perspective",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "business-monitoring",
+                "business-perspectives",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "92e66db9-1afc-459b-9854-ad3c52f69e53",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "business-monitoring",
+                    "business-perspectives",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"label\": \"biz-perspective\",\n  \"name\": \"biz-perspective\",\n  \"rbacTags\": [\n    {\n      \"id\": \"0xHKaxfaS161Al6Qc23g4w\",\n      \"displayName\": \"team 1\"\n    }\n  ],\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"AND\",\n    \"elements\": [\n      {\n        \"type\": \"EXPRESSION\",\n        \"logicalOperator\": \"AND\",\n        \"elements\": [\n          {\n            \"type\": \"EXPRESSION\",\n            \"logicalOperator\": \"OR\",\n            \"elements\": [\n              {\n                \"type\": \"TAG_FILTER\",\n                \"name\": \"service.name\",\n                \"stringValue\": \"my-service-1\",\n                \"numberValue\": null,\n                \"booleanValue\": null,\n                \"key\": null,\n                \"value\": \"my-service-1\",\n                \"operator\": \"EQUALS\",\n                \"entity\": \"DESTINATION\"\n              },\n              {\n                \"type\": \"TAG_FILTER\",\n                \"name\": \"service.name\",\n                \"stringValue\": \"my-service-2\",\n                \"numberValue\": null,\n                \"booleanValue\": null,\n                \"key\": null,\n                \"value\": \"my-service-2\",\n                \"operator\": \"EQUALS\",\n                \"entity\": \"DESTINATION\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"gBwNFIbjS6Ozwt0a12regg\",\n  \"label\": \"biz-perspective\",\n  \"name\": \"biz-perspective\",\n  \"description\": \"This is an example business perspective\",\n  \"rbacTags\": [\n    {\n      \"id\": \"0xHKaxfaS161Al6Qc23g4w\",\n      \"displayName\": \"team 1\"\n    }\n  ],\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"AND\",\n    \"elements\": [\n      {\n        \"type\": \"EXPRESSION\",\n        \"logicalOperator\": \"AND\",\n        \"elements\": [\n          {\n            \"type\": \"EXPRESSION\",\n            \"logicalOperator\": \"OR\",\n            \"elements\": [\n              {\n                \"type\": \"TAG_FILTER\",\n                \"name\": \"service.name\",\n                \"stringValue\": \"my-service-1\",\n                \"numberValue\": null,\n                \"booleanValue\": null,\n                \"key\": null,\n                \"value\": \"my-service-1\",\n                \"operator\": \"EQUALS\",\n                \"entity\": \"DESTINATION\"\n              },\n              {\n                \"type\": \"TAG_FILTER\",\n                \"name\": \"service.name\",\n                \"stringValue\": \"my-service-2\",\n                \"numberValue\": null,\n                \"booleanValue\": null,\n                \"key\": null,\n                \"value\": \"my-service-2\",\n                \"operator\": \"EQUALS\",\n                \"entity\": \"DESTINATION\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "11007ade-e55a-42f4-85f1-719414e31a10",
+          "name": "Get business tag catalog",
+          "request": {
+            "name": "Get business tag catalog",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "business-monitoring",
+                "catalog"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<long>"
+                },
+                {
+                  "disabled": false,
+                  "key": "useCase",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fa445f46-3f09-42bb-991f-7366c271484f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "business-monitoring",
+                    "catalog"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "useCase",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tagTree\": [\n    {\n      \"label\": \"Region or Environment\",\n      \"description\": null,\n      \"icon\": null,\n      \"children\": [\n        {\n          \"label\": \"Zone\",\n          \"description\": null,\n          \"icon\": null,\n          \"children\": [\n            {\n              \"label\": \"Agent Zone\",\n              \"tagName\": \"agent.zone\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Ec2 Zone\",\n              \"tagName\": \"aws.ec2.zone\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Azure Zone\",\n              \"tagName\": \"azure.zone\",\n              \"type\": \"TAG\"\n            }\n          ],\n          \"type\": \"LEVEL\",\n          \"queryable\": false\n        },\n        {\n          \"label\": \"Cloud\",\n          \"description\": null,\n          \"icon\": null,\n          \"children\": [\n            {\n              \"label\": \"Aws Arn\",\n              \"tagName\": \"aws.arn\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Ec2 Ipv4\",\n              \"tagName\": \"aws.ec2.ipv4\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Ec2 PublicName\",\n              \"tagName\": \"aws.ec2.publicName\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Ec2 Tag\",\n              \"tagName\": \"aws.ec2.tag\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Ec2 Zone\",\n              \"tagName\": \"aws.ec2.zone\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Ecs Cluster Name\",\n              \"tagName\": \"aws.ecs.cluster.name\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Azure Zone\",\n              \"tagName\": \"azure.zone\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Gce Tag\",\n              \"tagName\": \"gce.tag\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Gce Zone\",\n              \"tagName\": \"gce.zone\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Cloud Provider\",\n              \"tagName\": \"cloud.provider\",\n              \"type\": \"TAG\"\n            }\n          ],\n          \"type\": \"LEVEL\",\n          \"queryable\": false\n        },\n        {\n          \"label\": \"Host\",\n          \"description\": null,\n          \"icon\": null,\n          \"children\": [\n            {\n              \"label\": \"Http Host\",\n              \"tagName\": \"call.http.host\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Host Fqdn\",\n              \"tagName\": \"host.fqdn\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Host Ip\",\n              \"tagName\": \"host.ip\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Host Name\",\n              \"tagName\": \"host.name\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Host Zone\",\n              \"tagName\": \"host.zone\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Jboss Node Name\",\n              \"tagName\": \"jboss.node.name\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Kubernetes Cluster Name\",\n              \"tagName\": \"kubernetes.cluster.name\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Kubernetes Node Name\",\n              \"tagName\": \"kubernetes.node.name\",\n              \"type\": \"TAG\"\n            }\n          ],\n          \"type\": \"LEVEL\",\n          \"queryable\": false\n        }\n      ],\n      \"type\": \"LEVEL\",\n      \"queryable\": false\n    },\n    {\n      \"label\": \"custom\",\n      \"description\": null,\n      \"icon\": null,\n      \"children\": [\n        {\n          \"label\": \"HTTP\",\n          \"description\": null,\n          \"icon\": null,\n          \"children\": [\n            {\n              \"label\": \"Http Header\",\n              \"tagName\": \"call.http.header\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Http Params\",\n              \"tagName\": \"call.http.params\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Http PathTemplate\",\n              \"tagName\": \"call.http.pathTemplate\",\n              \"type\": \"TAG\"\n            }\n          ],\n          \"type\": \"LEVEL\",\n          \"queryable\": false\n        },\n        {\n          \"label\": \"Miscellaneous\",\n          \"description\": null,\n          \"icon\": null,\n          \"children\": [\n            {\n              \"label\": \"Agent Tag\",\n              \"tagName\": \"agent.tag\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Ec2 Tag\",\n              \"tagName\": \"aws.ec2.tag\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Call Tag\",\n              \"tagName\": \"call.tag\",\n              \"type\": \"TAG\"\n            }\n          ],\n          \"type\": \"LEVEL\",\n          \"queryable\": false\n        },\n        {\n          \"label\": \"Platform\",\n          \"description\": null,\n          \"icon\": null,\n          \"children\": [\n            {\n              \"label\": \"Docker Label\",\n              \"tagName\": \"docker.label\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Kubernetes Label\",\n              \"tagName\": \"kubernetes.label\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Kubernetes Deployment Label\",\n              \"tagName\": \"kubernetes.deployment.label\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Kubernetes Pod Label\",\n              \"tagName\": \"kubernetes.pod.label\",\n              \"type\": \"TAG\"\n            },\n            {\n              \"label\": \"Openshift Deploymentconfig Label\",\n              \"tagName\": \"openshift.deploymentconfig.label\",\n              \"type\": \"TAG\"\n            }\n          ],\n          \"type\": \"LEVEL\",\n          \"queryable\": false\n        }\n      ],\n      \"type\": \"LEVEL\",\n      \"queryable\": false\n    }\n  ],\n  \"tags\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Customer tenant unit",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "tenant",
+      "key": "tenant"
+    },
+    {
+      "description": {
+        "content": "Customer tenant name",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "unit",
+      "key": "unit"
+    },
+    {
+      "type": "string",
+      "value": "https://{{unit}}-{{tenant}}.instana.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "e8d9b69e-bc35-4942-a0e0-f3a41df11955",
+    "name": "Instana REST API documentation Business Monitoring API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n\n\nContact Support:\n Name: © Instana\n Email: support@instana.com",
+      "type": "text/plain"
+    }
+  }
+}

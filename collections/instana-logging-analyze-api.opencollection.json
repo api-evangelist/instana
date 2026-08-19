@@ -1,0 +1,55 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Logging Analyze API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Logging Analyze",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Log Volume Usage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/logging/logs/getLogVolumeUsage",
+            "params": [
+              {
+                "name": "fromTs",
+                "value": "1682899200",
+                "type": "query",
+                "description": "Start timestamp in seconds. Must be <= `toTs`."
+              },
+              {
+                "name": "toTs",
+                "value": "1682899201",
+                "type": "query",
+                "description": "End timestamp in seconds. Must be >= `fromTs`."
+              },
+              {
+                "name": "groupingTag",
+                "value": "zone",
+                "type": "query",
+                "description": "Optional tag to group volume usage by. Valid groupingTag values are:\n`kubernetes_cluster_name`, `kubernetes_daemonset_name`, `kubernetes_namespace_name`,\n`kubernetes_deployment_name`, `host_name`, `zone`.\n"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns aggregated log volume usage data for a specified time range and optional grouping tag.\n`fromTs` and `toTs` are required and must define a valid time range (i.e., `fromTs` <= `toTs`).\nRefer to the query parameter description for valid `groupingTag` values.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

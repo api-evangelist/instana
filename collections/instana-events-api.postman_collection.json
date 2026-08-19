@@ -1,0 +1,1312 @@
+{
+  "item": [
+    {
+      "id": "b213600f-e524-4094-b595-796ea1ac005c",
+      "name": "Events",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9bebfa88-b901-4f2c-86cf-e442dcf8615e",
+          "name": "Get all Events",
+          "request": {
+            "name": "Get all Events",
+            "description": {
+              "content": "Get all Events within a timeframe. The timeframe is defined as `[from, to]` or `[to - windowSize, to]`. ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<long>",
+                  "description": "A Unix timestamp representing the end of the requested timeframe. Defaults to the current system time"
+                },
+                {
+                  "disabled": false,
+                  "key": "windowSize",
+                  "value": "<long>",
+                  "description": "The size of the requested timeframe, in milliseconds, relative to the 'to' parameter. Defaults to 10 minutes (600000 milliseconds) if neither 'windowSize' nor 'from' are provided. Resulting timeframe range = [to - windowSize, to]"
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<long>",
+                  "description": "A Unix timestamp representing the start of the requested timeframe. Can be used as an alternative to 'windowSize' to define the timeframe. If both 'from' and 'windowSize' are provided, 'from' takes precedence. Resulting timeframe range = [from, to]"
+                },
+                {
+                  "disabled": false,
+                  "key": "filterEventUpdates",
+                  "value": "<boolean>",
+                  "description": "Flag to filter the results to only show events with state changes within the timeframe."
+                },
+                {
+                  "disabled": false,
+                  "key": "excludeTriggeredBefore",
+                  "value": "<boolean>",
+                  "description": "Flag to filter the results to exclude events that have been triggered before the timeframe. This also filters out events with state changes within the timeframe if the events' start times begin before the timeframe."
+                },
+                {
+                  "disabled": false,
+                  "key": "includeAgentMonitoringIssues",
+                  "value": "<boolean>",
+                  "description": "Flag to filter the results to include Agent Monitoring Issues."
+                },
+                {
+                  "disabled": false,
+                  "key": "includeKubernetesInfoEvents",
+                  "value": "<boolean>",
+                  "description": "Flag to filter the results to include Kubernetes Info Events."
+                },
+                {
+                  "disabled": false,
+                  "key": "eventTypeFilters",
+                  "value": "<string>",
+                  "description": "A string representing an event type - an INCIDENT, ISSUE, or CHANGE. This query can be repeated to use multiple filters."
+                },
+                {
+                  "disabled": false,
+                  "key": "eventTypeFilters",
+                  "value": "<string>",
+                  "description": "A string representing an event type - an INCIDENT, ISSUE, or CHANGE. This query can be repeated to use multiple filters."
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3771fd28-a553-42a2-9fe4-ffd77096e744",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "to",
+                      "value": "1704096000000"
+                    },
+                    {
+                      "key": "windowSize",
+                      "value": "600000"
+                    },
+                    {
+                      "key": "from",
+                      "value": "1672560000000"
+                    },
+                    {
+                      "key": "filterEventUpdates",
+                      "value": "true"
+                    },
+                    {
+                      "key": "excludeTriggeredBefore",
+                      "value": "true"
+                    },
+                    {
+                      "key": "includeAgentMonitoringIssues",
+                      "value": "true"
+                    },
+                    {
+                      "key": "includeKubernetesInfoEvents",
+                      "value": "true"
+                    },
+                    {
+                      "key": "eventTypeFilters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"eventId\": \"gM73SycATrOFMcL5qspByQ\",\n    \"start\": 1706774419000,\n    \"end\": 1706783931000,\n    \"type\": \"incident\",\n    \"state\": \"open\",\n    \"problem\": \"New Event-test-01\",\n    \"detail\": \"test\",\n    \"severity\": 5,\n    \"entityName\": \".NET App\",\n    \"entityLabel\": \"powershell.exe\",\n    \"metrics\": [\n      {\n        \"metricName\": \"threads.lck_crs\",\n        \"snapshotId\": \"zqEuPom1v7YK61jRU8cEpRhCI1w\",\n        \"entityId\": {\n          \"steadyId\": \"55428\",\n          \"pluginId\": \"com.instana.forge.infrastructure.runtime.clr.ClrRuntimePlatform\",\n          \"host\": \"00:15:5d:ff:fe:98:d1:f6\"\n        }\n      }\n    ],\n    \"entityType\": \"INFRASTRUCTURE\",\n    \"fixSuggestion\": \"test\",\n    \"snapshotId\": \"zqEuPom1v7YK61jRU8cEpRhCI1w\",\n    \"recentEvents\": [\n      {\n        \"eventId\": \"ZzaptuusSOutGLGmqD-wzA\"\n      },\n      {\n        \"eventId\": \"oeqTbltKQw6pp1OJi_QH_Q\"\n      },\n      {\n        \"eventId\": \"Cnv-8y96SOW2CzZbn7SK7Q\"\n      },\n      {\n        \"eventId\": \"vidr6ZX9QmqhtdvBrYFR3Q\"\n      },\n      {\n        \"eventId\": \"NWfYJEUjSLSPJbxfCEW6kA\"\n      },\n      {\n        \"eventId\": \"iJ2Bm8Y5Qq-Fh-IAwAnRqQ\"\n      },\n      {\n        \"eventId\": \"kHiCKKByTdW0sMhhjxvgQg\"\n      },\n      {\n        \"eventId\": \"w-hl_-8NQXKEIemcNR5ouw\"\n      },\n      {\n        \"eventId\": \"Vn0weJOGROaFKwRtqNDaeg\"\n      },\n      {\n        \"eventId\": \"Z9yz38EOR3aR0rYlBN3oRQ\"\n      },\n      {\n        \"eventId\": \"h7-N1PT9Sim4dCbyM-sf3g\"\n      },\n      {\n        \"eventId\": \"nnWCZ2L2STi8lXFbPNUgUg\"\n      },\n      {\n        \"eventId\": \"j1NlsfUYTz69t3dqSMekPQ\"\n      }\n    ],\n    \"probableCause\": [],\n    \"probableCauseMetadata\": {}\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8fb23b2a-4043-4365-a510-783cd36829fc",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "to",
+                      "value": "1704096000000"
+                    },
+                    {
+                      "key": "windowSize",
+                      "value": "600000"
+                    },
+                    {
+                      "key": "from",
+                      "value": "1672560000000"
+                    },
+                    {
+                      "key": "filterEventUpdates",
+                      "value": "true"
+                    },
+                    {
+                      "key": "excludeTriggeredBefore",
+                      "value": "true"
+                    },
+                    {
+                      "key": "includeAgentMonitoringIssues",
+                      "value": "true"
+                    },
+                    {
+                      "key": "includeKubernetesInfoEvents",
+                      "value": "true"
+                    },
+                    {
+                      "key": "eventTypeFilters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e8f480ed-f83e-4ccd-8e6c-c89c800c4869",
+          "name": "Get Events by IDs",
+          "request": {
+            "name": "Get Events by IDs",
+            "description": {
+              "content": "Gets a set of events by their IDs. ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  \"<string>\",\n  \"<string>\"\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f681105a-3db9-42c5-af07-a744a450d7c8",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"VOMNl0OgRv2HXlsR0iUYGg\",\n  \"h66yezD9Sfi5YNh_cmeG7Q\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"eventId\": \"VOMNl0OgRv2HXlsR0iUYGg\",\n    \"start\": 1722027687446,\n    \"end\": 1722028317446,\n    \"type\": \"issue\",\n    \"state\": \"open\",\n    \"problem\": \"Calls are slower than usual\",\n    \"detail\": \"Calls are slower or equal to 50 ms based on latency (90th).\",\n    \"severity\": 5,\n    \"entityName\": \"Endpoint\",\n    \"entityLabel\": \"POST /integration/slack/event\",\n    \"metrics\": [\n      {\n        \"metricAggregation\": \"P90\",\n        \"metricName\": \"latency\"\n      }\n    ],\n    \"entityType\": \"ENDPOINT\",\n    \"fixSuggestion\": \"Calls are slower or equal to 50 ms based on latency (90th).\",\n    \"snapshotId\": \"A-fDmFeA5Mzl3yIs8hXs5Megwz8\",\n    \"endpointId\": \"A-fDmFeA5Mzl3yIs8hXs5Megwz8\",\n    \"endpointServiceId\": \"fc3b86a089d24ed3b7d50ac3a7639c682101d6b9\",\n    \"applicationId\": \"qOlcrsSlS_eWLGnBjooqWA\"\n  },\n  {\n    \"eventId\": \"h66yezD9Sfi5YNh_cmeG7Q\",\n    \"start\": 1721764921276,\n    \"end\": 1722028014839,\n    \"type\": \"issue\",\n    \"state\": \"open\",\n    \"problem\": \"_RP Static camunda Archive Invoice for k8s-demo\",\n    \"detail\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n    \"severity\": 5,\n    \"entityName\": \"Endpoint\",\n    \"entityLabel\": \"Archive Invoice\",\n    \"metrics\": [\n      {\n        \"metricAggregation\": \"P90\",\n        \"metricName\": \"latency\"\n      }\n    ],\n    \"entityType\": \"ENDPOINT\",\n    \"fixSuggestion\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n    \"snapshotId\": \"MN1thidNpDc15zM-NP4ilfJs87k\",\n    \"endpointId\": \"MN1thidNpDc15zM-NP4ilfJs87k\",\n    \"endpointServiceId\": \"1f0ee2b46a33c2dbfedfec9c45ad81ff1c8e7e37\",\n    \"applicationId\": \"acfRC1IqTVi41OMLAJU4Cw\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "453fa2d9-de1b-40e5-9e9b-3153d78fa04d",
+              "name": "Some of the requested events do not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"VOMNl0OgRv2HXlsR0iUYGg\",\n  \"h66yezD9Sfi5YNh_cmeG7Q\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Partial Content",
+              "code": 206,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3abf8be4-6118-4ac1-85f3-c108ade3cf1a",
+              "name": "Unprocessable entity.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"VOMNl0OgRv2HXlsR0iUYGg\",\n  \"h66yezD9Sfi5YNh_cmeG7Q\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ae4abab4-ee9d-463a-ab6c-bffa8bc1fbdb",
+          "name": "Get Agent Monitoring Events",
+          "request": {
+            "name": "Get Agent Monitoring Events",
+            "description": {
+              "content": "Gets all Agent Monitoring Events within a timeframe. The timeframe is defined as `[from, to]` or `[to - windowSize, to]`. ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "agent-monitoring-events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<long>",
+                  "description": "A Unix timestamp representing the end of the requested timeframe. Defaults to the current system time"
+                },
+                {
+                  "disabled": false,
+                  "key": "windowSize",
+                  "value": "<long>",
+                  "description": "The size of the requested timeframe, in milliseconds, relative to the 'to' parameter. Defaults to 10 minutes (600000 milliseconds) if neither 'windowSize' nor 'from' are provided. Resulting timeframe range = [to - windowSize, to]"
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<long>",
+                  "description": "A Unix timestamp representing the start of the requested timeframe. Can be used as an alternative to 'windowSize' to define the timeframe. If both 'from' and 'windowSize' are provided, 'from' takes precedence. Resulting timeframe range = [from, to]"
+                },
+                {
+                  "disabled": false,
+                  "key": "filterEventUpdates",
+                  "value": "<boolean>",
+                  "description": "Flag to filter the results to only show events with state changes within the timeframe."
+                },
+                {
+                  "disabled": false,
+                  "key": "excludeTriggeredBefore",
+                  "value": "<boolean>",
+                  "description": "Flag to filter the results to exclude events that have been triggered before the timeframe. This also filters out events with state changes within the timeframe if the events' start times begin before the timeframe."
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b6db4afd-9b8d-4442-9d6e-720466b8cc55",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "agent-monitoring-events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "to",
+                      "value": "1704096000000"
+                    },
+                    {
+                      "key": "windowSize",
+                      "value": "600000"
+                    },
+                    {
+                      "key": "from",
+                      "value": "1672560000000"
+                    },
+                    {
+                      "key": "filterEventUpdates",
+                      "value": "true"
+                    },
+                    {
+                      "key": "excludeTriggeredBefore",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"eventId\": \"n8DamRZKSs6Z2f0wiZ9tVQ\",\n    \"start\": 1707472014671,\n    \"end\": 1707472674671,\n    \"type\": \"agent_monitoring_issue\",\n    \"state\": \"open\",\n    \"problem\": \"Monitoring issue: jvm_attach_generic\",\n    \"detail\": \"Our Agent observed a problem with monitoring the linked process. To resolve this issue, please check our docs (https://www.instana.com/docs/) for error code: jvm_attach_generic\",\n    \"severity\": 5,\n    \"entityName\": \"Process\",\n    \"entityLabel\": \"java\",\n    \"entityType\": \"INFRASTRUCTURE\",\n    \"fixSuggestion\": \"Our Agent observed a problem with monitoring the linked process. To resolve this issue, please check our docs (https://www.instana.com/docs/) for error code: jvm_attach_generic\",\n    \"snapshotId\": \"2fDFOytDpF4FYKrTdfwdlklDOPY\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d570ce64-4cda-418b-ab17-4af947fc5a05",
+              "name": "The events do not exist in the timeframe.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "agent-monitoring-events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "to",
+                      "value": "1704096000000"
+                    },
+                    {
+                      "key": "windowSize",
+                      "value": "600000"
+                    },
+                    {
+                      "key": "from",
+                      "value": "1672560000000"
+                    },
+                    {
+                      "key": "filterEventUpdates",
+                      "value": "true"
+                    },
+                    {
+                      "key": "excludeTriggeredBefore",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6d3fca76-e381-4d26-a380-129c3355ef80",
+          "name": "Get Kubernetes Info Events",
+          "request": {
+            "name": "Get Kubernetes Info Events",
+            "description": {
+              "content": "Gets all Kubernetes Info Events within a timeframe. The timeframe is defined as `[from, to]` or `[to - windowSize, to]`. ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "kubernetes-info-events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<long>",
+                  "description": "A Unix timestamp representing the end of the requested timeframe. Defaults to the current system time"
+                },
+                {
+                  "disabled": false,
+                  "key": "windowSize",
+                  "value": "<long>",
+                  "description": "The size of the requested timeframe, in milliseconds, relative to the 'to' parameter. Defaults to 10 minutes (600000 milliseconds) if neither 'windowSize' nor 'from' are provided. Resulting timeframe range = [to - windowSize, to]"
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<long>",
+                  "description": "A Unix timestamp representing the start of the requested timeframe. Can be used as an alternative to 'windowSize' to define the timeframe. If both 'from' and 'windowSize' are provided, 'from' takes precedence. Resulting timeframe range = [from, to]"
+                },
+                {
+                  "disabled": false,
+                  "key": "filterEventUpdates",
+                  "value": "<boolean>",
+                  "description": "Flag to filter the results to only show events with state changes within the timeframe."
+                },
+                {
+                  "disabled": false,
+                  "key": "excludeTriggeredBefore",
+                  "value": "<boolean>",
+                  "description": "Flag to filter the results to exclude events that have been triggered before the timeframe. This also filters out events with state changes within the timeframe if the events' start times begin before the timeframe."
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "573753b0-1e1d-4b10-9caf-53e00751e8d8",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "kubernetes-info-events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "to",
+                      "value": "1704096000000"
+                    },
+                    {
+                      "key": "windowSize",
+                      "value": "600000"
+                    },
+                    {
+                      "key": "from",
+                      "value": "1672560000000"
+                    },
+                    {
+                      "key": "filterEventUpdates",
+                      "value": "true"
+                    },
+                    {
+                      "key": "excludeTriggeredBefore",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"eventId\": \"nOYcBAncQIyZHdVNnBRmzQ\",\n    \"start\": 1707472297000,\n    \"end\": 1707472297000,\n    \"type\": \"change\",\n    \"state\": \"closed\",\n    \"problem\": \"BackOff\",\n    \"detail\": \"Back-off pulling image \\\"gcr.io/kubernetes-helm/tiller:v2.14.1\\\"\",\n    \"severity\": -2,\n    \"entityName\": \"Kubernetes Pod\",\n    \"entityLabel\": \"kube-system/tiller-deploy-7bf78cdbf7-gnjg5 (pod)\",\n    \"entityType\": \"INFRASTRUCTURE\",\n    \"fixSuggestion\": \"Back-off pulling image \\\"gcr.io/kubernetes-helm/tiller:v2.14.1\\\"\",\n    \"snapshotId\": \"wTRNW3DaFeQhk7G3Cx5bKC5Psgk\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "75950056-5803-4a63-92ec-43aadab1fe31",
+              "name": "The events do not exist in the timeframe.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "kubernetes-info-events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "to",
+                      "value": "1704096000000"
+                    },
+                    {
+                      "key": "windowSize",
+                      "value": "600000"
+                    },
+                    {
+                      "key": "from",
+                      "value": "1672560000000"
+                    },
+                    {
+                      "key": "filterEventUpdates",
+                      "value": "true"
+                    },
+                    {
+                      "key": "excludeTriggeredBefore",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "be1f234f-18f0-4be0-8722-d233246e9dfa",
+          "name": "Get Event",
+          "request": {
+            "name": "Get Event",
+            "description": {
+              "content": "Gets a specific event.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                ":eventId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "eventId",
+                  "description": "(Required) ID of a specific Event to retrieve."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2663ab2d-a037-4978-8edf-8321b0bbda2c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    ":eventId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventId",
+                      "description": "(Required) ID of a specific Event to retrieve."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"eventId\": \"LZOGo1lXR4WeCB2ftgtGGQ\",\n  \"start\": 1706783553000,\n  \"end\": 1706783553000,\n  \"type\": \"change\",\n  \"state\": \"closed\",\n  \"problem\": \"Pulled\",\n  \"detail\": \"Successfully pulled image \\\"registry.redhat.io/redhat/redhat-marketplace-index:v4.14\\\" in 830.603468ms (830.624088ms including waiting)\",\n  \"severity\": -2,\n  \"entityName\": \"Kubernetes Pod\",\n  \"entityLabel\": \"openshift-marketplace/redhat-marketplace-qbn8f (pod)\",\n  \"entityType\": \"INFRASTRUCTURE\",\n  \"fixSuggestion\": \"Successfully pulled image \\\"registry.redhat.io/redhat/redhat-marketplace-index:v4.14\\\" in 830.603468ms (830.624088ms including waiting)\",\n  \"snapshotId\": \"xLziJivLyeepxBf0UnNR1ff-9MI\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e29d0d2-f57c-4f8e-ab94-0434d3b09358",
+              "name": "The requested event does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    ":eventId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventId",
+                      "description": "(Required) ID of a specific Event to retrieve."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Customer tenant unit",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "tenant",
+      "key": "tenant"
+    },
+    {
+      "description": {
+        "content": "Customer tenant name",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "unit",
+      "key": "unit"
+    },
+    {
+      "type": "string",
+      "value": "https://{{unit}}-{{tenant}}.instana.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "e9d9d97a-5714-4116-8f24-53fdfa32cbfc",
+    "name": "Instana REST API documentation Events API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n\n\nContact Support:\n Name: © Instana\n Email: support@instana.com",
+      "type": "text/plain"
+    }
+  }
+}

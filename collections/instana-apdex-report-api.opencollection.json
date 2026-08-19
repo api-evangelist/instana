@@ -1,0 +1,55 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Apdex Report API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Apdex Report",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generate Apdex report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/apdex/report/:apdexId",
+            "params": [
+              {
+                "name": "apdexId",
+                "value": "nCtEoR6NSPqG61QkIkwwCw",
+                "type": "path",
+                "description": "Apdex Configuration ID"
+              },
+              {
+                "name": "from",
+                "value": "1706713140000",
+                "type": "query",
+                "description": "Starting point for the data retrieval, specified as 13 digit Unix Timestamp milliseconds"
+              },
+              {
+                "name": "to",
+                "value": "1706813100000",
+                "type": "query",
+                "description": "Ending point for the data retrieval, specified as 13 digit Unix Timestamp milliseconds"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Generate Apdex Report for a specified Apdex ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

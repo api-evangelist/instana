@@ -1,0 +1,175 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Infrastructure Catalog API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Infrastructure Catalog",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get metric catalog",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/catalog/metrics/:plugin",
+            "params": [
+              {
+                "name": "plugin",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "label",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves all available metric definitions of the requested plugin.\n\n### Path Parameters:\n\n**plugin** The plugin id from [available plugins](#operation/getInfrastructureCatalogPlugins)\n\n### Optional Parameters:\n\n**filter** You can restrict the returned metric definitions by passing a filter.\n\n* `custom` to retrieve custom metric definitions only.\n* `builtin` to retrieve built-in metric definitions only.\n"
+        },
+        {
+          "info": {
+            "name": "Get payload keys for plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/catalog/payloads/:pluginId",
+            "params": [
+              {
+                "name": "pluginId",
+                "value": "db2Database",
+                "type": "path",
+                "description": "plugin id"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get payload keys for plugin"
+        },
+        {
+          "info": {
+            "name": "Get plugin catalog",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/catalog/plugins",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves all available plugin ids for your monitored system.\n"
+        },
+        {
+          "info": {
+            "name": "Get all plugins with custom metrics catalog",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/catalog/plugins-with-custom-metrics",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all plugins with custom metrics catalog"
+        },
+        {
+          "info": {
+            "name": "get search field catalog",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/catalog/search",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves all available search keywords for dynamic focus queries.\n\nThese search fields can be accessed via lucene queries. Each field belongs to a context, e.g. to entity, trace or event data.\nSome fields contain a set of possible fixed values, in this case a deviant value is invalid.\n\n```\n?query={keyword}:{value}\n```\n"
+        },
+        {
+          "info": {
+            "name": "Get available tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/catalog/tags",
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves the tag catalog."
+        },
+        {
+          "info": {
+            "name": "Get available tags for a particular plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/infrastructure-monitoring/catalog/tags/:plugin",
+            "params": [
+              {
+                "name": "plugin",
+                "value": "host",
+                "type": "path",
+                "description": "plugin"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint retrieves the tag catalog filtered by plugin."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

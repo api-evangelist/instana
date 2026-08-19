@@ -1,0 +1,61 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation SLI Report API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "SLI Report",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generate SLI report (Limitation: the Classic Edition API report can be available one hour after the SLI configuration created; other editions are around one minute.)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/sli/report/:sliId",
+            "params": [
+              {
+                "name": "sliId",
+                "value": "nCtEoR6NSPqG61QkIkwwCw",
+                "type": "path",
+                "description": "ID of the Service Level Indicator (SLI)"
+              },
+              {
+                "name": "slo",
+                "value": "0.99",
+                "type": "query",
+                "description": "Target SLO"
+              },
+              {
+                "name": "from",
+                "value": "1706713140000",
+                "type": "query",
+                "description": "From Timestamp in milliseconds (13-digit)"
+              },
+              {
+                "name": "to",
+                "value": "1706713140000",
+                "type": "query",
+                "description": "To Timestamp in milliseconds (13-digit)"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Generate SLI report (Limitation: the Classic Edition API report can be available one hour after the SLI configuration created; other editions are around one minute.)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

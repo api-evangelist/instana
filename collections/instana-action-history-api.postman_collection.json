@@ -1,0 +1,1994 @@
+{
+  "item": [
+    {
+      "id": "e63c7e96-0dcf-4744-908c-1c38cb062309",
+      "name": "Action History",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7344939d-8a9b-4c1c-bbb2-153425400e21",
+          "name": "Delete automation action run results.",
+          "request": {
+            "name": "Delete automation action run results.",
+            "description": {
+              "content": "Deletes the automation action run results from the action run history. The results to delete is filtered by the filter values given in the query parameters. The automation action run result will be deleted only if the action run result was created within the timeframe specified in the `from` and `to` query parameters. This call requires `Deletion of automation action history` permission and, `from` and `to` query parameters.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "automation",
+                "actioninstances"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<long>",
+                  "description": "(Required) From date filter in milliseconds (13-digit) to look up the action run results to delete"
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<long>",
+                  "description": "(Required) To date filter in milliseconds (13-digit) to look up the action run results to delete"
+                },
+                {
+                  "disabled": false,
+                  "key": "targetSnapshotId",
+                  "value": "<string>",
+                  "description": "Target snapshot ID to look up the action run results to delete"
+                },
+                {
+                  "disabled": false,
+                  "key": "eventId",
+                  "value": "<string>",
+                  "description": "Event ID filter to look up the action run results to delete"
+                },
+                {
+                  "disabled": false,
+                  "key": "eventSpecificationId",
+                  "value": "<string>",
+                  "description": "Event specification ID filter to look up the action run results to delete"
+                },
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>",
+                  "description": "Text in action run result name, description and event name to filter the action run results to delete"
+                },
+                {
+                  "disabled": false,
+                  "key": "types",
+                  "value": "<string>",
+                  "description": "Action type filter to look up the action run results to delete"
+                },
+                {
+                  "disabled": false,
+                  "key": "types",
+                  "value": "<string>",
+                  "description": "Action type filter to look up the action run results to delete"
+                },
+                {
+                  "disabled": false,
+                  "key": "actionStatuses",
+                  "value": "<string>",
+                  "description": "Action status filter to look up the action run results to delete"
+                },
+                {
+                  "disabled": false,
+                  "key": "actionStatuses",
+                  "value": "<string>",
+                  "description": "Action status filter to look up the action run results to delete"
+                },
+                {
+                  "disabled": false,
+                  "key": "actionIds",
+                  "value": "<string>",
+                  "description": "List of action IDs  to filter the action run results to delete"
+                },
+                {
+                  "disabled": false,
+                  "key": "actionIds",
+                  "value": "<string>",
+                  "description": "List of action IDs  to filter the action run results to delete"
+                },
+                {
+                  "disabled": false,
+                  "key": "policyId",
+                  "value": "<string>",
+                  "description": "Policy ID filter to look up the action run results to delete"
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ba611609-03c9-4fce-9129-2968d86841d9",
+              "name": "Automation action run results are deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "1706713140000"
+                    },
+                    {
+                      "key": "to",
+                      "value": "1706713140000"
+                    },
+                    {
+                      "key": "targetSnapshotId",
+                      "value": "aCtEoR6NSPqG61QkIkwwCw"
+                    },
+                    {
+                      "key": "eventId",
+                      "value": "bCtEoR6NSPqG61QkIkwwCw"
+                    },
+                    {
+                      "key": "eventSpecificationId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionStatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionStatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "policyId",
+                      "value": "bCtEoR6NSPqG61QkIkwwCw"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"deletedDocumentsCount\": \"2\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "640706ae-6998-4953-8c17-bbb822df7f99",
+              "name": "`from` date or `to` date query parameter is missing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "1706713140000"
+                    },
+                    {
+                      "key": "to",
+                      "value": "1706713140000"
+                    },
+                    {
+                      "key": "targetSnapshotId",
+                      "value": "aCtEoR6NSPqG61QkIkwwCw"
+                    },
+                    {
+                      "key": "eventId",
+                      "value": "bCtEoR6NSPqG61QkIkwwCw"
+                    },
+                    {
+                      "key": "eventSpecificationId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionStatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionStatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "policyId",
+                      "value": "bCtEoR6NSPqG61QkIkwwCw"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c8737ba8-0e2a-4852-af4c-fb2b9b1b635b",
+              "name": "Automation feature is not enabled or Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "1706713140000"
+                    },
+                    {
+                      "key": "to",
+                      "value": "1706713140000"
+                    },
+                    {
+                      "key": "targetSnapshotId",
+                      "value": "aCtEoR6NSPqG61QkIkwwCw"
+                    },
+                    {
+                      "key": "eventId",
+                      "value": "bCtEoR6NSPqG61QkIkwwCw"
+                    },
+                    {
+                      "key": "eventSpecificationId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionStatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionStatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "policyId",
+                      "value": "bCtEoR6NSPqG61QkIkwwCw"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0cd2203a-8099-4e9f-9e70-23d4f1482935",
+              "name": "The request do not contain a valid user or API Token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "1706713140000"
+                    },
+                    {
+                      "key": "to",
+                      "value": "1706713140000"
+                    },
+                    {
+                      "key": "targetSnapshotId",
+                      "value": "aCtEoR6NSPqG61QkIkwwCw"
+                    },
+                    {
+                      "key": "eventId",
+                      "value": "bCtEoR6NSPqG61QkIkwwCw"
+                    },
+                    {
+                      "key": "eventSpecificationId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionStatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionStatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "policyId",
+                      "value": "bCtEoR6NSPqG61QkIkwwCw"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b30d4331-a1a3-498b-bfdc-ddd990f104e0",
+          "name": "Get the details of automation action run results from action run history.",
+          "request": {
+            "name": "Get the details of automation action run results from action run history.",
+            "description": {
+              "content": "Get the details of automation action run results from action run history. The results are filtered by the filters in the query parameters. The automation action run result will be fetched only if the action run results were created within the timeframe specified by the `windowSize` and `to` query parameters. The `windowSize` parameter is used to compute the from date (`from = to - windowSize`) of the timeframe. The default value for `windowSize` is 10 minutes and the default value for `to` is current system time. When using personal access tokens, the user must have at least `Viewer` access for Automation and the automation action run results returned are also filtered based on the access set in `Limited access` permission settings. This API returns paginated result as specified in query parameters `page` and `pageSize`. The response contains list of automation action run results whose contents corresponds to the `page` query parameter and whose size corresponds to the `pageSize` query parameter.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "automation",
+                "actioninstances"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "windowSize",
+                  "value": "<long>",
+                  "description": "Window size filter in milliseconds (to compute the from date) to get the action run result details"
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<long>",
+                  "description": "To date filter in milliseconds (13-digit) to get the action run result details"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "Page to fetch -- used for paging the action run result records"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<integer>",
+                  "description": "Number of records to return in each page -- used for paging the action run result records"
+                },
+                {
+                  "disabled": false,
+                  "key": "targetSnapshotId",
+                  "value": "<string>",
+                  "description": "Target snapshot ID filter to get the action run result details"
+                },
+                {
+                  "disabled": false,
+                  "key": "eventId",
+                  "value": "<string>",
+                  "description": "Event ID filter to get the action run result details"
+                },
+                {
+                  "disabled": false,
+                  "key": "eventSpecificationId",
+                  "value": "<string>",
+                  "description": "Event specification ID filter to get the action run result details"
+                },
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>",
+                  "description": "Text in action run result name, description and event name filter to get the action run result details"
+                },
+                {
+                  "disabled": false,
+                  "key": "types",
+                  "value": "<string>",
+                  "description": "Action type filter to get the action run result details"
+                },
+                {
+                  "disabled": false,
+                  "key": "types",
+                  "value": "<string>",
+                  "description": "Action type filter to get the action run result details"
+                },
+                {
+                  "disabled": false,
+                  "key": "actionStatuses",
+                  "value": "<string>",
+                  "description": "Action status filter to get the action run result details"
+                },
+                {
+                  "disabled": false,
+                  "key": "actionStatuses",
+                  "value": "<string>",
+                  "description": "Action status filter to get the action run result details"
+                },
+                {
+                  "disabled": false,
+                  "key": "actionIds",
+                  "value": "<string>",
+                  "description": "Action IDs filter to get the action run result details for only these actions"
+                },
+                {
+                  "disabled": false,
+                  "key": "actionIds",
+                  "value": "<string>",
+                  "description": "Action IDs filter to get the action run result details for only these actions"
+                },
+                {
+                  "disabled": false,
+                  "key": "policyId",
+                  "value": "<string>",
+                  "description": "Policy ID filter to get the action run result details"
+                },
+                {
+                  "disabled": false,
+                  "key": "orderBy",
+                  "value": "<string>",
+                  "description": "Action run result column to order the result set."
+                },
+                {
+                  "disabled": false,
+                  "key": "orderDirection",
+                  "value": "<string>",
+                  "description": "Sort order direction."
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "522ffc6b-194b-494a-bd86-437e0941d112",
+              "name": "Automation action run result details are returned.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "windowSize",
+                      "value": "10000"
+                    },
+                    {
+                      "key": "to",
+                      "value": "1706713140000"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "50"
+                    },
+                    {
+                      "key": "targetSnapshotId",
+                      "value": "nCtEoR6NSPqG61QkIkwwCw"
+                    },
+                    {
+                      "key": "eventId",
+                      "value": "nCtEoR6NSPqG61QkIkwwCw"
+                    },
+                    {
+                      "key": "eventSpecificationId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionStatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionStatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "policyId",
+                      "value": "nCtEoR6NSPqG61QkIkwwCw"
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "Name of the action run result column. Default is action run result start date."
+                    },
+                    {
+                      "key": "orderDirection",
+                      "value": "asc or desc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"actionInstanceId\": \"fqiH0HOgR1-4Ygoy5EDycw\",\n      \"actionId\": \"d473c1b0-0740-4d08-95fe-31e5d0a9faff\",\n      \"actionName\": \"Hello World\",\n      \"type\": \"SCRIPT\",\n      \"status\": \"SUCCESS\",\n      \"createdDate\": 1710162882369,\n      \"startDate\": 1710162882653,\n      \"endDate\": 1710162882826,\n      \"eventId\": \"M3wuBxuaSDyecZJ7ICioiw\",\n      \"eventSpecificationId\": \"en0FW6XRWu7aRsD4055dbMLAuSU\",\n      \"problemText\": \"Test event\",\n      \"hostSnapshotId\": \"2nIOVtEW-iPbsEIi89-yDqJHi2g\",\n      \"targetSnapshotId\": \"jfSmhACY-Oa3a8zfjJxvOxJeDSk\",\n      \"metadata\": []\n    }\n  ],\n  \"page\": 1,\n  \"pageSize\": 50,\n  \"totalHits\": 500\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "70ced44e-e3a5-4f85-8693-b4d2546eaeae",
+              "name": "Automation feature is not enabled or Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "windowSize",
+                      "value": "10000"
+                    },
+                    {
+                      "key": "to",
+                      "value": "1706713140000"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "50"
+                    },
+                    {
+                      "key": "targetSnapshotId",
+                      "value": "nCtEoR6NSPqG61QkIkwwCw"
+                    },
+                    {
+                      "key": "eventId",
+                      "value": "nCtEoR6NSPqG61QkIkwwCw"
+                    },
+                    {
+                      "key": "eventSpecificationId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionStatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionStatuses",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actionIds",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "policyId",
+                      "value": "nCtEoR6NSPqG61QkIkwwCw"
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "Name of the action run result column. Default is action run result start date."
+                    },
+                    {
+                      "key": "orderDirection",
+                      "value": "asc or desc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f4650b53-d0c3-4358-8a26-bbd8d1d6baf4",
+          "name": "Run an automation action.",
+          "request": {
+            "name": "Run an automation action.",
+            "description": {
+              "content": "Submits the automation action for execution on an agent. The automation action to execute and the agent on which to execute the action must be specified as actionId and hostId. For more details on the request payload see the request sample. This call requires `Execution of automation actions`  permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "automation",
+                "actioninstances"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"actionId\": \"<string>\",\n  \"hostId\": \"<string>\",\n  \"async\": \"<string>\",\n  \"eventId\": \"<string>\",\n  \"inputParameters\": [\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"policyId\": \"<string>\",\n  \"timeout\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f3d6da88-7b3b-4dbe-9828-cf74bd1de345",
+              "name": "Automation action submitted for execution on the agent.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"hostId\": \"aHostId\",\n  \"actionId\": \"d473c1b0-0740-4d08-95fe-31e5d0a9faff\",\n  \"policyId\": \"2nIOVtEW-iPbsEIi89-yDqJabc\",\n  \"inputParameters\": [\n    {\n      \"name\": \"name\",\n      \"type\": \"type\",\n      \"value\": \"value\"\n    }\n  ],\n  \"eventId\": \"M3wuBxuaSDyecZJ7ICioiw\",\n  \"async\": \"true\",\n  \"timeout\": \"600\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"actionInstanceId\": \"fqiH0HOgR1-4Ygoy5EDycw\",\n  \"actionId\": \"d473c1b0-0740-4d08-95fe-31e5d0a9faff\",\n  \"actionName\": \"Hello World\",\n  \"type\": \"SCRIPT\",\n  \"status\": \"SUBMITTED\",\n  \"createdDate\": 1710162882369,\n  \"eventId\": \"M3wuBxuaSDyecZJ7ICioiw\",\n  \"eventSpecificationId\": \"en0FW6XRWu7aRsD4055dbMLAuSU\",\n  \"problemText\": \"Test event\",\n  \"hostSnapshotId\": \"2nIOVtEW-iPbsEIi89-yDqJHi2g\",\n  \"targetSnapshotId\": \"jfSmhACY-Oa3a8zfjJxvOxJeDSk\",\n  \"inputParameters\": [],\n  \"outputParameters\": [],\n  \"metadata\": [],\n  \"externalSourceType\": \"\",\n  \"actorId\": \"5ee5195fbea6150001758c40\",\n  \"actorName\": \"Stan\",\n  \"actorType\": \"USER\",\n  \"eventEntityType\": \"\",\n  \"actionDescription\": \"Simple script action for testing\",\n  \"policyId\": \"2nIOVtEW-iPbsEIi89-yDqJabc\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7fe31ec7-8b0e-4b17-9fa8-454d48f59e6a",
+              "name": "The payload in the request body is not valid or the action ID (actionId) in the payload is invalid or the agent host ID (hostId) in the payload is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"hostId\": \"aHostId\",\n  \"actionId\": \"d473c1b0-0740-4d08-95fe-31e5d0a9faff\",\n  \"policyId\": \"2nIOVtEW-iPbsEIi89-yDqJabc\",\n  \"inputParameters\": [\n    {\n      \"name\": \"name\",\n      \"type\": \"type\",\n      \"value\": \"value\"\n    }\n  ],\n  \"eventId\": \"M3wuBxuaSDyecZJ7ICioiw\",\n  \"async\": \"true\",\n  \"timeout\": \"600\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "feb5d39b-bc6f-4f0c-b97d-83aa439c4e1c",
+              "name": "Automation feature is not enabled or Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"hostId\": \"aHostId\",\n  \"actionId\": \"d473c1b0-0740-4d08-95fe-31e5d0a9faff\",\n  \"policyId\": \"2nIOVtEW-iPbsEIi89-yDqJabc\",\n  \"inputParameters\": [\n    {\n      \"name\": \"name\",\n      \"type\": \"type\",\n      \"value\": \"value\"\n    }\n  ],\n  \"eventId\": \"M3wuBxuaSDyecZJ7ICioiw\",\n  \"async\": \"true\",\n  \"timeout\": \"600\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "02c31cd7-5ea1-4701-946c-d0a70c04a5c4",
+          "name": "Deletes an automation action run result from the action run history by ID.",
+          "request": {
+            "name": "Deletes an automation action run result from the action run history by ID.",
+            "description": {
+              "content": "Deletes the automation action run result specified in the request path from the action run history. The automation action run result will be deleted only if the action run result was created within the timeframe specified in the `from` and `to` query parameters. To get the automation action run result ID and the created time, you can run `/api/automation/actioninstances` and `/api/automation/actioninstances/<{actionInstanceId}>` REST calls. This call requires `Deletion of automation action history` permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "automation",
+                "actioninstances",
+                ":actionInstanceId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<long>",
+                  "description": "(Required) From date filter in milliseconds (13-digit) to look up the action run result ID."
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<long>",
+                  "description": "(Required) To date filter in milliseconds (13-digit) to look up the action run result ID."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "actionInstanceId",
+                  "description": "(Required) Automation action run result ID to delete."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ef5f13fa-8559-4917-9e94-d17930327e5c",
+              "name": "Automation action run result is deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances",
+                    ":actionInstanceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "1706713140000"
+                    },
+                    {
+                      "key": "to",
+                      "value": "1706713190000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "actionInstanceId",
+                      "description": "(Required) Automation action run result ID to delete."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"deletedDocumentsCount\": \"2\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b07783e3-3329-42b7-8239-a79f6c5dbeff",
+              "name": "Automation action run result ID is missing in the request path, or `from` date or `to` date is missing in the query parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances",
+                    ":actionInstanceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "1706713140000"
+                    },
+                    {
+                      "key": "to",
+                      "value": "1706713190000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "actionInstanceId",
+                      "description": "(Required) Automation action run result ID to delete."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b46b46bf-155c-4db1-9635-e4584044344b",
+              "name": "Automation feature is not enabled or Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances",
+                    ":actionInstanceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "1706713140000"
+                    },
+                    {
+                      "key": "to",
+                      "value": "1706713190000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "actionInstanceId",
+                      "description": "(Required) Automation action run result ID to delete."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7105417a-eb24-4bdd-b7fd-9313d9a4db47",
+              "name": "The request do not contain a valid user or API Token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances",
+                    ":actionInstanceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "1706713140000"
+                    },
+                    {
+                      "key": "to",
+                      "value": "1706713190000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "actionInstanceId",
+                      "description": "(Required) Automation action run result ID to delete."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c68fbea5-2c25-449a-bfbe-3362873da95d",
+          "name": "Get the details of an automation action run result by ID from action run history.",
+          "request": {
+            "name": "Get the details of an automation action run result by ID from action run history.",
+            "description": {
+              "content": "Get the details of automation action run result specified in the request path from action run history. The automation action run result will be fetched only if the action run result was created within the timeframe specified by the `windowSize` and `to` query parameters. The `windowSize` parameter is used to compute the from date (`from = to - windowSize`) of the timeframe. The default value for `windowSize` is 10 minutes and the default value for `to` is current system time. To get the automation action run result ID and the created time, you can run `/api/automation/actioninstances` REST calls. When using personal access tokens, the user must have at least `Viewer` access for Automation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "automation",
+                "actioninstances",
+                ":actionInstanceId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "windowSize",
+                  "value": "<long>",
+                  "description": "Window size in milliseconds. This value is used compute the from date `(from = to - windowSize)` to get the action run result details. The default `windowSize` is set to 10 minutes if this value is not provided."
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<long>",
+                  "description": "To date filter in milliseconds (13-digit) to get the action run result details. The default `to` date is set to `System.currentTimeMillis()` if this value is not provided."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "actionInstanceId",
+                  "description": "(Required) action run result ID to get action run result details"
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "48fd4d85-49ca-4298-92e4-cb2b8191ac7d",
+              "name": "The automation action run result detail is returned.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances",
+                    ":actionInstanceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "windowSize",
+                      "value": "10000"
+                    },
+                    {
+                      "key": "to",
+                      "value": "1706713140000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "actionInstanceId",
+                      "description": "(Required) action run result ID to get action run result details"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"actionInstanceId\": \"fqiH0HOgR1-4Ygoy5EDycw\",\n  \"actionId\": \"d473c1b0-0740-4d08-95fe-31e5d0a9faff\",\n  \"actionName\": \"Hello World\",\n  \"type\": \"SCRIPT\",\n  \"status\": \"SUCCESS\",\n  \"returnCode\": 0,\n  \"errorMessage\": \"\",\n  \"createdDate\": 1710162882369,\n  \"startDate\": 1710162882653,\n  \"endDate\": 1710162882826,\n  \"eventId\": \"M3wuBxuaSDyecZJ7ICioiw\",\n  \"eventSpecificationId\": \"en0FW6XRWu7aRsD4055dbMLAuSU\",\n  \"problemText\": \"Test event\",\n  \"hostSnapshotId\": \"2nIOVtEW-iPbsEIi89-yDqJHi2g\",\n  \"inputParameters\": [],\n  \"outputParameters\": [],\n  \"metadata\": [],\n  \"targetSnapshotId\": \"jfSmhACY-Oa3a8zfjJxvOxJeDSk\",\n  \"externalSourceType\": \"\",\n  \"actorId\": \"5ee5195fbea6150001758c40\",\n  \"actorName\": \"Stan\",\n  \"actorType\": \"USER\",\n  \"eventEntityType\": \"\",\n  \"actionDescription\": \"Simple script action for testing\",\n  \"policyId\": \"2nIOVtEW-iPbsEIi89-yDqJabc\",\n  \"output\": \"Hello world!\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "62d54911-5280-417c-8d2b-17428693d87c",
+              "name": "Missing automation action run result ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances",
+                    ":actionInstanceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "windowSize",
+                      "value": "10000"
+                    },
+                    {
+                      "key": "to",
+                      "value": "1706713140000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "actionInstanceId",
+                      "description": "(Required) action run result ID to get action run result details"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d7ba208b-5e2c-4bd5-867c-2eaa48155bbd",
+              "name": "Automation feature is not enabled or Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "automation",
+                    "actioninstances",
+                    ":actionInstanceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "windowSize",
+                      "value": "10000"
+                    },
+                    {
+                      "key": "to",
+                      "value": "1706713140000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "actionInstanceId",
+                      "description": "(Required) action run result ID to get action run result details"
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Customer tenant unit",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "tenant",
+      "key": "tenant"
+    },
+    {
+      "description": {
+        "content": "Customer tenant name",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "unit",
+      "key": "unit"
+    },
+    {
+      "type": "string",
+      "value": "https://{{unit}}-{{tenant}}.instana.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "de4e688f-d893-406c-aaaa-08aaa7a2b48f",
+    "name": "Instana REST API documentation Action History API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n\n\nContact Support:\n Name: © Instana\n Email: support@instana.com",
+      "type": "text/plain"
+    }
+  }
+}

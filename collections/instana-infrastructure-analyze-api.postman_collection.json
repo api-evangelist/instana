@@ -1,0 +1,638 @@
+{
+  "item": [
+    {
+      "id": "a155755f-47a4-43bf-a581-2629c6f793dd",
+      "name": "Infrastructure Analyze",
+      "description": {
+        "content": "This endpoint group exposes the functions that are used by the Instana **Analyze Infrastructure** dashboards.\nTwo of the endpoints provide a [list of entity types](#operation/getAvailablePlugins) and [metrics for an entity type](#operation/getAvailableMetrics).\nIt is also possible to [search and filter entities](#operation/getEntities) and [aggregate metrics on similar entities](#operation/getEntityGroups).\n\n## Important notes\n\n### Prerequisites\n\nFor self-hosted installations, BeeInstana is required for this endpoint group.\nSee this [documentation for enabling BeeInstana](https://www.ibm.com/docs/en/instana-observability/current?topic=premises-installing-instana-backend-docker#beeinstana-metric-pipeline-beta).\n\n### Timeframe\n\n**timeFrame** As in the Instana dashboards, you can specify the timeframe for metrics retrieval.\n```\n  windowSize           to\n     (ms)       (unix-timestamp)\n<----------------------|\n```\nThe timeFrame might be adjusted to fit the metric granularity so that there is no partial bucket. For example, if the query timeFrame is 08:02 - 09:02 and the metric granularity is 5 minutes, the timeFrame will be adjusted to 08:05 - 09:00. The adjusted timeFrame will be returned in the response payload. If the query does not have any metric with specified granularity, a default granularity will be used for adjustment.\n\n### Metrics\n\n**metric** refers to the metric name. Query the [list of available metrics](#operation/getAvailableMetrics) for existing metrics on an entity type.\nThis is to be used when requesting metrics or when ordering by a metric. For **order.by**, `label` may also be used.\n\n### Filtering\n\nAs in the Instana dashboards, you can **filter by a tag**. Query the [infrastructure tag catalog](#operation/getInfrastructureCatalogMetrics) to retrieve a list of available tags.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ab1267c4-8231-45dc-a1dc-7c09de17c458",
+          "name": "Get infrastructure entities",
+          "request": {
+            "name": "Get infrastructure entities",
+            "description": {
+              "content": "This endpoint retrieves entities for a given entity type along with the requested metrics.\nFor more information on Infrastructure Analyze please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Infrastructure#infrastructure-analyze.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "infrastructure-monitoring",
+                "analyze",
+                "entities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pagination\": {\n    \"retrievalSize\": \"<integer>\",\n    \"cursor\": \"<object>\"\n  },\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeFrame\": {\n    \"to\": \"<long>\",\n    \"windowSize\": \"<long>\"\n  },\n  \"metrics\": [\n    \"<object>\",\n    \"<object>\",\n    \"<object>\",\n    \"<object>\",\n    \"<object>\",\n    \"<object>\",\n    \"<object>\",\n    \"<object>\",\n    \"<object>\",\n    \"<object>\"\n  ],\n  \"missingPlaceholder\": \"<string>\",\n  \"order\": {\n    \"by\": \"<string>\",\n    \"direction\": \"<string>\",\n    \"collation\": \"<string>\"\n  },\n  \"tags\": [\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c0937e67-86b5-491b-9e55-4632a8ce3137",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "infrastructure-monitoring",
+                    "analyze",
+                    "entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"entity\": \"NOT_APPLICABLE\",\n    \"name\": \"label\",\n    \"operator\": \"EQUALS\",\n    \"value\": \"custom-metrics.jar\"\n  },\n  \"timeFrame\": {\n    \"to\": 1673969562715,\n    \"windowSize\": 3600000\n  },\n  \"pagination\": {\n    \"retrievalSize\": 200\n  },\n  \"type\": \"jvmRuntimePlatform\",\n  \"metrics\": [\n    {\n      \"metric\": \"memory.used\",\n      \"granularity\": 3600000,\n      \"aggregation\": \"MAX\"\n    },\n    {\n      \"metric\": \"memory.used\",\n      \"granularity\": 600000,\n      \"aggregation\": \"MAX\"\n    },\n    {\n      \"metric\": \"threads.blocked\",\n      \"granularity\": 3600000,\n      \"aggregation\": \"MEAN\"\n    },\n    {\n      \"metric\": \"threads.blocked\",\n      \"granularity\": 600000,\n      \"aggregation\": \"MEAN\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"entityHealthInfo\": {\n        \"openIssues\": [\n          {\n            \"entityId\": \"string\",\n            \"id\": \"string\",\n            \"plugin\": \"string\",\n            \"state\": \"string\",\n            \"type\": \"string\",\n            \"end\": 3944,\n            \"endpointServiceId\": \"string\",\n            \"entityType\": \"Synthetic\",\n            \"eventConfigurationType\": \"string\",\n            \"longFormPluginId\": \"string\",\n            \"metadata\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"metricAccessId\": \"string\",\n            \"problem\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"rca\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_2\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_3\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_4\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"shortCode\": \"s\",\n            \"start\": 3453\n          },\n          {\n            \"entityId\": \"string\",\n            \"id\": \"string\",\n            \"plugin\": \"string\",\n            \"state\": \"string\",\n            \"type\": \"string\",\n            \"end\": 3192,\n            \"endpointServiceId\": \"\",\n            \"entityType\": \"Log\",\n            \"eventConfigurationType\": \"string\",\n            \"longFormPluginId\": \"string\",\n            \"metadata\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"metricAccessId\": \"string\",\n            \"problem\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"rca\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"shortCode\": \"string\",\n            \"start\": 2233\n          }\n        ],\n        \"maxSeverity\": 1.8969690960451135\n      },\n      \"label\": \"string\",\n      \"metrics\": {\n        \"key_0\": [\n          [\n            6407.922384926725,\n            6967.739423532589\n          ],\n          [\n            667.1255221897133,\n            3767.3992645027975\n          ]\n        ]\n      },\n      \"plugin\": \"string\",\n      \"snapshotId\": \"string\",\n      \"tags\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"time\": 4517\n    },\n    {\n      \"entityHealthInfo\": {\n        \"openIssues\": [\n          {\n            \"entityId\": \"string\",\n            \"id\": \"string\",\n            \"plugin\": \"string\",\n            \"state\": \"strin\",\n            \"type\": \"string\",\n            \"end\": 4484,\n            \"endpointServiceId\": \"s\",\n            \"entityType\": \"Endpoint20\",\n            \"eventConfigurationType\": \"string\",\n            \"longFormPluginId\": \"string\",\n            \"metadata\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"metricAccessId\": \"string\",\n            \"problem\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"rca\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_2\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_3\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"shortCode\": \"string\",\n            \"start\": 9208\n          },\n          {\n            \"entityId\": \"\",\n            \"id\": \"string\",\n            \"plugin\": \"string\",\n            \"state\": \"strin\",\n            \"type\": \"string\",\n            \"end\": 1683,\n            \"endpointServiceId\": \"string\",\n            \"entityType\": \"Endpoint20\",\n            \"eventConfigurationType\": \"string\",\n            \"longFormPluginId\": \"string\",\n            \"metadata\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_2\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_3\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"metricAccessId\": \"string\",\n            \"problem\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"rca\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"shortCode\": \"string\",\n            \"start\": 2617\n          }\n        ],\n        \"maxSeverity\": 1.2038806710809402\n      },\n      \"label\": \"string\",\n      \"metrics\": {\n        \"key_0\": [\n          [\n            459.0266601539372,\n            6211.38538184417\n          ],\n          [\n            9576.979804826817,\n            8791.134105895924\n          ]\n        ],\n        \"key_1\": [\n          [\n            4214.262827392442,\n            4489.423323387692\n          ],\n          [\n            8437.649523079523,\n            8887.983087489594\n          ]\n        ]\n      },\n      \"plugin\": \"string\",\n      \"snapshotId\": \"string\",\n      \"tags\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"time\": 6526\n    }\n  ],\n  \"adjustedTimeframe\": {\n    \"to\": 1027,\n    \"windowSize\": 2350\n  },\n  \"canLoadMore\": true,\n  \"next\": \"<object>\",\n  \"totalHits\": 1511\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "eeead5df-5515-407b-ab8f-c41fa674f98b",
+          "name": "Get grouped infrastructure entities with aggregated metrics",
+          "request": {
+            "name": "Get grouped infrastructure entities with aggregated metrics",
+            "description": {
+              "content": "This endpoint groups entities for a given entity type and aggregates metrics for these groups.\nFor more information on Infrastructure Analyze please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Infrastructure#infrastructure-analyze.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "infrastructure-monitoring",
+                "analyze",
+                "entity-groups"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"groupBy\": [\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"pagination\": {\n    \"retrievalSize\": \"<integer>\",\n    \"cursor\": \"<object>\"\n  },\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeFrame\": {\n    \"to\": \"<long>\",\n    \"windowSize\": \"<long>\"\n  },\n  \"metrics\": [\n    \"<object>\",\n    \"<object>\",\n    \"<object>\",\n    \"<object>\",\n    \"<object>\",\n    \"<object>\",\n    \"<object>\",\n    \"<object>\",\n    \"<object>\",\n    \"<object>\"\n  ],\n  \"missingPlaceholder\": \"<string>\",\n  \"order\": {\n    \"by\": \"<string>\",\n    \"direction\": \"<string>\",\n    \"collation\": \"<string>\"\n  },\n  \"type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "38bdc62a-db8c-4e02-8097-1d9d6d0e0879",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "infrastructure-monitoring",
+                    "analyze",
+                    "entity-groups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeFrame\": {\n    \"to\": 1674075565075,\n    \"windowSize\": 3600000\n  },\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"AND\",\n    \"elements\": []\n  },\n  \"pagination\": {\n    \"retrievalSize\": 20\n  },\n  \"groupBy\": [\n    \"host.name\"\n  ],\n  \"type\": \"jvmRuntimePlatform\",\n  \"metrics\": [\n    {\n      \"metric\": \"memory.used\",\n      \"granularity\": 3600000,\n      \"aggregation\": \"MEAN\"\n    },\n    {\n      \"metric\": \"memory.used\",\n      \"granularity\": 600000,\n      \"aggregation\": \"MEAN\"\n    },\n    {\n      \"metric\": \"threads.blocked\",\n      \"granularity\": 3600000,\n      \"aggregation\": \"MEAN\"\n    },\n    {\n      \"metric\": \"threads.blocked\",\n      \"granularity\": 600000,\n      \"aggregation\": \"MEAN\"\n    }\n  ],\n  \"order\": {\n    \"by\": \"label\",\n    \"direction\": \"ASC\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"count\": 4124,\n      \"metrics\": {\n        \"key_0\": [\n          [\n            2571.6451882422066,\n            7938.578653519405\n          ],\n          [\n            3741.782480253687,\n            5024.428374576849\n          ]\n        ],\n        \"key_1\": [\n          [\n            8543.530417900793,\n            9082.103254003589\n          ],\n          [\n            3631.546851924353,\n            5341.882146056582\n          ]\n        ],\n        \"key_2\": [\n          [\n            5739.953527377793,\n            2066.9805740727866\n          ],\n          [\n            7955.16024690675,\n            7586.951281599623\n          ]\n        ]\n      },\n      \"pollRate\": 1419,\n      \"tags\": {\n        \"key_0\": {},\n        \"key_1\": {}\n      }\n    },\n    {\n      \"count\": 7226,\n      \"metrics\": {\n        \"key_0\": [\n          [\n            3338.6997026140675,\n            4317.450753866533\n          ],\n          [\n            9137.927523993834,\n            1313.6094019695631\n          ]\n        ]\n      },\n      \"pollRate\": 9233,\n      \"tags\": {\n        \"key_0\": {},\n        \"key_1\": {},\n        \"key_2\": {}\n      }\n    }\n  ],\n  \"adjustedTimeframe\": {\n    \"to\": 8750,\n    \"windowSize\": 2854\n  },\n  \"canLoadMore\": true,\n  \"next\": \"<object>\",\n  \"totalHits\": 6904\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c4a33a4c-1dc3-429f-a95e-8e8495ce0826",
+          "name": "Get available entity types",
+          "request": {
+            "name": "Get available entity types",
+            "description": {
+              "content": "This endpoint retrieves available entity types.\nFor more information on Infrastructure Analyze please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Infrastructure#infrastructure-analyze.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "infrastructure-monitoring",
+                "analyze",
+                "entity-types"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeFrame\": {\n    \"to\": \"<long>\",\n    \"windowSize\": \"<long>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7a2f6daf-25c9-44c6-bf29-4175b53f7bb0",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "infrastructure-monitoring",
+                    "analyze",
+                    "entity-types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"AND\",\n    \"elements\": []\n  },\n  \"timeFrame\": {\n    \"to\": 1673969562715,\n    \"windowSize\": 3600000\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"plugins\": [\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "751295e4-f1cf-48b0-b37b-2741d6b5995f",
+          "name": "Get available metrics",
+          "request": {
+            "name": "Get available metrics",
+            "description": {
+              "content": "This endpoint retrieves available metrics for an entity type.\nFor more information on Infrastructure Analyze please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Infrastructure#infrastructure-analyze.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "infrastructure-monitoring",
+                "analyze",
+                "metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeFrame\": {\n    \"to\": \"<long>\",\n    \"windowSize\": \"<long>\"\n  },\n  \"query\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8793ef55-8cd0-4ce5-9a1b-16d54cf4da66",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "infrastructure-monitoring",
+                    "analyze",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tagFilterExpression\": {\n    \"type\": \"EXPRESSION\",\n    \"logicalOperator\": \"AND\",\n    \"elements\": []\n  },\n  \"timeFrame\": {\n    \"to\": 1673969562715,\n    \"windowSize\": 3600000\n  },\n  \"query\": \"\",\n  \"type\": \"jvmRuntimePlatform\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"metrics\": [\n    {\n      \"id\": \"string\",\n      \"infraTagCategory\": \"TIBCOBW\",\n      \"label\": \"string\",\n      \"ownerType\": \"string\",\n      \"category\": \"string\",\n      \"crossSeriesAggregations\": [\n        \"P50\",\n        \"MAX\"\n      ],\n      \"description\": \"string\",\n      \"format\": \"BYTE_RATE\",\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"id\": \"string\",\n      \"infraTagCategory\": \"CLR\",\n      \"label\": \"string\",\n      \"ownerType\": \"string\",\n      \"category\": \"string\",\n      \"crossSeriesAggregations\": [\n        \"SUM\",\n        \"MIN\"\n      ],\n      \"description\": \"string\",\n      \"format\": \"NANOS\",\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Customer tenant unit",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "tenant",
+      "key": "tenant"
+    },
+    {
+      "description": {
+        "content": "Customer tenant name",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "unit",
+      "key": "unit"
+    },
+    {
+      "type": "string",
+      "value": "https://{{unit}}-{{tenant}}.instana.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "6d11c18b-df5e-4d3e-88a1-c497de29f608",
+    "name": "Instana REST API documentation Infrastructure Analyze API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n\n\nContact Support:\n Name: © Instana\n Email: support@instana.com",
+      "type": "text/plain"
+    }
+  }
+}

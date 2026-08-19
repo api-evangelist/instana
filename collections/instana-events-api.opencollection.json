@@ -1,0 +1,229 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Events API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Events",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all Events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events",
+            "params": [
+              {
+                "name": "to",
+                "value": "1704096000000",
+                "type": "query",
+                "description": "A Unix timestamp representing the end of the requested timeframe. Defaults to the current system time"
+              },
+              {
+                "name": "windowSize",
+                "value": "600000",
+                "type": "query",
+                "description": "The size of the requested timeframe, in milliseconds, relative to the 'to' parameter. Defaults to 10 minutes (600000 milliseconds) if neither 'windowSize' nor 'from' are provided. Resulting timeframe range = [to - windowSize, to]"
+              },
+              {
+                "name": "from",
+                "value": "1672560000000",
+                "type": "query",
+                "description": "A Unix timestamp representing the start of the requested timeframe. Can be used as an alternative to 'windowSize' to define the timeframe. If both 'from' and 'windowSize' are provided, 'from' takes precedence. Resulting timeframe range = [from, to]"
+              },
+              {
+                "name": "filterEventUpdates",
+                "value": "true",
+                "type": "query",
+                "description": "Flag to filter the results to only show events with state changes within the timeframe."
+              },
+              {
+                "name": "excludeTriggeredBefore",
+                "value": "true",
+                "type": "query",
+                "description": "Flag to filter the results to exclude events that have been triggered before the timeframe. This also filters out events with state changes within the timeframe if the events' start times begin before the timeframe."
+              },
+              {
+                "name": "includeAgentMonitoringIssues",
+                "value": "true",
+                "type": "query",
+                "description": "Flag to filter the results to include Agent Monitoring Issues."
+              },
+              {
+                "name": "includeKubernetesInfoEvents",
+                "value": "true",
+                "type": "query",
+                "description": "Flag to filter the results to include Kubernetes Info Events."
+              },
+              {
+                "name": "eventTypeFilters",
+                "value": "INCIDENT",
+                "type": "query",
+                "description": "A string representing an event type - an INCIDENT, ISSUE, or CHANGE. This query can be repeated to use multiple filters."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all Events within a timeframe. The timeframe is defined as `[from, to]` or `[to - windowSize, to]`. "
+        },
+        {
+          "info": {
+            "name": "Get Events by IDs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets a set of events by their IDs. "
+        },
+        {
+          "info": {
+            "name": "Get Agent Monitoring Events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/agent-monitoring-events",
+            "params": [
+              {
+                "name": "to",
+                "value": "1704096000000",
+                "type": "query",
+                "description": "A Unix timestamp representing the end of the requested timeframe. Defaults to the current system time"
+              },
+              {
+                "name": "windowSize",
+                "value": "600000",
+                "type": "query",
+                "description": "The size of the requested timeframe, in milliseconds, relative to the 'to' parameter. Defaults to 10 minutes (600000 milliseconds) if neither 'windowSize' nor 'from' are provided. Resulting timeframe range = [to - windowSize, to]"
+              },
+              {
+                "name": "from",
+                "value": "1672560000000",
+                "type": "query",
+                "description": "A Unix timestamp representing the start of the requested timeframe. Can be used as an alternative to 'windowSize' to define the timeframe. If both 'from' and 'windowSize' are provided, 'from' takes precedence. Resulting timeframe range = [from, to]"
+              },
+              {
+                "name": "filterEventUpdates",
+                "value": "true",
+                "type": "query",
+                "description": "Flag to filter the results to only show events with state changes within the timeframe."
+              },
+              {
+                "name": "excludeTriggeredBefore",
+                "value": "true",
+                "type": "query",
+                "description": "Flag to filter the results to exclude events that have been triggered before the timeframe. This also filters out events with state changes within the timeframe if the events' start times begin before the timeframe."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets all Agent Monitoring Events within a timeframe. The timeframe is defined as `[from, to]` or `[to - windowSize, to]`. "
+        },
+        {
+          "info": {
+            "name": "Get Kubernetes Info Events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/kubernetes-info-events",
+            "params": [
+              {
+                "name": "to",
+                "value": "1704096000000",
+                "type": "query",
+                "description": "A Unix timestamp representing the end of the requested timeframe. Defaults to the current system time"
+              },
+              {
+                "name": "windowSize",
+                "value": "600000",
+                "type": "query",
+                "description": "The size of the requested timeframe, in milliseconds, relative to the 'to' parameter. Defaults to 10 minutes (600000 milliseconds) if neither 'windowSize' nor 'from' are provided. Resulting timeframe range = [to - windowSize, to]"
+              },
+              {
+                "name": "from",
+                "value": "1672560000000",
+                "type": "query",
+                "description": "A Unix timestamp representing the start of the requested timeframe. Can be used as an alternative to 'windowSize' to define the timeframe. If both 'from' and 'windowSize' are provided, 'from' takes precedence. Resulting timeframe range = [from, to]"
+              },
+              {
+                "name": "filterEventUpdates",
+                "value": "true",
+                "type": "query",
+                "description": "Flag to filter the results to only show events with state changes within the timeframe."
+              },
+              {
+                "name": "excludeTriggeredBefore",
+                "value": "true",
+                "type": "query",
+                "description": "Flag to filter the results to exclude events that have been triggered before the timeframe. This also filters out events with state changes within the timeframe if the events' start times begin before the timeframe."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets all Kubernetes Info Events within a timeframe. The timeframe is defined as `[from, to]` or `[to - windowSize, to]`. "
+        },
+        {
+          "info": {
+            "name": "Get Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/:eventId",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "LZOGo1lXR4WeCB2ftgtGGQ",
+                "type": "path",
+                "description": "ID of a specific Event to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets a specific event."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

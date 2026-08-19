@@ -1,0 +1,252 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Synthetic Test Playback Results API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Synthetic Test Playback Results",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Synthetic test playback results",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/results",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a list of aggregated playback results metrics for Synthetic tests matching the specified parameters\nFor more information on Synthetic Test Playback Results please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-test-playback-results."
+        },
+        {
+          "info": {
+            "name": "Get a list of Synthetic tests based on the specified analytic function",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/results/analytic",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a list of playback results metrics for Synthetic tests matching the specified parameters for the specified analytic\nFor more information on Synthetic Test Playback Results please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-test-playback-results."
+        },
+        {
+          "info": {
+            "name": "Get a list of Synthetic test playback results",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/results/list",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a list of playback results metrics for Synthetic tests matching the specified parameters\nFor more information on Synthetic Test Playback Results please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-test-playback-results."
+        },
+        {
+          "info": {
+            "name": "Get a list of Synthetic locations with last run test on each location data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/results/locationsummarylist",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get summary information for Synthetic locations matching the specified parameters\nFor more information on Synthetic Test Playback Results please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-test-playback-results."
+        },
+        {
+          "info": {
+            "name": "Get a list of Synthetic tests with success rate and average response time data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/results/testsummarylist",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a summary of the playback results metrics and success rate for Synthetic tests matching the specified parameters\nFor more information on Synthetic Test Playback Results please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-test-playback-results."
+        },
+        {
+          "info": {
+            "name": "Get Synthetic test playback detail result description(metadata)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/results/:testid/:testresultid",
+            "params": [
+              {
+                "name": "testid",
+                "value": "AMl0Y7tsvpp8XXrXt1XO",
+                "type": "path",
+                "description": "Test id of the test result detailed description to be retrieved"
+              },
+              {
+                "name": "testresultid",
+                "value": "5623c161-31d6-49b8-b314-91d4fb598f55",
+                "type": "path",
+                "description": "Test result id of the test result detailed description to be retrieved"
+              },
+              {
+                "name": "startTime",
+                "value": "1730295066008",
+                "type": "query",
+                "description": "Start time of the test result detailed description"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets the list of detailed data file names associated to a Synthetic playback result\nFor more information on Synthetic Test Playback Results please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-test-playback-results."
+        },
+        {
+          "info": {
+            "name": "Get Synthetic test playback result detail data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/results/:testid/:testresultid/detail",
+            "params": [
+              {
+                "name": "testid",
+                "value": "AMl0Y7tsvpp8XXrXt1XO",
+                "type": "path",
+                "description": "Test id of the test result detailed file contents to be retrieved"
+              },
+              {
+                "name": "testresultid",
+                "value": "5623c161-31d6-49b8-b314-91d4fb598f55",
+                "type": "path",
+                "description": "Test result id of the  test result detailed file to be retrieved"
+              },
+              {
+                "name": "type",
+                "value": "LOGS",
+                "type": "query",
+                "description": "Type of the test result detailed file contents"
+              },
+              {
+                "name": "name",
+                "value": "console.log",
+                "type": "query",
+                "description": "Name of the test result detailed file, if more than one file available for the same type. Can be used when parameter type=LOGS"
+              },
+              {
+                "name": "startTime",
+                "value": "1730295066008",
+                "type": "query",
+                "description": "Start time of the test result detailed file contents"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Download the contents of the Synthetic the playback result detail data file matching the specified file type\nFor more information on Synthetic Test Playback Results please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-test-playback-results."
+        },
+        {
+          "info": {
+            "name": "Download the synthetic test playback result detail data file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/synthetics/results/:testid/:testresultid/file",
+            "params": [
+              {
+                "name": "testid",
+                "value": "AMl0Y7tsvpp8XXrXt1XO",
+                "type": "path",
+                "description": "Test id of the test result detailed file to be retrieved"
+              },
+              {
+                "name": "testresultid",
+                "value": "5623c161-31d6-49b8-b314-91d4fb598f55",
+                "type": "path",
+                "description": "Test result id of the  test result detailed file to be retrieved"
+              },
+              {
+                "name": "type",
+                "value": "LOGS",
+                "type": "query",
+                "description": "Type of the test result detailed file"
+              },
+              {
+                "name": "startTime",
+                "value": "1730295066008",
+                "type": "query",
+                "description": "Start time of the test result detailed file"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Download the synthetic test playback result detail data file"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

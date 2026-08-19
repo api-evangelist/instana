@@ -1,0 +1,91 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Mobile App Metrics API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Mobile App Metrics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get mobile app beacon metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/metrics",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get mobile app monitoring beacon metrics."
+        },
+        {
+          "info": {
+            "name": "Get mobile app session",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/session:id:timestamp",
+            "params": [
+              {
+                "name": "id",
+                "value": "9CA9E31D-B0F7-40EC-8D32-FE163A6557AE",
+                "type": "path",
+                "description": "Identifier of the session to be retrieved"
+              },
+              {
+                "name": "timestamp",
+                "value": "1730595029980",
+                "type": "path",
+                "description": "Timestamp of the session to be retrieved"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get a mobile app monitoring session."
+        },
+        {
+          "info": {
+            "name": "Get beacon metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/mobile-app-monitoring/v2/metrics",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "API request to get mobile app monitoring beacon metrics."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

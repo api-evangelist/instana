@@ -1,0 +1,273 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Instana REST API documentation Synthetic Alert Configuration API",
+    "version": "1.307.1417"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Synthetic Alert Configuration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all Synthetic Smart Alert Configs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/synthetics",
+            "params": [
+              {
+                "name": "syntheticTestId",
+                "value": "ic25Vt1T5dgKzi0K7812",
+                "type": "query",
+                "description": "The ID of a specific Synthetic Test. "
+              },
+              {
+                "name": "alertIds",
+                "value": "smRTFp08juKWtn8I",
+                "type": "query",
+                "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets all the Synthetic Smart Alert Configuration pertaining to a specific synthetic test. Configurations are sorted by creation date in descending order.\nFor more information on Synthetic Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Create Synthetic Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/synthetics",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a new Synthetic Smart Alert Configuration.\nFor more information on Synthetic Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Get Synthetic Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/synthetics/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "qgEwvI0vRfe3Al_D7T7LSA",
+                "type": "path",
+                "description": "ID of a specific Synthetic Smart Alert Configuration to retrieve."
+              },
+              {
+                "name": "validOn",
+                "value": "1707149760053",
+                "type": "query",
+                "description": "A Unix timestamp representing a specific time the Configuration was active. If no timestamp is provided, the latest active version will be retrieved. "
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets a specific Synthetic Smart Alert Configuration. This may return a deleted Configuration.\nFor more information on Synthetic Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Update Synthetic Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/synthetics/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "qgEwvI0vRfe3Al_D7T7LSA",
+                "type": "path",
+                "description": "ID of a specific Synthetic Smart Alert Configuration to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Updates an existing Synthetic Smart Alert Configuration.\nFor more information on Synthetic Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Delete Synthetic Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/synthetics/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "2K1YQIeaSQKIcIkHPH7D3g",
+                "type": "path",
+                "description": "ID of a specific Synthetic Smart Alert Configuration to delete."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Deletes a Synthetic Smart Alert Configuration.\nFor more information on Synthetic Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Disable Synthetic Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/synthetics/:id/disable",
+            "params": [
+              {
+                "name": "id",
+                "value": "2K1YQIeaSQKIcIkHPH7D3g",
+                "type": "path",
+                "description": "ID of a specific Synthetic Smart Alert Configuration to disable."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Disables a Synthetic Smart Alert Configuration.\nFor more information on Synthetic Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Enable Synthetic Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/synthetics/:id/enable",
+            "params": [
+              {
+                "name": "id",
+                "value": "2K1YQIeaSQKIcIkHPH7D3g",
+                "type": "path",
+                "description": "ID of a specific Synthetic Smart Alert Configuration to enable."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Enables a Synthetic Smart Alert Configuration.\nFor more information on Synthetic Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Restore Synthetic Smart Alert Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/synthetics/:id/restore/:created",
+            "params": [
+              {
+                "name": "id",
+                "value": "2K1YQIeaSQKIcIkHPH7D3g",
+                "type": "path",
+                "description": "ID of a specific Synthetic Smart Alert Configuration to restore."
+              },
+              {
+                "name": "created",
+                "value": "1707726529124",
+                "type": "path",
+                "description": "Unix timestamp representing the creation time of a specific Synthetic Smart Alert Configuration."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Restores a deleted Synthetic Smart Alert Configuration.\nFor more information on Synthetic Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-alert-configuration."
+        },
+        {
+          "info": {
+            "name": "Get Synthetic Smart Alert Config Versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{unit}-{tenant}.instana.io/api/events/settings/global-alert-configs/synthetics/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "qgEwvI0vRfe3Al_D7T7LSA",
+                "type": "path",
+                "description": "ID of a specific Synthetic Smart Alert Configuration to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Gets all versions of a Synthetic Smart Alert Configuration. This may return deleted Configurations. Configurations are sorted by creation date in descending order.\nFor more information on Synthetic Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Synthetic+Monitoring#synthetic-alert-configuration."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

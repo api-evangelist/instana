@@ -1,0 +1,3573 @@
+{
+  "item": [
+    {
+      "id": "b8025461-12f8-4b50-a7ff-47244d6834af",
+      "name": "Application Alert Configuration",
+      "description": {
+        "content": "The API endpoints of this group can be used to manage Application alert configurations.\n\n## Parameters:\n\n- **id:** ID of the application alert config which needs to be updated.\n\n- **name:** Name for the application alert configuration.\n\n- **description:** Description for the application alert configuration.\n\n- **severity:** The severity of the alert when triggered, which is either `5` (Warning), or `10` (Critical).\n\n- **triggering:** Optional flag to indicate whether also an Incident is triggered or not.\n\n- **applications:** Selection of application, services and endpoints in scope.\n\n  The selection defines a tree of included or excluded sub entities. The defined `inclusive` flag defines whether this node and his child nodes are included (`inclusive: true`) or excluded (`inclusive: false`) by default. Empty selections or unnecessary selections are not allowed. \n\n  #### Example 1: Select an entire Application Perspective\n\n  To select the entire application with ID `<appId>` including all its services and endpoints, simply provide the following selection object:\n\n  ```json\n  \"applications\": {\n      \"<appId>\": {\n          \"applicationId\": \"<appId>\"\n      }\n  }\n  ```\n\n  Leaf nodes of the selection tree default to `true` if no `inclusive` value is defined.\n\n  #### Example 2: Specific selection of services and endpoints\n\n  To select not the entire application with ID `<appId>`, but only the entire serivces Service1 with ID `<service1>` and Service2 with ID `<service2>`, with the exception of endpoint `<endpoint2>` of Service2. And in addition, only Endpoint `<endpoint3>` of Service3 with id `<service3>`, then use the following selection:\n\n  ```json\n  \"applications\": {\n      \"<appId>\": {\n          \"applicationId\": \"<appId>\",\n          \"inclusive\": false,\n          \"services\": {\n              \"<service1>\": {\n                  \"serviceId\": \"<service1>\"\n              },\n              \"<service2>\": {\n                  \"serviceId\": \"<service2>\",\n                  \"inclusive\": true,\n                  \"endpoints\": {\n                      \"<endpoint2>\": {\n                          \"endpointId\": \"<endpoint2>\",\n                          \"inclusive\": false\n                      }\n                  }\n              },\n              \"<service3>\": {\n                  \"serviceId\": \"<service3>\",\n                  \"inclusive\": false,\n                  \"endpoints\": {\n                      \"<endpoint3>\": {\n                          \"endpointId\": \"<endpoint3>\",\n                          \"inclusive\": true\n                      }\n                  }\n              }\n          }\n      }\n  }\n  ``` \n\n- **boundaryScope:** Boundary scope of the Application Perspective\n\n- **tagFilterExpression:** Boolean expression of tag filters to define the scope of relevant calls.\n\n- **includeInternal:** Optional flag to indicate whether also internal calls are included in the scope or not. The default is `false`.\n\n- **includeSynthetic:** Optional flag to indicate whether also synthetic calls are included in the scope or not. The default is `false`.\n\n- **evaluationType:** The alert evaluation type of the alert configuration. For example, this allows to configure whether calls of the configured scope is aggregated to a single metric that is then considered for alerting (`\"PER_AP\"`), or whether each service of an Appliction Perspective is is evaluated individually (`\"PER_AP_SERVICE\"`).\n\n- **granularity:** The evaluation granularity used for detection of violations of the defined threshold. In other words, it defines the size of the tumbling window used.\n\n- **rule:** Indicates the type of rule this alert configuration is about.\n\n- **threshold:** Indicates the type of threshold this alert rule is evaluated on .\n\n- **timeThreshold:** Indicates the type of violation of the defined threshold.\n\n- **alertChannelIds:** List of IDs of alert channels defined in Instana.\n\n## Deprecated Parameters\n\n- **applicationId:** Unique ID of the Application Perspective. It is replaced by **applications**.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8ceb4cb4-35ec-4176-83b6-5ff3b5c22eec",
+          "name": "Get all Smart Alert Configs",
+          "request": {
+            "name": "Get all Smart Alert Configs",
+            "description": {
+              "content": "Gets all the Smart Alert Configurations pertaining to a specific application. Configurations are sorted by creation date in descending order.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "application-alert-configs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "applicationId",
+                  "value": "<string>",
+                  "description": "(Required) The ID of a specific Application."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "alertIds",
+                  "value": "<string>",
+                  "description": "A list of Smart Alert Configuration IDs. This allows fetching of a specific set of Configurations. This query can be repeated to use multiple IDs."
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9a559aff-2f90-4ec7-abae-94dfd7d653e1",
+              "name": "OK - Returns an empty list if no configurations match the criteria",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "applicationId",
+                      "value": "IYS1XOEcTNiT1eOD8pxgXg"
+                    },
+                    {
+                      "key": "alertIds",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"name\": \"Erroneous call rate is higher than normal\",\n    \"description\": \"The erroneous call rate is higher or equal to 4%.\",\n    \"boundaryScope\": \"ALL\",\n    \"applicationId\": \"IYS1XOEcTNiT1eOD8pxgXg\",\n    \"applications\": {\n      \"IYS1XOEcTNiT1eOD8pxgXg\": {\n        \"applicationId\": \"IYS1XOEcTNiT1eOD8pxgXg\",\n        \"inclusive\": true,\n        \"services\": {}\n      }\n    },\n    \"severity\": 5,\n    \"triggering\": false,\n    \"tagFilterExpression\": {\n      \"type\": \"EXPRESSION\",\n      \"logicalOperator\": \"AND\",\n      \"elements\": []\n    },\n    \"includeInternal\": false,\n    \"includeSynthetic\": false,\n    \"rule\": {\n      \"alertType\": \"errors\",\n      \"metricName\": \"errors\",\n      \"aggregation\": \"MEAN\"\n    },\n    \"threshold\": {\n      \"type\": \"staticThreshold\",\n      \"operator\": \">=\",\n      \"value\": 0.04,\n      \"lastUpdated\": 0\n    },\n    \"alertChannelIds\": [],\n    \"granularity\": 600000,\n    \"timeThreshold\": {\n      \"type\": \"violationsInSequence\",\n      \"timeWindow\": 600000\n    },\n    \"evaluationType\": \"PER_AP\",\n    \"customPayloadFields\": [],\n    \"id\": \"A5VvSXR_SVG6z7YbnIHiHQ\",\n    \"created\": 1707751873882,\n    \"initialCreated\": 1707751873882,\n    \"readOnly\": false,\n    \"enabled\": true,\n    \"derivedFromGlobalAlert\": false\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8ed57997-6338-41e9-b523-e5a363a2d883",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "applicationId",
+                      "value": "IYS1XOEcTNiT1eOD8pxgXg"
+                    },
+                    {
+                      "key": "alertIds",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "440a9b54-97c8-4c10-bb32-6439770e24b1",
+          "name": "Create Smart Alert Config",
+          "request": {
+            "name": "Create Smart Alert Config",
+            "description": {
+              "content": "Creates a new Smart Alert Configuration.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "application-alert-configs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"alertChannelIds\": [\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"applications\": {\n    \"key_0\": {\n      \"applicationId\": \"<string>\",\n      \"services\": {\n        \"key_0\": {\n          \"endpoints\": {\n            \"key_0\": {\n              \"endpointId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"inclusive\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"key_1\": {\n              \"endpointId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"inclusive\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          },\n          \"serviceId\": \"<string>\",\n          \"inclusive\": \"<boolean>\"\n        }\n      },\n      \"inclusive\": \"<boolean>\"\n    }\n  },\n  \"boundaryScope\": \"<string>\",\n  \"customPayloadFields\": [\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"evaluationType\": \"<string>\",\n  \"granularity\": 600000,\n  \"name\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeThreshold\": {\n    \"type\": \"<string>\",\n    \"timeWindow\": \"<long>\"\n  },\n  \"alertChannels\": {\n    \"key_0\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"key_1\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"applicationId\": \"<string>\",\n  \"gracePeriod\": \"<long>\",\n  \"includeInternal\": \"<boolean>\",\n  \"includeSynthetic\": \"<boolean>\",\n  \"rule\": {\n    \"alertType\": \"<string>\",\n    \"metricName\": \"<string>\",\n    \"aggregation\": \"<string>\"\n  },\n  \"rules\": [\n    {\n      \"rule\": {\n        \"alertType\": \"<string>\",\n        \"metricName\": \"<string>\",\n        \"aggregation\": \"<string>\"\n      },\n      \"thresholdOperator\": \"<string>\",\n      \"thresholds\": {\n        \"key_0\": {\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  ],\n  \"severity\": \"<integer>\",\n  \"tagFilters\": [\n    \"<object>\",\n    \"<object>\"\n  ],\n  \"threshold\": {\n    \"operator\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"triggering\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f10f94fe-1616-4feb-9556-d93016a0919c",
+              "name": "Smart Alert Configuration created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Calls are slower than usual\",\n  \"description\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n  \"boundaryScope\": \"INBOUND\",\n  \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n  \"applications\": {\n    \"ZOi0te_ERE-mRm-9zsbwdg\": {\n      \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n      \"inclusive\": true,\n      \"services\": {}\n    }\n  },\n  \"severity\": 5,\n  \"triggering\": false,\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"name\": \"endpoint.name\",\n    \"stringValue\": null,\n    \"numberValue\": null,\n    \"booleanValue\": null,\n    \"key\": null,\n    \"value\": null,\n    \"operator\": \"NOT_EMPTY\",\n    \"entity\": \"DESTINATION\"\n  },\n  \"includeInternal\": false,\n  \"includeSynthetic\": false,\n  \"rule\": {\n    \"alertType\": \"slowness\",\n    \"aggregation\": \"P90\",\n    \"metricName\": \"latency\"\n  },\n  \"threshold\": {\n    \"type\": \"historicBaseline\",\n    \"operator\": \">=\",\n    \"seasonality\": \"DAILY\",\n    \"baseline\": [\n      [\n        0,\n        1,\n        3\n      ],\n      [\n        600000,\n        1,\n        3\n      ]\n    ],\n    \"deviationFactor\": 3,\n    \"lastUpdated\": 0\n  },\n  \"alertChannelIds\": [],\n  \"granularity\": 600000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 600000\n  },\n  \"evaluationType\": \"PER_AP\",\n  \"customPayloadFields\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"Calls are slower than usual\",\n  \"description\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n  \"boundaryScope\": \"INBOUND\",\n  \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n  \"applications\": {\n    \"ZOi0te_ERE-mRm-9zsbwdg\": {\n      \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n      \"inclusive\": true,\n      \"services\": {}\n    }\n  },\n  \"severity\": 5,\n  \"triggering\": false,\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"name\": \"endpoint.name\",\n    \"stringValue\": null,\n    \"numberValue\": null,\n    \"booleanValue\": null,\n    \"key\": null,\n    \"value\": null,\n    \"operator\": \"NOT_EMPTY\",\n    \"entity\": \"DESTINATION\"\n  },\n  \"includeInternal\": false,\n  \"includeSynthetic\": false,\n  \"rule\": {\n    \"alertType\": \"slowness\",\n    \"aggregation\": \"P90\",\n    \"metricName\": \"latency\"\n  },\n  \"threshold\": {\n    \"type\": \"historicBaseline\",\n    \"operator\": \">=\",\n    \"seasonality\": \"DAILY\",\n    \"baseline\": [\n      [\n        0,\n        1,\n        3\n      ],\n      [\n        600000,\n        1,\n        3\n      ]\n    ],\n    \"deviationFactor\": 3,\n    \"lastUpdated\": 0\n  },\n  \"alertChannelIds\": [],\n  \"granularity\": 600000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 600000\n  },\n  \"evaluationType\": \"PER_AP\",\n  \"customPayloadFields\": [],\n  \"id\": \"DKp0JArJRAiQIav9CoKSWQ\",\n  \"created\": 1706617456952,\n  \"initialCreated\": 1706617456952,\n  \"readOnly\": false,\n  \"enabled\": true,\n  \"derivedFromGlobalAlert\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c9f05dd9-cdce-4482-9e49-f929d15056af",
+              "name": "Invalid Configuration.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Calls are slower than usual\",\n  \"description\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n  \"boundaryScope\": \"INBOUND\",\n  \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n  \"applications\": {\n    \"ZOi0te_ERE-mRm-9zsbwdg\": {\n      \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n      \"inclusive\": true,\n      \"services\": {}\n    }\n  },\n  \"severity\": 5,\n  \"triggering\": false,\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"name\": \"endpoint.name\",\n    \"stringValue\": null,\n    \"numberValue\": null,\n    \"booleanValue\": null,\n    \"key\": null,\n    \"value\": null,\n    \"operator\": \"NOT_EMPTY\",\n    \"entity\": \"DESTINATION\"\n  },\n  \"includeInternal\": false,\n  \"includeSynthetic\": false,\n  \"rule\": {\n    \"alertType\": \"slowness\",\n    \"aggregation\": \"P90\",\n    \"metricName\": \"latency\"\n  },\n  \"threshold\": {\n    \"type\": \"historicBaseline\",\n    \"operator\": \">=\",\n    \"seasonality\": \"DAILY\",\n    \"baseline\": [\n      [\n        0,\n        1,\n        3\n      ],\n      [\n        600000,\n        1,\n        3\n      ]\n    ],\n    \"deviationFactor\": 3,\n    \"lastUpdated\": 0\n  },\n  \"alertChannelIds\": [],\n  \"granularity\": 600000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 600000\n  },\n  \"evaluationType\": \"PER_AP\",\n  \"customPayloadFields\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b7697bb2-3f8d-4792-b1d1-c005b9e1214d",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Calls are slower than usual\",\n  \"description\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n  \"boundaryScope\": \"INBOUND\",\n  \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n  \"applications\": {\n    \"ZOi0te_ERE-mRm-9zsbwdg\": {\n      \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n      \"inclusive\": true,\n      \"services\": {}\n    }\n  },\n  \"severity\": 5,\n  \"triggering\": false,\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"name\": \"endpoint.name\",\n    \"stringValue\": null,\n    \"numberValue\": null,\n    \"booleanValue\": null,\n    \"key\": null,\n    \"value\": null,\n    \"operator\": \"NOT_EMPTY\",\n    \"entity\": \"DESTINATION\"\n  },\n  \"includeInternal\": false,\n  \"includeSynthetic\": false,\n  \"rule\": {\n    \"alertType\": \"slowness\",\n    \"aggregation\": \"P90\",\n    \"metricName\": \"latency\"\n  },\n  \"threshold\": {\n    \"type\": \"historicBaseline\",\n    \"operator\": \">=\",\n    \"seasonality\": \"DAILY\",\n    \"baseline\": [\n      [\n        0,\n        1,\n        3\n      ],\n      [\n        600000,\n        1,\n        3\n      ]\n    ],\n    \"deviationFactor\": 3,\n    \"lastUpdated\": 0\n  },\n  \"alertChannelIds\": [],\n  \"granularity\": 600000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 600000\n  },\n  \"evaluationType\": \"PER_AP\",\n  \"customPayloadFields\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8608ca59-aa47-4995-b8ab-a9c1a6d7fded",
+              "name": "Unprocessable entity.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Calls are slower than usual\",\n  \"description\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n  \"boundaryScope\": \"INBOUND\",\n  \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n  \"applications\": {\n    \"ZOi0te_ERE-mRm-9zsbwdg\": {\n      \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n      \"inclusive\": true,\n      \"services\": {}\n    }\n  },\n  \"severity\": 5,\n  \"triggering\": false,\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"name\": \"endpoint.name\",\n    \"stringValue\": null,\n    \"numberValue\": null,\n    \"booleanValue\": null,\n    \"key\": null,\n    \"value\": null,\n    \"operator\": \"NOT_EMPTY\",\n    \"entity\": \"DESTINATION\"\n  },\n  \"includeInternal\": false,\n  \"includeSynthetic\": false,\n  \"rule\": {\n    \"alertType\": \"slowness\",\n    \"aggregation\": \"P90\",\n    \"metricName\": \"latency\"\n  },\n  \"threshold\": {\n    \"type\": \"historicBaseline\",\n    \"operator\": \">=\",\n    \"seasonality\": \"DAILY\",\n    \"baseline\": [\n      [\n        0,\n        1,\n        3\n      ],\n      [\n        600000,\n        1,\n        3\n      ]\n    ],\n    \"deviationFactor\": 3,\n    \"lastUpdated\": 0\n  },\n  \"alertChannelIds\": [],\n  \"granularity\": 600000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 600000\n  },\n  \"evaluationType\": \"PER_AP\",\n  \"customPayloadFields\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "28b96bbe-aac2-4ec8-bf35-c14bdb0487e7",
+              "name": "Baseline calculation failed due to insufficient data.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Calls are slower than usual\",\n  \"description\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n  \"boundaryScope\": \"INBOUND\",\n  \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n  \"applications\": {\n    \"ZOi0te_ERE-mRm-9zsbwdg\": {\n      \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n      \"inclusive\": true,\n      \"services\": {}\n    }\n  },\n  \"severity\": 5,\n  \"triggering\": false,\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"name\": \"endpoint.name\",\n    \"stringValue\": null,\n    \"numberValue\": null,\n    \"booleanValue\": null,\n    \"key\": null,\n    \"value\": null,\n    \"operator\": \"NOT_EMPTY\",\n    \"entity\": \"DESTINATION\"\n  },\n  \"includeInternal\": false,\n  \"includeSynthetic\": false,\n  \"rule\": {\n    \"alertType\": \"slowness\",\n    \"aggregation\": \"P90\",\n    \"metricName\": \"latency\"\n  },\n  \"threshold\": {\n    \"type\": \"historicBaseline\",\n    \"operator\": \">=\",\n    \"seasonality\": \"DAILY\",\n    \"baseline\": [\n      [\n        0,\n        1,\n        3\n      ],\n      [\n        600000,\n        1,\n        3\n      ]\n    ],\n    \"deviationFactor\": 3,\n    \"lastUpdated\": 0\n  },\n  \"alertChannelIds\": [],\n  \"granularity\": 600000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 600000\n  },\n  \"evaluationType\": \"PER_AP\",\n  \"customPayloadFields\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Precondition Required",
+              "code": 428,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "75de9eb9-b1cb-4f35-be94-7ed7328bc4b2",
+          "name": "Delete Smart Alert Config",
+          "request": {
+            "name": "Delete Smart Alert Config",
+            "description": {
+              "content": "Deletes an Smart Alert Configuration.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "application-alert-configs",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of a specific Smart Alert Configuration to delete."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "13cb171d-ff18-45bb-9f9f-63321ab94f98",
+              "name": "Smart Alert Configuration deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to delete."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "412c3f0d-6405-41a2-8a46-53858dfdc2f9",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to delete."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f50f985b-32d4-47ee-ba3d-bbebb35fa0ac",
+              "name": "Invalid Configuration ID provided.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to delete."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "968864d2-bd89-4a91-af3d-226bc3009474",
+          "name": "Get Smart Alert Config",
+          "request": {
+            "name": "Get Smart Alert Config",
+            "description": {
+              "content": "Gets a specific Smart Alert Configuration. This may return a deleted Configuration.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "application-alert-configs",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "validOn",
+                  "value": "<long>",
+                  "description": "A Unix timestamp representing a specific time the Configuration was active. If no timestamp is provided, the latest active version will be retrieved. "
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of a specific Smart Alert Configuration to retrieve."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6eebc407-ab79-48b1-9636-d7bf70682d99",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "validOn",
+                      "value": "1706617456952"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to retrieve."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"Calls are slower than usual\",\n  \"description\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n  \"boundaryScope\": \"INBOUND\",\n  \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n  \"applications\": {\n    \"ZOi0te_ERE-mRm-9zsbwdg\": {\n      \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n      \"inclusive\": true,\n      \"services\": {}\n    }\n  },\n  \"severity\": 5,\n  \"triggering\": false,\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"name\": \"endpoint.name\",\n    \"stringValue\": null,\n    \"numberValue\": null,\n    \"booleanValue\": null,\n    \"key\": null,\n    \"value\": null,\n    \"operator\": \"NOT_EMPTY\",\n    \"entity\": \"DESTINATION\"\n  },\n  \"includeInternal\": false,\n  \"includeSynthetic\": false,\n  \"rule\": {\n    \"alertType\": \"slowness\",\n    \"aggregation\": \"P90\",\n    \"metricName\": \"latency\"\n  },\n  \"threshold\": {\n    \"type\": \"historicBaseline\",\n    \"operator\": \">=\",\n    \"seasonality\": \"DAILY\",\n    \"baseline\": [\n      [\n        0,\n        1,\n        3\n      ],\n      [\n        600000,\n        1,\n        3\n      ]\n    ],\n    \"deviationFactor\": 3,\n    \"lastUpdated\": 0\n  },\n  \"alertChannelIds\": [],\n  \"granularity\": 600000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 600000\n  },\n  \"evaluationType\": \"PER_AP\",\n  \"customPayloadFields\": [],\n  \"id\": \"DKp0JArJRAiQIav9CoKSWQ\",\n  \"created\": 1706617456952,\n  \"initialCreated\": 1706617456952,\n  \"readOnly\": false,\n  \"enabled\": true,\n  \"derivedFromGlobalAlert\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "039dee8c-487b-406c-a46e-9a9c234dbe30",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "validOn",
+                      "value": "1706617456952"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to retrieve."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "df97cde5-7e10-40fd-95ba-7f5c02a94bee",
+              "name": "The requested Configuration does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "validOn",
+                      "value": "1706617456952"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to retrieve."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7e8edee4-626c-47de-b019-1b06c136db2b",
+          "name": "Update Smart Alert Config",
+          "request": {
+            "name": "Update Smart Alert Config",
+            "description": {
+              "content": "Updates an existing Smart Alert Configuration.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "application-alert-configs",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of a specific Smart Alert Configuration to update."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"alertChannelIds\": [\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"applications\": {\n    \"key_0\": {\n      \"applicationId\": \"<string>\",\n      \"services\": {\n        \"key_0\": {\n          \"endpoints\": {\n            \"key_0\": {\n              \"endpointId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"inclusive\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"key_1\": {\n              \"endpointId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"inclusive\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          },\n          \"serviceId\": \"<string>\",\n          \"inclusive\": \"<boolean>\"\n        },\n        \"key_1\": {\n          \"endpoints\": {\n            \"key_0\": {\n              \"endpointId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"inclusive\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"key_1\": {\n              \"endpointId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"inclusive\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"key_2\": {\n              \"endpointId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"inclusive\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"key_3\": {\n              \"endpointId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"inclusive\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          },\n          \"serviceId\": \"<string>\",\n          \"inclusive\": \"<boolean>\"\n        }\n      },\n      \"inclusive\": \"<boolean>\"\n    }\n  },\n  \"boundaryScope\": \"<string>\",\n  \"customPayloadFields\": [\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"evaluationType\": \"<string>\",\n  \"granularity\": 600000,\n  \"name\": \"<string>\",\n  \"tagFilterExpression\": {\n    \"type\": \"<string>\"\n  },\n  \"timeThreshold\": {\n    \"type\": \"<string>\",\n    \"timeWindow\": \"<long>\"\n  },\n  \"alertChannels\": {\n    \"key_0\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"key_1\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"applicationId\": \"<string>\",\n  \"gracePeriod\": \"<long>\",\n  \"includeInternal\": \"<boolean>\",\n  \"includeSynthetic\": \"<boolean>\",\n  \"rule\": {\n    \"alertType\": \"<string>\",\n    \"metricName\": \"<string>\",\n    \"aggregation\": \"<string>\"\n  },\n  \"rules\": [\n    {\n      \"rule\": {\n        \"alertType\": \"<string>\",\n        \"metricName\": \"<string>\",\n        \"aggregation\": \"<string>\"\n      },\n      \"thresholdOperator\": \"<string>\",\n      \"thresholds\": {\n        \"key_0\": {\n          \"type\": \"<string>\"\n        }\n      }\n    }\n  ],\n  \"severity\": \"<integer>\",\n  \"tagFilters\": [\n    \"<object>\",\n    \"<object>\"\n  ],\n  \"threshold\": {\n    \"operator\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"triggering\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d31dd165-7199-41ba-9cb2-d63acaa8bd1f",
+              "name": "Smart Alert Configuration updated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to update."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Calls are slower than usual\",\n  \"description\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n  \"boundaryScope\": \"INBOUND\",\n  \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n  \"applications\": {\n    \"ZOi0te_ERE-mRm-9zsbwdg\": {\n      \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n      \"inclusive\": true,\n      \"services\": {}\n    }\n  },\n  \"severity\": 5,\n  \"triggering\": false,\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"name\": \"endpoint.name\",\n    \"stringValue\": null,\n    \"numberValue\": null,\n    \"booleanValue\": null,\n    \"key\": null,\n    \"value\": null,\n    \"operator\": \"NOT_EMPTY\",\n    \"entity\": \"DESTINATION\"\n  },\n  \"includeInternal\": false,\n  \"includeSynthetic\": false,\n  \"rule\": {\n    \"alertType\": \"slowness\",\n    \"aggregation\": \"P90\",\n    \"metricName\": \"latency\"\n  },\n  \"threshold\": {\n    \"type\": \"historicBaseline\",\n    \"operator\": \">=\",\n    \"seasonality\": \"DAILY\",\n    \"baseline\": [\n      [\n        0,\n        1,\n        3\n      ],\n      [\n        600000,\n        1,\n        3\n      ]\n    ],\n    \"deviationFactor\": 3,\n    \"lastUpdated\": 0\n  },\n  \"alertChannelIds\": [],\n  \"granularity\": 600000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 600000\n  },\n  \"evaluationType\": \"PER_AP\",\n  \"customPayloadFields\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"Calls are slower than usual\",\n  \"description\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n  \"boundaryScope\": \"INBOUND\",\n  \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n  \"applications\": {\n    \"ZOi0te_ERE-mRm-9zsbwdg\": {\n      \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n      \"inclusive\": true,\n      \"services\": {}\n    }\n  },\n  \"severity\": 5,\n  \"triggering\": false,\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"name\": \"endpoint.name\",\n    \"stringValue\": null,\n    \"numberValue\": null,\n    \"booleanValue\": null,\n    \"key\": null,\n    \"value\": null,\n    \"operator\": \"NOT_EMPTY\",\n    \"entity\": \"DESTINATION\"\n  },\n  \"includeInternal\": false,\n  \"includeSynthetic\": false,\n  \"rule\": {\n    \"alertType\": \"slowness\",\n    \"aggregation\": \"P90\",\n    \"metricName\": \"latency\"\n  },\n  \"threshold\": {\n    \"type\": \"historicBaseline\",\n    \"operator\": \">=\",\n    \"seasonality\": \"DAILY\",\n    \"baseline\": [\n      [\n        0,\n        1,\n        3\n      ],\n      [\n        600000,\n        1,\n        3\n      ]\n    ],\n    \"deviationFactor\": 3,\n    \"lastUpdated\": 0\n  },\n  \"alertChannelIds\": [],\n  \"granularity\": 600000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 600000\n  },\n  \"evaluationType\": \"PER_AP\",\n  \"customPayloadFields\": [],\n  \"id\": \"DKp0JArJRAiQIav9CoKSWQ\",\n  \"created\": 1706617456952,\n  \"initialCreated\": 1706617456952,\n  \"readOnly\": false,\n  \"enabled\": true,\n  \"derivedFromGlobalAlert\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "38283c32-c34f-4627-b990-708405d0db14",
+              "name": "Smart Alert Configuration did not change.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to update."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Calls are slower than usual\",\n  \"description\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n  \"boundaryScope\": \"INBOUND\",\n  \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n  \"applications\": {\n    \"ZOi0te_ERE-mRm-9zsbwdg\": {\n      \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n      \"inclusive\": true,\n      \"services\": {}\n    }\n  },\n  \"severity\": 5,\n  \"triggering\": false,\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"name\": \"endpoint.name\",\n    \"stringValue\": null,\n    \"numberValue\": null,\n    \"booleanValue\": null,\n    \"key\": null,\n    \"value\": null,\n    \"operator\": \"NOT_EMPTY\",\n    \"entity\": \"DESTINATION\"\n  },\n  \"includeInternal\": false,\n  \"includeSynthetic\": false,\n  \"rule\": {\n    \"alertType\": \"slowness\",\n    \"aggregation\": \"P90\",\n    \"metricName\": \"latency\"\n  },\n  \"threshold\": {\n    \"type\": \"historicBaseline\",\n    \"operator\": \">=\",\n    \"seasonality\": \"DAILY\",\n    \"baseline\": [\n      [\n        0,\n        1,\n        3\n      ],\n      [\n        600000,\n        1,\n        3\n      ]\n    ],\n    \"deviationFactor\": 3,\n    \"lastUpdated\": 0\n  },\n  \"alertChannelIds\": [],\n  \"granularity\": 600000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 600000\n  },\n  \"evaluationType\": \"PER_AP\",\n  \"customPayloadFields\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e33aab06-259a-436f-81bf-ec2e91e69563",
+              "name": "Invalid Application ID provided.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to update."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Calls are slower than usual\",\n  \"description\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n  \"boundaryScope\": \"INBOUND\",\n  \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n  \"applications\": {\n    \"ZOi0te_ERE-mRm-9zsbwdg\": {\n      \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n      \"inclusive\": true,\n      \"services\": {}\n    }\n  },\n  \"severity\": 5,\n  \"triggering\": false,\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"name\": \"endpoint.name\",\n    \"stringValue\": null,\n    \"numberValue\": null,\n    \"booleanValue\": null,\n    \"key\": null,\n    \"value\": null,\n    \"operator\": \"NOT_EMPTY\",\n    \"entity\": \"DESTINATION\"\n  },\n  \"includeInternal\": false,\n  \"includeSynthetic\": false,\n  \"rule\": {\n    \"alertType\": \"slowness\",\n    \"aggregation\": \"P90\",\n    \"metricName\": \"latency\"\n  },\n  \"threshold\": {\n    \"type\": \"historicBaseline\",\n    \"operator\": \">=\",\n    \"seasonality\": \"DAILY\",\n    \"baseline\": [\n      [\n        0,\n        1,\n        3\n      ],\n      [\n        600000,\n        1,\n        3\n      ]\n    ],\n    \"deviationFactor\": 3,\n    \"lastUpdated\": 0\n  },\n  \"alertChannelIds\": [],\n  \"granularity\": 600000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 600000\n  },\n  \"evaluationType\": \"PER_AP\",\n  \"customPayloadFields\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a54c7a5f-66af-4201-8f0c-ae5f1e4d1f7a",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to update."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Calls are slower than usual\",\n  \"description\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n  \"boundaryScope\": \"INBOUND\",\n  \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n  \"applications\": {\n    \"ZOi0te_ERE-mRm-9zsbwdg\": {\n      \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n      \"inclusive\": true,\n      \"services\": {}\n    }\n  },\n  \"severity\": 5,\n  \"triggering\": false,\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"name\": \"endpoint.name\",\n    \"stringValue\": null,\n    \"numberValue\": null,\n    \"booleanValue\": null,\n    \"key\": null,\n    \"value\": null,\n    \"operator\": \"NOT_EMPTY\",\n    \"entity\": \"DESTINATION\"\n  },\n  \"includeInternal\": false,\n  \"includeSynthetic\": false,\n  \"rule\": {\n    \"alertType\": \"slowness\",\n    \"aggregation\": \"P90\",\n    \"metricName\": \"latency\"\n  },\n  \"threshold\": {\n    \"type\": \"historicBaseline\",\n    \"operator\": \">=\",\n    \"seasonality\": \"DAILY\",\n    \"baseline\": [\n      [\n        0,\n        1,\n        3\n      ],\n      [\n        600000,\n        1,\n        3\n      ]\n    ],\n    \"deviationFactor\": 3,\n    \"lastUpdated\": 0\n  },\n  \"alertChannelIds\": [],\n  \"granularity\": 600000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 600000\n  },\n  \"evaluationType\": \"PER_AP\",\n  \"customPayloadFields\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8ff79b26-e5ea-497d-8224-2ffcb706968f",
+              "name": "Unprocessable entity.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to update."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Calls are slower than usual\",\n  \"description\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n  \"boundaryScope\": \"INBOUND\",\n  \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n  \"applications\": {\n    \"ZOi0te_ERE-mRm-9zsbwdg\": {\n      \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n      \"inclusive\": true,\n      \"services\": {}\n    }\n  },\n  \"severity\": 5,\n  \"triggering\": false,\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"name\": \"endpoint.name\",\n    \"stringValue\": null,\n    \"numberValue\": null,\n    \"booleanValue\": null,\n    \"key\": null,\n    \"value\": null,\n    \"operator\": \"NOT_EMPTY\",\n    \"entity\": \"DESTINATION\"\n  },\n  \"includeInternal\": false,\n  \"includeSynthetic\": false,\n  \"rule\": {\n    \"alertType\": \"slowness\",\n    \"aggregation\": \"P90\",\n    \"metricName\": \"latency\"\n  },\n  \"threshold\": {\n    \"type\": \"historicBaseline\",\n    \"operator\": \">=\",\n    \"seasonality\": \"DAILY\",\n    \"baseline\": [\n      [\n        0,\n        1,\n        3\n      ],\n      [\n        600000,\n        1,\n        3\n      ]\n    ],\n    \"deviationFactor\": 3,\n    \"lastUpdated\": 0\n  },\n  \"alertChannelIds\": [],\n  \"granularity\": 600000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 600000\n  },\n  \"evaluationType\": \"PER_AP\",\n  \"customPayloadFields\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6fed6bc2-27d4-4dea-9d1d-d9ccf5f223fb",
+              "name": "Baseline calculation failed due to insufficient data.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to update."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Calls are slower than usual\",\n  \"description\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n  \"boundaryScope\": \"INBOUND\",\n  \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n  \"applications\": {\n    \"ZOi0te_ERE-mRm-9zsbwdg\": {\n      \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n      \"inclusive\": true,\n      \"services\": {}\n    }\n  },\n  \"severity\": 5,\n  \"triggering\": false,\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"name\": \"endpoint.name\",\n    \"stringValue\": null,\n    \"numberValue\": null,\n    \"booleanValue\": null,\n    \"key\": null,\n    \"value\": null,\n    \"operator\": \"NOT_EMPTY\",\n    \"entity\": \"DESTINATION\"\n  },\n  \"includeInternal\": false,\n  \"includeSynthetic\": false,\n  \"rule\": {\n    \"alertType\": \"slowness\",\n    \"aggregation\": \"P90\",\n    \"metricName\": \"latency\"\n  },\n  \"threshold\": {\n    \"type\": \"historicBaseline\",\n    \"operator\": \">=\",\n    \"seasonality\": \"DAILY\",\n    \"baseline\": [\n      [\n        0,\n        1,\n        3\n      ],\n      [\n        600000,\n        1,\n        3\n      ]\n    ],\n    \"deviationFactor\": 3,\n    \"lastUpdated\": 0\n  },\n  \"alertChannelIds\": [],\n  \"granularity\": 600000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 600000\n  },\n  \"evaluationType\": \"PER_AP\",\n  \"customPayloadFields\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Precondition Required",
+              "code": 428,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "358ec789-2c7b-41c9-8bb4-7025fd6fb8b5",
+              "name": "Internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to update."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Calls are slower than usual\",\n  \"description\": \"Calls are slower or equal to the expectation based on latency (90th).\",\n  \"boundaryScope\": \"INBOUND\",\n  \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n  \"applications\": {\n    \"ZOi0te_ERE-mRm-9zsbwdg\": {\n      \"applicationId\": \"ZOi0te_ERE-mRm-9zsbwdg\",\n      \"inclusive\": true,\n      \"services\": {}\n    }\n  },\n  \"severity\": 5,\n  \"triggering\": false,\n  \"tagFilterExpression\": {\n    \"type\": \"TAG_FILTER\",\n    \"name\": \"endpoint.name\",\n    \"stringValue\": null,\n    \"numberValue\": null,\n    \"booleanValue\": null,\n    \"key\": null,\n    \"value\": null,\n    \"operator\": \"NOT_EMPTY\",\n    \"entity\": \"DESTINATION\"\n  },\n  \"includeInternal\": false,\n  \"includeSynthetic\": false,\n  \"rule\": {\n    \"alertType\": \"slowness\",\n    \"aggregation\": \"P90\",\n    \"metricName\": \"latency\"\n  },\n  \"threshold\": {\n    \"type\": \"historicBaseline\",\n    \"operator\": \">=\",\n    \"seasonality\": \"DAILY\",\n    \"baseline\": [\n      [\n        0,\n        1,\n        3\n      ],\n      [\n        600000,\n        1,\n        3\n      ]\n    ],\n    \"deviationFactor\": 3,\n    \"lastUpdated\": 0\n  },\n  \"alertChannelIds\": [],\n  \"granularity\": 600000,\n  \"timeThreshold\": {\n    \"type\": \"violationsInSequence\",\n    \"timeWindow\": 600000\n  },\n  \"evaluationType\": \"PER_AP\",\n  \"customPayloadFields\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "29633ce2-3419-4ccb-a04a-34bcb245ee16",
+          "name": "Disable Smart Alert Config",
+          "request": {
+            "name": "Disable Smart Alert Config",
+            "description": {
+              "content": "Disables an Smart Alert Configuration.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "application-alert-configs",
+                ":id",
+                "disable"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of a specific Smart Alert Configuration to disable."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "<string>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7547a911-e67e-4e22-83c4-666d5d3858da",
+              "name": "Smart Alert Configuration disabled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "disable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to disable."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2ee58de3-a8ff-48d3-8a6c-d696063ddbd5",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "disable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to disable."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2fa831cc-bd13-4bb8-9bf0-4603f0e5a3c1",
+              "name": "Invalid Configuration ID provided.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "disable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to disable."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a58688a5-adc8-4a28-b6dc-495319a49b1b",
+          "name": "Enable Application Alert Config",
+          "request": {
+            "name": "Enable Application Alert Config",
+            "description": {
+              "content": "Enables an Smart Alert Configuration.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "application-alert-configs",
+                ":id",
+                "enable"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of a specific Smart Alert Configuration to enable."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "<string>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ed1d21e8-1fb2-4c10-873a-a83dba287b52",
+              "name": "Smart Alert Configuration enabled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "enable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to enable."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c3d365d4-ddca-44b2-91af-98b820b7ed5c",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "enable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to enable."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d0d97b6e-93fa-462c-a5aa-476f3f580f98",
+              "name": "Invalid Configuration ID provided.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "enable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to enable."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "88a11cb2-2b31-41e2-9e26-9932d47bee96",
+          "name": "Restore Smart Alert Config",
+          "request": {
+            "name": "Restore Smart Alert Config",
+            "description": {
+              "content": "Restores a deleted Smart Alert Configuration.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "application-alert-configs",
+                ":id",
+                "restore",
+                ":created"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of a specific Smart Alert Configuration to restore."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "created",
+                  "description": "(Required) Unix timestamp representing the creation time of a specific Smart Alert Configuration."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "<string>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "494d139c-d59a-47c1-80e2-dfe0970370fd",
+              "name": "Smart Alert Configuration restored.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "restore",
+                    ":created"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to restore."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "created",
+                      "description": "(Required) Unix timestamp representing the creation time of a specific Smart Alert Configuration."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6b1836cf-0e46-4d5b-93ed-1a2c6c8b081f",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "restore",
+                    ":created"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to restore."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "created",
+                      "description": "(Required) Unix timestamp representing the creation time of a specific Smart Alert Configuration."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6b4ed6bb-04ce-42ac-a9e1-e852f36bc0a6",
+              "name": "Invalid Configuration provided.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "restore",
+                    ":created"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to restore."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "created",
+                      "description": "(Required) Unix timestamp representing the creation time of a specific Smart Alert Configuration."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<string>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c61f9de4-fce6-48c1-9e34-082571ac39d4",
+          "name": "Recalculate Smart Alert Config Baseline",
+          "request": {
+            "name": "Recalculate Smart Alert Config Baseline",
+            "description": {
+              "content": "Recalculates and updates the historic baseline (static seasonal threshold) of a Configuration. The `LastUpdated` field of the Configuration is changed to the current time.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "application-alert-configs",
+                ":id",
+                "update-baseline"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of a specific Smart Alert Configuration to recalculate."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f1dc78c1-d5fe-4ea2-94e6-ac829f5a818d",
+              "name": "Smart Alert Configuration baseline successfully recalculated and updated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "update-baseline"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to recalculate."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3af5fa4a-2432-4860-b44d-aad4e319918b",
+              "name": "Baseline recalculation completed with no changes needed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "update-baseline"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to recalculate."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "074b42a1-c57f-46b2-877d-5a90e3d72579",
+              "name": "Invalid configuration type or configuration is read-only.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "update-baseline"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to recalculate."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "579e3572-f2c3-4026-a5d6-7135d440e8e0",
+              "name": "Insufficient permissions to access this configuration.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "update-baseline"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to recalculate."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1ecfaf12-d966-4049-b80b-edc0e7188eed",
+              "name": "Smart Alert Configuration not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "update-baseline"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to recalculate."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4f52b131-8109-44ed-9c68-8d795337ced4",
+              "name": "Baseline calculation failed due to insufficient data.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "update-baseline"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to recalculate."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Precondition Required",
+              "code": 428,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "efed4edc-c663-4dd5-8e6e-8b570946e1e6",
+          "name": "Get Smart Alert Config Versions",
+          "request": {
+            "name": "Get Smart Alert Config Versions",
+            "description": {
+              "content": "Gets all versions of an Smart Alert Configuration. This may return deleted Configurations. Configurations are sorted by creation date in descending order.\nFor more information on Application Alert Configuration please access the https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Applications#application-alert-configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "events",
+                "settings",
+                "application-alert-configs",
+                ":id",
+                "versions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of a specific Smart Alert Configuration to retrieve."
+                },
+                {
+                  "description": "Customer tenant unit",
+                  "type": "any",
+                  "value": "{{tenant}}",
+                  "key": "tenant"
+                },
+                {
+                  "description": "Customer tenant name",
+                  "type": "any",
+                  "value": "{{unit}}",
+                  "key": "unit"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5cc6d35b-8a65-44c5-b3e6-6052292be4ad",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to retrieve."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"DKp0JArJRAiQIav9CoKSWQ\",\n    \"created\": 1706617456952,\n    \"enabled\": true,\n    \"deleted\": false,\n    \"changeSummary\": {\n      \"changeType\": \"CREATE\",\n      \"author\": {\n        \"id\": \"5ee8a3e8cd70020001ecb007\",\n        \"type\": \"USER\",\n        \"fullName\": \"Stan\"\n      }\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ffa3c614-74c8-4592-a2de-882d18de5bb6",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to retrieve."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "17e854e2-817b-4367-89d1-952b68cdebd8",
+              "name": "The requested Configuration does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "events",
+                    "settings",
+                    "application-alert-configs",
+                    ":id",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of a specific Smart Alert Configuration to retrieve."
+                    },
+                    {
+                      "description": "Customer tenant unit",
+                      "type": "any",
+                      "value": "{{tenant}}",
+                      "key": "tenant"
+                    },
+                    {
+                      "description": "Customer tenant name",
+                      "type": "any",
+                      "value": "{{unit}}",
+                      "key": "unit"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Customer tenant unit",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "tenant",
+      "key": "tenant"
+    },
+    {
+      "description": {
+        "content": "Customer tenant name",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "unit",
+      "key": "unit"
+    },
+    {
+      "type": "string",
+      "value": "https://{{unit}}-{{tenant}}.instana.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "ce33a3d3-0c02-46f1-9005-136fe72343bf",
+    "name": "Instana REST API documentation Application Alert Configuration API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n\n\nContact Support:\n Name: © Instana\n Email: support@instana.com",
+      "type": "text/plain"
+    }
+  }
+}
