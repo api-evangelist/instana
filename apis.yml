@@ -528,6 +528,8 @@ apis:
   description: The Events API from Instana — 4 operation(s) for events.
   humanURL: https://www.ibm.com/docs/en/instana-observability/current?topic=apis-rest-api
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -591,6 +593,8 @@ apis:
     done through a corresponding entry in the `permissionSet` payload.
   humanURL: https://www.ibm.com/docs/en/instana-observability/current?topic=apis-rest-api
   tags:
+  - Group
+  tags_raw:
   - Groups
   properties:
   - type: OpenAPI
@@ -1646,6 +1650,8 @@ apis:
   description: The Teams API from Instana — 2 operation(s) for teams.
   humanURL: https://www.ibm.com/docs/en/instana-observability/current?topic=apis-rest-api
   tags:
+  - Team
+  tags_raw:
   - Teams
   properties:
   - type: OpenAPI
