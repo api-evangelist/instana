@@ -4,6 +4,17 @@ description: Instana is an enterprise observability and application performance 
   automated full-stack visibility and AI-powered APM. Instana offers a public REST API for programmatic access to
   monitoring data, configurations, and integrations.
 type: Index
+deliveryModel:
+  model: unknown
+  open_source: false
+  commercial: false
+  callable_host: true
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - openapi
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: unknown
@@ -1612,6 +1623,9 @@ apis:
   - type: GitHubOrganization
     url: https://github.com/instana/openapi
 common:
+- type: CapabilityMap
+  url: capabilities/instana-capability-edges.yml
+  name: Instana Business Capability Map
 - type: ParentCompany
   url: https://apis.io/providers/ibm/
   name: Ibm
