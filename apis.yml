@@ -412,6 +412,8 @@ apis:
   description: The Audit Log API from Instana — 2 operation(s) for audit log.
   humanURL: https://www.ibm.com/docs/en/instana-observability/current?topic=apis-rest-api
   tags:
+  - Audit Logs
+  tags_raw:
   - Audit Log
   properties:
   - type: OpenAPI
