@@ -10,6 +10,12 @@ provenance:
   grounding: every price_text was found verbatim in the fetched page text
 audience: business-product
 pricing_basis: usage-other
+delivery:
+  delivery: managed+licensed
+  method: page
+  read: '2026-09-20'
+  evidence: 'Plan Name: Self-Hosted Pricing: Starting at $385.20 USD per MVS per year'
+  managed_tier: PayPerUse
 published: true
 note: Pricing per Managed Virtual Server (MVS); prices indicative and vary by country.
 plan_count: 7
