@@ -1625,6 +1625,10 @@ apis:
   - type: GitHubOrganization
     url: https://github.com/instana/openapi
 common:
+- type: Pricing
+  url: https://www.ibm.com/products/instana/pricing
+- type: Plans
+  url: plans/instana-plans-pricing.yml
 - type: CapabilityMap
   url: capabilities/instana-capability-edges.yml
   name: Instana Business Capability Map
