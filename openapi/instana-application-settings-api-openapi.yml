@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
   contact:
     email: support@instana.com
@@ -12,7 +12,7 @@ info:
     altText: instana logo
     backgroundColor: '#FAFBFC'
     url: header-logo.svg
-  description: "Searching for answers and best pratices? Check our [IBM Instana Community](https://community.ibm.com/community/user/aiops/communities/community-home?CommunityKey=58f324a3-3104-41be-9510-5b7c413cc48f).\n\n<div style=\"background-color:#e6f0ff; padding: 12px; border-left: 6px solid #0052cc; font-size: 14px; display: flex; align-items: center;\">\n  <img src=\"https://img.icons8.com/ios-filled/50/0052cc/info.png\" width=\"18\" height=\"18\" style=\"margin-right: 8px;\" alt=\"info icon\"/>\n  <span>\n    <b>Our API documentation is moving to</b> \n    <a href=\"https://developer.ibm.com/apis/catalog/instana--instana-rest-api/Introduction\" target=\"_blank\">API Hub</a>\n\t — please update your bookmarks now, as the current site will be deprecated after Release-306.\n  </span>\n</div>\n\n## Overview\nThe Instana REST API provides programmatic access to the Instana platform. It can be used to retrieve data available through the Instana UI Dashboard -- metrics, events, traces, etc -- and also to automate configuration tasks such as user management.\n\n### Navigating the API documentation\nThe API endpoints are grouped by product area and functionality. This generally maps to how our UI Dashboard is organized, hopefully making it easier to locate which endpoints you'd use to fetch the data you see visualized in our UI. The [UI sections](https://www.ibm.com/docs/en/instana-observability/current?topic=working-user-interface#navigation-menu) include:\n- Websites & Mobile Apps\n- Applications\n- Infrastructure\n- Synthetic Monitoring\n- Events\n- Automation\n- Service Levels\n- Settings\n- etc\n\n### Rate Limiting\nA rate limit is applied to API usage. Up to 5,000 calls per hour can be made. How many remaining calls can be made and when this call limit resets, can inspected via three headers that are part of the responses of the API server.\n\n- **X-RateLimit-Limit:** Shows the maximum number of calls that may be executed per hour.\n- **X-RateLimit-Remaining:** How many calls may still be executed within the current hour.\n- **X-RateLimit-Reset:** Time when the remaining calls will be reset to the limit. For compatibility reasons with other rate limited APIs, this date is not the date in milliseconds, but instead in seconds since 1970-01-01T00:00:00+00:00.\n\n### Further Reading\nWe provide additional documentation for our REST API in our [product documentation](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-web-rest-api). Here you'll also find some common queries for retrieving data and configuring Instana.\n\n## Getting Started with the REST API\n\n### API base URL\nThe base URL for an specific instance of Instana can be determined using the tenant and unit information.\n- `base`: This is the base URL of a tenant unit, e.g. `https://test-example.instana.io`. This is the same URL that is used to access the Instana user interface.\n- `apiToken`: Requests against the Instana API require valid API tokens. An initial API token can be generated via the Instana user interface. Any additional API tokens can be generated via the API itself.\n\n### Curl Example\nHere is an Example to use the REST API with Curl. First lets get all the available metrics with possible aggregations with a GET call.\n\n```bash\ncurl --request GET \\\n  --url https://test-instana.instana.io/api/application-monitoring/catalog/metrics \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx'\n```\n\nNext we can get every call grouped by the endpoint name that has an error count greater then zero. As a metric we could get the mean error rate for example.\n\n```bash\ncurl --request POST \\\n  --url https://test-instana.instana.io/api/application-monitoring/analyze/call-groups \\\n  --header 'authorization: apiToken xxxxxxxxxxxxxxxx' \\\n  --header 'content-type: application/json' \\\n  --data '{\n  \"group\":{\n      \"groupbyTag\":\"endpoint.name\"\n  },\n  \"tagFilters\":[\n  \t{\n  \t\t\"name\":\"call.error.count\",\n  \t\t\"value\":\"0\",\n  \t\t\"operator\":\"GREATER_THAN\"\n  \t}\n  ],\n  \"metrics\":[\n  \t{\n  \t\t\"metric\":\"errors\",\n  \t\t\"aggregation\":\"MEAN\"\n  \t}\n  ]\n  }'\n```\n\n### Generating REST API clients\n\nThe API is specified using the [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification) (previously known as Swagger) format.\nYou can download the current specification at our [GitHub API documentation](https://instana.github.io/openapi/openapi.yaml).\n\nOpenAPI tries to solve the issue of ever-evolving APIs and clients lagging behind. Please make sure that you always use the latest version of the generator, as a number of improvements are regularly made.\nTo generate a client library for your language, you can use the [OpenAPI client generators](https://github.com/OpenAPITools/openapi-generator).\n\n#### Go\nFor example, to generate a client library for Go to interact with our backend, you can use the following script; mind replacing the values of the `UNIT_NAME` and `TENANT_NAME` environment variables using those for your tenant unit:\n\n```bash\n#!/bin/bash\n\n### This script assumes you have the `java` and `wget` commands on the path\n\nexport UNIT_NAME='myunit' # for example: prod\nexport TENANT_NAME='mytenant' # for example: awesomecompany\n\n//Download the generator to your current working directory:\nwget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar -O openapi-generator-cli.jar --server-variables \"tenant=${TENANT_NAME},unit=${UNIT_NAME}\"\n\n//generate a client library that you can vendor into your repository\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g go \\\n    -o pkg/instana/openapi \\\n    --skip-validate-spec\n\n//(optional) format the Go code according to the Go code standard\ngofmt -s -w pkg/instana/openapi\n```\n\nThe generated clients contain comprehensive READMEs, and you can start right away using the client from the example above:\n\n```go\nimport instana \"./pkg/instana/openapi\"\n\n// readTags will read all available application monitoring tags along with their type and category\nfunc readTags() {\n\tconfiguration := instana.NewConfiguration()\n\tconfiguration.Host = \"tenant-unit.instana.io\"\n\tconfiguration.BasePath = \"https://tenant-unit.instana.io\"\n\n\tclient := instana.NewAPIClient(configuration)\n\tauth := context.WithValue(context.Background(), instana.ContextAPIKey, instana.APIKey{\n\t\tKey:    apiKey,\n\t\tPrefix: \"apiToken\",\n\t})\n\n\ttags, _, err := client.ApplicationCatalogApi.GetApplicationTagCatalog(auth)\n\tif err != nil {\n\t\tfmt.Fatalf(\"Error calling the API, aborting.\")\n\t}\n\n\tfor _, tag := range tags {\n\t\tfmt.Printf(\"%s (%s): %s\\n\", tag.Category, tag.Type, tag.Name)\n\t}\n}\n```\n\n#### Java\nFollow the instructions provided in the official documentation from [OpenAPI Tools](https://github.com/OpenAPITools) to download the [openapi-generator-cli.jar](https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#13---download-jar).\n\nDepending on your environment, use one of the following java http client implementations which will create a valid client for our OpenAPI specification:\n```\n//Nativ Java HTTP Client\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8 --library native\n\n//Spring WebClient\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library webclient\n\n//Spring RestTemplate\njava -jar openapi-generator-cli.jar generate -i https://instana.github.io/openapi/openapi.yaml -g java -o pkg/instana/openapi --skip-validate-spec  -p dateLibrary=java8,hideGenerationTimestamp=true --library resttemplate\n\n```\n"
+  description: Searching for answers and best pratices?
 servers:
 - description: Instana Backend
   url: https://{unit}-{tenant}.instana.io
@@ -31,31 +31,7 @@ servers:
       description: Customer Self-Hosted domain
 tags:
 - name: Application Settings
-  description: 'The API endpoints of this group provides a way to create, read, update, delete (CRUD) for various configuration settings. It includes:
-
-
-    **Application Perspectives Configuration**
-
-
-    Set of APIs which perform CRUD operations for Application Perspectives.
-
-
-    **Endpoint Mapping Configuration**
-
-
-    Set of APIs which perform CRUD operations when user wants to customise the endpoint mapping rules.
-
-
-    **Service Mapping Configuration**
-
-
-    Set of APIs which perform CRUD operations when user wants to customise the service mapping rules.
-
-
-    **Manual Service Mapping Configuration**
-
-
-    Set of **experimental** APIS which perform CRUD operations when user wants to tweak the service mapping rules when automatic service mapping rules gives undesired results.'
+  description: The API endpoints of this group provides a way to create, read, update, delete (CRUD) for various configuration settings.
 paths:
   /api/application-monitoring/settings/application:
     get:
@@ -236,7 +212,19 @@ paths:
       tags:
       - Application Settings
       x-ibm-ahub-byok: true
-      description: "Use this API endpoint if one wants to create a new Application Perspective. This endpoint requires `canConfigureApplications` permission. \n\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureApplications` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Configuration of applications` to `true`.\n\n\n## Deprecated Parameters\n**matchSpecification:** A binary tree sturcture of match expression connected with binary operator AND or OR. It is replaced by **tagFilterExpression** which is also used in Application Analyze API endpoints."
+      description: 'Use this API endpoint if one wants to create a new Application Perspective. This endpoint requires `canConfigureApplications` permission.
+
+
+        One can use `Create or update an API token` endpoint to update the permission by setting `canConfigureApplications` to `true`.
+
+        If one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.
+
+        There one can update the existing token or create a new token and set `Configuration of applications` to `true`.
+
+
+        ## Deprecated Parameters
+
+        **matchSpecification:** A binary tree sturcture of match expression connected with binary operator AND or OR. It is replaced by **tagFilterExpression** which is also used in Application Analyze API endpoints.'
   /api/application-monitoring/settings/application/{id}:
     delete:
       description: 'Use this API endpoint if one wants to delete an Application Perspective. This endpoint requires `canConfigureApplications` permission.
@@ -1043,7 +1031,31 @@ paths:
       tags:
       - Application Settings
       x-ibm-ahub-byok: true
-      description: "Use this API Endpoint if one wants to retrieve a list of all manual service configurations. This endpoint requires `CanConfigureServiceMapping` permission. \n\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and endpoint mapping` to `true`.\n\n**This is an experimental endpoint to workaround service mapping issues.**\n\n### Use cases\n\nThe manual service configuration APIs enables mapping calls to services using tag filter expressions based on call tags.\n\nThere are two use cases on the usage of these APIs:\n\n1. Map to an Unmonitored Service with a Custom Name. For example, Map HTTP calls to different Google domains (`www.ibm.com`, `www.ibm.fr`) into a single service named `IBM` using the `call.http.host tag`.\n2. Link Calls to an Existing Monitored Service. For example, Link database calls (`jdbc:mysql://10.128.0.1:3306`) to an existing service like `MySQL@3306` on demo-host by referencing its service ID."
+      description: 'Use this API Endpoint if one wants to retrieve a list of all manual service configurations. This endpoint requires `CanConfigureServiceMapping` permission.
+
+
+        One can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.
+
+        If one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.
+
+        There one can update the existing token or create a new token and set `Customize service rules and endpoint mapping` to `true`.
+
+
+        **This is an experimental endpoint to workaround service mapping issues.**
+
+
+        ### Use cases
+
+
+        The manual service configuration APIs enables mapping calls to services using tag filter expressions based on call tags.
+
+
+        There are two use cases on the usage of these APIs:
+
+
+        1. Map to an Unmonitored Service with a Custom Name. For example, Map HTTP calls to different Google domains (`www.ibm.com`, `www.ibm.fr`) into a single service named `IBM` using the `call.http.host tag`.
+
+        2. Link Calls to an Existing Monitored Service. For example, Link database calls (`jdbc:mysql://10.128.0.1:3306`) to an existing service like `MySQL@3306` on demo-host by referencing its service ID.'
     post:
       operationId: addManualServiceConfig
       requestBody:
@@ -1097,7 +1109,40 @@ paths:
       tags:
       - Application Settings
       x-ibm-ahub-byok: true
-      description: "Use this API endpoint if one wants to add a manual service configuration. This endpoint requires `CanConfigureServiceMapping` permission. \n\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and endpoint mapping` to `true`.\n\n**This is an experimental endpoint to workaround service mapping issues.**\n\n### Use cases\n\nThe manual service configuration APIs enables mapping calls to services using tag filter expressions based on call tags.\n\nThere are two use cases on the usage of these APIs:\n\n1. Map to an Unmonitored Service with a Custom Name. For example, Map HTTP calls to different Google domains (`www.ibm.com`, `www.ibm.fr`) into a single service named `IBM` using the `call.http.host tag`.\n2. Link Calls to an Existing Monitored Service. For example, Link database calls (`jdbc:mysql://10.128.0.1:3306`) to an existing service like `MySQL@3306` on demo-host by referencing its service ID.\n\n### Important Note\n\n1. Use `tagfilterExpression` to match calls on which the manual service configuration will be applied. **Only call tags are allowed** in the tag filter expression.\n\n2.  Either `unmonitoredServiceName` or `existingServiceId` should be specified in a configuration."
+      description: 'Use this API endpoint if one wants to add a manual service configuration. This endpoint requires `CanConfigureServiceMapping` permission.
+
+
+        One can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.
+
+        If one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.
+
+        There one can update the existing token or create a new token and set `Customize service rules and endpoint mapping` to `true`.
+
+
+        **This is an experimental endpoint to workaround service mapping issues.**
+
+
+        ### Use cases
+
+
+        The manual service configuration APIs enables mapping calls to services using tag filter expressions based on call tags.
+
+
+        There are two use cases on the usage of these APIs:
+
+
+        1. Map to an Unmonitored Service with a Custom Name. For example, Map HTTP calls to different Google domains (`www.ibm.com`, `www.ibm.fr`) into a single service named `IBM` using the `call.http.host tag`.
+
+        2. Link Calls to an Existing Monitored Service. For example, Link database calls (`jdbc:mysql://10.128.0.1:3306`) to an existing service like `MySQL@3306` on demo-host by referencing its service ID.
+
+
+        ### Important Note
+
+
+        1. Use `tagfilterExpression` to match calls on which the manual service configuration will be applied. **Only call tags are allowed** in the tag filter expression.
+
+
+        2. Either `unmonitoredServiceName` or `existingServiceId` should be specified in a configuration.'
     put:
       operationId: replaceAllManualServiceConfigs
       requestBody:
@@ -1155,7 +1200,40 @@ paths:
       tags:
       - Application Settings
       x-ibm-ahub-byok: true
-      description: "Use this API endpoint if one wants to update more than 1 manual service configurations. This endpoint requires `CanConfigureServiceMapping` permission. \n\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and endpoint mapping` to `true`.\n\n**This is an experimental endpoint to workaround service mapping issues.**\n\n### Use cases\n\nThe manual service configuration APIs enables mapping calls to services using tag filter expressions based on call tags.\n\nThere are two use cases on the usage of these APIs:\n\n1. Map to an Unmonitored Service with a Custom Name. For example, Map HTTP calls to different Google domains (`www.ibm.com`, `www.ibm.fr`) into a single service named `IBM` using the `call.http.host tag`.\n2. Link Calls to an Existing Monitored Service. For example, Link database calls (`jdbc:mysql://10.128.0.1:3306`) to an existing service like `MySQL@3306` on demo-host by referencing its service ID.\n\n### Important Note\n\n1. Use `tagfilterExpression` to match calls on which the manual service configuration will be applied. **Only call tags are allowed** in the tag filter expression.\n\n2.  Either `unmonitoredServiceName` or `existingServiceId` should be specified in a configuration."
+      description: 'Use this API endpoint if one wants to update more than 1 manual service configurations. This endpoint requires `CanConfigureServiceMapping` permission.
+
+
+        One can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.
+
+        If one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.
+
+        There one can update the existing token or create a new token and set `Customize service rules and endpoint mapping` to `true`.
+
+
+        **This is an experimental endpoint to workaround service mapping issues.**
+
+
+        ### Use cases
+
+
+        The manual service configuration APIs enables mapping calls to services using tag filter expressions based on call tags.
+
+
+        There are two use cases on the usage of these APIs:
+
+
+        1. Map to an Unmonitored Service with a Custom Name. For example, Map HTTP calls to different Google domains (`www.ibm.com`, `www.ibm.fr`) into a single service named `IBM` using the `call.http.host tag`.
+
+        2. Link Calls to an Existing Monitored Service. For example, Link database calls (`jdbc:mysql://10.128.0.1:3306`) to an existing service like `MySQL@3306` on demo-host by referencing its service ID.
+
+
+        ### Important Note
+
+
+        1. Use `tagfilterExpression` to match calls on which the manual service configuration will be applied. **Only call tags are allowed** in the tag filter expression.
+
+
+        2. Either `unmonitoredServiceName` or `existingServiceId` should be specified in a configuration.'
   /api/application-monitoring/settings/manual-service/{id}:
     delete:
       operationId: deleteManualServiceConfig
@@ -1178,7 +1256,31 @@ paths:
       tags:
       - Application Settings
       x-ibm-ahub-byok: true
-      description: "Use this API endpoint if one wants to delete a manual service configuration. This endpoint requires `CanConfigureServiceMapping` permission. \n\nOne can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.\nIf one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.\nThere one can update the existing token or create a new token and set `Customize service rules and endpoint mapping` to `true`.\n\n**This is an experimental endpoint to workaround service mapping issues.**\n\n### Use cases\n\nThe manual service configuration APIs enables mapping calls to services using tag filter expressions based on call tags.\n\nThere are two use cases on the usage of these APIs:\n\n1. Map to an Unmonitored Service with a Custom Name. For example, Map HTTP calls to different Google domains (`www.ibm.com`, `www.ibm.fr`) into a single service named `IBM` using the `call.http.host tag`.\n2. Link Calls to an Existing Monitored Service. For example, Link database calls (`jdbc:mysql://10.128.0.1:3306`) to an existing service like `MySQL@3306` on demo-host by referencing its service ID."
+      description: 'Use this API endpoint if one wants to delete a manual service configuration. This endpoint requires `CanConfigureServiceMapping` permission.
+
+
+        One can use `Create or update an API token` endpoint to update the permission by setting `canConfigureServiceMapping` to `true`.
+
+        If one wants to enable the permission from Instana UI, go to Settings -> Security & Access -> Access Control -> API Token.
+
+        There one can update the existing token or create a new token and set `Customize service rules and endpoint mapping` to `true`.
+
+
+        **This is an experimental endpoint to workaround service mapping issues.**
+
+
+        ### Use cases
+
+
+        The manual service configuration APIs enables mapping calls to services using tag filter expressions based on call tags.
+
+
+        There are two use cases on the usage of these APIs:
+
+
+        1. Map to an Unmonitored Service with a Custom Name. For example, Map HTTP calls to different Google domains (`www.ibm.com`, `www.ibm.fr`) into a single service named `IBM` using the `call.http.host tag`.
+
+        2. Link Calls to an Existing Monitored Service. For example, Link database calls (`jdbc:mysql://10.128.0.1:3306`) to an existing service like `MySQL@3306` on demo-host by referencing its service ID.'
     put:
       operationId: updateManualServiceConfig
       parameters:
@@ -1266,7 +1368,7 @@ paths:
         1. Use `tagfilterExpression` to match calls on which the manual service configuration will be applied. **Only call tags are allowed** in the tag filter expression.
 
 
-        2.  Either `unmonitoredServiceName` or `existingServiceId` should be specified in a configuration.'
+        2. Either `unmonitoredServiceName` or `existingServiceId` should be specified in a configuration.'
   /api/application-monitoring/settings/service:
     get:
       description: 'Use this API endpoint if one wants to retrive a list of all service configurations.
@@ -1621,172 +1723,49 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    NewApplicationConfig:
+    ServiceConfig:
       type: object
       properties:
-        accessRules:
-          type: array
-          description: 'Defines permissions and access relationships.
-
-            '
-          items:
-            $ref: '#/components/schemas/AccessRule'
-          maxItems: 64
-          minItems: 1
-        boundaryScope:
+        comment:
           type: string
-          description: '**INBOUND**: Inbound calls are calls initiated from outside the application and where the destination service is part of the selected application perspective.
+          description: 'A small description of the service configuration would be present in this field if it was provided during creation of the custom service rule.
 
-
-            **ALL**: Results and metrics for not only calls at the application perspective boundary, but also those occurring within the application perspective.
-
-
-            **DEFAULT**: Default value, for Application Perspectives created before the introduction of `ALL` and `INBOUND`.
-
-            At present, whenever new Application Perspectives are created, there are only 2 options to select: `ALL` or `INBOUND`.
-
-            It is recommended to use either `ALL` or `INBOUND` as `DEFAULT` is deprecated. `DEFAULT` is treated as `INBOUND`.
+            If it was not provided, this field will remain empty. It is considered as best practice to add a comment to document the reasoning behind creating the rule.
 
             '
-          enum:
-          - ALL
-          - INBOUND
-          - DEFAULT
-        label:
-          type: string
-          description: 'Name of the Application Perspective. Eg: `app1`.'
-          maxLength: 128
-          minLength: 1
-        matchSpecification:
-          $ref: '#/components/schemas/MatchExpressionDTO'
-        scope:
-          type: string
-          description: '**INCLUDE_NO_DOWNSTREAM** : Only the selected services from the filters are included (call this the core set).
-
-            This is useful when you treat the services as opaque.
-
-            An example would be the services that represent 3rd party APIs.
-
-
-            **INCLUDE_IMMEDIATE_DOWNSTREAM_DATABASE_AND_MESSAGING** : Include the core set of services from the filters and then expand this core set to include the database and messaging services that the core set directly interacts with.
-
-            This is useful if you are want to monitor a set of services and their direct dependencies.
-
-            For example, a development team responsible for several micro-services.
-
-
-            **INCLUDE_ALL_DOWNSTREAM** : It effortlessly and automatically includes all the services that form the entire end-to-end dependency chain of the core set of services.
-
-            This is useful if the AP will be used for troubleshooting.
-
-            '
-          enum:
-          - INCLUDE_NO_DOWNSTREAM
-          - INCLUDE_IMMEDIATE_DOWNSTREAM_DATABASE_AND_MESSAGING
-          - INCLUDE_ALL_DOWNSTREAM
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-      required:
-      - accessRules
-      - boundaryScope
-      - label
-      - scope
-    HttpEndpointConfig:
-      type: object
-      properties:
-        endpointNameByCollectedPathTemplateRuleEnabled:
-          type: boolean
-          description: 'The highest default precedence of endpoint rule is creating endpoint is based on path template. For example,
-
-            ```
-
-            /hospital/1948/patient/291148
-
-            /hospital/728/patient/924892
-
-            /hospital/47/patient/25978
-
-            /hospital/108429/patient/1847
-
-            ```
-
-            can be considered as `/hospital/{hid}/patient/{pid}` if this rule is enabled. For most of the use cases, this rule should be enabled.
-
-            '
-        endpointNameByFirstPathSegmentRuleEnabled:
-          type: boolean
-          description: 'There are endpoint extraction rules in Instana which take the first path segment from the HTTP request and turn this into an endpoint name.
-
-            For example, given the following URLs `/users/123/profile` and `/users/123/settings`, the extraction rule will only take the first segment. As a result endpoint name will be `users`.
-
-            Although this is useful in cases where broad overview of monitoring is required, lot of use cases are more specified.
-
-            Considering the above example, if this rule is enabled, Instana can''t distinguish between `profile` or `settings` as endpoints.
-
-            For use cases where endpoints has to be monitored at fine granular level, this flag should be set to `false`.
-
-            '
-        rules:
-          type: array
-          description: Specify custom rule configuration apart from Instana predefined rules. This rule has the highest precedence. This is only available for HTTP endpoints.
-          items:
-            $ref: '#/components/schemas/HttpEndpointRule'
-          maxItems: 500
-          minItems: 0
-        serviceId:
-          type: string
-          description: 'An Instana generated unique identifier for a Service. If specified, the list of results will be filtered for the specified Service ID. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
-
-            One can see the service id from Instana UI by going to a Service page. In the URL, there will be `serviceId=3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
-
-            Alternatively, one can use `Get services` API endpoint to get the service id in `id` parameter.
-
-            '
-      required:
-      - rules
-      - serviceId
-    NewManualServiceConfig:
-      type: object
-      properties:
-        description:
-          type: string
-          description: A description of the manual service configuration.
+          maxLength: 2048
+          minLength: 0
         enabled:
           type: boolean
-          description: Enable or disable the manual service configuration. By default it is enabled.
-        existingServiceId:
+          description: If enabled, calls will be mapped to the rule.
+        id:
           type: string
-          description: The service ID of the existing monitored service to which the calls should be linked.
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        unmonitoredServiceName:
+          description: 'A unique string for the service configuration. Eg: `G510hmXYSDysLZ5kuj0BaQ`'
+        label:
           type: string
-          description: A service name if you want to map calls to an unmonitored service.
-      required:
-      - tagFilterExpression
-    ServiceMatchingRule:
-      type: object
-      description: Calls will be matched with the array of key-value tags present in this field.
-      properties:
-        key:
-          type: string
-          description: 'In Instana UI, this is shown as `Tag`.
+          description: 'It contains the tags defined in `matchSpecification` concatenated with a dash.
 
-            One can select a variety of pre-defined tags. Eg: `host.fqdn`, `container.label` etc.
+            Eg: if the `matchSpecification` contains keys `kubernetes.namespace.name` and `docker.label`, `label` would be `kubernetes.namespace.name-docker.label`.
 
             '
-        value:
+        matchSpecification:
+          type: array
+          description: Calls will be matched with the array of key-value tags present in this field.
+          items:
+            $ref: '#/components/schemas/ServiceMatchingRule'
+          maxItems: 20
+          minItems: 0
+        name:
           type: string
-          description: 'In Instana UI, this is known as ''key`.
-
-            Eg: if one labels Docker containers such as com.acme.service-name:myservice, to map services from this label,
-
-            the `key` aka `tag` would be `docker.label` and `value` aka `key` would be `com.acme.service-name`.
-
-            '
+          description: 'The name of the service configuration. Eg: `Rule ABC`'
+          maxLength: 128
+          minLength: 1
       required:
-      - key
-      - value
+      - enabled
+      - id
+      - label
+      - matchSpecification
+      - name
     ApplicationConfig:
       type: object
       properties:
@@ -1863,6 +1842,76 @@ components:
       - id
       - label
       - scope
+    NewApplicationConfig:
+      type: object
+      properties:
+        accessRules:
+          type: array
+          description: 'Defines permissions and access relationships.
+
+            '
+          items:
+            $ref: '#/components/schemas/AccessRule'
+          maxItems: 64
+          minItems: 1
+        boundaryScope:
+          type: string
+          description: '**INBOUND**: Inbound calls are calls initiated from outside the application and where the destination service is part of the selected application perspective.
+
+
+            **ALL**: Results and metrics for not only calls at the application perspective boundary, but also those occurring within the application perspective.
+
+
+            **DEFAULT**: Default value, for Application Perspectives created before the introduction of `ALL` and `INBOUND`.
+
+            At present, whenever new Application Perspectives are created, there are only 2 options to select: `ALL` or `INBOUND`.
+
+            It is recommended to use either `ALL` or `INBOUND` as `DEFAULT` is deprecated. `DEFAULT` is treated as `INBOUND`.
+
+            '
+          enum:
+          - ALL
+          - INBOUND
+          - DEFAULT
+        label:
+          type: string
+          description: 'Name of the Application Perspective. Eg: `app1`.'
+          maxLength: 128
+          minLength: 1
+        matchSpecification:
+          $ref: '#/components/schemas/MatchExpressionDTO'
+        scope:
+          type: string
+          description: '**INCLUDE_NO_DOWNSTREAM** : Only the selected services from the filters are included (call this the core set).
+
+            This is useful when you treat the services as opaque.
+
+            An example would be the services that represent 3rd party APIs.
+
+
+            **INCLUDE_IMMEDIATE_DOWNSTREAM_DATABASE_AND_MESSAGING** : Include the core set of services from the filters and then expand this core set to include the database and messaging services that the core set directly interacts with.
+
+            This is useful if you are want to monitor a set of services and their direct dependencies.
+
+            For example, a development team responsible for several micro-services.
+
+
+            **INCLUDE_ALL_DOWNSTREAM** : It effortlessly and automatically includes all the services that form the entire end-to-end dependency chain of the core set of services.
+
+            This is useful if the AP will be used for troubleshooting.
+
+            '
+          enum:
+          - INCLUDE_NO_DOWNSTREAM
+          - INCLUDE_IMMEDIATE_DOWNSTREAM_DATABASE_AND_MESSAGING
+          - INCLUDE_ALL_DOWNSTREAM
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+      required:
+      - accessRules
+      - boundaryScope
+      - label
+      - scope
     HttpEndpointRule:
       type: object
       description: Specify custom rule configuration apart from Instana predefined rules. This rule has the highest precedence. This is only available for HTTP endpoints.
@@ -1895,62 +1944,6 @@ components:
           minItems: 0
       required:
       - pathSegments
-    MatchExpressionDTO:
-      type: object
-      description: ' Specify the expression to match, For example, `endpoint.name contains health`.'
-      discriminator:
-        mapping:
-          BINARY_OP: '#/components/schemas/BinaryOperatorDTO'
-          LEAF: '#/components/schemas/TagMatcherDTO'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    ServiceConfig:
-      type: object
-      properties:
-        comment:
-          type: string
-          description: 'A small description of the service configuration would be present in this field if it was provided during creation of the custom service rule.
-
-            If it was not provided, this field will remain empty. It is considered as best practice to add a comment to document the reasoning behind creating the rule.
-
-            '
-          maxLength: 2048
-          minLength: 0
-        enabled:
-          type: boolean
-          description: If enabled, calls will be mapped to the rule.
-        id:
-          type: string
-          description: 'A unique string for the service configuration. Eg: `G510hmXYSDysLZ5kuj0BaQ`'
-        label:
-          type: string
-          description: 'It contains the tags defined in `matchSpecification` concatenated with a dash.
-
-            Eg: if the `matchSpecification` contains keys `kubernetes.namespace.name` and `docker.label`, `label` would be `kubernetes.namespace.name-docker.label`.
-
-            '
-        matchSpecification:
-          type: array
-          description: Calls will be matched with the array of key-value tags present in this field.
-          items:
-            $ref: '#/components/schemas/ServiceMatchingRule'
-          maxItems: 20
-          minItems: 0
-        name:
-          type: string
-          description: 'The name of the service configuration. Eg: `Rule ABC`'
-          maxLength: 128
-          minLength: 1
-      required:
-      - enabled
-      - id
-      - label
-      - matchSpecification
-      - name
     HttpPathSegmentMatchingRule:
       type: object
       description: "A list of path segment matching rules, each defining how a segment of the HTTP path should be matched.\nEach object in this array represents a segment rule, allowing for fixed segments, dynamic parameters, wildcards, or unsupported segments. \n\n**UNSUPPORTED**: A path segment that is not recognized by the system. \n\n**FIXED**: This type represents a static, unchanging part of the URL path.\nFor example, `/api/{version}/users`, `api` and `users` would be `FIXED` segment. \n\n**PARAMETER**: This type represents a variable part of the URL path, often used to capture specific parameters or IDs that change with each request.\nFor example, `/api/{version}/users`, `version` would be `PARAMETER` segment. `version` can be `v1`, `v2`, `v3` etc. \n\n**MATCH_ALL**: This type represents a wildcard, capturing all remaining segments from this point onward in the URL path.\nFor example, `/api/{version}/users/*` — Matches all paths like `/api/v1/users/123`. `/api/v3/users/456` etc. \n\n"
@@ -1971,70 +1964,6 @@ components:
           - MATCH_ALL
       required:
       - type
-    ManualServiceConfig:
-      type: object
-      properties:
-        description:
-          type: string
-          description: A description of the manual service configuration.
-        enabled:
-          type: boolean
-          description: Enable or disable the manual service configuration. By default it is enabled.
-        existingServiceId:
-          type: string
-          description: The service ID of the existing monitored service to which the calls should be linked.
-        id:
-          type: string
-          description: A unique id of the manual service configuration.
-          maxLength: 128
-          minLength: 1
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        unmonitoredServiceName:
-          type: string
-          description: A service name if you want to map calls to an unmonitored service.
-      required:
-      - id
-      - tagFilterExpression
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    AccessRule:
-      type: object
-      properties:
-        accessType:
-          type: string
-          description: "Specifies the type of access permitted. \n\n`READ`: Only viewing Application Perspective is allowed. \n\n`READ_WRITE`: Both viewing and modifying Application Perspective are permitted. \n\n"
-          enum:
-          - READ
-          - READ_WRITE
-        relatedId:
-          type: string
-          description: "An identifier that connects the access rule to a specific entity.\nFor example, if the `relationType` is `USER`, the corresponding `relatedId` would be a user id. \n\n**Note**: when `relationType` is `GLOBAL`, `relatedId` is `null`.\n"
-          maxLength: 64
-          minLength: 0
-        relationType:
-          type: string
-          description: "Defines the type of relationship or subject to which the access rule applies. \n\n`USER`: Access is granted to an individual user. \n\n`API_TOKEN`: Access is granted to a specific API token. \n\n`ROLE`: Access is granted based on a user role, applying to any user with that role. \n\n`TEAM`: Access is granted to a team, likely applying to all team members. \n\n`GLOBAL`: Access is granted to every user or service.\n"
-          enum:
-          - USER
-          - API_TOKEN
-          - ROLE
-          - TEAM
-          - GLOBAL
-      required:
-      - accessType
-      - relationType
     EndpointConfig:
       type: object
       properties:
@@ -2096,6 +2025,179 @@ components:
       required:
       - endpointCase
       - serviceId
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    HttpEndpointConfig:
+      type: object
+      properties:
+        endpointNameByCollectedPathTemplateRuleEnabled:
+          type: boolean
+          description: 'The highest default precedence of endpoint rule is creating endpoint is based on path template. For example,
+
+            ```
+
+            /hospital/1948/patient/291148
+
+            /hospital/728/patient/924892
+
+            /hospital/47/patient/25978
+
+            /hospital/108429/patient/1847
+
+            ```
+
+            can be considered as `/hospital/{hid}/patient/{pid}` if this rule is enabled. For most of the use cases, this rule should be enabled.
+
+            '
+        endpointNameByFirstPathSegmentRuleEnabled:
+          type: boolean
+          description: 'There are endpoint extraction rules in Instana which take the first path segment from the HTTP request and turn this into an endpoint name.
+
+            For example, given the following URLs `/users/123/profile` and `/users/123/settings`, the extraction rule will only take the first segment. As a result endpoint name will be `users`.
+
+            Although this is useful in cases where broad overview of monitoring is required, lot of use cases are more specified.
+
+            Considering the above example, if this rule is enabled, Instana can''t distinguish between `profile` or `settings` as endpoints.
+
+            For use cases where endpoints has to be monitored at fine granular level, this flag should be set to `false`.
+
+            '
+        rules:
+          type: array
+          description: Specify custom rule configuration apart from Instana predefined rules. This rule has the highest precedence. This is only available for HTTP endpoints.
+          items:
+            $ref: '#/components/schemas/HttpEndpointRule'
+          maxItems: 500
+          minItems: 0
+        serviceId:
+          type: string
+          description: 'An Instana generated unique identifier for a Service. If specified, the list of results will be filtered for the specified Service ID. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
+
+            One can see the service id from Instana UI by going to a Service page. In the URL, there will be `serviceId=3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
+
+            Alternatively, one can use `Get services` API endpoint to get the service id in `id` parameter.
+
+            '
+      required:
+      - rules
+      - serviceId
+    ManualServiceConfig:
+      type: object
+      properties:
+        description:
+          type: string
+          description: A description of the manual service configuration.
+        enabled:
+          type: boolean
+          description: Enable or disable the manual service configuration. By default it is enabled.
+        existingServiceId:
+          type: string
+          description: The service ID of the existing monitored service to which the calls should be linked.
+        id:
+          type: string
+          description: A unique id of the manual service configuration.
+          maxLength: 128
+          minLength: 1
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        unmonitoredServiceName:
+          type: string
+          description: A service name if you want to map calls to an unmonitored service.
+      required:
+      - id
+      - tagFilterExpression
+    ServiceMatchingRule:
+      type: object
+      description: Calls will be matched with the array of key-value tags present in this field.
+      properties:
+        key:
+          type: string
+          description: 'In Instana UI, this is shown as `Tag`.
+
+            One can select a variety of pre-defined tags. Eg: `host.fqdn`, `container.label` etc.
+
+            '
+        value:
+          type: string
+          description: 'In Instana UI, this is known as ''key`.
+
+            Eg: if one labels Docker containers such as com.acme.service-name:myservice, to map services from this label,
+
+            the `key` aka `tag` would be `docker.label` and `value` aka `key` would be `com.acme.service-name`.
+
+            '
+      required:
+      - key
+      - value
+    NewManualServiceConfig:
+      type: object
+      properties:
+        description:
+          type: string
+          description: A description of the manual service configuration.
+        enabled:
+          type: boolean
+          description: Enable or disable the manual service configuration. By default it is enabled.
+        existingServiceId:
+          type: string
+          description: The service ID of the existing monitored service to which the calls should be linked.
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        unmonitoredServiceName:
+          type: string
+          description: A service name if you want to map calls to an unmonitored service.
+      required:
+      - tagFilterExpression
+    MatchExpressionDTO:
+      type: object
+      description: ' Specify the expression to match, For example, `endpoint.name contains health`.'
+      discriminator:
+        mapping:
+          BINARY_OP: '#/components/schemas/BinaryOperatorDTO'
+          LEAF: '#/components/schemas/TagMatcherDTO'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    AccessRule:
+      type: object
+      properties:
+        accessType:
+          type: string
+          description: "Specifies the type of access permitted. \n\n`READ`: Only viewing Application Perspective is allowed. \n\n`READ_WRITE`: Both viewing and modifying Application Perspective are permitted. \n\n"
+          enum:
+          - READ
+          - READ_WRITE
+        relatedId:
+          type: string
+          description: "An identifier that connects the access rule to a specific entity.\nFor example, if the `relationType` is `USER`, the corresponding `relatedId` would be a user id. \n\n**Note**: when `relationType` is `GLOBAL`, `relatedId` is `null`.\n"
+          maxLength: 64
+          minLength: 0
+        relationType:
+          type: string
+          description: "Defines the type of relationship or subject to which the access rule applies. \n\n`USER`: Access is granted to an individual user. \n\n`API_TOKEN`: Access is granted to a specific API token. \n\n`ROLE`: Access is granted based on a user role, applying to any user with that role. \n\n`TEAM`: Access is granted to a team, likely applying to all team members. \n\n`GLOBAL`: Access is granted to every user or service.\n"
+          enum:
+          - USER
+          - API_TOKEN
+          - ROLE
+          - TEAM
+          - GLOBAL
+      required:
+      - accessType
+      - relationType
   securitySchemes:
     ApiKeyAuth:
       in: header

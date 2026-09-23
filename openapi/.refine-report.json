@@ -1,7 +1,7 @@
 {
   "provider": "instana",
   "sources": [
-    "instana-openapi.yml"
+    "_original/instana-openapi.yml"
   ],
   "outputs": [
     "instana-ai-management-api-openapi.yml",
@@ -67,12 +67,12 @@
     "instana-website-configuration-api-openapi.yml",
     "instana-website-metrics-api-openapi.yml"
   ],
-  "archived": [
-    "archived openapi/instana-openapi.yml"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "instana-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
     "instana-openapi.yml: declared missing tag: Apdex Report",
     "instana-openapi.yml: declared missing tag: Apdex Settings",
     "instana-openapi.yml: declared missing tag: Business Monitoring",
@@ -82,7 +82,71 @@
     "instana-openapi.yml: declared missing tag: SLO Correction Windows",
     "instana-openapi.yml: declared missing tag: Service Levels Alert Configuration",
     "instana-openapi.yml: declared missing tag: Service Levels Objective(SLO) Configurations",
-    "instana-openapi.yml: declared missing tag: Service Levels Objective(SLO) Report"
+    "instana-openapi.yml: declared missing tag: Service Levels Objective(SLO) Report",
+    "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "instana-action-catalog-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-action-history-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-ai-management-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-apdex-report-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-apdex-settings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-api-token-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-application-alert-configuration-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-application-analyze-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-application-catalog-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-application-metrics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-application-resources-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-application-settings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-application-topology-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-audit-log-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-business-monitoring-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-custom-dashboards-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-custom-entities-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-end-user-monitoring-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-event-settings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-events-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-global-application-alert-configuration-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-groups-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-host-agent-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-infrastructure-alert-configuration-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-infrastructure-analyze-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-infrastructure-catalog-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-infrastructure-metrics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-infrastructure-resources-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-infrastructure-topology-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-log-alert-configuration-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-logging-analyze-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-maintenance-configuration-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-mobile-app-analyze-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-mobile-app-catalog-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-mobile-app-configuration-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-mobile-app-metrics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-policies-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-releases-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-roles-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-service-levels-alert-configuration-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-service-levels-objective-slo-configurations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-service-levels-objective-slo-report-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-session-settings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-sli-report-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-sli-settings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-slo-correction-configurations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-slo-correction-windows-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-synthetic-alert-configuration-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-synthetic-calls-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-synthetic-catalog-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-synthetic-metrics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-synthetic-settings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-synthetic-test-playback-results-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-teams-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-usage-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-user-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-website-analyze-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-website-catalog-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-website-configuration-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instana-website-metrics-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
