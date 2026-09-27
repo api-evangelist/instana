@@ -300,6 +300,13 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
+    SnapshotResult:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SnapshotItem'
     SnapshotItem:
       type: object
       description: Detail information for requested snapshots.
@@ -335,13 +342,6 @@ components:
           type: integer
           format: int64
           description: End of timeframe expressed as the Unix epoch time in milliseconds
-    SnapshotResult:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/SnapshotItem'
     AgentConfigurationUpdate:
       type: object
       properties:

@@ -402,55 +402,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    SoftwareVersion:
-      type: object
-      properties:
-        discoveryType:
-          type: string
-          enum:
-          - NATIVE_SENSOR
-          - REMOTE_SENSOR
-          - PACKAGE_MANAGER
-          - OTHER
-        metadata:
-          type: object
-          additionalProperties:
-            type: string
-        name:
-          type: string
-        plugin:
-          type: string
-        softwareType:
-          type: string
-          enum:
-          - DEPENDENCY
-          - RUNTIME
-          - DATABASE
-          - MESSAGING
-          - PLATFORM
-          - PACKAGE
-          - OS
-          - CACHE
-          - API_GATEWAY
-          - OTHER
-          - APPLICATION_FRAMEWORK
-        usedBy:
-          type: array
-          items:
-            $ref: '#/components/schemas/SoftwareUser'
-          uniqueItems: true
-        vendor:
-          type: string
-        version:
-          type: string
-      required:
-      - discoveryType
-      - name
-      - plugin
-      - softwareType
-      - usedBy
-      - vendor
-      - version
     MonitoringState:
       type: object
       properties:
@@ -484,43 +435,6 @@ components:
         serverlessCount:
           type: integer
           format: int32
-    GetSnapshotsQuery:
-      type: object
-      properties:
-        snapshotIds:
-          type: array
-          description: List of one or more snapshot ids.
-          items:
-            type: string
-            description: List of one or more snapshot ids.
-          maxItems: 1000
-          minItems: 0
-          uniqueItems: true
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-      required:
-      - snapshotIds
-    TimeFrame:
-      type: object
-      description: Time range for which the data should be retrieved.
-      properties:
-        to:
-          type: integer
-          format: int64
-          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
-        windowSize:
-          type: integer
-          format: int64
-          description: windowSize in milliseconds
-          maximum: 2678400000
-          minimum: 0
-    SnapshotResult:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/SnapshotItem'
     PostSnapshotsResult:
       type: object
       properties:
@@ -570,6 +484,55 @@ components:
           type: integer
           format: int64
           description: End of timeframe expressed as the Unix epoch time in milliseconds
+    SoftwareVersion:
+      type: object
+      properties:
+        discoveryType:
+          type: string
+          enum:
+          - NATIVE_SENSOR
+          - REMOTE_SENSOR
+          - PACKAGE_MANAGER
+          - OTHER
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        name:
+          type: string
+        plugin:
+          type: string
+        softwareType:
+          type: string
+          enum:
+          - DEPENDENCY
+          - RUNTIME
+          - DATABASE
+          - MESSAGING
+          - PLATFORM
+          - PACKAGE
+          - OS
+          - CACHE
+          - API_GATEWAY
+          - OTHER
+          - APPLICATION_FRAMEWORK
+        usedBy:
+          type: array
+          items:
+            $ref: '#/components/schemas/SoftwareUser'
+          uniqueItems: true
+        vendor:
+          type: string
+        version:
+          type: string
+      required:
+      - discoveryType
+      - name
+      - plugin
+      - softwareType
+      - usedBy
+      - vendor
+      - version
     SoftwareUser:
       type: object
       properties:
@@ -581,6 +544,43 @@ components:
           type: string
         snapshotId:
           type: string
+    TimeFrame:
+      type: object
+      description: Time range for which the data should be retrieved.
+      properties:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          maximum: 2678400000
+          minimum: 0
+    SnapshotResult:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SnapshotItem'
+    GetSnapshotsQuery:
+      type: object
+      properties:
+        snapshotIds:
+          type: array
+          description: List of one or more snapshot ids.
+          items:
+            type: string
+            description: List of one or more snapshot ids.
+          maxItems: 1000
+          minItems: 0
+          uniqueItems: true
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+      required:
+      - snapshotIds
   securitySchemes:
     ApiKeyAuth:
       in: header

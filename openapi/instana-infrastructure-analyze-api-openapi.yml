@@ -220,60 +220,17 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    ArithmeticConfiguration:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/InfraMetricConfiguration'
-      - type: object
-        properties:
-          operation:
-            $ref: '#/components/schemas/ArithmeticOperation'
-    InfrastructureEntitiesResult:
+    CursorPaginationInfraExploreCursor:
       type: object
       properties:
-        adjustedTimeframe:
-          $ref: '#/components/schemas/AdjustedTimeframe'
-        canLoadMore:
-          type: boolean
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/InfrastructureItem'
-        next:
+        cursor:
           $ref: '#/components/schemas/InfraExploreCursor'
-        totalHits:
+        retrievalSize:
           type: integer
-          format: int64
-          description: represents the total number of results
-          minimum: 0
+          format: int32
+          description: number of values to return
       required:
-      - items
-    GetAvailableMetricsQuery:
-      type: object
-      properties:
-        query:
-          type: string
-          description: Search term used to filter results using fields such as label, description, tag name or keywords
-          maxLength: 200
-          minLength: 0
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-        type:
-          type: string
-          description: Entity type. Identifier for the monitored technology.
-      required:
-      - tagFilterExpression
-      - timeFrame
-    AvailablePlugins:
-      type: object
-      properties:
-        plugins:
-          type: array
-          items:
-            type: string
-          uniqueItems: true
+      - retrievalSize
     MetricMetadata:
       type: object
       properties:
@@ -422,6 +379,24 @@ components:
       - infraTagCategory
       - label
       - ownerType
+    GetAvailableMetricsQuery:
+      type: object
+      properties:
+        query:
+          type: string
+          description: Search term used to filter results using fields such as label, description, tag name or keywords
+          maxLength: 200
+          minLength: 0
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+        type:
+          type: string
+          description: Entity type. Identifier for the monitored technology.
+      required:
+      - tagFilterExpression
+      - timeFrame
     AdjustedTimeframe:
       type: object
       description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
@@ -443,243 +418,14 @@ components:
           minimum: 0
       required:
       - to
-    InfraExploreCursor:
-      type: object
-      description: cursor to use between successive queries
-    ArithmeticOperand:
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/SingleValue'
-      - $ref: '#/components/schemas/MetricQuery'
-      - $ref: '#/components/schemas/NestedOperation'
-    CursorPaginationInfraExploreCursor:
-      type: object
-      properties:
-        cursor:
-          $ref: '#/components/schemas/InfraExploreCursor'
-        retrievalSize:
-          type: integer
-          format: int32
-          description: number of values to return
-      required:
-      - retrievalSize
-    Order:
-      type: object
-      description: 'Specifies the ordering of the results.
-
-        It contains fields that define the sorting criteria, the collation for sorting, and the direction in which the results should be ordered.
-
-        '
-      properties:
-        by:
-          type: string
-          description: If the granularity is set to `1` you can use the metric name eg. `latency.p95` to order by that value.
-        collation:
-          type: string
-          description: Language code used for sorting. Ignored for infrastructure queries.
-        direction:
-          type: string
-          description: The order in which results will be sorted, either `ASC` for ascending or `DESC` for descending.
-          enum:
-          - ASC
-          - DESC
-      required:
-      - by
-      - direction
-    TimeFrame:
-      type: object
-      description: Time range for which the data should be retrieved.
-      properties:
-        to:
-          type: integer
-          format: int64
-          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
-        windowSize:
-          type: integer
-          format: int64
-          description: windowSize in milliseconds
-          maximum: 2678400000
-          minimum: 0
-    MetricQuery:
+    ArithmeticConfiguration:
       type: object
       allOf:
-      - $ref: '#/components/schemas/ArithmeticOperand'
+      - $ref: '#/components/schemas/InfraMetricConfiguration'
       - type: object
         properties:
-          aggregation:
-            type: string
-            enum:
-            - SUM
-            - MEAN
-            - MAX
-            - MIN
-            - P25
-            - P50
-            - P75
-            - P90
-            - P95
-            - P98
-            - P99
-            - P99_9
-            - P99_99
-            - DISTINCT_COUNT
-            - SUM_POSITIVE
-            - PER_SECOND
-            - INCREASE
-            writeOnly: true
-          crossSeriesAggregation:
-            type: string
-            enum:
-            - SUM
-            - MEAN
-            - MAX
-            - MIN
-            - P25
-            - P50
-            - P75
-            - P90
-            - P95
-            - P98
-            - P99
-            - P99_9
-            - P99_99
-            - DISTINCT_COUNT
-            - SUM_POSITIVE
-            - PER_SECOND
-            - INCREASE
-            writeOnly: true
-          granularity:
-            type: integer
-            format: int64
-            writeOnly: true
-          metric:
-            type: string
-            writeOnly: true
-          regex:
-            type: boolean
-            writeOnly: true
-          required:
-            type: boolean
-            writeOnly: true
-    InfrastructureGroup:
-      type: object
-      description: group of infrastructure entities
-      properties:
-        count:
-          type: integer
-          format: int64
-          description: number of entities in this group
-        metrics:
-          type: object
-          additionalProperties:
-            type: array
-            description: map of metric keys to array of timestamp,value pairs
-            items:
-              type: array
-              description: map of metric keys to array of timestamp,value pairs
-              items:
-                type: number
-                description: map of metric keys to array of timestamp,value pairs
-          description: map of metric keys to array of timestamp,value pairs
-        pollRate:
-          type: integer
-          format: int64
-          description: max poll rate across this group
-        tags:
-          type: object
-          additionalProperties:
-            type: object
-            description: tag keys and values for this group
-          description: tag keys and values for this group
-    InfraMetricConfiguration:
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/SimpleMetricConfiguration'
-      - $ref: '#/components/schemas/ArithmeticConfiguration'
-    GetAvailablePluginsQuery:
-      type: object
-      properties:
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-      required:
-      - tagFilterExpression
-      - timeFrame
-    Problem:
-      type: object
-      properties:
-        fixSuggestion:
-          type: string
-          maxLength: 65536
-          minLength: 0
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
-        problemText:
-          type: string
-          maxLength: 2048
-          minLength: 0
-        severity:
-          type: integer
-          format: int32
-      required:
-      - id
-    SingleValue:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ArithmeticOperand'
-      - type: object
-        properties:
-          value:
-            type: number
-            format: double
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    GetInfrastructureQuery:
-      type: object
-      properties:
-        metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/InfraMetricConfiguration'
-          maxItems: 10
-          minItems: 0
-        missingPlaceholder:
-          type: string
-        order:
-          $ref: '#/components/schemas/Order'
-        pagination:
-          $ref: '#/components/schemas/CursorPaginationInfraExploreCursor'
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        tags:
-          type: array
-          items:
-            type: string
-          maxItems: 5
-          minItems: 0
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-        type:
-          type: string
-          description: Type of entities
-      required:
-      - pagination
-      - tagFilterExpression
-      - timeFrame
+          operation:
+            $ref: '#/components/schemas/ArithmeticOperation'
     InfrastructureItem:
       type: object
       properties:
@@ -707,84 +453,6 @@ components:
           type: integer
           format: int64
           description: Epoch time in milliseconds if the snapshot is offline. Set to 9223372036854775807 if the snapshot is online.
-    EntityHealthInfo:
-      type: object
-      properties:
-        maxSeverity:
-          type: number
-          format: double
-          maximum: 10
-          minimum: 0
-        openIssues:
-          type: array
-          items:
-            $ref: '#/components/schemas/Event'
-          uniqueItems: true
-      required:
-      - openIssues
-    NestedOperation:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ArithmeticOperand'
-      - type: object
-        properties:
-          operation:
-            $ref: '#/components/schemas/ArithmeticOperation'
-    InfrastructureGroupsResult:
-      type: object
-      properties:
-        adjustedTimeframe:
-          $ref: '#/components/schemas/AdjustedTimeframe'
-        canLoadMore:
-          type: boolean
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/InfrastructureGroup'
-        next:
-          $ref: '#/components/schemas/InfraExploreCursor'
-        totalHits:
-          type: integer
-          format: int64
-          description: represents the total number of results
-          minimum: 0
-      required:
-      - items
-    GetInfrastructureGroupsQuery:
-      type: object
-      properties:
-        groupBy:
-          type: array
-          description: Entity grouping tag. Use the Instana Analyze Infrastructure dashboard to determine the entity grouping tag name.
-          items:
-            type: string
-            description: Entity grouping tag. Use the Instana Analyze Infrastructure dashboard to determine the entity grouping tag name.
-          maxItems: 5
-          minItems: 0
-        metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/InfraMetricConfiguration'
-          maxItems: 10
-          minItems: 0
-        missingPlaceholder:
-          type: string
-        order:
-          $ref: '#/components/schemas/Order'
-        pagination:
-          $ref: '#/components/schemas/CursorPaginationInfraExploreCursor'
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-        type:
-          type: string
-          description: Type of entities
-      required:
-      - groupBy
-      - pagination
-      - tagFilterExpression
-      - timeFrame
     Event:
       type: object
       properties:
@@ -859,26 +527,107 @@ components:
       - plugin
       - state
       - type
-    ArithmeticOperation:
+    MetricQuery:
       type: object
-      discriminator:
-        mapping:
-          ADDITION: '#/components/schemas/Addition'
-          DIVISION: '#/components/schemas/Division'
-          MULTIPLICATION: '#/components/schemas/Multiplication'
-          SUBTRACTION: '#/components/schemas/Subtraction'
-        propertyName: operator
+      allOf:
+      - $ref: '#/components/schemas/ArithmeticOperand'
+      - type: object
+        properties:
+          aggregation:
+            type: string
+            enum:
+            - SUM
+            - MEAN
+            - MAX
+            - MIN
+            - P25
+            - P50
+            - P75
+            - P90
+            - P95
+            - P98
+            - P99
+            - P99_9
+            - P99_99
+            - DISTINCT_COUNT
+            - SUM_POSITIVE
+            - PER_SECOND
+            - INCREASE
+            writeOnly: true
+          crossSeriesAggregation:
+            type: string
+            enum:
+            - SUM
+            - MEAN
+            - MAX
+            - MIN
+            - P25
+            - P50
+            - P75
+            - P90
+            - P95
+            - P98
+            - P99
+            - P99_9
+            - P99_99
+            - DISTINCT_COUNT
+            - SUM_POSITIVE
+            - PER_SECOND
+            - INCREASE
+            writeOnly: true
+          granularity:
+            type: integer
+            format: int64
+            writeOnly: true
+          metric:
+            type: string
+            writeOnly: true
+          regex:
+            type: boolean
+            writeOnly: true
+          required:
+            type: boolean
+            writeOnly: true
+    GetInfrastructureQuery:
+      type: object
       properties:
-        left:
-          $ref: '#/components/schemas/ArithmeticOperand'
-        operator:
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfraMetricConfiguration'
+          maxItems: 10
+          minItems: 0
+        missingPlaceholder:
           type: string
-        right:
-          $ref: '#/components/schemas/ArithmeticOperand'
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/CursorPaginationInfraExploreCursor'
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tags:
+          type: array
+          items:
+            type: string
+          maxItems: 5
+          minItems: 0
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+        type:
+          type: string
+          description: Type of entities
       required:
-      - left
-      - operator
-      - right
+      - pagination
+      - tagFilterExpression
+      - timeFrame
+    NestedOperation:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ArithmeticOperand'
+      - type: object
+        properties:
+          operation:
+            $ref: '#/components/schemas/ArithmeticOperation'
     AvailableMetrics:
       type: object
       properties:
@@ -887,6 +636,166 @@ components:
           items:
             $ref: '#/components/schemas/MetricMetadata'
           uniqueItems: true
+    InfrastructureEntitiesResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        canLoadMore:
+          type: boolean
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfrastructureItem'
+        next:
+          $ref: '#/components/schemas/InfraExploreCursor'
+        totalHits:
+          type: integer
+          format: int64
+          description: represents the total number of results
+          minimum: 0
+      required:
+      - items
+    InfrastructureGroupsResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        canLoadMore:
+          type: boolean
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfrastructureGroup'
+        next:
+          $ref: '#/components/schemas/InfraExploreCursor'
+        totalHits:
+          type: integer
+          format: int64
+          description: represents the total number of results
+          minimum: 0
+      required:
+      - items
+    InfraExploreCursor:
+      type: object
+      description: cursor to use between successive queries
+    SingleValue:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ArithmeticOperand'
+      - type: object
+        properties:
+          value:
+            type: number
+            format: double
+    ArithmeticOperand:
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/SingleValue'
+      - $ref: '#/components/schemas/MetricQuery'
+      - $ref: '#/components/schemas/NestedOperation'
+    Problem:
+      type: object
+      properties:
+        fixSuggestion:
+          type: string
+          maxLength: 65536
+          minLength: 0
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+        problemText:
+          type: string
+          maxLength: 2048
+          minLength: 0
+        severity:
+          type: integer
+          format: int32
+      required:
+      - id
+    TimeFrame:
+      type: object
+      description: Time range for which the data should be retrieved.
+      properties:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          maximum: 2678400000
+          minimum: 0
+    InfrastructureGroup:
+      type: object
+      description: group of infrastructure entities
+      properties:
+        count:
+          type: integer
+          format: int64
+          description: number of entities in this group
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            description: map of metric keys to array of timestamp,value pairs
+            items:
+              type: array
+              description: map of metric keys to array of timestamp,value pairs
+              items:
+                type: number
+                description: map of metric keys to array of timestamp,value pairs
+          description: map of metric keys to array of timestamp,value pairs
+        pollRate:
+          type: integer
+          format: int64
+          description: max poll rate across this group
+        tags:
+          type: object
+          additionalProperties:
+            type: object
+            description: tag keys and values for this group
+          description: tag keys and values for this group
+    GetAvailablePluginsQuery:
+      type: object
+      properties:
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+      required:
+      - tagFilterExpression
+      - timeFrame
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    EntityHealthInfo:
+      type: object
+      properties:
+        maxSeverity:
+          type: number
+          format: double
+          maximum: 10
+          minimum: 0
+        openIssues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+          uniqueItems: true
+      required:
+      - openIssues
     SimpleMetricConfiguration:
       type: object
       allOf:
@@ -948,6 +857,97 @@ components:
       required:
       - aggregation
       - metric
+    GetInfrastructureGroupsQuery:
+      type: object
+      properties:
+        groupBy:
+          type: array
+          description: Entity grouping tag. Use the Instana Analyze Infrastructure dashboard to determine the entity grouping tag name.
+          items:
+            type: string
+            description: Entity grouping tag. Use the Instana Analyze Infrastructure dashboard to determine the entity grouping tag name.
+          maxItems: 5
+          minItems: 0
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfraMetricConfiguration'
+          maxItems: 10
+          minItems: 0
+        missingPlaceholder:
+          type: string
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/CursorPaginationInfraExploreCursor'
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+        type:
+          type: string
+          description: Type of entities
+      required:
+      - groupBy
+      - pagination
+      - tagFilterExpression
+      - timeFrame
+    ArithmeticOperation:
+      type: object
+      discriminator:
+        mapping:
+          ADDITION: '#/components/schemas/Addition'
+          DIVISION: '#/components/schemas/Division'
+          MULTIPLICATION: '#/components/schemas/Multiplication'
+          SUBTRACTION: '#/components/schemas/Subtraction'
+        propertyName: operator
+      properties:
+        left:
+          $ref: '#/components/schemas/ArithmeticOperand'
+        operator:
+          type: string
+        right:
+          $ref: '#/components/schemas/ArithmeticOperand'
+      required:
+      - left
+      - operator
+      - right
+    AvailablePlugins:
+      type: object
+      properties:
+        plugins:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+    Order:
+      type: object
+      description: 'Specifies the ordering of the results.
+
+        It contains fields that define the sorting criteria, the collation for sorting, and the direction in which the results should be ordered.
+
+        '
+      properties:
+        by:
+          type: string
+          description: If the granularity is set to `1` you can use the metric name eg. `latency.p95` to order by that value.
+        collation:
+          type: string
+          description: Language code used for sorting. Ignored for infrastructure queries.
+        direction:
+          type: string
+          description: The order in which results will be sorted, either `ASC` for ascending or `DESC` for descending.
+          enum:
+          - ASC
+          - DESC
+      required:
+      - by
+      - direction
+    InfraMetricConfiguration:
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/SimpleMetricConfiguration'
+      - $ref: '#/components/schemas/ArithmeticConfiguration'
   securitySchemes:
     ApiKeyAuth:
       in: header

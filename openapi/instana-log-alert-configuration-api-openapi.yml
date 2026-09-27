@@ -314,52 +314,6 @@ components:
       required:
       - key
       - type
-    Author:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - API
-          - USER
-          - INSTANA
-          - UNKNOWN
-    ChangeSummary:
-      type: object
-      description: Brief summary of changes made in this config version.
-      properties:
-        author:
-          $ref: '#/components/schemas/Author'
-        changeType:
-          type: string
-          enum:
-          - CREATE
-          - UPDATE
-          - DELETE
-          - ENABLE
-          - DISABLE
-          - RESTORE
-          - UNKNOWN
-      required:
-      - author
-      - changeType
-    LogTimeThreshold:
-      type: object
-      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
-      discriminator:
-        mapping:
-          violationsInSequence: '#/components/schemas/ViolationsInSequenceLogTimeThreshold'
-        propertyName: type
-      properties:
-        timeWindow:
-          type: integer
-          format: int64
-        type:
-          type: string
-      required:
-      - type
     LogAlertConfigWithMetadata:
       type: object
       properties:
@@ -465,52 +419,28 @@ components:
       - name
       - tagFilterExpression
       - timeThreshold
-    LogAlertRule:
+    Threshold:
       type: object
+      deprecated: true
+      description: Indicates the type of threshold this alert rule is evaluated on.
       discriminator:
         mapping:
-          logCount: '#/components/schemas/LogCountAlertRule'
-        propertyName: alertType
-      properties:
-        aggregation:
-          type: string
-          enum:
-          - SUM
-          - MEAN
-          - MAX
-          - MIN
-          - P25
-          - P50
-          - P75
-          - P90
-          - P95
-          - P98
-          - P99
-          - P99_9
-          - P99_99
-          - DISTINCT_COUNT
-          - SUM_POSITIVE
-          - PER_SECOND
-          - INCREASE
-        alertType:
-          type: string
-        metricName:
-          type: string
-      required:
-      - alertType
-      - metricName
-    ThresholdConfigRule:
-      type: object
-      discriminator:
-        mapping:
-          adaptiveBaseline: '#/components/schemas/AdaptiveThresholdRule'
-          historicBaseline: '#/components/schemas/StaticBaselineThresholdRule'
-          staticThreshold: '#/components/schemas/StaticThresholdRule'
+          adaptiveBaseline: '#/components/schemas/AdaptiveBaseline'
+          historicBaseline: '#/components/schemas/HistoricBaseline'
+          staticThreshold: '#/components/schemas/StaticThreshold'
         propertyName: type
       properties:
+        operator:
+          type: string
+          enum:
+          - '>'
+          - '>='
+          - <
+          - <=
         type:
           type: string
       required:
+      - operator
       - type
     TagFilterExpressionElement:
       type: object
@@ -550,6 +480,84 @@ components:
           minLength: 0
       required:
       - id
+    ThresholdConfigRule:
+      type: object
+      discriminator:
+        mapping:
+          adaptiveBaseline: '#/components/schemas/AdaptiveThresholdRule'
+          historicBaseline: '#/components/schemas/StaticBaselineThresholdRule'
+          staticThreshold: '#/components/schemas/StaticThresholdRule'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    LogAlertRule:
+      type: object
+      discriminator:
+        mapping:
+          logCount: '#/components/schemas/LogCountAlertRule'
+        propertyName: alertType
+      properties:
+        aggregation:
+          type: string
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        alertType:
+          type: string
+        metricName:
+          type: string
+      required:
+      - alertType
+      - metricName
+    ChangeSummary:
+      type: object
+      description: Brief summary of changes made in this config version.
+      properties:
+        author:
+          $ref: '#/components/schemas/Author'
+        changeType:
+          type: string
+          enum:
+          - CREATE
+          - UPDATE
+          - DELETE
+          - ENABLE
+          - DISABLE
+          - RESTORE
+          - UNKNOWN
+      required:
+      - author
+      - changeType
+    Author:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - API
+          - USER
+          - INSTANA
+          - UNKNOWN
     RuleWithThresholdLogAlertRule:
       type: object
       description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
@@ -571,39 +579,6 @@ components:
       - rule
       - thresholdOperator
       - thresholds
-    Threshold:
-      type: object
-      deprecated: true
-      description: Indicates the type of threshold this alert rule is evaluated on.
-      discriminator:
-        mapping:
-          adaptiveBaseline: '#/components/schemas/AdaptiveBaseline'
-          historicBaseline: '#/components/schemas/HistoricBaseline'
-          staticThreshold: '#/components/schemas/StaticThreshold'
-        propertyName: type
-      properties:
-        operator:
-          type: string
-          enum:
-          - '>'
-          - '>='
-          - <
-          - <=
-        type:
-          type: string
-      required:
-      - operator
-      - type
-    GroupByTag:
-      type: object
-      description: The grouping tags used to group the metric results.
-      properties:
-        key:
-          type: string
-        tagName:
-          type: string
-      required:
-      - tagName
     LogAlertConfig:
       type: object
       properties:
@@ -692,6 +667,31 @@ components:
       - name
       - tagFilterExpression
       - timeThreshold
+    GroupByTag:
+      type: object
+      description: The grouping tags used to group the metric results.
+      properties:
+        key:
+          type: string
+        tagName:
+          type: string
+      required:
+      - tagName
+    LogTimeThreshold:
+      type: object
+      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
+      discriminator:
+        mapping:
+          violationsInSequence: '#/components/schemas/ViolationsInSequenceLogTimeThreshold'
+        propertyName: type
+      properties:
+        timeWindow:
+          type: integer
+          format: int64
+        type:
+          type: string
+      required:
+      - type
   securitySchemes:
     ApiKeyAuth:
       in: header

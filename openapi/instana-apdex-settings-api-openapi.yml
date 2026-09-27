@@ -250,29 +250,19 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    ApdexConfiguration:
+    TagFilterExpressionElement:
       type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
       properties:
-        apdexEntity:
-          $ref: '#/components/schemas/ApdexEntity'
-        apdexName:
+        type:
           type: string
-          description: Name of the Apdex Configuration
-          maxLength: 256
-          minLength: 0
-        createdAt:
-          type: integer
-          format: int64
-          description: Created Date of Apdex Configuration
-        id:
-          type: string
-          description: Apdex Configuration ID
-          maxLength: 64
-          minLength: 0
       required:
-      - apdexEntity
-      - apdexName
-      - id
+      - type
     ApdexConfigurationInput:
       type: object
       properties:
@@ -309,19 +299,29 @@ components:
       - apdexType
       - entityId
       - tagFilterExpression
-    TagFilterExpressionElement:
+    ApdexConfiguration:
       type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
       properties:
-        type:
+        apdexEntity:
+          $ref: '#/components/schemas/ApdexEntity'
+        apdexName:
           type: string
+          description: Name of the Apdex Configuration
+          maxLength: 256
+          minLength: 0
+        createdAt:
+          type: integer
+          format: int64
+          description: Created Date of Apdex Configuration
+        id:
+          type: string
+          description: Apdex Configuration ID
+          maxLength: 64
+          minLength: 0
       required:
-      - type
+      - apdexEntity
+      - apdexName
+      - id
   securitySchemes:
     ApiKeyAuth:
       in: header

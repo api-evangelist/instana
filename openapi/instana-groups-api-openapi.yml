@@ -1230,6 +1230,45 @@ paths:
       description: See creating group mapping
 components:
   schemas:
+    ScopeBinding:
+      type: object
+      properties:
+        scopeId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        scopeRoleId:
+          type: string
+          maxLength: 64
+          minLength: 0
+    ApiRestrictedApplicationFilter:
+      type: object
+      properties:
+        label:
+          type: string
+        restrictingApplicationId:
+          type: string
+        scope:
+          type: string
+          enum:
+          - INCLUDE_NO_DOWNSTREAM
+          - INCLUDE_IMMEDIATE_DOWNSTREAM_DATABASE_AND_MESSAGING
+          - INCLUDE_ALL_DOWNSTREAM
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+    GroupMappingOverview:
+      type: object
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        role:
+          type: string
+        team:
+          type: string
+        value:
+          type: string
     ApiPermissionSet:
       type: object
       properties:
@@ -1321,17 +1360,6 @@ components:
       - syntheticCredentialKeys
       - syntheticTestIds
       - websiteIds
-    ApiMember:
-      type: object
-      properties:
-        email:
-          type: string
-        name:
-          type: string
-        userId:
-          type: string
-      required:
-      - userId
     GroupMapping:
       type: object
       properties:
@@ -1357,17 +1385,19 @@ components:
       - groupId
       - key
       - value
-    ScopeBinding:
+    TagFilterExpressionElement:
       type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
       properties:
-        scopeId:
+        type:
           type: string
-          maxLength: 64
-          minLength: 0
-        scopeRoleId:
-          type: string
-          maxLength: 64
-          minLength: 0
+      required:
+      - type
     ApiGroup:
       type: object
       properties:
@@ -1389,47 +1419,17 @@ components:
       - members
       - name
       - permissionSet
-    TagFilterExpressionElement:
+    ApiMember:
       type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
       properties:
-        type:
+        email:
+          type: string
+        name:
+          type: string
+        userId:
           type: string
       required:
-      - type
-    ApiRestrictedApplicationFilter:
-      type: object
-      properties:
-        label:
-          type: string
-        restrictingApplicationId:
-          type: string
-        scope:
-          type: string
-          enum:
-          - INCLUDE_NO_DOWNSTREAM
-          - INCLUDE_IMMEDIATE_DOWNSTREAM_DATABASE_AND_MESSAGING
-          - INCLUDE_ALL_DOWNSTREAM
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-    GroupMappingOverview:
-      type: object
-      properties:
-        id:
-          type: string
-        key:
-          type: string
-        role:
-          type: string
-        team:
-          type: string
-        value:
-          type: string
+      - userId
     IdentityProviderPatch:
       type: object
       properties:

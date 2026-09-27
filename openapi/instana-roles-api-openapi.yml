@@ -286,6 +286,17 @@ components:
           uniqueItems: true
       required:
       - name
+    ApiMember:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        userId:
+          type: string
+      required:
+      - userId
     ApiRole:
       type: object
       properties:
@@ -308,17 +319,6 @@ components:
       - members
       - name
       - permissions
-    ApiMember:
-      type: object
-      properties:
-        email:
-          type: string
-        name:
-          type: string
-        userId:
-          type: string
-      required:
-      - userId
   securitySchemes:
     ApiKeyAuth:
       in: header

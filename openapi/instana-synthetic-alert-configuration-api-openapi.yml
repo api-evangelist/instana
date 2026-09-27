@@ -595,35 +595,44 @@ components:
       required:
       - key
       - type
-    Author:
+    TagFilterExpressionElement:
       type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - API
-          - USER
-          - INSTANA
-          - UNKNOWN
-    SyntheticTimeThreshold:
-      type: object
-      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
+      description: Boolean expression of tag filters to define the scope of relevant calls.
       discriminator:
         mapping:
-          violationsInSequence: '#/components/schemas/ViolationsInSequenceSyntheticTimeThreshold'
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
         propertyName: type
       properties:
         type:
           type: string
-        violationsCount:
-          type: integer
-          format: int32
-          maximum: 12
-          minimum: 1
       required:
       - type
+    ConfigVersion:
+      type: object
+      properties:
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummary'
+        created:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the creation time of this revision.
+          minimum: 1
+        deleted:
+          type: boolean
+          deprecated: true
+          description: Flag to indicate whether or not the configuration was deleted.
+        enabled:
+          type: boolean
+          deprecated: true
+          description: Flag to indicate whether or not the configuration is enabled.
+        id:
+          type: string
+          description: ID of this configuration version.
+          maxLength: 64
+          minLength: 0
+      required:
+      - id
     ChangeSummary:
       type: object
       description: Brief summary of changes made in this config version.
@@ -643,41 +652,96 @@ components:
       required:
       - author
       - changeType
-    SyntheticAlertRule:
+    Author:
       type: object
-      description: Indicates the type of rule this alert configuration is about.
-      discriminator:
-        mapping:
-          failure: '#/components/schemas/FailureSyntheticAlertRule'
-        propertyName: alertType
       properties:
-        aggregation:
+        id:
+          type: string
+        type:
           type: string
           enum:
-          - SUM
-          - MEAN
-          - MAX
-          - MIN
-          - P25
-          - P50
-          - P75
-          - P90
-          - P95
-          - P98
-          - P99
-          - P99_9
-          - P99_99
-          - DISTINCT_COUNT
-          - SUM_POSITIVE
-          - PER_SECOND
-          - INCREASE
-        alertType:
+          - API
+          - USER
+          - INSTANA
+          - UNKNOWN
+    SyntheticAlertConfig:
+      type: object
+      properties:
+        alertChannelIds:
+          type: array
+          description: List of IDs of alert channels defined in Instana. Can be left empty.
+          items:
+            type: string
+            description: List of IDs of alert channels defined in Instana. Can be left empty.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        description:
           type: string
-        metricName:
+          description: Description of the synthetic alert configuration. Used as a template for the description of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 65536
+          minLength: 0
+        gracePeriod:
+          type: integer
+          format: int64
+          description: The duration for which an alert remains open after conditions are no longer violated, with the alert auto-closing once the grace period expires.
+        name:
           type: string
+          description: Name of the synthetic alert configuration. Used as a template for the title of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 256
+          minLength: 0
+        rule:
+          $ref: '#/components/schemas/SyntheticAlertRule'
+        severity:
+          type: integer
+          format: int32
+          description: The severity of the alert when triggered, which is either 5 (Warning), or 10 (Critical).
+          maximum: 10
+          minimum: 5
+        syntheticTestIds:
+          type: array
+          description: IDs of the synthetic tests that this Smart Alert configuration is applied to.
+          items:
+            type: string
+            description: IDs of the synthetic tests that this Smart Alert configuration is applied to.
+          uniqueItems: true
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        timeThreshold:
+          $ref: '#/components/schemas/SyntheticTimeThreshold'
       required:
-      - alertType
-      - metricName
+      - alertChannelIds
+      - customPayloadFields
+      - description
+      - name
+      - rule
+      - syntheticTestIds
+      - tagFilterExpression
+      - timeThreshold
+    SyntheticTimeThreshold:
+      type: object
+      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
+      discriminator:
+        mapping:
+          violationsInSequence: '#/components/schemas/ViolationsInSequenceSyntheticTimeThreshold'
+        propertyName: type
+      properties:
+        type:
+          type: string
+        violationsCount:
+          type: integer
+          format: int32
+          maximum: 12
+          minimum: 1
+      required:
+      - type
     SyntheticAlertConfigWithMetadata:
       type: object
       properties:
@@ -761,105 +825,41 @@ components:
       - syntheticTestIds
       - tagFilterExpression
       - timeThreshold
-    TagFilterExpressionElement:
+    SyntheticAlertRule:
       type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
+      description: Indicates the type of rule this alert configuration is about.
       discriminator:
         mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
+          failure: '#/components/schemas/FailureSyntheticAlertRule'
+        propertyName: alertType
       properties:
-        type:
+        aggregation:
+          type: string
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        alertType:
+          type: string
+        metricName:
           type: string
       required:
-      - type
-    ConfigVersion:
-      type: object
-      properties:
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummary'
-        created:
-          type: integer
-          format: int64
-          description: Unix timestamp representing the creation time of this revision.
-          minimum: 1
-        deleted:
-          type: boolean
-          deprecated: true
-          description: Flag to indicate whether or not the configuration was deleted.
-        enabled:
-          type: boolean
-          deprecated: true
-          description: Flag to indicate whether or not the configuration is enabled.
-        id:
-          type: string
-          description: ID of this configuration version.
-          maxLength: 64
-          minLength: 0
-      required:
-      - id
-    SyntheticAlertConfig:
-      type: object
-      properties:
-        alertChannelIds:
-          type: array
-          description: List of IDs of alert channels defined in Instana. Can be left empty.
-          items:
-            type: string
-            description: List of IDs of alert channels defined in Instana. Can be left empty.
-          maxItems: 1024
-          minItems: 0
-          uniqueItems: true
-        customPayloadFields:
-          type: array
-          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
-          items:
-            $ref: '#/components/schemas/CustomPayloadField'
-          maxItems: 20
-          minItems: 0
-        description:
-          type: string
-          description: Description of the synthetic alert configuration. Used as a template for the description of alert/event notifications triggered by this Smart Alert configuration.
-          maxLength: 65536
-          minLength: 0
-        gracePeriod:
-          type: integer
-          format: int64
-          description: The duration for which an alert remains open after conditions are no longer violated, with the alert auto-closing once the grace period expires.
-        name:
-          type: string
-          description: Name of the synthetic alert configuration. Used as a template for the title of alert/event notifications triggered by this Smart Alert configuration.
-          maxLength: 256
-          minLength: 0
-        rule:
-          $ref: '#/components/schemas/SyntheticAlertRule'
-        severity:
-          type: integer
-          format: int32
-          description: The severity of the alert when triggered, which is either 5 (Warning), or 10 (Critical).
-          maximum: 10
-          minimum: 5
-        syntheticTestIds:
-          type: array
-          description: IDs of the synthetic tests that this Smart Alert configuration is applied to.
-          items:
-            type: string
-            description: IDs of the synthetic tests that this Smart Alert configuration is applied to.
-          uniqueItems: true
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        timeThreshold:
-          $ref: '#/components/schemas/SyntheticTimeThreshold'
-      required:
-      - alertChannelIds
-      - customPayloadFields
-      - description
-      - name
-      - rule
-      - syntheticTestIds
-      - tagFilterExpression
-      - timeThreshold
+      - alertType
+      - metricName
   securitySchemes:
     ApiKeyAuth:
       in: header

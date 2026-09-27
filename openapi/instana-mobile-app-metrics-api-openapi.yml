@@ -226,6 +226,70 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
+    MobileAppMonitoringMetricsConfiguration:
+      type: object
+      properties:
+        aggregation:
+          type: string
+          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        granularity:
+          type: integer
+          format: int32
+          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
+        metric:
+          type: string
+          description: 'Set a particular metric, eg: `latency`.'
+        numeratorTagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+      required:
+      - aggregation
+      - metric
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    MetricAPIResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+      required:
+      - metrics
     GetMobileAppMetrics:
       type: object
       properties:
@@ -256,58 +320,15 @@ components:
       required:
       - metrics
       - type
-    GetMobileAppMetricsV2:
+    AdjustedTimeframe:
       type: object
-      properties:
-        metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/MobileAppMonitoringMetricsConfiguration'
-          maxItems: 5
-          minItems: 1
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-        type:
-          type: string
-          enum:
-          - SESSION_START
-          - HTTP_REQUEST
-          - CRASH
-          - CUSTOM
-          - VIEW_CHANGE
-          - DROP_BEACON
-          - PERF
-      required:
-      - metrics
-      - type
-    StackTraceLine:
-      type: object
-      properties:
-        column:
-          type: integer
-          format: int32
-          minimum: -1
-        file:
-          type: string
-        line:
-          type: integer
-          format: int32
-          minimum: -1
-        name:
-          type: string
-        translationExplanation:
-          type: string
-        translationStatus:
-          type: integer
-          format: int32
-          minimum: -1
-      required:
-      - file
-    TimeFrame:
-      type: object
-      description: Time range for which the data should be retrieved.
+      description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
+
+        For example, In request payload, if timeframe is 08:03 - 14:03, which is a 6 hour window size. It is adjusted to 08:05 - 14:00
+
+        Another example, In request payload, if timeframe is 08:20 - 08:20 (next day) which is a 24h window size. It is adjusted to 08:30 - 08:00 (next day)
+
+        '
       properties:
         to:
           type: integer
@@ -317,13 +338,9 @@ components:
           type: integer
           format: int64
           description: windowSize in milliseconds
-          maximum: 2678400000
           minimum: 0
-    MobileAppMetricResult:
-      type: object
-      properties:
-        empty:
-          type: boolean
+      required:
+      - to
     MobileAppMonitoringBeacon:
       type: object
       properties:
@@ -693,19 +710,29 @@ components:
       - performanceSubtype
       - rateLimitBeaconType
       - type
-    TagFilterExpressionElement:
+    StackTraceLine:
       type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
       properties:
-        type:
+        column:
+          type: integer
+          format: int32
+          minimum: -1
+        file:
           type: string
+        line:
+          type: integer
+          format: int32
+          minimum: -1
+        name:
+          type: string
+        translationExplanation:
+          type: string
+        translationStatus:
+          type: integer
+          format: int32
+          minimum: -1
       required:
-      - type
+      - file
     DeprecatedTagFilter:
       type: object
       properties:
@@ -743,15 +770,35 @@ components:
       - name
       - operator
       - value
-    AdjustedTimeframe:
+    GetMobileAppMetricsV2:
       type: object
-      description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
-
-        For example, In request payload, if timeframe is 08:03 - 14:03, which is a 6 hour window size. It is adjusted to 08:05 - 14:00
-
-        Another example, In request payload, if timeframe is 08:20 - 08:20 (next day) which is a 24h window size. It is adjusted to 08:30 - 08:00 (next day)
-
-        '
+      properties:
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAppMonitoringMetricsConfiguration'
+          maxItems: 5
+          minItems: 1
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+        type:
+          type: string
+          enum:
+          - SESSION_START
+          - HTTP_REQUEST
+          - CRASH
+          - CUSTOM
+          - VIEW_CHANGE
+          - DROP_BEACON
+          - PERF
+      required:
+      - metrics
+      - type
+    TimeFrame:
+      type: object
+      description: Time range for which the data should be retrieved.
       properties:
         to:
           type: integer
@@ -761,60 +808,13 @@ components:
           type: integer
           format: int64
           description: windowSize in milliseconds
+          maximum: 2678400000
           minimum: 0
-      required:
-      - to
-    MobileAppMonitoringMetricsConfiguration:
+    MobileAppMetricResult:
       type: object
       properties:
-        aggregation:
-          type: string
-          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
-          enum:
-          - SUM
-          - MEAN
-          - MAX
-          - MIN
-          - P25
-          - P50
-          - P75
-          - P90
-          - P95
-          - P98
-          - P99
-          - P99_9
-          - P99_99
-          - DISTINCT_COUNT
-          - SUM_POSITIVE
-          - PER_SECOND
-          - INCREASE
-        granularity:
-          type: integer
-          format: int32
-          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
-        metric:
-          type: string
-          description: 'Set a particular metric, eg: `latency`.'
-        numeratorTagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-      required:
-      - aggregation
-      - metric
-    MetricAPIResult:
-      type: object
-      properties:
-        adjustedTimeframe:
-          $ref: '#/components/schemas/AdjustedTimeframe'
-        metrics:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: array
-              items:
-                type: number
-      required:
-      - metrics
+        empty:
+          type: boolean
   securitySchemes:
     ApiKeyAuth:
       in: header

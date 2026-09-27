@@ -129,6 +129,43 @@ components:
       required:
       - connections
       - services
+    ServiceMapConnection:
+      type: object
+      description: A list which indicates which services are consumers and which are providers in the communication chain.
+      properties:
+        calls:
+          type: integer
+          format: int64
+          description: "The number of calls between the 2 services.\nEg: The number of calls from `24558242fdeb52571cfb9fa42f1b334aa65d7e61` service to `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa` service over the mentioned timeframe is `200`. \n\nIf no timeframe (`to` and `windowSize` in query paramter) is mentioned, the timeframe is taken as last hour.\n"
+          minimum: 0
+        errorRate:
+          type: number
+          format: double
+          description: "The error rate of the calls between the 2 services.\nEg: The error rate of calls from `24558242fdeb52571cfb9fa42f1b334aa65d7e61` service to `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa` service over the mentioned timeframe is `0.1`. \n\nThe value is between 0 and 1. \n\nIf no timeframe (`to` and `windowSize` in query paramter) is mentioned, the timeframe is taken as last hour.\n"
+          maximum: 1
+          minimum: 0
+        from:
+          type: string
+          description: 'The service that initiates a request to another service.
+
+            It contains a unique service id. Eg: `24558242fdeb52571cfb9fa42f1b334aa65d7e61`.
+
+            '
+        latency:
+          type: number
+          format: double
+          description: "The mean latency of the calls between the 2 services.\nEg: The mean latency of calls from `24558242fdeb52571cfb9fa42f1b334aa65d7e61` service to `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa` service over the mentioned timeframe is `4.46`. \n\nThe value is in milliseconds. \n\nIf no timeframe (`to` and `windowSize` in query paramter) is mentioned, the timeframe is taken as last hour.\n"
+          minimum: 0
+        to:
+          type: string
+          description: 'The service that receives the request sent by the source service.
+
+            It contains a unique service id. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
+
+            '
+      required:
+      - from
+      - to
     ExtendedService:
       type: object
       description: List of services in the topology.
@@ -203,43 +240,6 @@ components:
       - snapshotIds
       - technologies
       - types
-    ServiceMapConnection:
-      type: object
-      description: A list which indicates which services are consumers and which are providers in the communication chain.
-      properties:
-        calls:
-          type: integer
-          format: int64
-          description: "The number of calls between the 2 services.\nEg: The number of calls from `24558242fdeb52571cfb9fa42f1b334aa65d7e61` service to `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa` service over the mentioned timeframe is `200`. \n\nIf no timeframe (`to` and `windowSize` in query paramter) is mentioned, the timeframe is taken as last hour.\n"
-          minimum: 0
-        errorRate:
-          type: number
-          format: double
-          description: "The error rate of the calls between the 2 services.\nEg: The error rate of calls from `24558242fdeb52571cfb9fa42f1b334aa65d7e61` service to `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa` service over the mentioned timeframe is `0.1`. \n\nThe value is between 0 and 1. \n\nIf no timeframe (`to` and `windowSize` in query paramter) is mentioned, the timeframe is taken as last hour.\n"
-          maximum: 1
-          minimum: 0
-        from:
-          type: string
-          description: 'The service that initiates a request to another service.
-
-            It contains a unique service id. Eg: `24558242fdeb52571cfb9fa42f1b334aa65d7e61`.
-
-            '
-        latency:
-          type: number
-          format: double
-          description: "The mean latency of the calls between the 2 services.\nEg: The mean latency of calls from `24558242fdeb52571cfb9fa42f1b334aa65d7e61` service to `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa` service over the mentioned timeframe is `4.46`. \n\nThe value is in milliseconds. \n\nIf no timeframe (`to` and `windowSize` in query paramter) is mentioned, the timeframe is taken as last hour.\n"
-          minimum: 0
-        to:
-          type: string
-          description: 'The service that receives the request sent by the source service.
-
-            It contains a unique service id. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
-
-            '
-      required:
-      - from
-      - to
   securitySchemes:
     ApiKeyAuth:
       in: header

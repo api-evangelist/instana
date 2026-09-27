@@ -392,54 +392,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    UsersResult:
-      type: object
-      properties:
-        invitations:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvitationResult'
-          uniqueItems: true
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserResult'
-          uniqueItems: true
-    InvitationResult:
-      type: object
-      properties:
-        invitationStatus:
-          type: string
-          enum:
-          - SUCCESS
-          - INTERNAL_ERROR
-          - FAILURE_USER_ALREADY_EXISTS
-          - FAILURE_USER_ALREADY_INVITED
-          - FAILURE_ONLY_DEFAULT_GROUP_INVITATION_ALLOWED
-          - FAILURE_TENANT_IDP_CONFIGURED
-        userEmail:
-          type: string
-    Invitation:
-      type: object
-      properties:
-        email:
-          type: string
-        groupId:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-      required:
-      - email
-      - groupId
-    EditUser:
-      type: object
-      properties:
-        fullName:
-          type: string
-      required:
-      - fullName
     UserResult:
       type: object
       properties:
@@ -461,6 +413,54 @@ components:
       - email
       - fullName
       - id
+    InvitationResult:
+      type: object
+      properties:
+        invitationStatus:
+          type: string
+          enum:
+          - SUCCESS
+          - INTERNAL_ERROR
+          - FAILURE_USER_ALREADY_EXISTS
+          - FAILURE_USER_ALREADY_INVITED
+          - FAILURE_ONLY_DEFAULT_GROUP_INVITATION_ALLOWED
+          - FAILURE_TENANT_IDP_CONFIGURED
+        userEmail:
+          type: string
+    EditUser:
+      type: object
+      properties:
+        fullName:
+          type: string
+      required:
+      - fullName
+    Invitation:
+      type: object
+      properties:
+        email:
+          type: string
+        groupId:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+      required:
+      - email
+      - groupId
+    UsersResult:
+      type: object
+      properties:
+        invitations:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvitationResult'
+          uniqueItems: true
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResult'
+          uniqueItems: true
     InvitationResponse:
       type: object
       properties:

@@ -385,8 +385,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    JsonNode:
-      type: object
     LLMEgressGateway:
       type: object
       description: Custom handler definition.
@@ -438,6 +436,8 @@ components:
       - prompt
       - supports
       - tenantUnitId
+    JsonNode:
+      type: object
   securitySchemes:
     ApiKeyAuth:
       in: header

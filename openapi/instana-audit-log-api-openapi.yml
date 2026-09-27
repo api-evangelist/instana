@@ -135,45 +135,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    AuditLogUiResponse:
-      type: object
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/AuditLogEntry'
-        total:
-          type: integer
-          format: int64
-    LogEntryActor:
-      type: object
-      properties:
-        email:
-          type: string
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-          - USER
-          - API_TOKEN
-          - POLICY
-      required:
-      - id
-      - name
-      - type
-    AccessLogResponse:
-      type: object
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessLogEntry'
-        total:
-          type: integer
-          format: int64
     AccessLogEntry:
       type: object
       properties:
@@ -211,6 +172,45 @@ components:
       - email
       - fullName
       - tenantId
+    AccessLogResponse:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessLogEntry'
+        total:
+          type: integer
+          format: int64
+    LogEntryActor:
+      type: object
+      properties:
+        email:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - USER
+          - API_TOKEN
+          - POLICY
+      required:
+      - id
+      - name
+      - type
+    AuditLogUiResponse:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLogEntry'
+        total:
+          type: integer
+          format: int64
     AuditLogEntry:
       type: object
       properties:

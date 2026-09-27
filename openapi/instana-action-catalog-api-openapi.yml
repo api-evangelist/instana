@@ -331,293 +331,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    Action:
-      type: object
-      description: Automation action definition. When this is used in policy creation request, only `id` should be specified.
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-          description: Action created time.
-        description:
-          type: string
-          description: Action description.
-          maxLength: 512
-          minLength: 0
-        fields:
-          type: array
-          description: List of fields that describe an action.
-          items:
-            $ref: '#/components/schemas/Field'
-        id:
-          type: string
-          description: Action identifier.
-          maxLength: 128
-          minLength: 1
-        inputParameters:
-          type: array
-          description: List of inputs to the action.
-          items:
-            $ref: '#/components/schemas/Parameter'
-        metadata:
-          $ref: '#/components/schemas/MetaData'
-        modifiedAt:
-          type: string
-          format: date-time
-          description: Action modified time.
-        name:
-          type: string
-          description: Action name.
-          maxLength: 128
-          minLength: 1
-        tags:
-          type: array
-          description: List of tags added to the action.
-          items:
-            type: string
-            description: List of tags added to the action.
-        type:
-          type: string
-          description: 'Action type can be one of the following values:  SCRIPT, HTTP, ANSIBLE, EXTERNAL, GITHUB, GITLAB, JIRA, MANUAL, DOC_LINK'
-          enum:
-          - SCRIPT
-          - HTTP
-          - ANSIBLE
-          - EXTERNAL
-          - GITHUB
-          - GITLAB
-          - JIRA
-          - MANUAL
-          - DOC_LINK
-          maxLength: 128
-          minLength: 0
-      required:
-      - createdAt
-      - id
-      - modifiedAt
-      - name
-      - type
-    Field:
-      type: object
-      description: List of fields that describe an action.
-      properties:
-        description:
-          type: string
-        encoding:
-          type: string
-        name:
-          type: string
-        secured:
-          type: boolean
-        value:
-          type: string
-      required:
-      - encoding
-      - name
-      - value
-    ActionMatch:
-      type: object
-      properties:
-        action:
-          $ref: '#/components/schemas/Action'
-        aiEngine:
-          type: string
-          enum:
-          - POLICY
-          - EVENT_SIMILARITY
-          - NLP
-          - SUCCESS_RATE
-          - TURBONOMIC
-          - WATSONX
-        confidence:
-          type: string
-        policy:
-          $ref: '#/components/schemas/Policy'
-        score:
-          type: number
-          format: double
-      required:
-      - aiEngine
-      - confidence
-      - score
-    TagCatalog:
-      type: object
-      properties:
-        tagTree:
-          type: array
-          description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
-
-            Consider this as the root of the tree where it has tags as attributes or children.
-
-            '
-          items:
-            $ref: '#/components/schemas/TagTreeLevel'
-        tags:
-          type: array
-          description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
-
-            Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
-
-            '
-          items:
-            $ref: '#/components/schemas/Tag'
-      required:
-      - tagTree
-      - tags
-    PolicyRunnable:
-      type: object
-      description: Runnable associated with the policy. It can be a `workflow` or `action`. Currently only supports `action`.
-      properties:
-        id:
-          type: string
-          description: Action identifier.
-        runConfiguration:
-          $ref: '#/components/schemas/RunConfiguration'
-        type:
-          type: string
-          description: Type of runnable. Supported value is `action`.
-          enum:
-          - action
-          - workflow
-      required:
-      - id
-      - runConfiguration
-      - type
-    ParameterValue:
-      type: object
-      description: List of action input parameters.
-      properties:
-        name:
-          type: string
-          description: Parameter name.
-        value:
-          type: string
-          description: Parameter value.
-      required:
-      - name
-      - value
-    Trigger:
-      type: object
-      description: The trigger is the Instana event or Smart Alert that defines the initial conditions that must be met for the policy to apply on the actions in `typeConfiguration`.
-      properties:
-        description:
-          type: string
-          description: A description for the trigger.
-        id:
-          type: string
-          description: Trigger (Instana event or Smart Alert) identifier.
-        name:
-          type: string
-          description: A name of the trigger (name of Instana event or Smart Alert).
-        scheduling:
-          $ref: '#/components/schemas/PolicyScheduling'
-        type:
-          type: string
-          description: Instana event type, Smart Alert type, or 'schedule'. The type must be one of the enum values.
-          enum:
-          - customEvent
-          - builtinEvent
-          - applicationSmartAlert
-          - globalApplicationSmartAlert
-          - websiteSmartAlert
-          - infraSmartAlert
-          - mobileAppSmartAlert
-          - syntheticsSmartAlert
-          - logSmartAlert
-          - sloSmartAlert
-          - schedule
-      required:
-      - type
-    TagTreeLevel:
-      type: object
-      description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
-
-        Consider this as the root of the tree where it has tags as attributes or children.
-
-        '
-      properties:
-        children:
-          type: array
-          description: Children tags of tagTree
-          items:
-            $ref: '#/components/schemas/TagTreeNode'
-        description:
-          type: string
-          description: The description provided, if any.
-          maxLength: 512
-          minLength: 0
-        icon:
-          type: string
-          description: 'Each tag has an Icon which can be seen on the drop down list in Unbounded Analytics.
-
-            If there is an icon, there will be a string associated with it.
-
-            Eg: For for all `TAG` under `Call` tagTreeNode, the `icon` value is `lib_application_call`.
-
-            '
-          maxLength: 128
-          minLength: 0
-        label:
-          type: string
-          description: 'The name of the tagTreeNode. Eg: `Commonly Used`, `Application`.'
-          maxLength: 128
-          minLength: 0
-        queryable:
-          type: boolean
-        scoreBoost:
-          type: integer
-          format: int32
-          description: 'By default it is `null` if it is not set explictily by IBM Instana.
-
-            The purpose of this parameter is to rank the tagTree. For eg: some set of tags are frequently used.
-
-            Tags under `Commonly used` is frequently used, so it will come up on top of the drop down list of `Query Builder` in `Unbounded Analytics`.
-
-            Higher the scoreBoost, higher the ranking.
-
-            '
-        type:
-          type: string
-          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
-      required:
-      - children
-      - label
-    TypeConfiguration:
-      type: object
-      description: List of configurations that contains the list of actions to run and the mode (automatic or manual) in which the policy is run.
-      properties:
-        condition:
-          $ref: '#/components/schemas/Condition'
-        name:
-          type: string
-          description: The policy type determines how a policy is run. Value must be one of the enum values. Value `manual` means the policy is run manually when an event is raised. Value `automatic` means policy is run automatically when an event is raised.
-          enum:
-          - automatic
-          - manual
-        runnable:
-          $ref: '#/components/schemas/PolicyRunnable'
-      required:
-      - name
-      - runnable
-    GetDynamicParameterValues:
-      type: object
-      properties:
-        eventId:
-          type: string
-          description: Event identifier
-        parameters:
-          type: array
-          description: List of dynamic parameters
-          items:
-            $ref: '#/components/schemas/DynamicParameter'
-        timestamp:
-          type: integer
-          format: int64
-          description: The start of the timestamp expressed in Unix epoch time in milliseconds.
-      required:
-      - eventId
-      - parameters
-      - timestamp
     Condition:
       type: object
       description: This applies to only `automatic` policy type. A Dynamic Focus Query that selects a list of entities on which the policy is run.
@@ -625,44 +338,6 @@ components:
         query:
           type: string
           description: Dynamic Focus Query string that selects a list of entities on which the policy is run.
-    PolicyScheduling:
-      type: object
-      description: Scheduling information for a scheduled policy.
-      properties:
-        recurrentRule:
-          type: string
-          description: 'Recurrent Rule defines how the policy recurs, using iCalendar RRULE format (e.g., `FREQ=DAILY;INTERVAL=1`).It supports fields like FREQ, INTERVAL, BYDAY. Refer to RFC 5545: https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10'
-        startTime:
-          type: string
-          format: date-time
-          description: The time to run the policy action in milliseconds since epoch (UTC) (e.g., `1706713140000`).
-      required:
-      - startTime
-    MetaData:
-      type: object
-      description: Action metadata.
-      properties:
-        ai:
-          type: array
-          description: List of metadata for AI originated actions.
-          items:
-            type: object
-            additionalProperties:
-              type: object
-              description: List of metadata for AI originated actions.
-            description: List of metadata for AI originated actions.
-        aiOriginated:
-          type: boolean
-          description: AI originated action flag. Value is `true` if action is AI generated `false` otherwise.
-        builtIn:
-          type: boolean
-          description: Built-in out of the box action flag. Value is `true` if built-in action `false` otherwise.
-        readOnly:
-          type: boolean
-          description: Read only action flag. Value is `true` if read only `false` otherwise.
-        sensorImported:
-          type: boolean
-          description: Sensor imported action flag. Value is `true` if action is imported from sensor `false` otherwise.
     Tag:
       type: object
       description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
@@ -760,6 +435,52 @@ components:
       required:
       - name
       - type
+    ActionSearchSpace:
+      type: object
+      properties:
+        description:
+          type: string
+          description: The description of an incident or issue.
+        entityType:
+          type: string
+          description: The entity type associated with the incident or issue.
+        eventId:
+          type: string
+          description: The event identifier associated with the incident or issue.
+        name:
+          type: string
+          description: The name of an incident or issue.
+      required:
+      - name
+    ActionConfiguration:
+      type: object
+      description: List of action configurations.
+      properties:
+        action:
+          $ref: '#/components/schemas/Action'
+        agentId:
+          type: string
+          description: Identifier of the agent host on which to run the action.
+        inputParameterValues:
+          type: array
+          description: List of action input parameters.
+          items:
+            $ref: '#/components/schemas/ParameterValue'
+      required:
+      - action
+    ParameterValue:
+      type: object
+      description: List of action input parameters.
+      properties:
+        name:
+          type: string
+          description: Parameter name.
+        value:
+          type: string
+          description: Parameter value.
+      required:
+      - name
+      - value
     Parameter:
       type: object
       description: List of inputs to the action.
@@ -790,6 +511,97 @@ components:
           description: Parameter value.
       required:
       - label
+      - name
+      - type
+    ActionMatch:
+      type: object
+      properties:
+        action:
+          $ref: '#/components/schemas/Action'
+        aiEngine:
+          type: string
+          enum:
+          - POLICY
+          - EVENT_SIMILARITY
+          - NLP
+          - SUCCESS_RATE
+          - TURBONOMIC
+          - WATSONX
+        confidence:
+          type: string
+        policy:
+          $ref: '#/components/schemas/Policy'
+        score:
+          type: number
+          format: double
+      required:
+      - aiEngine
+      - confidence
+      - score
+    Action:
+      type: object
+      description: Automation action definition. When this is used in policy creation request, only `id` should be specified.
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: Action created time.
+        description:
+          type: string
+          description: Action description.
+          maxLength: 512
+          minLength: 0
+        fields:
+          type: array
+          description: List of fields that describe an action.
+          items:
+            $ref: '#/components/schemas/Field'
+        id:
+          type: string
+          description: Action identifier.
+          maxLength: 128
+          minLength: 1
+        inputParameters:
+          type: array
+          description: List of inputs to the action.
+          items:
+            $ref: '#/components/schemas/Parameter'
+        metadata:
+          $ref: '#/components/schemas/MetaData'
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Action modified time.
+        name:
+          type: string
+          description: Action name.
+          maxLength: 128
+          minLength: 1
+        tags:
+          type: array
+          description: List of tags added to the action.
+          items:
+            type: string
+            description: List of tags added to the action.
+        type:
+          type: string
+          description: 'Action type can be one of the following values:  SCRIPT, HTTP, ANSIBLE, EXTERNAL, GITHUB, GITLAB, JIRA, MANUAL, DOC_LINK'
+          enum:
+          - SCRIPT
+          - HTTP
+          - ANSIBLE
+          - EXTERNAL
+          - GITHUB
+          - GITLAB
+          - JIRA
+          - MANUAL
+          - DOC_LINK
+          maxLength: 128
+          minLength: 0
+      required:
+      - createdAt
+      - id
+      - modifiedAt
       - name
       - type
     Policy:
@@ -829,39 +641,31 @@ components:
       - name
       - trigger
       - typeConfigurations
-    ActionSearchSpace:
+    MetaData:
       type: object
+      description: Action metadata.
       properties:
-        description:
-          type: string
-          description: The description of an incident or issue.
-        entityType:
-          type: string
-          description: The entity type associated with the incident or issue.
-        eventId:
-          type: string
-          description: The event identifier associated with the incident or issue.
-        name:
-          type: string
-          description: The name of an incident or issue.
-      required:
-      - name
-    ActionConfiguration:
-      type: object
-      description: List of action configurations.
-      properties:
-        action:
-          $ref: '#/components/schemas/Action'
-        agentId:
-          type: string
-          description: Identifier of the agent host on which to run the action.
-        inputParameterValues:
+        ai:
           type: array
-          description: List of action input parameters.
+          description: List of metadata for AI originated actions.
           items:
-            $ref: '#/components/schemas/ParameterValue'
-      required:
-      - action
+            type: object
+            additionalProperties:
+              type: object
+              description: List of metadata for AI originated actions.
+            description: List of metadata for AI originated actions.
+        aiOriginated:
+          type: boolean
+          description: AI originated action flag. Value is `true` if action is AI generated `false` otherwise.
+        builtIn:
+          type: boolean
+          description: Built-in out of the box action flag. Value is `true` if built-in action `false` otherwise.
+        readOnly:
+          type: boolean
+          description: Read only action flag. Value is `true` if read only `false` otherwise.
+        sensorImported:
+          type: boolean
+          description: Sensor imported action flag. Value is `true` if action is imported from sensor `false` otherwise.
     DynamicParameter:
       type: object
       description: List of dynamic parameters
@@ -878,6 +682,107 @@ components:
         tagName:
           type: string
           description: 'The name of the tag. Eg: `call.name`'
+    PolicyScheduling:
+      type: object
+      description: Scheduling information for a scheduled policy.
+      properties:
+        recurrentRule:
+          type: string
+          description: 'Recurrent Rule defines how the policy recurs, using iCalendar RRULE format (e.g., `FREQ=DAILY;INTERVAL=1`).It supports fields like FREQ, INTERVAL, BYDAY. Refer to RFC 5545: https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10'
+        startTime:
+          type: string
+          format: date-time
+          description: The time to run the policy action in milliseconds since epoch (UTC) (e.g., `1706713140000`).
+      required:
+      - startTime
+    GetDynamicParameterValues:
+      type: object
+      properties:
+        eventId:
+          type: string
+          description: Event identifier
+        parameters:
+          type: array
+          description: List of dynamic parameters
+          items:
+            $ref: '#/components/schemas/DynamicParameter'
+        timestamp:
+          type: integer
+          format: int64
+          description: The start of the timestamp expressed in Unix epoch time in milliseconds.
+      required:
+      - eventId
+      - parameters
+      - timestamp
+    Trigger:
+      type: object
+      description: The trigger is the Instana event or Smart Alert that defines the initial conditions that must be met for the policy to apply on the actions in `typeConfiguration`.
+      properties:
+        description:
+          type: string
+          description: A description for the trigger.
+        id:
+          type: string
+          description: Trigger (Instana event or Smart Alert) identifier.
+        name:
+          type: string
+          description: A name of the trigger (name of Instana event or Smart Alert).
+        scheduling:
+          $ref: '#/components/schemas/PolicyScheduling'
+        type:
+          type: string
+          description: Instana event type, Smart Alert type, or 'schedule'. The type must be one of the enum values.
+          enum:
+          - customEvent
+          - builtinEvent
+          - applicationSmartAlert
+          - globalApplicationSmartAlert
+          - websiteSmartAlert
+          - infraSmartAlert
+          - mobileAppSmartAlert
+          - syntheticsSmartAlert
+          - logSmartAlert
+          - sloSmartAlert
+          - schedule
+      required:
+      - type
+    Field:
+      type: object
+      description: List of fields that describe an action.
+      properties:
+        description:
+          type: string
+        encoding:
+          type: string
+        name:
+          type: string
+        secured:
+          type: boolean
+        value:
+          type: string
+      required:
+      - encoding
+      - name
+      - value
+    PolicyRunnable:
+      type: object
+      description: Runnable associated with the policy. It can be a `workflow` or `action`. Currently only supports `action`.
+      properties:
+        id:
+          type: string
+          description: Action identifier.
+        runConfiguration:
+          $ref: '#/components/schemas/RunConfiguration'
+        type:
+          type: string
+          description: Type of runnable. Supported value is `action`.
+          enum:
+          - action
+          - workflow
+      required:
+      - id
+      - runConfiguration
+      - type
     TagTreeNode:
       type: object
       description: Children tags of tagTree
@@ -894,6 +799,84 @@ components:
         type:
           type: string
           description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
+    TagTreeLevel:
+      type: object
+      description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
+
+        Consider this as the root of the tree where it has tags as attributes or children.
+
+        '
+      properties:
+        children:
+          type: array
+          description: Children tags of tagTree
+          items:
+            $ref: '#/components/schemas/TagTreeNode'
+        description:
+          type: string
+          description: The description provided, if any.
+          maxLength: 512
+          minLength: 0
+        icon:
+          type: string
+          description: 'Each tag has an Icon which can be seen on the drop down list in Unbounded Analytics.
+
+            If there is an icon, there will be a string associated with it.
+
+            Eg: For for all `TAG` under `Call` tagTreeNode, the `icon` value is `lib_application_call`.
+
+            '
+          maxLength: 128
+          minLength: 0
+        label:
+          type: string
+          description: 'The name of the tagTreeNode. Eg: `Commonly Used`, `Application`.'
+          maxLength: 128
+          minLength: 0
+        queryable:
+          type: boolean
+        scoreBoost:
+          type: integer
+          format: int32
+          description: 'By default it is `null` if it is not set explictily by IBM Instana.
+
+            The purpose of this parameter is to rank the tagTree. For eg: some set of tags are frequently used.
+
+            Tags under `Commonly used` is frequently used, so it will come up on top of the drop down list of `Query Builder` in `Unbounded Analytics`.
+
+            Higher the scoreBoost, higher the ranking.
+
+            '
+        type:
+          type: string
+          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
+      required:
+      - children
+      - label
+    TagCatalog:
+      type: object
+      properties:
+        tagTree:
+          type: array
+          description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
+
+            Consider this as the root of the tree where it has tags as attributes or children.
+
+            '
+          items:
+            $ref: '#/components/schemas/TagTreeLevel'
+        tags:
+          type: array
+          description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
+
+            Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
+
+            '
+          items:
+            $ref: '#/components/schemas/Tag'
+      required:
+      - tagTree
+      - tags
     RunConfiguration:
       type: object
       description: Action run configuration.
@@ -905,6 +888,23 @@ components:
             $ref: '#/components/schemas/ActionConfiguration'
       required:
       - actions
+    TypeConfiguration:
+      type: object
+      description: List of configurations that contains the list of actions to run and the mode (automatic or manual) in which the policy is run.
+      properties:
+        condition:
+          $ref: '#/components/schemas/Condition'
+        name:
+          type: string
+          description: The policy type determines how a policy is run. Value must be one of the enum values. Value `manual` means the policy is run manually when an event is raised. Value `automatic` means policy is run automatically when an event is raised.
+          enum:
+          - automatic
+          - manual
+        runnable:
+          $ref: '#/components/schemas/PolicyRunnable'
+      required:
+      - name
+      - runnable
   securitySchemes:
     ApiKeyAuth:
       in: header

@@ -157,21 +157,80 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    CustomEntityWithMetadata:
+    TagFilterExpressionElement:
       type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
       properties:
-        created:
-          type: integer
-          format: int64
-        data:
-          $ref: '#/components/schemas/CustomEntityModel'
-        id:
-          type: string
-        version:
+        type:
           type: string
       required:
-      - data
+      - type
+    AccessRule:
+      type: object
+      properties:
+        accessType:
+          type: string
+          description: "Specifies the type of access permitted. \n\n`READ`: Only viewing Application Perspective is allowed. \n\n`READ_WRITE`: Both viewing and modifying Application Perspective are permitted. \n\n"
+          enum:
+          - READ
+          - READ_WRITE
+        relatedId:
+          type: string
+          description: "An identifier that connects the access rule to a specific entity.\nFor example, if the `relationType` is `USER`, the corresponding `relatedId` would be a user id. \n\n**Note**: when `relationType` is `GLOBAL`, `relatedId` is `null`.\n"
+          maxLength: 64
+          minLength: 0
+        relationType:
+          type: string
+          description: "Defines the type of relationship or subject to which the access rule applies. \n\n`USER`: Access is granted to an individual user. \n\n`API_TOKEN`: Access is granted to a specific API token. \n\n`ROLE`: Access is granted based on a user role, applying to any user with that role. \n\n`TEAM`: Access is granted to a team, likely applying to all team members. \n\n`GLOBAL`: Access is granted to every user or service.\n"
+          enum:
+          - USER
+          - API_TOKEN
+          - ROLE
+          - TEAM
+          - GLOBAL
+      required:
+      - accessType
+      - relationType
+    Widget:
+      type: object
+      properties:
+        config:
+          type: object
+        height:
+          type: integer
+          format: int32
+          minimum: 1
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+        title:
+          type: string
+        type:
+          type: string
+        width:
+          type: integer
+          format: int32
+          maximum: 12
+          minimum: 1
+        x:
+          type: integer
+          format: int32
+          maximum: 11
+          minimum: 0
+        y:
+          type: integer
+          format: int32
+          minimum: 0
+      required:
+      - config
       - id
+      - type
     CustomMetric:
       type: object
       properties:
@@ -293,6 +352,51 @@ components:
         type:
           type: string
           description: Type of entity for the source metric
+    CustomEntityModel:
+      type: object
+      properties:
+        dashboards:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomDashboard'
+          uniqueItems: true
+        dependencies:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomDependency'
+          uniqueItems: true
+        identifiers:
+          type: array
+          items:
+            type: string
+        label:
+          type: string
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomMetric'
+          uniqueItems: true
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+      required:
+      - identifiers
+      - label
+      - tagFilterExpression
+    CustomEntityWithMetadata:
+      type: object
+      properties:
+        created:
+          type: integer
+          format: int64
+        data:
+          $ref: '#/components/schemas/CustomEntityModel'
+        id:
+          type: string
+        version:
+          type: string
+      required:
+      - data
+      - id
     CustomDashboard:
       type: object
       properties:
@@ -364,110 +468,6 @@ components:
           - parent
           maxLength: 8
           minLength: 1
-    Widget:
-      type: object
-      properties:
-        config:
-          type: object
-        height:
-          type: integer
-          format: int32
-          minimum: 1
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
-        title:
-          type: string
-        type:
-          type: string
-        width:
-          type: integer
-          format: int32
-          maximum: 12
-          minimum: 1
-        x:
-          type: integer
-          format: int32
-          maximum: 11
-          minimum: 0
-        y:
-          type: integer
-          format: int32
-          minimum: 0
-      required:
-      - config
-      - id
-      - type
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    AccessRule:
-      type: object
-      properties:
-        accessType:
-          type: string
-          description: "Specifies the type of access permitted. \n\n`READ`: Only viewing Application Perspective is allowed. \n\n`READ_WRITE`: Both viewing and modifying Application Perspective are permitted. \n\n"
-          enum:
-          - READ
-          - READ_WRITE
-        relatedId:
-          type: string
-          description: "An identifier that connects the access rule to a specific entity.\nFor example, if the `relationType` is `USER`, the corresponding `relatedId` would be a user id. \n\n**Note**: when `relationType` is `GLOBAL`, `relatedId` is `null`.\n"
-          maxLength: 64
-          minLength: 0
-        relationType:
-          type: string
-          description: "Defines the type of relationship or subject to which the access rule applies. \n\n`USER`: Access is granted to an individual user. \n\n`API_TOKEN`: Access is granted to a specific API token. \n\n`ROLE`: Access is granted based on a user role, applying to any user with that role. \n\n`TEAM`: Access is granted to a team, likely applying to all team members. \n\n`GLOBAL`: Access is granted to every user or service.\n"
-          enum:
-          - USER
-          - API_TOKEN
-          - ROLE
-          - TEAM
-          - GLOBAL
-      required:
-      - accessType
-      - relationType
-    CustomEntityModel:
-      type: object
-      properties:
-        dashboards:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomDashboard'
-          uniqueItems: true
-        dependencies:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomDependency'
-          uniqueItems: true
-        identifiers:
-          type: array
-          items:
-            type: string
-        label:
-          type: string
-        metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomMetric'
-          uniqueItems: true
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-      required:
-      - identifiers
-      - label
-      - tagFilterExpression
   securitySchemes:
     ApiKeyAuth:
       in: header

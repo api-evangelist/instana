@@ -649,21 +649,31 @@ components:
           exclusiveMinimum: 0
       required:
       - metricName
-    SliEntity:
+    SliConfiguration:
       type: object
-      description: Entity Type of the SLI Configuration
-      discriminator:
-        mapping:
-          application: '#/components/schemas/ApplicationSliEntity'
-          availability: '#/components/schemas/AvailabilitySliEntity'
-          websiteEventBased: '#/components/schemas/WebsiteEventBasedSliEntity'
-          websiteTimeBased: '#/components/schemas/WebsiteTimeBasedSliEntity'
-        propertyName: sliType
       properties:
-        sliType:
+        id:
           type: string
+          description: Unique ID for each SLI
+          maxLength: 64
+          minLength: 0
+        initialEvaluationTimestamp:
+          type: integer
+          format: int64
+          description: Initial evaluation timestamp in milliseconds (13-digit)
+        metricConfiguration:
+          $ref: '#/components/schemas/MetricConfiguration'
+        sliEntity:
+          $ref: '#/components/schemas/SliEntity'
+        sliName:
+          type: string
+          description: The name of the Service Level Indicator (SLI) specified during its creation
+          maxLength: 256
+          minLength: 0
       required:
-      - sliType
+      - id
+      - sliEntity
+      - sliName
     SliConfigurationWithLastUpdated:
       type: object
       properties:
@@ -694,31 +704,21 @@ components:
       - id
       - sliEntity
       - sliName
-    SliConfiguration:
+    SliEntity:
       type: object
+      description: Entity Type of the SLI Configuration
+      discriminator:
+        mapping:
+          application: '#/components/schemas/ApplicationSliEntity'
+          availability: '#/components/schemas/AvailabilitySliEntity'
+          websiteEventBased: '#/components/schemas/WebsiteEventBasedSliEntity'
+          websiteTimeBased: '#/components/schemas/WebsiteTimeBasedSliEntity'
+        propertyName: sliType
       properties:
-        id:
+        sliType:
           type: string
-          description: Unique ID for each SLI
-          maxLength: 64
-          minLength: 0
-        initialEvaluationTimestamp:
-          type: integer
-          format: int64
-          description: Initial evaluation timestamp in milliseconds (13-digit)
-        metricConfiguration:
-          $ref: '#/components/schemas/MetricConfiguration'
-        sliEntity:
-          $ref: '#/components/schemas/SliEntity'
-        sliName:
-          type: string
-          description: The name of the Service Level Indicator (SLI) specified during its creation
-          maxLength: 256
-          minLength: 0
       required:
-      - id
-      - sliEntity
-      - sliName
+      - sliType
   securitySchemes:
     ApiKeyAuth:
       in: header

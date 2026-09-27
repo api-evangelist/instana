@@ -261,67 +261,19 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    DashboardApiToken:
+    UserBasicResult:
       type: object
       properties:
+        email:
+          type: string
+        fullName:
+          type: string
         id:
           type: string
-        name:
-          type: string
       required:
+      - email
+      - fullName
       - id
-      - name
-    CustomDashboard:
-      type: object
-      properties:
-        accessRules:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessRule'
-          maxItems: 64
-          minItems: 1
-        id:
-          type: string
-        title:
-          type: string
-        widgets:
-          type: array
-          items:
-            $ref: '#/components/schemas/Widget'
-          maxItems: 128
-          minItems: 0
-          uniqueItems: true
-      required:
-      - accessRules
-      - id
-      - title
-      - widgets
-    CustomDashboardPreview:
-      type: object
-      properties:
-        annotations:
-          type: array
-          items:
-            type: string
-            enum:
-            - SHARED
-            - WRITABLE
-          maxItems: 8
-          minItems: 0
-          uniqueItems: true
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
-        ownerId:
-          type: string
-        title:
-          type: string
-      required:
-      - annotations
-      - id
-      - ownerId
-      - title
     Widget:
       type: object
       properties:
@@ -357,19 +309,32 @@ components:
       - config
       - id
       - type
-    UserBasicResult:
+    AccessRule:
       type: object
       properties:
-        email:
+        accessType:
           type: string
-        fullName:
+          description: "Specifies the type of access permitted. \n\n`READ`: Only viewing Application Perspective is allowed. \n\n`READ_WRITE`: Both viewing and modifying Application Perspective are permitted. \n\n"
+          enum:
+          - READ
+          - READ_WRITE
+        relatedId:
           type: string
-        id:
+          description: "An identifier that connects the access rule to a specific entity.\nFor example, if the `relationType` is `USER`, the corresponding `relatedId` would be a user id. \n\n**Note**: when `relationType` is `GLOBAL`, `relatedId` is `null`.\n"
+          maxLength: 64
+          minLength: 0
+        relationType:
           type: string
+          description: "Defines the type of relationship or subject to which the access rule applies. \n\n`USER`: Access is granted to an individual user. \n\n`API_TOKEN`: Access is granted to a specific API token. \n\n`ROLE`: Access is granted based on a user role, applying to any user with that role. \n\n`TEAM`: Access is granted to a team, likely applying to all team members. \n\n`GLOBAL`: Access is granted to every user or service.\n"
+          enum:
+          - USER
+          - API_TOKEN
+          - ROLE
+          - TEAM
+          - GLOBAL
       required:
-      - email
-      - fullName
-      - id
+      - accessType
+      - relationType
     CustomDashboardWithUserSpecificInformation:
       type: object
       properties:
@@ -401,32 +366,67 @@ components:
       - title
       - widgets
       - writable
-    AccessRule:
+    DashboardApiToken:
       type: object
       properties:
-        accessType:
+        id:
           type: string
-          description: "Specifies the type of access permitted. \n\n`READ`: Only viewing Application Perspective is allowed. \n\n`READ_WRITE`: Both viewing and modifying Application Perspective are permitted. \n\n"
-          enum:
-          - READ
-          - READ_WRITE
-        relatedId:
+        name:
           type: string
-          description: "An identifier that connects the access rule to a specific entity.\nFor example, if the `relationType` is `USER`, the corresponding `relatedId` would be a user id. \n\n**Note**: when `relationType` is `GLOBAL`, `relatedId` is `null`.\n"
+      required:
+      - id
+      - name
+    CustomDashboardPreview:
+      type: object
+      properties:
+        annotations:
+          type: array
+          items:
+            type: string
+            enum:
+            - SHARED
+            - WRITABLE
+          maxItems: 8
+          minItems: 0
+          uniqueItems: true
+        id:
+          type: string
           maxLength: 64
           minLength: 0
-        relationType:
+        ownerId:
           type: string
-          description: "Defines the type of relationship or subject to which the access rule applies. \n\n`USER`: Access is granted to an individual user. \n\n`API_TOKEN`: Access is granted to a specific API token. \n\n`ROLE`: Access is granted based on a user role, applying to any user with that role. \n\n`TEAM`: Access is granted to a team, likely applying to all team members. \n\n`GLOBAL`: Access is granted to every user or service.\n"
-          enum:
-          - USER
-          - API_TOKEN
-          - ROLE
-          - TEAM
-          - GLOBAL
+        title:
+          type: string
       required:
-      - accessType
-      - relationType
+      - annotations
+      - id
+      - ownerId
+      - title
+    CustomDashboard:
+      type: object
+      properties:
+        accessRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessRule'
+          maxItems: 64
+          minItems: 1
+        id:
+          type: string
+        title:
+          type: string
+        widgets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Widget'
+          maxItems: 128
+          minItems: 0
+          uniqueItems: true
+      required:
+      - accessRules
+      - id
+      - title
+      - widgets
   securitySchemes:
     ApiKeyAuth:
       in: header

@@ -290,60 +290,6 @@ components:
       - formatter
       - label
       - metricId
-    TagTreeLevel:
-      type: object
-      description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
-
-        Consider this as the root of the tree where it has tags as attributes or children.
-
-        '
-      properties:
-        children:
-          type: array
-          description: Children tags of tagTree
-          items:
-            $ref: '#/components/schemas/TagTreeNode'
-        description:
-          type: string
-          description: The description provided, if any.
-          maxLength: 512
-          minLength: 0
-        icon:
-          type: string
-          description: 'Each tag has an Icon which can be seen on the drop down list in Unbounded Analytics.
-
-            If there is an icon, there will be a string associated with it.
-
-            Eg: For for all `TAG` under `Call` tagTreeNode, the `icon` value is `lib_application_call`.
-
-            '
-          maxLength: 128
-          minLength: 0
-        label:
-          type: string
-          description: 'The name of the tagTreeNode. Eg: `Commonly Used`, `Application`.'
-          maxLength: 128
-          minLength: 0
-        queryable:
-          type: boolean
-        scoreBoost:
-          type: integer
-          format: int32
-          description: 'By default it is `null` if it is not set explictily by IBM Instana.
-
-            The purpose of this parameter is to rank the tagTree. For eg: some set of tags are frequently used.
-
-            Tags under `Commonly used` is frequently used, so it will come up on top of the drop down list of `Query Builder` in `Unbounded Analytics`.
-
-            Higher the scoreBoost, higher the ranking.
-
-            '
-        type:
-          type: string
-          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
-      required:
-      - children
-      - label
     TagCatalog:
       type: object
       properties:
@@ -368,22 +314,6 @@ components:
       required:
       - tagTree
       - tags
-    TagTreeNode:
-      type: object
-      description: Children tags of tagTree
-      discriminator:
-        mapping:
-          LEVEL: '#/components/schemas/TagTreeLevel'
-          TAG: '#/components/schemas/TagTreeTag'
-        propertyName: type
-      properties:
-        icon:
-          type: string
-        label:
-          type: string
-        type:
-          type: string
-          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
     Tag:
       type: object
       description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
@@ -481,6 +411,76 @@ components:
       required:
       - name
       - type
+    TagTreeNode:
+      type: object
+      description: Children tags of tagTree
+      discriminator:
+        mapping:
+          LEVEL: '#/components/schemas/TagTreeLevel'
+          TAG: '#/components/schemas/TagTreeTag'
+        propertyName: type
+      properties:
+        icon:
+          type: string
+        label:
+          type: string
+        type:
+          type: string
+          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
+    TagTreeLevel:
+      type: object
+      description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
+
+        Consider this as the root of the tree where it has tags as attributes or children.
+
+        '
+      properties:
+        children:
+          type: array
+          description: Children tags of tagTree
+          items:
+            $ref: '#/components/schemas/TagTreeNode'
+        description:
+          type: string
+          description: The description provided, if any.
+          maxLength: 512
+          minLength: 0
+        icon:
+          type: string
+          description: 'Each tag has an Icon which can be seen on the drop down list in Unbounded Analytics.
+
+            If there is an icon, there will be a string associated with it.
+
+            Eg: For for all `TAG` under `Call` tagTreeNode, the `icon` value is `lib_application_call`.
+
+            '
+          maxLength: 128
+          minLength: 0
+        label:
+          type: string
+          description: 'The name of the tagTreeNode. Eg: `Commonly Used`, `Application`.'
+          maxLength: 128
+          minLength: 0
+        queryable:
+          type: boolean
+        scoreBoost:
+          type: integer
+          format: int32
+          description: 'By default it is `null` if it is not set explictily by IBM Instana.
+
+            The purpose of this parameter is to rank the tagTree. For eg: some set of tags are frequently used.
+
+            Tags under `Commonly used` is frequently used, so it will come up on top of the drop down list of `Query Builder` in `Unbounded Analytics`.
+
+            Higher the scoreBoost, higher the ranking.
+
+            '
+        type:
+          type: string
+          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
+      required:
+      - children
+      - label
   securitySchemes:
     ApiKeyAuth:
       in: header

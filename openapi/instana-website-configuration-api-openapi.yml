@@ -740,18 +740,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    Website:
-      type: object
-      properties:
-        appName:
-          type: string
-        id:
-          type: string
-        name:
-          type: string
-      required:
-      - id
-      - name
     GeoSubdivision:
       type: object
       properties:
@@ -765,22 +753,6 @@ components:
           minLength: 0
       required:
       - name
-    SourceMapUploadConfigs:
-      type: object
-      properties:
-        config:
-          type: array
-          items:
-            $ref: '#/components/schemas/SourceMapUploadConfig'
-          writeOnly: true
-        configs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SourceMapUploadConfig'
-          maxItems: 1024
-          minItems: 0
-      required:
-      - configs
     SourceMapFileMeta:
       type: object
       properties:
@@ -811,53 +783,6 @@ components:
       - format
       - type
       - url
-    IpMaskingConfiguration:
-      type: object
-      properties:
-        ipMasking:
-          type: string
-          enum:
-          - DEFAULT
-          - STRICT
-          - REMOVE_ALL_DETAILS
-      required:
-      - ipMasking
-    ApiTag:
-      type: object
-      properties:
-        displayName:
-          type: string
-          maxLength: 256
-          minLength: 0
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
-      required:
-      - displayName
-      - id
-    SourceMapUploadConfig:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-        description:
-          type: string
-        id:
-          type: string
-        metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/SourceMapFileMeta'
-          maxItems: 500
-          minItems: 0
-        modifiedAt:
-          type: string
-          format: date-time
-      required:
-      - id
-      - metadata
     GeoMappingRule:
       type: object
       properties:
@@ -896,6 +821,42 @@ components:
       required:
       - cidr
       - subdivisions
+    SourceMapUploadConfig:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        description:
+          type: string
+        id:
+          type: string
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceMapFileMeta'
+          maxItems: 500
+          minItems: 0
+        modifiedAt:
+          type: string
+          format: date-time
+      required:
+      - id
+      - metadata
+    ApiTag:
+      type: object
+      properties:
+        displayName:
+          type: string
+          maxLength: 256
+          minLength: 0
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+      required:
+      - displayName
+      - id
     GeoLocationConfiguration:
       type: object
       properties:
@@ -926,6 +887,45 @@ components:
         sizeOnDisk:
           type: integer
           format: int64
+    IpMaskingConfiguration:
+      type: object
+      properties:
+        ipMasking:
+          type: string
+          enum:
+          - DEFAULT
+          - STRICT
+          - REMOVE_ALL_DETAILS
+      required:
+      - ipMasking
+    SourceMapUploadConfigs:
+      type: object
+      properties:
+        config:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceMapUploadConfig'
+          writeOnly: true
+        configs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceMapUploadConfig'
+          maxItems: 1024
+          minItems: 0
+      required:
+      - configs
+    Website:
+      type: object
+      properties:
+        appName:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
   securitySchemes:
     ApiKeyAuth:
       in: header

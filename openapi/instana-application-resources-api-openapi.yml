@@ -348,50 +348,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    ApplicationResult:
-      type: object
-      properties:
-        items:
-          type: array
-          description: Returns a list of Application Perspectives.
-          items:
-            $ref: '#/components/schemas/Application'
-        page:
-          type: integer
-          format: int32
-          description: Page number you want to retrieve in a request / retrieved in a response.
-        pageSize:
-          type: integer
-          format: int32
-          description: number of elements retrieved in a single query.
-        totalHits:
-          type: integer
-          format: int32
-          description: 'The number of results returned. For eg: If `items` has 5 elements, `totalhits` will be 5'
-    Application:
-      type: object
-      description: Returns a list of Application Perspectives.
-      properties:
-        boundaryScope:
-          type: string
-          description: Here, `ALL` Application Boundary Scope is considered.
-        entityType:
-          type: string
-          description: Since, this is an Application Perspective, it will be of type `APPLICATION`.
-          enum:
-          - APPLICATION
-          - SERVICE
-          - ENDPOINT
-        id:
-          type: string
-          description: 'Unique ID of the Application Perspective. Eg: `Av62RoIKQv-A3n6DbMQh9g`.'
-        label:
-          type: string
-          description: 'Name of the Application Perspective. Eg: `app1`.'
-      required:
-      - boundaryScope
-      - id
-      - label
     Endpoint:
       type: object
       properties:
@@ -453,25 +409,6 @@ components:
       - serviceId
       - technologies
       - type
-    EndpointResult:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Endpoint'
-        page:
-          type: integer
-          format: int32
-          description: Page number you want to retrieve in a request / retrieved in a response.
-        pageSize:
-          type: integer
-          format: int32
-          description: number of elements retrieved in a single query.
-        totalHits:
-          type: integer
-          format: int32
-          description: 'The number of results returned. For eg: If `items` has 5 elements, `totalhits` will be 5'
     Service:
       type: object
       properties:
@@ -530,6 +467,69 @@ components:
       - snapshotIds
       - technologies
       - types
+    Application:
+      type: object
+      description: Returns a list of Application Perspectives.
+      properties:
+        boundaryScope:
+          type: string
+          description: Here, `ALL` Application Boundary Scope is considered.
+        entityType:
+          type: string
+          description: Since, this is an Application Perspective, it will be of type `APPLICATION`.
+          enum:
+          - APPLICATION
+          - SERVICE
+          - ENDPOINT
+        id:
+          type: string
+          description: 'Unique ID of the Application Perspective. Eg: `Av62RoIKQv-A3n6DbMQh9g`.'
+        label:
+          type: string
+          description: 'Name of the Application Perspective. Eg: `app1`.'
+      required:
+      - boundaryScope
+      - id
+      - label
+    EndpointResult:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Endpoint'
+        page:
+          type: integer
+          format: int32
+          description: Page number you want to retrieve in a request / retrieved in a response.
+        pageSize:
+          type: integer
+          format: int32
+          description: number of elements retrieved in a single query.
+        totalHits:
+          type: integer
+          format: int32
+          description: 'The number of results returned. For eg: If `items` has 5 elements, `totalhits` will be 5'
+    ApplicationResult:
+      type: object
+      properties:
+        items:
+          type: array
+          description: Returns a list of Application Perspectives.
+          items:
+            $ref: '#/components/schemas/Application'
+        page:
+          type: integer
+          format: int32
+          description: Page number you want to retrieve in a request / retrieved in a response.
+        pageSize:
+          type: integer
+          format: int32
+          description: number of elements retrieved in a single query.
+        totalHits:
+          type: integer
+          format: int32
+          description: 'The number of results returned. For eg: If `items` has 5 elements, `totalhits` will be 5'
     ServiceResult:
       type: object
       properties:

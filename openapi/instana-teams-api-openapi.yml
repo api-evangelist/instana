@@ -284,6 +284,28 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
+    ApiTeamInfo:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 2048
+          minLength: 0
+    ApiRestrictedApplicationFilter:
+      type: object
+      properties:
+        label:
+          type: string
+        restrictingApplicationId:
+          type: string
+        scope:
+          type: string
+          enum:
+          - INCLUDE_NO_DOWNSTREAM
+          - INCLUDE_IMMEDIATE_DOWNSTREAM_DATABASE_AND_MESSAGING
+          - INCLUDE_ALL_DOWNSTREAM
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
     ApiTeamRole:
       type: object
       properties:
@@ -295,13 +317,41 @@ components:
           type: boolean
       required:
       - roleId
-    ApiTeamInfo:
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    ApiTeam:
       type: object
       properties:
-        description:
+        id:
           type: string
-          maxLength: 2048
+          maxLength: 64
           minLength: 0
+        info:
+          $ref: '#/components/schemas/ApiTeamInfo'
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTeamMember'
+          uniqueItems: true
+        scope:
+          $ref: '#/components/schemas/ApiTeamScope'
+        tag:
+          type: string
+          maxLength: 256
+          minLength: 0
+      required:
+      - tag
     ApiTeamMember:
       type: object
       properties:
@@ -318,34 +368,6 @@ components:
           type: string
       required:
       - userId
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    ApiRestrictedApplicationFilter:
-      type: object
-      properties:
-        label:
-          type: string
-        restrictingApplicationId:
-          type: string
-        scope:
-          type: string
-          enum:
-          - INCLUDE_NO_DOWNSTREAM
-          - INCLUDE_IMMEDIATE_DOWNSTREAM_DATABASE_AND_MESSAGING
-          - INCLUDE_ALL_DOWNSTREAM
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
     ApiTeamScope:
       type: object
       properties:
@@ -437,28 +459,6 @@ components:
           items:
             type: string
           uniqueItems: true
-    ApiTeam:
-      type: object
-      properties:
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
-        info:
-          $ref: '#/components/schemas/ApiTeamInfo'
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiTeamMember'
-          uniqueItems: true
-        scope:
-          $ref: '#/components/schemas/ApiTeamScope'
-        tag:
-          type: string
-          maxLength: 256
-          minLength: 0
-      required:
-      - tag
   securitySchemes:
     ApiKeyAuth:
       in: header

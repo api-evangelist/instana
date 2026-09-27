@@ -786,6 +786,18 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
+    TestResult:
+      type: object
+      properties:
+        testResult:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestResultItem'
+        testResultItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestResultItem'
+          writeOnly: true
     TestResultListResult:
       type: object
       properties:
@@ -808,302 +820,6 @@ components:
           minimum: 0
       required:
       - items
-    TestLastError:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            type: string
-        startTime:
-          type: integer
-          format: int64
-    TestResultMetadata:
-      type: object
-      properties:
-        metadata:
-          type: object
-          additionalProperties:
-            type: object
-        startTime:
-          type: integer
-          format: int64
-        testId:
-          type: string
-        testResultId:
-          type: string
-      required:
-      - testId
-    TestResultSubtransaction:
-      type: object
-      properties:
-        metrics:
-          type: object
-          additionalProperties:
-            type: object
-        properties:
-          type: object
-          additionalProperties:
-            type: object
-      required:
-      - metrics
-      - properties
-    LocationStatus:
-      type: object
-      properties:
-        locationDisplayLabel:
-          type: string
-        locationId:
-          type: string
-        successRate:
-          type: number
-          format: double
-        successRuns:
-          type: integer
-          format: int64
-        totalTestRuns:
-          type: integer
-          format: int64
-      required:
-      - locationId
-    Order:
-      type: object
-      description: 'Specifies the ordering of the results.
-
-        It contains fields that define the sorting criteria, the collation for sorting, and the direction in which the results should be ordered.
-
-        '
-      properties:
-        by:
-          type: string
-          description: If the granularity is set to `1` you can use the metric name eg. `latency.p95` to order by that value.
-        collation:
-          type: string
-          description: Language code used for sorting. Ignored for infrastructure queries.
-        direction:
-          type: string
-          description: The order in which results will be sorted, either `ASC` for ascending or `DESC` for descending.
-          enum:
-          - ASC
-          - DESC
-      required:
-      - by
-      - direction
-    TimeFrame:
-      type: object
-      description: Time range for which the data should be retrieved.
-      properties:
-        to:
-          type: integer
-          format: int64
-          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
-        windowSize:
-          type: integer
-          format: int64
-          description: windowSize in milliseconds
-          maximum: 2678400000
-          minimum: 0
-    GetTestResultAnalytic:
-      type: object
-      properties:
-        analyticFunction:
-          type: string
-        includeLocationIdGrouping:
-          type: boolean
-          writeOnly: true
-        order:
-          $ref: '#/components/schemas/Order'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-        syntheticMetrics:
-          type: array
-          items:
-            type: string
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        tagFilters:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagFilter'
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-      required:
-      - analyticFunction
-      - syntheticMetrics
-    TestResult:
-      type: object
-      properties:
-        testResult:
-          type: array
-          items:
-            $ref: '#/components/schemas/TestResultItem'
-        testResultItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/TestResultItem'
-          writeOnly: true
-    GetTestResultBase:
-      type: object
-      properties:
-        order:
-          $ref: '#/components/schemas/Order'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        tagFilters:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagFilter'
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-    GetTestResult:
-      type: object
-      properties:
-        applicationId:
-          type: string
-          maxLength: 64
-          minLength: 0
-        locationId:
-          type: array
-          items:
-            type: string
-        metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/SyntheticMetricConfiguration'
-        order:
-          $ref: '#/components/schemas/Order'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-        serviceId:
-          type: string
-          maxLength: 64
-          minLength: 0
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        tagFilters:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagFilter'
-        testId:
-          type: array
-          items:
-            type: string
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-      required:
-      - metrics
-    TestResultListItem:
-      type: object
-      properties:
-        metrics:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: array
-              items:
-                type: number
-        testResultCommonProperties:
-          $ref: '#/components/schemas/TestResultCommonProperties'
-      required:
-      - metrics
-      - testResultCommonProperties
-    TestResultDetailData:
-      type: object
-      properties:
-        har:
-          type: object
-          additionalProperties:
-            type: object
-        imageFiles:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: string
-              format: byte
-        logFiles:
-          type: object
-          additionalProperties:
-            type: string
-        logs:
-          type: string
-        subtransactionAvgMetrics:
-          type: object
-          additionalProperties:
-            type: object
-        subtransactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/TestResultSubtransaction'
-        testId:
-          type: string
-        testResultId:
-          type: string
-        videos:
-          type: array
-          items:
-            type: string
-            format: byte
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    TestResultCommonProperties:
-      type: object
-      properties:
-        clientId:
-          type: string
-        customTags:
-          type: object
-          additionalProperties:
-            type: string
-        dnsQueryType:
-          type: string
-        dnsServerName:
-          type: string
-        errors:
-          type: array
-          items:
-            type: string
-        id:
-          type: string
-        ismDetails:
-          type: object
-          additionalProperties:
-            type: string
-        lastErrors:
-          $ref: '#/components/schemas/TestLastError'
-        locationDisplayLabel:
-          type: string
-        locationId:
-          type: string
-        runType:
-          type: string
-        sslDaysRemaining:
-          type: string
-        testCommonProperties:
-          $ref: '#/components/schemas/TestCommonProperties'
-        testId:
-          type: string
-        testLastError:
-          $ref: '#/components/schemas/TestLastError'
-        testName:
-          type: string
-      required:
-      - clientId
-      - testId
     TagFilter:
       type: object
       allOf:
@@ -1154,61 +870,69 @@ components:
       - entity
       - name
       - operator
-    SyntheticMetricConfiguration:
+    TestResultListItem:
       type: object
       properties:
-        aggregation:
-          type: string
-          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
-          enum:
-          - SUM
-          - MEAN
-          - MAX
-          - MIN
-          - P25
-          - P50
-          - P75
-          - P90
-          - P95
-          - P98
-          - P99
-          - P99_9
-          - P99_99
-          - DISTINCT_COUNT
-          - SUM_POSITIVE
-          - PER_SECOND
-          - INCREASE
-        granularity:
-          type: integer
-          format: int32
-          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
-        metric:
-          type: string
-          description: 'Set a particular metric, eg: `latency`.'
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+        testResultCommonProperties:
+          $ref: '#/components/schemas/TestResultCommonProperties'
       required:
-      - aggregation
-      - metric
-    Pagination:
+      - metrics
+      - testResultCommonProperties
+    TestResultSubtransaction:
       type: object
       properties:
-        page:
-          type: integer
-          format: int32
-          description: Page number for a specific page in the results. For example, if you'd like to retrieve the 5th page out of 10 pages, the value would be 5.
-          minimum: 1
-        pageSize:
-          type: integer
-          format: int32
-          description: 'Set the number of items you want to return with one query. Eg: if you want to retrieve 10 items, the value would be 10.'
-          maximum: 200
-          minimum: 1
-    GetTestResultList:
+        metrics:
+          type: object
+          additionalProperties:
+            type: object
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+      required:
+      - metrics
+      - properties
+    TestLastError:
       type: object
       properties:
-        applicationId:
+        errors:
+          type: array
+          items:
+            type: string
+        startTime:
+          type: integer
+          format: int64
+    GetTestResultBase:
+      type: object
+      properties:
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagFilter'
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+    GetTestResultAnalytic:
+      type: object
+      properties:
+        analyticFunction:
           type: string
-          maxLength: 64
-          minLength: 0
+        includeLocationIdGrouping:
+          type: boolean
+          writeOnly: true
         order:
           $ref: '#/components/schemas/Order'
         pagination:
@@ -1226,7 +950,137 @@ components:
         timeFrame:
           $ref: '#/components/schemas/TimeFrame'
       required:
+      - analyticFunction
       - syntheticMetrics
+    TestResultCommonProperties:
+      type: object
+      properties:
+        clientId:
+          type: string
+        customTags:
+          type: object
+          additionalProperties:
+            type: string
+        dnsQueryType:
+          type: string
+        dnsServerName:
+          type: string
+        errors:
+          type: array
+          items:
+            type: string
+        id:
+          type: string
+        ismDetails:
+          type: object
+          additionalProperties:
+            type: string
+        lastErrors:
+          $ref: '#/components/schemas/TestLastError'
+        locationDisplayLabel:
+          type: string
+        locationId:
+          type: string
+        runType:
+          type: string
+        sslDaysRemaining:
+          type: string
+        testCommonProperties:
+          $ref: '#/components/schemas/TestCommonProperties'
+        testId:
+          type: string
+        testLastError:
+          $ref: '#/components/schemas/TestLastError'
+        testName:
+          type: string
+      required:
+      - clientId
+      - testId
+    TestResultDetailData:
+      type: object
+      properties:
+        har:
+          type: object
+          additionalProperties:
+            type: object
+        imageFiles:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+              format: byte
+        logFiles:
+          type: object
+          additionalProperties:
+            type: string
+        logs:
+          type: string
+        subtransactionAvgMetrics:
+          type: object
+          additionalProperties:
+            type: object
+        subtransactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestResultSubtransaction'
+        testId:
+          type: string
+        testResultId:
+          type: string
+        videos:
+          type: array
+          items:
+            type: string
+            format: byte
+    TestResultMetadata:
+      type: object
+      properties:
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+        startTime:
+          type: integer
+          format: int64
+        testId:
+          type: string
+        testResultId:
+          type: string
+      required:
+      - testId
+    LocationStatus:
+      type: object
+      properties:
+        locationDisplayLabel:
+          type: string
+        locationId:
+          type: string
+        successRate:
+          type: number
+          format: double
+        successRuns:
+          type: integer
+          format: int64
+        totalTestRuns:
+          type: integer
+          format: int64
+      required:
+      - locationId
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          description: Page number for a specific page in the results. For example, if you'd like to retrieve the 5th page out of 10 pages, the value would be 5.
+          minimum: 1
+        pageSize:
+          type: integer
+          format: int32
+          description: 'Set the number of items you want to return with one query. Eg: if you want to retrieve 10 items, the value would be 10.'
+          maximum: 200
+          minimum: 1
     GetTestSummaryResult:
       type: object
       properties:
@@ -1248,45 +1102,20 @@ components:
           $ref: '#/components/schemas/TimeFrame'
       required:
       - metrics
-    TestResultItem:
+    TimeFrame:
       type: object
+      description: Time range for which the data should be retrieved.
       properties:
-        applicationId:
-          type: string
-        applicationIds:
-          type: array
-          items:
-            type: string
-        customTags:
-          type: object
-          additionalProperties:
-            type: string
-        locationId:
-          type: array
-          items:
-            type: string
-        metrics:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
-        mobileApplicationIds:
-          type: array
-          items:
-            type: string
-        serviceId:
-          type: string
-        testId:
-          type: string
-        testName:
-          type: string
-        websiteIds:
-          type: array
-          items:
-            type: string
-      required:
-      - testId
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          maximum: 2678400000
+          minimum: 0
     TestCommonProperties:
       type: object
       properties:
@@ -1364,6 +1193,177 @@ components:
       - id
       - label
       - type
+    TestResultItem:
+      type: object
+      properties:
+        applicationId:
+          type: string
+        applicationIds:
+          type: array
+          items:
+            type: string
+        customTags:
+          type: object
+          additionalProperties:
+            type: string
+        locationId:
+          type: array
+          items:
+            type: string
+        metrics:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+        mobileApplicationIds:
+          type: array
+          items:
+            type: string
+        serviceId:
+          type: string
+        testId:
+          type: string
+        testName:
+          type: string
+        websiteIds:
+          type: array
+          items:
+            type: string
+      required:
+      - testId
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    SyntheticMetricConfiguration:
+      type: object
+      properties:
+        aggregation:
+          type: string
+          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        granularity:
+          type: integer
+          format: int32
+          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
+        metric:
+          type: string
+          description: 'Set a particular metric, eg: `latency`.'
+      required:
+      - aggregation
+      - metric
+    GetTestResultList:
+      type: object
+      properties:
+        applicationId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        syntheticMetrics:
+          type: array
+          items:
+            type: string
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagFilter'
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+      required:
+      - syntheticMetrics
+    Order:
+      type: object
+      description: 'Specifies the ordering of the results.
+
+        It contains fields that define the sorting criteria, the collation for sorting, and the direction in which the results should be ordered.
+
+        '
+      properties:
+        by:
+          type: string
+          description: If the granularity is set to `1` you can use the metric name eg. `latency.p95` to order by that value.
+        collation:
+          type: string
+          description: Language code used for sorting. Ignored for infrastructure queries.
+        direction:
+          type: string
+          description: The order in which results will be sorted, either `ASC` for ascending or `DESC` for descending.
+          enum:
+          - ASC
+          - DESC
+      required:
+      - by
+      - direction
+    GetTestResult:
+      type: object
+      properties:
+        applicationId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        locationId:
+          type: array
+          items:
+            type: string
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyntheticMetricConfiguration'
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        serviceId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagFilter'
+        testId:
+          type: array
+          items:
+            type: string
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+      required:
+      - metrics
   securitySchemes:
     ApiKeyAuth:
       in: header

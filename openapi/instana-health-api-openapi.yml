@@ -85,15 +85,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    InstanaVersionInfo:
-      type: object
-      properties:
-        branch:
-          type: string
-        commit:
-          type: string
-        imageTag:
-          type: string
     HealthState:
       type: object
       properties:
@@ -107,6 +98,15 @@ components:
           type: array
           items:
             type: string
+    InstanaVersionInfo:
+      type: object
+      properties:
+        branch:
+          type: string
+        commit:
+          type: string
+        imageTag:
+          type: string
   securitySchemes:
     ApiKeyAuth:
       in: header

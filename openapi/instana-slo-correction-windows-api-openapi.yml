@@ -165,32 +165,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    CorrectionWindow:
-      type: object
-      description: List of Correction Windows
-      properties:
-        correctionConfigs:
-          type: array
-          description: IDs of the Correction configurations in the Correction Window
-          items:
-            type: string
-            description: IDs of the Correction configurations in the Correction Window
-          uniqueItems: true
-        from:
-          type: string
-          format: date-time
-          description: Correction Window starting timestamp in milliseconds (13-digit)
-        sloConfigs:
-          type: array
-          description: IDs of the SLO configurations in the Correction Window
-          items:
-            type: string
-            description: IDs of the SLO configurations in the Correction Window
-          uniqueItems: true
-        to:
-          type: string
-          format: date-time
-          description: Correction Window ending timestamp in milliseconds (13-digit)
     Correction:
       type: object
       properties:
@@ -221,6 +195,32 @@ components:
           type: string
           format: date-time
           description: Correction ending timestamp in milliseconds (13-digit)
+    CorrectionWindow:
+      type: object
+      description: List of Correction Windows
+      properties:
+        correctionConfigs:
+          type: array
+          description: IDs of the Correction configurations in the Correction Window
+          items:
+            type: string
+            description: IDs of the Correction configurations in the Correction Window
+          uniqueItems: true
+        from:
+          type: string
+          format: date-time
+          description: Correction Window starting timestamp in milliseconds (13-digit)
+        sloConfigs:
+          type: array
+          description: IDs of the SLO configurations in the Correction Window
+          items:
+            type: string
+            description: IDs of the SLO configurations in the Correction Window
+          uniqueItems: true
+        to:
+          type: string
+          format: date-time
+          description: Correction Window ending timestamp in milliseconds (13-digit)
   securitySchemes:
     ApiKeyAuth:
       in: header

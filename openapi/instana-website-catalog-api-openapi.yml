@@ -226,6 +226,143 @@ paths:
         ```'
 components:
   schemas:
+    TagCatalog:
+      type: object
+      properties:
+        tagTree:
+          type: array
+          description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
+
+            Consider this as the root of the tree where it has tags as attributes or children.
+
+            '
+          items:
+            $ref: '#/components/schemas/TagTreeLevel'
+        tags:
+          type: array
+          description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
+
+            Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
+
+            '
+          items:
+            $ref: '#/components/schemas/Tag'
+      required:
+      - tagTree
+      - tags
+    Tag:
+      type: object
+      description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
+
+        Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
+
+        '
+      properties:
+        aliases:
+          type: array
+          description: 'List of other names that can refer to this tag
+
+            '
+          items:
+            type: string
+            description: 'List of other names that can refer to this tag
+
+              '
+          uniqueItems: true
+        availability:
+          type: array
+          description: 'List of product areas this tag is available in
+
+            '
+          items:
+            type: string
+            description: 'List of product areas this tag is available in
+
+              '
+            enum:
+            - INFRASTRUCTURE_METRICS
+            - APPLICATION
+            - WEBSITE
+            - MOBILE_APP
+            - EUM
+            - EUM_IMPACTED_BEACON
+            - EVENT
+            - SLI
+            - SLO
+            - SLO_PREVIEW
+            - USAGE
+            - LOG
+            - SYNTHETICS
+            - SYNTHETICS_DETAIL
+            - APDEX
+            - BIZOPS
+            - BUSINESS_METRICS
+            - SUBTRACE
+            - UNKNOWN
+          uniqueItems: true
+        canApplyToDestination:
+          type: boolean
+          description: 'Whether the tag is available for destination or not.
+
+            If source and destination is false, it means the tag is independent of source and destination. Eg: of such tag is `call.http.path`.
+
+            '
+        canApplyToSource:
+          type: boolean
+          description: 'Whether the tag is available for source or not.
+
+            If source and destination is false, it means the tag is independent of source and destination. Eg: of such tag is `call.http.path`.
+
+            '
+        description:
+          type: string
+          description: The description of the tag if it is provided.
+        idTag:
+          type: boolean
+          description: 'Whether the Tag is a unique ID or not.
+
+            Eg: `idTag` for `endpoint.id` is true but for `call.rpc.method` it is false.
+
+            '
+        label:
+          type: string
+          description: 'The name of the tag which is seen in the UI. Eg: `Call name`'
+          maxLength: 256
+          minLength: 0
+        name:
+          type: string
+          description: 'The name of the tag. Eg: `call.name`'
+        type:
+          type: string
+          description: 'The data type of the tag. Eg: `call.name` accepts `STRING` value.'
+          enum:
+          - BOOLEAN
+          - STRING
+          - NUMBER
+          - STRING_SET
+          - STRING_LIST
+          - KEY_VALUE_PAIR
+          - FLOAT_LIST
+          - KEY_NUMBER_PAIR
+      required:
+      - name
+      - type
+    TagTreeNode:
+      type: object
+      description: Children tags of tagTree
+      discriminator:
+        mapping:
+          LEVEL: '#/components/schemas/TagTreeLevel'
+          TAG: '#/components/schemas/TagTreeTag'
+        propertyName: type
+      properties:
+        icon:
+          type: string
+        label:
+          type: string
+        type:
+          type: string
+          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
     WebsiteMonitoringMetricDescription:
       type: object
       properties:
@@ -404,143 +541,6 @@ components:
       required:
       - children
       - label
-    TagCatalog:
-      type: object
-      properties:
-        tagTree:
-          type: array
-          description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
-
-            Consider this as the root of the tree where it has tags as attributes or children.
-
-            '
-          items:
-            $ref: '#/components/schemas/TagTreeLevel'
-        tags:
-          type: array
-          description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
-
-            Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
-
-            '
-          items:
-            $ref: '#/components/schemas/Tag'
-      required:
-      - tagTree
-      - tags
-    TagTreeNode:
-      type: object
-      description: Children tags of tagTree
-      discriminator:
-        mapping:
-          LEVEL: '#/components/schemas/TagTreeLevel'
-          TAG: '#/components/schemas/TagTreeTag'
-        propertyName: type
-      properties:
-        icon:
-          type: string
-        label:
-          type: string
-        type:
-          type: string
-          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
-    Tag:
-      type: object
-      description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
-
-        Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
-
-        '
-      properties:
-        aliases:
-          type: array
-          description: 'List of other names that can refer to this tag
-
-            '
-          items:
-            type: string
-            description: 'List of other names that can refer to this tag
-
-              '
-          uniqueItems: true
-        availability:
-          type: array
-          description: 'List of product areas this tag is available in
-
-            '
-          items:
-            type: string
-            description: 'List of product areas this tag is available in
-
-              '
-            enum:
-            - INFRASTRUCTURE_METRICS
-            - APPLICATION
-            - WEBSITE
-            - MOBILE_APP
-            - EUM
-            - EUM_IMPACTED_BEACON
-            - EVENT
-            - SLI
-            - SLO
-            - SLO_PREVIEW
-            - USAGE
-            - LOG
-            - SYNTHETICS
-            - SYNTHETICS_DETAIL
-            - APDEX
-            - BIZOPS
-            - BUSINESS_METRICS
-            - SUBTRACE
-            - UNKNOWN
-          uniqueItems: true
-        canApplyToDestination:
-          type: boolean
-          description: 'Whether the tag is available for destination or not.
-
-            If source and destination is false, it means the tag is independent of source and destination. Eg: of such tag is `call.http.path`.
-
-            '
-        canApplyToSource:
-          type: boolean
-          description: 'Whether the tag is available for source or not.
-
-            If source and destination is false, it means the tag is independent of source and destination. Eg: of such tag is `call.http.path`.
-
-            '
-        description:
-          type: string
-          description: The description of the tag if it is provided.
-        idTag:
-          type: boolean
-          description: 'Whether the Tag is a unique ID or not.
-
-            Eg: `idTag` for `endpoint.id` is true but for `call.rpc.method` it is false.
-
-            '
-        label:
-          type: string
-          description: 'The name of the tag which is seen in the UI. Eg: `Call name`'
-          maxLength: 256
-          minLength: 0
-        name:
-          type: string
-          description: 'The name of the tag. Eg: `call.name`'
-        type:
-          type: string
-          description: 'The data type of the tag. Eg: `call.name` accepts `STRING` value.'
-          enum:
-          - BOOLEAN
-          - STRING
-          - NUMBER
-          - STRING_SET
-          - STRING_LIST
-          - KEY_VALUE_PAIR
-          - FLOAT_LIST
-          - KEY_NUMBER_PAIR
-      required:
-      - name
-      - type
   securitySchemes:
     ApiKeyAuth:
       in: header

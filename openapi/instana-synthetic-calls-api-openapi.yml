@@ -137,21 +137,6 @@ components:
           type: string
       required:
       - type
-    SyntheticCallConfig:
-      type: object
-      properties:
-        customRules:
-          type: array
-          description: The list of custom rules for synthetic endpoints defined by the user.
-          items:
-            $ref: '#/components/schemas/SyntheticCallRule'
-          maxItems: 500
-          minItems: 0
-        defaultRulesEnabled:
-          type: boolean
-          description: A flag to enable/disable the default synthetic endpoint configurations defined by Instana.
-      required:
-      - customRules
     SyntheticCallWithDefaultsConfig:
       type: object
       properties:
@@ -172,6 +157,21 @@ components:
       required:
       - customRules
       - defaultRules
+    SyntheticCallConfig:
+      type: object
+      properties:
+        customRules:
+          type: array
+          description: The list of custom rules for synthetic endpoints defined by the user.
+          items:
+            $ref: '#/components/schemas/SyntheticCallRule'
+          maxItems: 500
+          minItems: 0
+        defaultRulesEnabled:
+          type: boolean
+          description: A flag to enable/disable the default synthetic endpoint configurations defined by Instana.
+      required:
+      - customRules
     SyntheticCallRule:
       type: object
       description: The list of custom rules for synthetic endpoints defined by the user.
