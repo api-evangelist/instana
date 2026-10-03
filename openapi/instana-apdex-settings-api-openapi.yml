@@ -250,6 +250,29 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
+    ApdexEntity:
+      type: object
+      description: Entity which holds the information of Apdex Configuration
+      discriminator:
+        mapping:
+          application: '#/components/schemas/ApplicationApdexEntity'
+          website: '#/components/schemas/WebsiteApdexEntity'
+        propertyName: apdexType
+      properties:
+        apdexType:
+          type: string
+        entityId:
+          type: string
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        threshold:
+          type: integer
+          format: int32
+          minimum: 1
+      required:
+      - apdexType
+      - entityId
+      - tagFilterExpression
     TagFilterExpressionElement:
       type: object
       description: Boolean expression of tag filters to define the scope of relevant calls.
@@ -276,29 +299,6 @@ components:
       required:
       - apdexEntity
       - apdexName
-    ApdexEntity:
-      type: object
-      description: Entity which holds the information of Apdex Configuration
-      discriminator:
-        mapping:
-          application: '#/components/schemas/ApplicationApdexEntity'
-          website: '#/components/schemas/WebsiteApdexEntity'
-        propertyName: apdexType
-      properties:
-        apdexType:
-          type: string
-        entityId:
-          type: string
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        threshold:
-          type: integer
-          format: int32
-          minimum: 1
-      required:
-      - apdexType
-      - entityId
-      - tagFilterExpression
     ApdexConfiguration:
       type: object
       properties:

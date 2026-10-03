@@ -610,33 +610,19 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    ServiceNode:
+    ThresholdConfigRule:
       type: object
+      discriminator:
+        mapping:
+          adaptiveBaseline: '#/components/schemas/AdaptiveThresholdRule'
+          historicBaseline: '#/components/schemas/StaticBaselineThresholdRule'
+          staticThreshold: '#/components/schemas/StaticThresholdRule'
+        propertyName: type
       properties:
-        endpoints:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/EndpointNode'
-        inclusive:
-          type: boolean
-        serviceId:
+        type:
           type: string
-          maxLength: 64
-          minLength: 0
       required:
-      - endpoints
-      - serviceId
-    EndpointNode:
-      type: object
-      properties:
-        endpointId:
-          type: string
-          maxLength: 64
-          minLength: 0
-        inclusive:
-          type: boolean
-      required:
-      - endpointId
+      - type
     ApplicationAlertRule:
       type: object
       discriminator:
@@ -676,23 +662,18 @@ components:
       required:
       - alertType
       - metricName
-    CustomPayloadField:
+    Author:
       type: object
-      description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
-      discriminator:
-        mapping:
-          dynamic: '#/components/schemas/DynamicField'
-          staticString: '#/components/schemas/StaticStringField'
-        propertyName: type
       properties:
-        key:
+        id:
           type: string
-          description: A user-specified unique identifier or name for a custom payload entry.
         type:
           type: string
-      required:
-      - key
-      - type
+          enum:
+          - API
+          - USER
+          - INSTANA
+          - UNKNOWN
     GlobalApplicationAlertConfigWithMetadata:
       type: object
       properties:
@@ -842,18 +823,22 @@ components:
       - name
       - tagFilterExpression
       - timeThreshold
-    TagFilterExpressionElement:
+    CustomPayloadField:
       type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
+      description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
       discriminator:
         mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
+          dynamic: '#/components/schemas/DynamicField'
+          staticString: '#/components/schemas/StaticStringField'
         propertyName: type
       properties:
+        key:
+          type: string
+          description: A user-specified unique identifier or name for a custom payload entry.
         type:
           type: string
       required:
+      - key
       - type
     RuleWithThresholdApplicationAlertRule:
       type: object
@@ -876,92 +861,6 @@ components:
       - rule
       - thresholdOperator
       - thresholds
-    ConfigVersion:
-      type: object
-      properties:
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummary'
-        created:
-          type: integer
-          format: int64
-          description: Unix timestamp representing the creation time of this revision.
-          minimum: 1
-        deleted:
-          type: boolean
-          deprecated: true
-          description: Flag to indicate whether or not the configuration was deleted.
-        enabled:
-          type: boolean
-          deprecated: true
-          description: Flag to indicate whether or not the configuration is enabled.
-        id:
-          type: string
-          description: ID of this configuration version.
-          maxLength: 64
-          minLength: 0
-      required:
-      - id
-    ThresholdConfigRule:
-      type: object
-      discriminator:
-        mapping:
-          adaptiveBaseline: '#/components/schemas/AdaptiveThresholdRule'
-          historicBaseline: '#/components/schemas/StaticBaselineThresholdRule'
-          staticThreshold: '#/components/schemas/StaticThresholdRule'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    ApplicationTimeThreshold:
-      type: object
-      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
-      discriminator:
-        mapping:
-          requestImpact: '#/components/schemas/TraceImpactApplicationTimeThreshold'
-          violationsInPeriod: '#/components/schemas/ViolationsInPeriodApplicationTimeThreshold'
-          violationsInSequence: '#/components/schemas/ViolationsInSequenceApplicationTimeThreshold'
-        propertyName: type
-      properties:
-        timeWindow:
-          type: integer
-          format: int64
-        type:
-          type: string
-      required:
-      - type
-    ChangeSummary:
-      type: object
-      description: Brief summary of changes made in this config version.
-      properties:
-        author:
-          $ref: '#/components/schemas/Author'
-        changeType:
-          type: string
-          enum:
-          - CREATE
-          - UPDATE
-          - DELETE
-          - ENABLE
-          - DISABLE
-          - RESTORE
-          - UNKNOWN
-      required:
-      - author
-      - changeType
-    Author:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - API
-          - USER
-          - INSTANA
-          - UNKNOWN
     GlobalApplicationsAlertConfig:
       type: object
       properties:
@@ -1079,6 +978,91 @@ components:
       - name
       - tagFilterExpression
       - timeThreshold
+    ConfigVersion:
+      type: object
+      properties:
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummary'
+        created:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the creation time of this revision.
+          minimum: 1
+        deleted:
+          type: boolean
+          deprecated: true
+          description: Flag to indicate whether or not the configuration was deleted.
+        enabled:
+          type: boolean
+          deprecated: true
+          description: Flag to indicate whether or not the configuration is enabled.
+        id:
+          type: string
+          description: ID of this configuration version.
+          maxLength: 64
+          minLength: 0
+      required:
+      - id
+    ChangeSummary:
+      type: object
+      description: Brief summary of changes made in this config version.
+      properties:
+        author:
+          $ref: '#/components/schemas/Author'
+        changeType:
+          type: string
+          enum:
+          - CREATE
+          - UPDATE
+          - DELETE
+          - ENABLE
+          - DISABLE
+          - RESTORE
+          - UNKNOWN
+      required:
+      - author
+      - changeType
+    EndpointNode:
+      type: object
+      properties:
+        endpointId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        inclusive:
+          type: boolean
+      required:
+      - endpointId
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    ApplicationTimeThreshold:
+      type: object
+      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
+      discriminator:
+        mapping:
+          requestImpact: '#/components/schemas/TraceImpactApplicationTimeThreshold'
+          violationsInPeriod: '#/components/schemas/ViolationsInPeriodApplicationTimeThreshold'
+          violationsInSequence: '#/components/schemas/ViolationsInSequenceApplicationTimeThreshold'
+        propertyName: type
+      properties:
+        timeWindow:
+          type: integer
+          format: int64
+        type:
+          type: string
+      required:
+      - type
     ApplicationNode:
       type: object
       description: Selection of applications, services, and endpoints that this Smart Alert configuration is associated with. This selection is connected to the defined `tagFilterExpression` by the logical `AND` operator.
@@ -1096,6 +1080,22 @@ components:
       required:
       - applicationId
       - services
+    ServiceNode:
+      type: object
+      properties:
+        endpoints:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EndpointNode'
+        inclusive:
+          type: boolean
+        serviceId:
+          type: string
+          maxLength: 64
+          minLength: 0
+      required:
+      - endpoints
+      - serviceId
     Threshold:
       type: object
       deprecated: true

@@ -134,6 +134,21 @@ components:
         source:
           type: string
           description: ID of the incoming GraphEdge.
+    EntityId:
+      type: object
+      properties:
+        host:
+          type: string
+        pluginId:
+          type: string
+          description: Plugin name
+        steadyId:
+          type: string
+          description: Steady identifier for the entity.
+      required:
+      - host
+      - pluginId
+      - steadyId
     GraphNode:
       type: object
       properties:
@@ -163,21 +178,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GraphNode'
-    EntityId:
-      type: object
-      properties:
-        host:
-          type: string
-        pluginId:
-          type: string
-          description: Plugin name
-        steadyId:
-          type: string
-          description: Steady identifier for the entity.
-      required:
-      - host
-      - pluginId
-      - steadyId
   securitySchemes:
     ApiKeyAuth:
       in: header

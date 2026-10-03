@@ -2894,299 +2894,132 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    SystemRuleLabel:
+    Action:
       type: object
+      description: Automation action definition. When this is used in policy creation request, only `id` should be specified.
       properties:
-        id:
+        createdAt:
           type: string
-        name:
-          type: string
-      required:
-      - id
-      - name
-    MobileAppAlertRule:
-      type: object
-      discriminator:
-        mapping:
-          crash: '#/components/schemas/CrashMobileAppAlertRule'
-          customEvent: '#/components/schemas/CustomEventMobileAppAlertRule'
-          slowness: '#/components/schemas/SlownessMobileAppAlertRule'
-          statusCode: '#/components/schemas/StatusCodeMobileAppAlertRule'
-          throughput: '#/components/schemas/ThroughputMobileAppAlertRule'
-        propertyName: alertType
-      properties:
-        aggregation:
-          type: string
-          enum:
-          - SUM
-          - MEAN
-          - MAX
-          - MIN
-          - P25
-          - P50
-          - P75
-          - P90
-          - P95
-          - P98
-          - P99
-          - P99_9
-          - P99_99
-          - DISTINCT_COUNT
-          - SUM_POSITIVE
-          - PER_SECOND
-          - INCREASE
-        alertType:
-          type: string
-        metricName:
-          type: string
-      required:
-      - alertType
-      - metricName
-    ApiTag:
-      type: object
-      properties:
-        displayName:
-          type: string
-          maxLength: 256
-          minLength: 0
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
-      required:
-      - displayName
-      - id
-    ManualAlertingChannelConfiguration:
-      type: object
-      properties:
-        customPayloadFields:
-          type: array
-          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
-          items:
-            $ref: '#/components/schemas/StaticStringField'
-          maxItems: 20
-          minItems: 0
-        eventId:
-          type: string
-          description: Id of the event to be notified about.
-          maxLength: 256
-          minLength: 0
-      required:
-      - customPayloadFields
-      - eventId
-    TagFilter:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/TagFilterExpressionElement'
-      - type: object
-        properties:
-          entity:
-            type: string
-            description: SOURCE or DESTINATION tag in case of a call tag. For Infrastructure, always set to NOT_APPLICABLE.
-            enum:
-            - NOT_APPLICABLE
-            - DESTINATION
-            - SOURCE
-          key:
-            type: string
-            description: Tag key in case of a key/value tag.
-            maxLength: 512
-            minLength: 0
-          name:
-            type: string
-            description: Name of the tag.
-            maxLength: 128
-            minLength: 0
-          operator:
-            type: string
-            enum:
-            - EQUALS
-            - CONTAINS
-            - LESS_THAN
-            - LESS_OR_EQUAL_THAN
-            - GREATER_THAN
-            - GREATER_OR_EQUAL_THAN
-            - NOT_EMPTY
-            - NOT_EQUAL
-            - NOT_CONTAIN
-            - IS_EMPTY
-            - NOT_BLANK
-            - IS_BLANK
-            - STARTS_WITH
-            - ENDS_WITH
-            - NOT_STARTS_WITH
-            - NOT_ENDS_WITH
-            - REGEX_MATCH
-          value:
-            type: object
-            description: Tag value to filter on. Can be a string, number, or boolean value.
-      required:
-      - entity
-      - name
-      - operator
-    Tag:
-      type: object
-      description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
-
-        Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
-
-        '
-      properties:
-        aliases:
-          type: array
-          description: 'List of other names that can refer to this tag
-
-            '
-          items:
-            type: string
-            description: 'List of other names that can refer to this tag
-
-              '
-          uniqueItems: true
-        availability:
-          type: array
-          description: 'List of product areas this tag is available in
-
-            '
-          items:
-            type: string
-            description: 'List of product areas this tag is available in
-
-              '
-            enum:
-            - INFRASTRUCTURE_METRICS
-            - APPLICATION
-            - WEBSITE
-            - MOBILE_APP
-            - EUM
-            - EUM_IMPACTED_BEACON
-            - EVENT
-            - SLI
-            - SLO
-            - SLO_PREVIEW
-            - USAGE
-            - LOG
-            - SYNTHETICS
-            - SYNTHETICS_DETAIL
-            - APDEX
-            - BIZOPS
-            - BUSINESS_METRICS
-            - SUBTRACE
-            - UNKNOWN
-          uniqueItems: true
-        canApplyToDestination:
-          type: boolean
-          description: 'Whether the tag is available for destination or not.
-
-            If source and destination is false, it means the tag is independent of source and destination. Eg: of such tag is `call.http.path`.
-
-            '
-        canApplyToSource:
-          type: boolean
-          description: 'Whether the tag is available for source or not.
-
-            If source and destination is false, it means the tag is independent of source and destination. Eg: of such tag is `call.http.path`.
-
-            '
+          format: date-time
+          description: Action created time.
         description:
           type: string
-          description: The description of the tag if it is provided.
-        idTag:
-          type: boolean
-          description: 'Whether the Tag is a unique ID or not.
-
-            Eg: `idTag` for `endpoint.id` is true but for `call.rpc.method` it is false.
-
-            '
-        label:
-          type: string
-          description: 'The name of the tag which is seen in the UI. Eg: `Call name`'
-          maxLength: 256
+          description: Action description.
+          maxLength: 512
           minLength: 0
-        name:
-          type: string
-          description: 'The name of the tag. Eg: `call.name`'
-        type:
-          type: string
-          description: 'The data type of the tag. Eg: `call.name` accepts `STRING` value.'
-          enum:
-          - BOOLEAN
-          - STRING
-          - NUMBER
-          - STRING_SET
-          - STRING_LIST
-          - KEY_VALUE_PAIR
-          - FLOAT_LIST
-          - KEY_NUMBER_PAIR
-      required:
-      - name
-      - type
-    ValidatedAlertingChannelInputInfo:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-          description: Flag to indicate whether or not the configuration is enabled.
-        entityId:
-          type: string
-          description: The entity ID in case of Smart Alerts, such as for the application, website or mobile app.
-        eventTypes:
+        fields:
           type: array
-          description: The selected event types, if applicable.
+          description: List of fields that describe an action.
           items:
-            type: string
-            description: The selected event types, if applicable.
-            enum:
-            - incident
-            - critical
-            - warning
-            - change
-            - online
-            - offline
-            - agent_monitoring_issue
-            - cve_issue
-            - none
-          maxItems: 6
-          minItems: 0
-          uniqueItems: true
+            $ref: '#/components/schemas/Field'
         id:
           type: string
-          description: ID of the alert configuration.
-          maxLength: 64
-          minLength: 0
-        invalid:
-          type: boolean
-          description: Flag to indicate whether the specified query is invalid.
-        label:
+          description: Action identifier.
+          maxLength: 128
+          minLength: 1
+        inputParameters:
+          type: array
+          description: List of inputs to the action.
+          items:
+            $ref: '#/components/schemas/Parameter'
+        metadata:
+          $ref: '#/components/schemas/MetaData'
+        modifiedAt:
           type: string
-          description: The name of the alert configuration.
-          maxLength: 256
-          minLength: 0
-        query:
+          format: date-time
+          description: Action modified time.
+        name:
           type: string
-          description: The DFQ used in the alert configuration, if applicable.
-          maxLength: 2048
-          minLength: 0
-        selectedEvents:
-          type: integer
-          format: int32
-          description: The number of selected events, if applicable.
+          description: Action name.
+          maxLength: 128
+          minLength: 1
+        tags:
+          type: array
+          description: List of tags added to the action.
+          items:
+            type: string
+            description: List of tags added to the action.
         type:
           type: string
-          description: The alert type.
+          description: 'Action type can be one of the following values:  SCRIPT, HTTP, ANSIBLE, EXTERNAL, GITHUB, GITLAB, JIRA, MANUAL, DOC_LINK'
           enum:
-          - Alert
-          - WebsiteSmartAlert
-          - MobileSmartAlert
-          - ApplicationSmartAlert
-          - GlobalApplicationSmartAlert
-          - SyntheticSmartAlert
-          - InfraSmartAlert
-          - ServiceLevelSmartAlert
-          - LogSmartAlert
+          - SCRIPT
+          - HTTP
+          - ANSIBLE
+          - EXTERNAL
+          - GITHUB
+          - GITLAB
+          - JIRA
+          - MANUAL
+          - DOC_LINK
+          maxLength: 128
+          minLength: 0
       required:
+      - createdAt
       - id
-      - label
+      - modifiedAt
+      - name
+      - type
+    MetaData:
+      type: object
+      description: Action metadata.
+      properties:
+        ai:
+          type: array
+          description: List of metadata for AI originated actions.
+          items:
+            type: object
+            additionalProperties:
+              type: object
+              description: List of metadata for AI originated actions.
+            description: List of metadata for AI originated actions.
+        aiOriginated:
+          type: boolean
+          description: AI originated action flag. Value is `true` if action is AI generated `false` otherwise.
+        builtIn:
+          type: boolean
+          description: Built-in out of the box action flag. Value is `true` if built-in action `false` otherwise.
+        readOnly:
+          type: boolean
+          description: Read only action flag. Value is `true` if read only `false` otherwise.
+        sensorImported:
+          type: boolean
+          description: Sensor imported action flag. Value is `true` if action is imported from sensor `false` otherwise.
+    RuleInput:
+      type: object
+      description: List of input rules of the Built-in Event Specification
+      properties:
+        inputKind:
+          type: string
+          enum:
+          - METRIC
+          - SNAPSHOT_FIELD
+          - EVENT
+          - DERIVED_METRIC
+          - METRIC_PATTERN
+        inputName:
+          type: string
+          maxLength: 256
+          minLength: 0
+      required:
+      - inputKind
+      - inputName
+    CustomPayloadField:
+      type: object
+      description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+      discriminator:
+        mapping:
+          dynamic: '#/components/schemas/DynamicField'
+          staticString: '#/components/schemas/StaticStringField'
+        propertyName: type
+      properties:
+        key:
+          type: string
+          description: A user-specified unique identifier or name for a custom payload entry.
+        type:
+          type: string
+      required:
+      - key
       - type
     MobileAppAlertConfig:
       type: object
@@ -3285,62 +3118,218 @@ components:
       - name
       - tagFilterExpression
       - timeThreshold
-    BuiltInEventSpecification:
+    MobileAppAlertRule:
       type: object
+      discriminator:
+        mapping:
+          crash: '#/components/schemas/CrashMobileAppAlertRule'
+          customEvent: '#/components/schemas/CustomEventMobileAppAlertRule'
+          slowness: '#/components/schemas/SlownessMobileAppAlertRule'
+          statusCode: '#/components/schemas/StatusCodeMobileAppAlertRule'
+          throughput: '#/components/schemas/ThroughputMobileAppAlertRule'
+        propertyName: alertType
+      properties:
+        aggregation:
+          type: string
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        alertType:
+          type: string
+        metricName:
+          type: string
+      required:
+      - alertType
+      - metricName
+    TagFilter:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/TagFilterExpressionElement'
+      - type: object
+        properties:
+          entity:
+            type: string
+            description: SOURCE or DESTINATION tag in case of a call tag. For Infrastructure, always set to NOT_APPLICABLE.
+            enum:
+            - NOT_APPLICABLE
+            - DESTINATION
+            - SOURCE
+          key:
+            type: string
+            description: Tag key in case of a key/value tag.
+            maxLength: 512
+            minLength: 0
+          name:
+            type: string
+            description: Name of the tag.
+            maxLength: 128
+            minLength: 0
+          operator:
+            type: string
+            enum:
+            - EQUALS
+            - CONTAINS
+            - LESS_THAN
+            - LESS_OR_EQUAL_THAN
+            - GREATER_THAN
+            - GREATER_OR_EQUAL_THAN
+            - NOT_EMPTY
+            - NOT_EQUAL
+            - NOT_CONTAIN
+            - IS_EMPTY
+            - NOT_BLANK
+            - IS_BLANK
+            - STARTS_WITH
+            - ENDS_WITH
+            - NOT_STARTS_WITH
+            - NOT_ENDS_WITH
+            - REGEX_MATCH
+          value:
+            type: object
+            description: Tag value to filter on. Can be a string, number, or boolean value.
+      required:
+      - entity
+      - name
+      - operator
+    ManualCloseInfo:
+      type: object
+      properties:
+        closeTimestamp:
+          type: integer
+          format: int64
+          description: The closing timestamp.
+        disableEvent:
+          type: boolean
+          description: Flag to indicate whether to disable the event.
+        eventIds:
+          type: array
+          description: The event IDs to manually close, in case of multi close.
+          items:
+            type: string
+            description: The event IDs to manually close, in case of multi close.
+          uniqueItems: true
+        muteAlerts:
+          type: boolean
+          description: Flag to indicate whether to mute alerts.
+        reasonForClosing:
+          type: string
+          description: The reason for manual closing.
+        username:
+          type: string
+          description: The user name.
+          maxLength: 256
+          minLength: 0
+      required:
+      - reasonForClosing
+      - username
+    Parameter:
+      type: object
+      description: List of inputs to the action.
       properties:
         description:
           type: string
-          description: Description of Built-in Event Specification
-          maxLength: 2048
-          minLength: 0
-        enabled:
-          type: boolean
-          description: Flag to show whether the Built-in Event Specification is enabled
+          description: Parameter description.
         hidden:
           type: boolean
-          description: Flag to show whether the Built-in Event Specification is hidden
-        hyperParams:
-          type: array
-          description: List of hyper parameters of the Built-in Event Specification
-          items:
-            $ref: '#/components/schemas/HyperParam'
-          maxItems: 32
-          minItems: 0
-        id:
+          description: Is parameter hidden or not.
+        label:
           type: string
-          description: ID of Built-in Event Specification
-          maxLength: 2048
-          minLength: 0
+          description: Parameter label.
         name:
           type: string
-          description: Name of Built-in Event Specification
-          maxLength: 256
+          description: Parameter name.
+        required:
+          type: boolean
+          description: Is parameter required or not.
+        secured:
+          type: boolean
+          description: Is parameter secured or not.
+        type:
+          type: string
+          description: Parameter type. Valid values are `static`, `dynamic`, or `vault`. Default value is `static`
+        value:
+          type: string
+          description: Parameter value.
+      required:
+      - label
+      - name
+      - type
+    Json:
+      type: object
+    Problem:
+      type: object
+      properties:
+        fixSuggestion:
+          type: string
+          maxLength: 65536
           minLength: 0
-        ruleInputs:
-          type: array
-          description: List of input rules of the Built-in Event Specification
-          items:
-            $ref: '#/components/schemas/RuleInput'
-          maxItems: 32
-          minItems: 0
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+        problemText:
+          type: string
+          maxLength: 2048
+          minLength: 0
         severity:
           type: integer
           format: int32
-          description: Severity level of Built-in Event Specification
-        shortPluginId:
-          type: string
-          description: ID of short plugin of Built-in Event Specification
-          maxLength: 64
-          minLength: 0
-        triggering:
-          type: boolean
-          description: Flag to show whether the Built-in Event Specification is triggering
       required:
-      - hyperParams
       - id
-      - name
-      - ruleInputs
-      - shortPluginId
+    EventFilteringConfiguration:
+      type: object
+      description: Event Filter Configuration for supporting the scope of the Alert Configuration. Applies a filter based on the application perspective or selected entities.
+      properties:
+        applicationAlertConfigIds:
+          type: array
+          items:
+            type: string
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        eventTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - incident
+            - critical
+            - warning
+            - change
+            - online
+            - offline
+            - agent_monitoring_issue
+            - cve_issue
+            - none
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        query:
+          type: string
+          maxLength: 2048
+          minLength: 0
+        ruleIds:
+          type: array
+          items:
+            type: string
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
     WebsiteAlertRule:
       type: object
       discriminator:
@@ -3379,23 +3368,253 @@ components:
       required:
       - alertType
       - metricName
-    WebsiteTimeThreshold:
+    TagTreeNode:
       type: object
-      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
+      description: Children tags of tagTree
       discriminator:
         mapping:
-          userImpactOfViolationsInSequence: '#/components/schemas/UserImpactWebsiteTimeThreshold'
-          violationsInPeriod: '#/components/schemas/ViolationsInPeriodWebsiteTimeThreshold'
-          violationsInSequence: '#/components/schemas/ViolationsInSequenceWebsiteTimeThreshold'
+          LEVEL: '#/components/schemas/TagTreeLevel'
+          TAG: '#/components/schemas/TagTreeTag'
         propertyName: type
       properties:
-        timeWindow:
+        icon:
+          type: string
+        label:
+          type: string
+        type:
+          type: string
+          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
+    BuiltInEventSpecificationWithLastUpdated:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Description of Built-in Event Specification
+          maxLength: 2048
+          minLength: 0
+        enabled:
+          type: boolean
+          description: Flag to show whether the Built-in Event Specification is enabled
+        hidden:
+          type: boolean
+          description: Flag to show whether the Built-in Event Specification is hidden
+        hyperParams:
+          type: array
+          description: List of hyper parameters of the Built-in Event Specification
+          items:
+            $ref: '#/components/schemas/HyperParam'
+          maxItems: 32
+          minItems: 0
+        id:
+          type: string
+          description: ID of Built-in Event Specification
+          maxLength: 2048
+          minLength: 0
+        lastUpdated:
           type: integer
           format: int64
+          minimum: 1
+        name:
+          type: string
+          description: Name of Built-in Event Specification
+          maxLength: 256
+          minLength: 0
+        ruleInputs:
+          type: array
+          description: List of input rules of the Built-in Event Specification
+          items:
+            $ref: '#/components/schemas/RuleInput'
+          maxItems: 32
+          minItems: 0
+        severity:
+          type: integer
+          format: int32
+          description: Severity level of Built-in Event Specification
+        shortPluginId:
+          type: string
+          description: ID of short plugin of Built-in Event Specification
+          maxLength: 64
+          minLength: 0
+        triggering:
+          type: boolean
+          description: Flag to show whether the Built-in Event Specification is triggering
+      required:
+      - hyperParams
+      - id
+      - name
+      - ruleInputs
+      - shortPluginId
+    TagCatalog:
+      type: object
+      properties:
+        tagTree:
+          type: array
+          description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
+
+            Consider this as the root of the tree where it has tags as attributes or children.
+
+            '
+          items:
+            $ref: '#/components/schemas/TagTreeLevel'
+        tags:
+          type: array
+          description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
+
+            Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
+
+            '
+          items:
+            $ref: '#/components/schemas/Tag'
+      required:
+      - tagTree
+      - tags
+    CustomPayloadWithLastUpdated:
+      type: object
+      properties:
+        fields:
+          type: array
+          description: Required parameters for custom payload configuration.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        lastUpdated:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the time (in milliseconds) the configuration was last updated.
+          minimum: 1
+      required:
+      - fields
+    IntegrationOverview:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID of the alert channel
+        kind:
+          type: string
+          description: The type of the Alerting Channel.
+        name:
+          type: string
+          description: The name of the Alerting Channel.
+        properties:
+          type: object
+          additionalProperties:
+            type: string
+            description: Properties of the alert channel in pairs of key/value
+          description: Properties of the alert channel in pairs of key/value
+        rbacTags:
+          type: array
+          description: Team Tags that's assigned to the Alerting Channel
+          items:
+            $ref: '#/components/schemas/ApiTag'
+          uniqueItems: true
+      required:
+      - id
+      - kind
+      - name
+    Field:
+      type: object
+      description: List of fields that describe an action.
+      properties:
+        description:
+          type: string
+        encoding:
+          type: string
+        name:
+          type: string
+        secured:
+          type: boolean
+        value:
+          type: string
+      required:
+      - encoding
+      - name
+      - value
+    StaticStringField:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/CustomPayloadField'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: Custom value for static type custom payload
+      required:
+      - key
+      - value
+    AlertingConfigurationWithLastUpdated:
+      type: object
+      properties:
+        alertName:
+          type: string
+          description: Name of the Alert Configuration.
+          maxLength: 256
+          minLength: 0
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/StaticStringField'
+          maxItems: 20
+          minItems: 0
+        eventFilteringConfiguration:
+          $ref: '#/components/schemas/EventFilteringConfiguration'
+        id:
+          type: string
+          description: ID of the Alert Configuration.
+          maxLength: 64
+          minLength: 0
+        includeEntityNameInLegacyAlerts:
+          type: boolean
+          description: To include the entity name in a legacy alert based on built-in/custom events.
+        integrationIds:
+          type: array
+          description: List of Alert Channel IDs added in this Alert Configuration.
+          items:
+            type: string
+            description: List of Alert Channel IDs added in this Alert Configuration.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        lastUpdated:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the time the configuration was last updated.
+          minimum: 1
+        muteUntil:
+          type: integer
+          format: int64
+          description: Timer dictating how long the Alert Configuration will stay muted. A value of `0` means the Alert Configuration is currently enabled. Otherwise, the Alert Configuration is currently disabled (muted).
+      required:
+      - alertName
+      - customPayloadFields
+      - eventFilteringConfiguration
+      - id
+      - integrationIds
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
         type:
           type: string
       required:
       - type
+    SystemRuleLabel:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
     AbstractRule:
       type: object
       discriminator:
@@ -3415,357 +3634,6 @@ components:
           format: int32
       required:
       - ruleType
-    Parameter:
-      type: object
-      description: List of inputs to the action.
-      properties:
-        description:
-          type: string
-          description: Parameter description.
-        hidden:
-          type: boolean
-          description: Is parameter hidden or not.
-        label:
-          type: string
-          description: Parameter label.
-        name:
-          type: string
-          description: Parameter name.
-        required:
-          type: boolean
-          description: Is parameter required or not.
-        secured:
-          type: boolean
-          description: Is parameter secured or not.
-        type:
-          type: string
-          description: Parameter type. Valid values are `static`, `dynamic`, or `vault`. Default value is `static`
-        value:
-          type: string
-          description: Parameter value.
-      required:
-      - label
-      - name
-      - type
-    AbstractIntegration:
-      type: object
-      discriminator:
-        mapping:
-          BIDIRECTIONAL_MS_TEAMS: '#/components/schemas/BidirectionalMsTeamsAppIntegration'
-          BIDIRECTIONAL_SLACK: '#/components/schemas/BidirectionalSlackAppIntegration'
-          EMAIL: '#/components/schemas/EmailIntegration'
-          GOOGLE_CHAT: '#/components/schemas/GoogleChatIntegration'
-          OFFICE_365: '#/components/schemas/Office365Integration'
-          OPS_GENIE: '#/components/schemas/OpsgenieIntegration'
-          PAGER_DUTY: '#/components/schemas/PagerdutyIntegration'
-          PROMETHEUS_WEBHOOK: '#/components/schemas/PrometheusWebhookIntegration'
-          SALESFORCE: '#/components/schemas/SalesforceIntegration'
-          SERVICE_NOW_APPLICATION: '#/components/schemas/ServiceNowEnhancedIntegration'
-          SERVICE_NOW_WEBHOOK: '#/components/schemas/ServiceNowIntegration'
-          SLACK: '#/components/schemas/SlackIntegration'
-          SPLUNK: '#/components/schemas/SplunkIntegration'
-          VICTOR_OPS: '#/components/schemas/VictorOpsIntegration'
-          WATSON_AIOPS_WEBHOOK: '#/components/schemas/WatsonAIOpsWebhookIntegration'
-          WEBEX_TEAMS_WEBHOOK: '#/components/schemas/WebexTeamsWebhookIntegration'
-          WEB_HOOK: '#/components/schemas/WebhookIntegration'
-          Z_CHATOPS: '#/components/schemas/ZChatOpsIntegration'
-        propertyName: kind
-      properties:
-        id:
-          type: string
-          description: Unique ID of the returned Alert Channel
-        kind:
-          type: string
-          description: The type of the Alerting Channel.
-        name:
-          type: string
-          description: The name of the Alerting Channel.
-      required:
-      - id
-      - kind
-      - name
-    Action:
-      type: object
-      description: Automation action definition. When this is used in policy creation request, only `id` should be specified.
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-          description: Action created time.
-        description:
-          type: string
-          description: Action description.
-          maxLength: 512
-          minLength: 0
-        fields:
-          type: array
-          description: List of fields that describe an action.
-          items:
-            $ref: '#/components/schemas/Field'
-        id:
-          type: string
-          description: Action identifier.
-          maxLength: 128
-          minLength: 1
-        inputParameters:
-          type: array
-          description: List of inputs to the action.
-          items:
-            $ref: '#/components/schemas/Parameter'
-        metadata:
-          $ref: '#/components/schemas/MetaData'
-        modifiedAt:
-          type: string
-          format: date-time
-          description: Action modified time.
-        name:
-          type: string
-          description: Action name.
-          maxLength: 128
-          minLength: 1
-        tags:
-          type: array
-          description: List of tags added to the action.
-          items:
-            type: string
-            description: List of tags added to the action.
-        type:
-          type: string
-          description: 'Action type can be one of the following values:  SCRIPT, HTTP, ANSIBLE, EXTERNAL, GITHUB, GITLAB, JIRA, MANUAL, DOC_LINK'
-          enum:
-          - SCRIPT
-          - HTTP
-          - ANSIBLE
-          - EXTERNAL
-          - GITHUB
-          - GITLAB
-          - JIRA
-          - MANUAL
-          - DOC_LINK
-          maxLength: 128
-          minLength: 0
-      required:
-      - createdAt
-      - id
-      - modifiedAt
-      - name
-      - type
-    HyperParam:
-      type: object
-      description: List of hyper parameters of the Built-in Event Specification
-      properties:
-        defaultValue:
-          type: number
-          format: double
-        description:
-          type: string
-          maxLength: 2048
-          minLength: 0
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
-        maxValue:
-          type: number
-          format: double
-        minValue:
-          type: number
-          format: double
-        name:
-          type: string
-          maxLength: 256
-          minLength: 0
-        valueFormat:
-          type: string
-          description: '|
-
-            * NUMBER: Generic number
-
-            * BYTES: Number of bytes
-
-            * KILO_BYTES: Number of kilobytes
-
-            * MEGA_BYTES: Number of megabytes
-
-            * PERCENTAGE: Percentage in scale [0,1]
-
-            * PERCENTAGE_100: Percentage in scale [0,100]
-
-            * PERCENTAGE_NO_CAPPING: Percentage in scale [0,1] but value could exceed 1 for example when metric is aggregated
-
-            * PERCENTAGE_100_NO_CAPPING: Percentage in scale [0,100] but value could exceed 100 for example when metric is aggregated
-
-            * LATENCY: Time in milliseconds, with value of 0 should not be considered a a strict 0, but considered as < 1ms
-
-            * NANOS: Time in nanoseconds
-
-            * MILLIS: Time in milliseconds
-
-            * MICROS: Time in microseconds
-
-            * SECONDS: Time in seconds
-
-            * RATE: Number of occurrences per second
-
-            * BYTE_RATE: Number of bytes per second
-
-            * UNDEFINED: Metric value unit is not known
-
-            '
-          enum:
-          - NUMBER
-          - BYTES
-          - KILO_BYTES
-          - MEGA_BYTES
-          - PERCENTAGE
-          - PERCENTAGE_100
-          - PERCENTAGE_NO_CAPPING
-          - PERCENTAGE_100_NO_CAPPING
-          - LATENCY
-          - NANOS
-          - MILLIS
-          - MICROS
-          - SECONDS
-          - RATE
-          - BYTE_RATE
-          - UNDEFINED
-      required:
-      - description
-      - id
-      - name
-    Event:
-      type: object
-      properties:
-        end:
-          type: integer
-          format: int64
-          minimum: 1
-        endpointServiceId:
-          type: string
-          maxLength: 64
-          minLength: 0
-        entityId:
-          type: string
-          maxLength: 64
-          minLength: 0
-        entityType:
-          type: string
-          enum:
-          - Entity10
-          - App20
-          - Service20
-          - Endpoint20
-          - Website
-          - Synthetic
-          - MobileApp
-          - Log
-        eventConfigurationType:
-          type: string
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
-        longFormPluginId:
-          type: string
-        metadata:
-          type: object
-          additionalProperties:
-            type: object
-        metricAccessId:
-          type: string
-          maxLength: 64
-          minLength: 0
-        plugin:
-          type: string
-          maxLength: 256
-          minLength: 0
-        problem:
-          $ref: '#/components/schemas/Problem'
-        rca:
-          type: object
-          additionalProperties:
-            type: object
-        shortCode:
-          type: string
-          maxLength: 64
-          minLength: 0
-        start:
-          type: integer
-          format: int64
-          minimum: 1
-        state:
-          type: string
-          maxLength: 8
-          minLength: 0
-        type:
-          type: string
-          maxLength: 64
-          minLength: 0
-      required:
-      - entityId
-      - id
-      - plugin
-      - state
-      - type
-    CustomPayloadField:
-      type: object
-      description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
-      discriminator:
-        mapping:
-          dynamic: '#/components/schemas/DynamicField'
-          staticString: '#/components/schemas/StaticStringField'
-        propertyName: type
-      properties:
-        key:
-          type: string
-          description: A user-specified unique identifier or name for a custom payload entry.
-        type:
-          type: string
-      required:
-      - key
-      - type
-    RuleWithThresholdMobileAppAlertRule:
-      type: object
-      description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
-      properties:
-        rule:
-          $ref: '#/components/schemas/MobileAppAlertRule'
-        thresholdOperator:
-          type: string
-          enum:
-          - '>'
-          - '>='
-          - <
-          - <=
-        thresholds:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ThresholdConfigRule'
-      required:
-      - rule
-      - thresholdOperator
-      - thresholds
-    RuleWithThresholdWebsiteAlertRule:
-      type: object
-      description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
-      properties:
-        rule:
-          $ref: '#/components/schemas/WebsiteAlertRule'
-        thresholdOperator:
-          type: string
-          enum:
-          - '>'
-          - '>='
-          - <
-          - <=
-        thresholds:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ThresholdConfigRule'
-      required:
-      - rule
-      - thresholdOperator
-      - thresholds
     ValidatedAlertingConfiguration:
       type: object
       properties:
@@ -3832,227 +3700,43 @@ components:
       - eventFilteringConfiguration
       - id
       - integrationIds
-    CustomPayloadWithVersion:
+    AbstractIntegration:
       type: object
-      properties:
-        fields:
-          type: array
-          description: Required parameters for custom payload configuration.
-          items:
-            $ref: '#/components/schemas/CustomPayloadField'
-          maxItems: 20
-          minItems: 0
-        lastUpdated:
-          type: integer
-          format: int64
-          description: Unix timestamp representing the time (in milliseconds) the configuration was last updated.
-          minimum: 1
-        version:
-          type: integer
-          format: int32
-          description: Global custom payloads version.
-      required:
-      - fields
-      - version
-    MetaData:
-      type: object
-      description: Action metadata.
-      properties:
-        ai:
-          type: array
-          description: List of metadata for AI originated actions.
-          items:
-            type: object
-            additionalProperties:
-              type: object
-              description: List of metadata for AI originated actions.
-            description: List of metadata for AI originated actions.
-        aiOriginated:
-          type: boolean
-          description: AI originated action flag. Value is `true` if action is AI generated `false` otherwise.
-        builtIn:
-          type: boolean
-          description: Built-in out of the box action flag. Value is `true` if built-in action `false` otherwise.
-        readOnly:
-          type: boolean
-          description: Read only action flag. Value is `true` if read only `false` otherwise.
-        sensorImported:
-          type: boolean
-          description: Sensor imported action flag. Value is `true` if action is imported from sensor `false` otherwise.
-    ConfigVersion:
-      type: object
-      properties:
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummary'
-        created:
-          type: integer
-          format: int64
-          description: Unix timestamp representing the creation time of this revision.
-          minimum: 1
-        deleted:
-          type: boolean
-          deprecated: true
-          description: Flag to indicate whether or not the configuration was deleted.
-        enabled:
-          type: boolean
-          deprecated: true
-          description: Flag to indicate whether or not the configuration is enabled.
-        id:
-          type: string
-          description: ID of this configuration version.
-          maxLength: 64
-          minLength: 0
-      required:
-      - id
-    CustomPayloadWithLastUpdated:
-      type: object
-      properties:
-        fields:
-          type: array
-          description: Required parameters for custom payload configuration.
-          items:
-            $ref: '#/components/schemas/CustomPayloadField'
-          maxItems: 20
-          minItems: 0
-        lastUpdated:
-          type: integer
-          format: int64
-          description: Unix timestamp representing the time (in milliseconds) the configuration was last updated.
-          minimum: 1
-      required:
-      - fields
-    ChangeSummary:
-      type: object
-      description: Brief summary of changes made in this config version.
-      properties:
-        author:
-          $ref: '#/components/schemas/Author'
-        changeType:
-          type: string
-          enum:
-          - CREATE
-          - UPDATE
-          - DELETE
-          - ENABLE
-          - DISABLE
-          - RESTORE
-          - UNKNOWN
-      required:
-      - author
-      - changeType
-    Author:
-      type: object
+      discriminator:
+        mapping:
+          BIDIRECTIONAL_MS_TEAMS: '#/components/schemas/BidirectionalMsTeamsAppIntegration'
+          BIDIRECTIONAL_SLACK: '#/components/schemas/BidirectionalSlackAppIntegration'
+          EMAIL: '#/components/schemas/EmailIntegration'
+          GOOGLE_CHAT: '#/components/schemas/GoogleChatIntegration'
+          OFFICE_365: '#/components/schemas/Office365Integration'
+          OPS_GENIE: '#/components/schemas/OpsgenieIntegration'
+          PAGER_DUTY: '#/components/schemas/PagerdutyIntegration'
+          PROMETHEUS_WEBHOOK: '#/components/schemas/PrometheusWebhookIntegration'
+          SALESFORCE: '#/components/schemas/SalesforceIntegration'
+          SERVICE_NOW_APPLICATION: '#/components/schemas/ServiceNowEnhancedIntegration'
+          SERVICE_NOW_WEBHOOK: '#/components/schemas/ServiceNowIntegration'
+          SLACK: '#/components/schemas/SlackIntegration'
+          SPLUNK: '#/components/schemas/SplunkIntegration'
+          VICTOR_OPS: '#/components/schemas/VictorOpsIntegration'
+          WATSON_AIOPS_WEBHOOK: '#/components/schemas/WatsonAIOpsWebhookIntegration'
+          WEBEX_TEAMS_WEBHOOK: '#/components/schemas/WebexTeamsWebhookIntegration'
+          WEB_HOOK: '#/components/schemas/WebhookIntegration'
+          Z_CHATOPS: '#/components/schemas/ZChatOpsIntegration'
+        propertyName: kind
       properties:
         id:
           type: string
-        type:
+          description: Unique ID of the returned Alert Channel
+        kind:
           type: string
-          enum:
-          - API
-          - USER
-          - INSTANA
-          - UNKNOWN
-    CustomEventSpecificationWithLastUpdated:
-      type: object
-      properties:
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Action'
-        applicationAlertConfigId:
-          type: string
-          maxLength: 64
-          minLength: 0
-        deleted:
-          type: boolean
-        description:
-          type: string
-          maxLength: 32765
-          minLength: 0
-        enabled:
-          type: boolean
-        entityType:
-          type: string
-          maxLength: 64
-          minLength: 0
-        expirationTime:
-          type: integer
-          format: int64
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
-        lastUpdated:
-          type: integer
-          format: int64
-          minimum: 1
-        migrated:
-          type: boolean
+          description: The type of the Alerting Channel.
         name:
           type: string
-          maxLength: 256
-          minLength: 0
-        query:
-          type: string
-          maxLength: 2048
-          minLength: 0
-        ruleLogicalOperator:
-          type: string
-          description: Set AND / OR
-          enum:
-          - AND
-          - OR
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/AbstractRule'
-          maxItems: 5
-          minItems: 1
-        transientEventAlertMuted:
-          type: boolean
-        transientEventEnabled:
-          type: boolean
-        transientEventThreshold:
-          type: integer
-          format: int64
-        triggering:
-          type: boolean
+          description: The name of the Alerting Channel.
       required:
-      - entityType
       - id
+      - kind
       - name
-      - rules
-    ManualCloseInfo:
-      type: object
-      properties:
-        closeTimestamp:
-          type: integer
-          format: int64
-          description: The closing timestamp.
-        disableEvent:
-          type: boolean
-          description: Flag to indicate whether to disable the event.
-        eventIds:
-          type: array
-          description: The event IDs to manually close, in case of multi close.
-          items:
-            type: string
-            description: The event IDs to manually close, in case of multi close.
-          uniqueItems: true
-        muteAlerts:
-          type: boolean
-          description: Flag to indicate whether to mute alerts.
-        reasonForClosing:
-          type: string
-          description: The reason for manual closing.
-        username:
-          type: string
-          description: The user name.
-          maxLength: 256
-          minLength: 0
-      required:
-      - reasonForClosing
-      - username
     WebsiteAlertConfigWithMetadata:
       type: object
       properties:
@@ -4176,21 +3860,204 @@ components:
       - tagFilterExpression
       - timeThreshold
       - websiteId
-    EventFilteringConfiguration:
+    Tag:
       type: object
-      description: Event Filter Configuration for supporting the scope of the Alert Configuration. Applies a filter based on the application perspective or selected entities.
+      description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
+
+        Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
+
+        '
       properties:
-        applicationAlertConfigIds:
+        aliases:
           type: array
+          description: 'List of other names that can refer to this tag
+
+            '
           items:
             type: string
-          maxItems: 1024
-          minItems: 0
+            description: 'List of other names that can refer to this tag
+
+              '
           uniqueItems: true
+        availability:
+          type: array
+          description: 'List of product areas this tag is available in
+
+            '
+          items:
+            type: string
+            description: 'List of product areas this tag is available in
+
+              '
+            enum:
+            - INFRASTRUCTURE_METRICS
+            - APPLICATION
+            - WEBSITE
+            - MOBILE_APP
+            - EUM
+            - EUM_IMPACTED_BEACON
+            - EVENT
+            - SLI
+            - SLO
+            - SLO_PREVIEW
+            - USAGE
+            - LOG
+            - SYNTHETICS
+            - SYNTHETICS_DETAIL
+            - APDEX
+            - BIZOPS
+            - BUSINESS_METRICS
+            - SUBTRACE
+            - UNKNOWN
+          uniqueItems: true
+        canApplyToDestination:
+          type: boolean
+          description: 'Whether the tag is available for destination or not.
+
+            If source and destination is false, it means the tag is independent of source and destination. Eg: of such tag is `call.http.path`.
+
+            '
+        canApplyToSource:
+          type: boolean
+          description: 'Whether the tag is available for source or not.
+
+            If source and destination is false, it means the tag is independent of source and destination. Eg: of such tag is `call.http.path`.
+
+            '
+        description:
+          type: string
+          description: The description of the tag if it is provided.
+        idTag:
+          type: boolean
+          description: 'Whether the Tag is a unique ID or not.
+
+            Eg: `idTag` for `endpoint.id` is true but for `call.rpc.method` it is false.
+
+            '
+        label:
+          type: string
+          description: 'The name of the tag which is seen in the UI. Eg: `Call name`'
+          maxLength: 256
+          minLength: 0
+        name:
+          type: string
+          description: 'The name of the tag. Eg: `call.name`'
+        type:
+          type: string
+          description: 'The data type of the tag. Eg: `call.name` accepts `STRING` value.'
+          enum:
+          - BOOLEAN
+          - STRING
+          - NUMBER
+          - STRING_SET
+          - STRING_LIST
+          - KEY_VALUE_PAIR
+          - FLOAT_LIST
+          - KEY_NUMBER_PAIR
+      required:
+      - name
+      - type
+    Author:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - API
+          - USER
+          - INSTANA
+          - UNKNOWN
+    Event:
+      type: object
+      properties:
+        end:
+          type: integer
+          format: int64
+          minimum: 1
+        endpointServiceId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        entityId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        entityType:
+          type: string
+          enum:
+          - Entity10
+          - App20
+          - Service20
+          - Endpoint20
+          - Website
+          - Synthetic
+          - MobileApp
+          - Log
+        eventConfigurationType:
+          type: string
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+        longFormPluginId:
+          type: string
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+        metricAccessId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        plugin:
+          type: string
+          maxLength: 256
+          minLength: 0
+        problem:
+          $ref: '#/components/schemas/Problem'
+        rca:
+          type: object
+          additionalProperties:
+            type: object
+        shortCode:
+          type: string
+          maxLength: 64
+          minLength: 0
+        start:
+          type: integer
+          format: int64
+          minimum: 1
+        state:
+          type: string
+          maxLength: 8
+          minLength: 0
+        type:
+          type: string
+          maxLength: 64
+          minLength: 0
+      required:
+      - entityId
+      - id
+      - plugin
+      - state
+      - type
+    ValidatedAlertingChannelInputInfo:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Flag to indicate whether or not the configuration is enabled.
+        entityId:
+          type: string
+          description: The entity ID in case of Smart Alerts, such as for the application, website or mobile app.
         eventTypes:
           type: array
+          description: The selected event types, if applicable.
           items:
             type: string
+            description: The selected event types, if applicable.
             enum:
             - incident
             - critical
@@ -4201,73 +4068,329 @@ components:
             - agent_monitoring_issue
             - cve_issue
             - none
-          maxItems: 1024
+          maxItems: 6
           minItems: 0
           uniqueItems: true
-        query:
+        id:
           type: string
-          maxLength: 2048
-          minLength: 0
-        ruleIds:
-          type: array
-          items:
-            type: string
-          maxItems: 1024
-          minItems: 0
-          uniqueItems: true
-    CustomEventSpecification:
-      type: object
-      properties:
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Action'
-        description:
-          type: string
-          maxLength: 32765
-          minLength: 0
-        enabled:
-          type: boolean
-        entityType:
-          type: string
+          description: ID of the alert configuration.
           maxLength: 64
           minLength: 0
-        expirationTime:
-          type: integer
-          format: int64
-        name:
+        invalid:
+          type: boolean
+          description: Flag to indicate whether the specified query is invalid.
+        label:
           type: string
+          description: The name of the alert configuration.
           maxLength: 256
           minLength: 0
         query:
           type: string
+          description: The DFQ used in the alert configuration, if applicable.
           maxLength: 2048
           minLength: 0
-        ruleLogicalOperator:
+        selectedEvents:
+          type: integer
+          format: int32
+          description: The number of selected events, if applicable.
+        type:
           type: string
-          description: Set AND / OR
+          description: The alert type.
           enum:
-          - AND
-          - OR
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/AbstractRule'
-          maxItems: 5
-          minItems: 1
-        transientEventAlertMuted:
-          type: boolean
-        transientEventEnabled:
-          type: boolean
-        transientEventThreshold:
+          - Alert
+          - WebsiteSmartAlert
+          - MobileSmartAlert
+          - ApplicationSmartAlert
+          - GlobalApplicationSmartAlert
+          - SyntheticSmartAlert
+          - InfraSmartAlert
+          - ServiceLevelSmartAlert
+          - LogSmartAlert
+      required:
+      - id
+      - label
+      - type
+    RuleWithThresholdMobileAppAlertRule:
+      type: object
+      description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
+      properties:
+        rule:
+          $ref: '#/components/schemas/MobileAppAlertRule'
+        thresholdOperator:
+          type: string
+          enum:
+          - '>'
+          - '>='
+          - <
+          - <=
+        thresholds:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ThresholdConfigRule'
+      required:
+      - rule
+      - thresholdOperator
+      - thresholds
+    ConfigVersion:
+      type: object
+      properties:
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummary'
+        created:
           type: integer
           format: int64
+          description: Unix timestamp representing the creation time of this revision.
+          minimum: 1
+        deleted:
+          type: boolean
+          deprecated: true
+          description: Flag to indicate whether or not the configuration was deleted.
+        enabled:
+          type: boolean
+          deprecated: true
+          description: Flag to indicate whether or not the configuration is enabled.
+        id:
+          type: string
+          description: ID of this configuration version.
+          maxLength: 64
+          minLength: 0
+      required:
+      - id
+    BuiltInEventSpecification:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Description of Built-in Event Specification
+          maxLength: 2048
+          minLength: 0
+        enabled:
+          type: boolean
+          description: Flag to show whether the Built-in Event Specification is enabled
+        hidden:
+          type: boolean
+          description: Flag to show whether the Built-in Event Specification is hidden
+        hyperParams:
+          type: array
+          description: List of hyper parameters of the Built-in Event Specification
+          items:
+            $ref: '#/components/schemas/HyperParam'
+          maxItems: 32
+          minItems: 0
+        id:
+          type: string
+          description: ID of Built-in Event Specification
+          maxLength: 2048
+          minLength: 0
+        name:
+          type: string
+          description: Name of Built-in Event Specification
+          maxLength: 256
+          minLength: 0
+        ruleInputs:
+          type: array
+          description: List of input rules of the Built-in Event Specification
+          items:
+            $ref: '#/components/schemas/RuleInput'
+          maxItems: 32
+          minItems: 0
+        severity:
+          type: integer
+          format: int32
+          description: Severity level of Built-in Event Specification
+        shortPluginId:
+          type: string
+          description: ID of short plugin of Built-in Event Specification
+          maxLength: 64
+          minLength: 0
         triggering:
           type: boolean
+          description: Flag to show whether the Built-in Event Specification is triggering
       required:
-      - entityType
+      - hyperParams
+      - id
       - name
-      - rules
+      - ruleInputs
+      - shortPluginId
+    TagTreeLevel:
+      type: object
+      description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
+
+        Consider this as the root of the tree where it has tags as attributes or children.
+
+        '
+      properties:
+        children:
+          type: array
+          description: Children tags of tagTree
+          items:
+            $ref: '#/components/schemas/TagTreeNode'
+        description:
+          type: string
+          description: The description provided, if any.
+          maxLength: 512
+          minLength: 0
+        icon:
+          type: string
+          description: 'Each tag has an Icon which can be seen on the drop down list in Unbounded Analytics.
+
+            If there is an icon, there will be a string associated with it.
+
+            Eg: For for all `TAG` under `Call` tagTreeNode, the `icon` value is `lib_application_call`.
+
+            '
+          maxLength: 128
+          minLength: 0
+        label:
+          type: string
+          description: 'The name of the tagTreeNode. Eg: `Commonly Used`, `Application`.'
+          maxLength: 128
+          minLength: 0
+        queryable:
+          type: boolean
+        scoreBoost:
+          type: integer
+          format: int32
+          description: 'By default it is `null` if it is not set explictily by IBM Instana.
+
+            The purpose of this parameter is to rank the tagTree. For eg: some set of tags are frequently used.
+
+            Tags under `Commonly used` is frequently used, so it will come up on top of the drop down list of `Query Builder` in `Unbounded Analytics`.
+
+            Higher the scoreBoost, higher the ranking.
+
+            '
+        type:
+          type: string
+          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
+      required:
+      - children
+      - label
+    RuleWithThresholdWebsiteAlertRule:
+      type: object
+      description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
+      properties:
+        rule:
+          $ref: '#/components/schemas/WebsiteAlertRule'
+        thresholdOperator:
+          type: string
+          enum:
+          - '>'
+          - '>='
+          - <
+          - <=
+        thresholds:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ThresholdConfigRule'
+      required:
+      - rule
+      - thresholdOperator
+      - thresholds
+    AlertingConfiguration:
+      type: object
+      properties:
+        alertName:
+          type: string
+          description: Name of the Alert Configuration.
+          maxLength: 256
+          minLength: 0
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/StaticStringField'
+          maxItems: 20
+          minItems: 0
+        eventFilteringConfiguration:
+          $ref: '#/components/schemas/EventFilteringConfiguration'
+        id:
+          type: string
+          description: ID of the Alert Configuration.
+          maxLength: 64
+          minLength: 0
+        includeEntityNameInLegacyAlerts:
+          type: boolean
+          description: To include the entity name in a legacy alert based on built-in/custom events.
+        integrationIds:
+          type: array
+          description: List of Alert Channel IDs added in this Alert Configuration.
+          items:
+            type: string
+            description: List of Alert Channel IDs added in this Alert Configuration.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        muteUntil:
+          type: integer
+          format: int64
+          description: Timer dictating how long the Alert Configuration will stay muted. A value of `0` means the Alert Configuration is currently enabled. Otherwise, the Alert Configuration is currently disabled (muted).
+      required:
+      - alertName
+      - customPayloadFields
+      - eventFilteringConfiguration
+      - id
+      - integrationIds
+    TagFilterExpression:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/TagFilterExpressionElement'
+      - type: object
+        properties:
+          elements:
+            type: array
+            items:
+              $ref: '#/components/schemas/TagFilterExpressionElement'
+          logicalOperator:
+            type: string
+            description: Set AND / OR
+            enum:
+            - AND
+            - OR
+      required:
+      - elements
+      - logicalOperator
+    ManualAlertingChannelConfiguration:
+      type: object
+      properties:
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/StaticStringField'
+          maxItems: 20
+          minItems: 0
+        eventId:
+          type: string
+          description: Id of the event to be notified about.
+          maxLength: 256
+          minLength: 0
+      required:
+      - customPayloadFields
+      - eventId
+    Threshold:
+      type: object
+      deprecated: true
+      description: Indicates the type of threshold this alert rule is evaluated on.
+      discriminator:
+        mapping:
+          adaptiveBaseline: '#/components/schemas/AdaptiveBaseline'
+          historicBaseline: '#/components/schemas/HistoricBaseline'
+          staticThreshold: '#/components/schemas/StaticThreshold'
+        propertyName: type
+      properties:
+        operator:
+          type: string
+          enum:
+          - '>'
+          - '>='
+          - <
+          - <=
+        type:
+          type: string
+      required:
+      - operator
+      - type
     WebsiteAlertConfig:
       type: object
       properties:
@@ -4369,66 +4492,254 @@ components:
       - tagFilterExpression
       - timeThreshold
       - websiteId
-    BuiltInEventSpecificationWithLastUpdated:
+    CustomPayloadConfiguration:
       type: object
       properties:
+        fields:
+          type: array
+          description: Required parameters for custom payload configuration.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+      required:
+      - fields
+    CustomEventSpecification:
+      type: object
+      properties:
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
         description:
           type: string
-          description: Description of Built-in Event Specification
-          maxLength: 2048
+          maxLength: 32765
           minLength: 0
         enabled:
           type: boolean
-          description: Flag to show whether the Built-in Event Specification is enabled
-        hidden:
-          type: boolean
-          description: Flag to show whether the Built-in Event Specification is hidden
-        hyperParams:
+        entityType:
+          type: string
+          maxLength: 64
+          minLength: 0
+        expirationTime:
+          type: integer
+          format: int64
+        name:
+          type: string
+          maxLength: 256
+          minLength: 0
+        query:
+          type: string
+          maxLength: 2048
+          minLength: 0
+        ruleLogicalOperator:
+          type: string
+          description: Set AND / OR
+          enum:
+          - AND
+          - OR
+        rules:
           type: array
-          description: List of hyper parameters of the Built-in Event Specification
           items:
-            $ref: '#/components/schemas/HyperParam'
-          maxItems: 32
-          minItems: 0
+            $ref: '#/components/schemas/AbstractRule'
+          maxItems: 5
+          minItems: 1
+        transientEventAlertMuted:
+          type: boolean
+        transientEventEnabled:
+          type: boolean
+        transientEventThreshold:
+          type: integer
+          format: int64
+        triggering:
+          type: boolean
+      required:
+      - entityType
+      - name
+      - rules
+    CustomEventSpecificationWithLastUpdated:
+      type: object
+      properties:
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+        applicationAlertConfigId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        deleted:
+          type: boolean
+        description:
+          type: string
+          maxLength: 32765
+          minLength: 0
+        enabled:
+          type: boolean
+        entityType:
+          type: string
+          maxLength: 64
+          minLength: 0
+        expirationTime:
+          type: integer
+          format: int64
         id:
           type: string
-          description: ID of Built-in Event Specification
-          maxLength: 2048
+          maxLength: 64
           minLength: 0
         lastUpdated:
           type: integer
           format: int64
           minimum: 1
+        migrated:
+          type: boolean
         name:
           type: string
-          description: Name of Built-in Event Specification
           maxLength: 256
           minLength: 0
-        ruleInputs:
-          type: array
-          description: List of input rules of the Built-in Event Specification
-          items:
-            $ref: '#/components/schemas/RuleInput'
-          maxItems: 32
-          minItems: 0
-        severity:
-          type: integer
-          format: int32
-          description: Severity level of Built-in Event Specification
-        shortPluginId:
+        query:
           type: string
-          description: ID of short plugin of Built-in Event Specification
-          maxLength: 64
+          maxLength: 2048
           minLength: 0
+        ruleLogicalOperator:
+          type: string
+          description: Set AND / OR
+          enum:
+          - AND
+          - OR
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbstractRule'
+          maxItems: 5
+          minItems: 1
+        transientEventAlertMuted:
+          type: boolean
+        transientEventEnabled:
+          type: boolean
+        transientEventThreshold:
+          type: integer
+          format: int64
         triggering:
           type: boolean
-          description: Flag to show whether the Built-in Event Specification is triggering
       required:
-      - hyperParams
+      - entityType
       - id
       - name
-      - ruleInputs
-      - shortPluginId
+      - rules
+    ThresholdConfigRule:
+      type: object
+      discriminator:
+        mapping:
+          adaptiveBaseline: '#/components/schemas/AdaptiveThresholdRule'
+          historicBaseline: '#/components/schemas/StaticBaselineThresholdRule'
+          staticThreshold: '#/components/schemas/StaticThresholdRule'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    WebsiteTimeThreshold:
+      type: object
+      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
+      discriminator:
+        mapping:
+          userImpactOfViolationsInSequence: '#/components/schemas/UserImpactWebsiteTimeThreshold'
+          violationsInPeriod: '#/components/schemas/ViolationsInPeriodWebsiteTimeThreshold'
+          violationsInSequence: '#/components/schemas/ViolationsInSequenceWebsiteTimeThreshold'
+        propertyName: type
+      properties:
+        timeWindow:
+          type: integer
+          format: int64
+        type:
+          type: string
+      required:
+      - type
+    HyperParam:
+      type: object
+      description: List of hyper parameters of the Built-in Event Specification
+      properties:
+        defaultValue:
+          type: number
+          format: double
+        description:
+          type: string
+          maxLength: 2048
+          minLength: 0
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+        maxValue:
+          type: number
+          format: double
+        minValue:
+          type: number
+          format: double
+        name:
+          type: string
+          maxLength: 256
+          minLength: 0
+        valueFormat:
+          type: string
+          description: '|
+
+            * NUMBER: Generic number
+
+            * BYTES: Number of bytes
+
+            * KILO_BYTES: Number of kilobytes
+
+            * MEGA_BYTES: Number of megabytes
+
+            * PERCENTAGE: Percentage in scale [0,1]
+
+            * PERCENTAGE_100: Percentage in scale [0,100]
+
+            * PERCENTAGE_NO_CAPPING: Percentage in scale [0,1] but value could exceed 1 for example when metric is aggregated
+
+            * PERCENTAGE_100_NO_CAPPING: Percentage in scale [0,100] but value could exceed 100 for example when metric is aggregated
+
+            * LATENCY: Time in milliseconds, with value of 0 should not be considered a a strict 0, but considered as < 1ms
+
+            * NANOS: Time in nanoseconds
+
+            * MILLIS: Time in milliseconds
+
+            * MICROS: Time in microseconds
+
+            * SECONDS: Time in seconds
+
+            * RATE: Number of occurrences per second
+
+            * BYTE_RATE: Number of bytes per second
+
+            * UNDEFINED: Metric value unit is not known
+
+            '
+          enum:
+          - NUMBER
+          - BYTES
+          - KILO_BYTES
+          - MEGA_BYTES
+          - PERCENTAGE
+          - PERCENTAGE_100
+          - PERCENTAGE_NO_CAPPING
+          - PERCENTAGE_100_NO_CAPPING
+          - LATENCY
+          - NANOS
+          - MILLIS
+          - MICROS
+          - SECONDS
+          - RATE
+          - BYTE_RATE
+          - UNDEFINED
+      required:
+      - description
+      - id
+      - name
     WithMetadata:
       type: object
       properties:
@@ -4548,359 +4859,25 @@ components:
       - name
       - tagFilterExpression
       - timeThreshold
-    RuleInput:
+    ChangeSummary:
       type: object
-      description: List of input rules of the Built-in Event Specification
+      description: Brief summary of changes made in this config version.
       properties:
-        inputKind:
+        author:
+          $ref: '#/components/schemas/Author'
+        changeType:
           type: string
           enum:
-          - METRIC
-          - SNAPSHOT_FIELD
-          - EVENT
-          - DERIVED_METRIC
-          - METRIC_PATTERN
-        inputName:
-          type: string
-          maxLength: 256
-          minLength: 0
+          - CREATE
+          - UPDATE
+          - DELETE
+          - ENABLE
+          - DISABLE
+          - RESTORE
+          - UNKNOWN
       required:
-      - inputKind
-      - inputName
-    ThresholdConfigRule:
-      type: object
-      discriminator:
-        mapping:
-          adaptiveBaseline: '#/components/schemas/AdaptiveThresholdRule'
-          historicBaseline: '#/components/schemas/StaticBaselineThresholdRule'
-          staticThreshold: '#/components/schemas/StaticThresholdRule'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    Field:
-      type: object
-      description: List of fields that describe an action.
-      properties:
-        description:
-          type: string
-        encoding:
-          type: string
-        name:
-          type: string
-        secured:
-          type: boolean
-        value:
-          type: string
-      required:
-      - encoding
-      - name
-      - value
-    MobileAppTimeThreshold:
-      type: object
-      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
-      discriminator:
-        mapping:
-          userImpactOfViolationsInSequence: '#/components/schemas/UserImpactMobileAppTimeThreshold'
-          violationsInPeriod: '#/components/schemas/ViolationsInPeriodMobileAppTimeThreshold'
-          violationsInSequence: '#/components/schemas/ViolationsInSequenceMobileAppTimeThreshold'
-        propertyName: type
-      properties:
-        timeWindow:
-          type: integer
-          format: int64
-        type:
-          type: string
-      required:
-      - type
-    TagFilterExpression:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/TagFilterExpressionElement'
-      - type: object
-        properties:
-          elements:
-            type: array
-            items:
-              $ref: '#/components/schemas/TagFilterExpressionElement'
-          logicalOperator:
-            type: string
-            description: Set AND / OR
-            enum:
-            - AND
-            - OR
-      required:
-      - elements
-      - logicalOperator
-    AlertingConfiguration:
-      type: object
-      properties:
-        alertName:
-          type: string
-          description: Name of the Alert Configuration.
-          maxLength: 256
-          minLength: 0
-        customPayloadFields:
-          type: array
-          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
-          items:
-            $ref: '#/components/schemas/StaticStringField'
-          maxItems: 20
-          minItems: 0
-        eventFilteringConfiguration:
-          $ref: '#/components/schemas/EventFilteringConfiguration'
-        id:
-          type: string
-          description: ID of the Alert Configuration.
-          maxLength: 64
-          minLength: 0
-        includeEntityNameInLegacyAlerts:
-          type: boolean
-          description: To include the entity name in a legacy alert based on built-in/custom events.
-        integrationIds:
-          type: array
-          description: List of Alert Channel IDs added in this Alert Configuration.
-          items:
-            type: string
-            description: List of Alert Channel IDs added in this Alert Configuration.
-          maxItems: 1024
-          minItems: 0
-          uniqueItems: true
-        muteUntil:
-          type: integer
-          format: int64
-          description: Timer dictating how long the Alert Configuration will stay muted. A value of `0` means the Alert Configuration is currently enabled. Otherwise, the Alert Configuration is currently disabled (muted).
-      required:
-      - alertName
-      - customPayloadFields
-      - eventFilteringConfiguration
-      - id
-      - integrationIds
-    Problem:
-      type: object
-      properties:
-        fixSuggestion:
-          type: string
-          maxLength: 65536
-          minLength: 0
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
-        problemText:
-          type: string
-          maxLength: 2048
-          minLength: 0
-        severity:
-          type: integer
-          format: int32
-      required:
-      - id
-    AlertingConfigurationWithLastUpdated:
-      type: object
-      properties:
-        alertName:
-          type: string
-          description: Name of the Alert Configuration.
-          maxLength: 256
-          minLength: 0
-        customPayloadFields:
-          type: array
-          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
-          items:
-            $ref: '#/components/schemas/StaticStringField'
-          maxItems: 20
-          minItems: 0
-        eventFilteringConfiguration:
-          $ref: '#/components/schemas/EventFilteringConfiguration'
-        id:
-          type: string
-          description: ID of the Alert Configuration.
-          maxLength: 64
-          minLength: 0
-        includeEntityNameInLegacyAlerts:
-          type: boolean
-          description: To include the entity name in a legacy alert based on built-in/custom events.
-        integrationIds:
-          type: array
-          description: List of Alert Channel IDs added in this Alert Configuration.
-          items:
-            type: string
-            description: List of Alert Channel IDs added in this Alert Configuration.
-          maxItems: 1024
-          minItems: 0
-          uniqueItems: true
-        lastUpdated:
-          type: integer
-          format: int64
-          description: Unix timestamp representing the time the configuration was last updated.
-          minimum: 1
-        muteUntil:
-          type: integer
-          format: int64
-          description: Timer dictating how long the Alert Configuration will stay muted. A value of `0` means the Alert Configuration is currently enabled. Otherwise, the Alert Configuration is currently disabled (muted).
-      required:
-      - alertName
-      - customPayloadFields
-      - eventFilteringConfiguration
-      - id
-      - integrationIds
-    TagTreeNode:
-      type: object
-      description: Children tags of tagTree
-      discriminator:
-        mapping:
-          LEVEL: '#/components/schemas/TagTreeLevel'
-          TAG: '#/components/schemas/TagTreeTag'
-        propertyName: type
-      properties:
-        icon:
-          type: string
-        label:
-          type: string
-        type:
-          type: string
-          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
-    Threshold:
-      type: object
-      deprecated: true
-      description: Indicates the type of threshold this alert rule is evaluated on.
-      discriminator:
-        mapping:
-          adaptiveBaseline: '#/components/schemas/AdaptiveBaseline'
-          historicBaseline: '#/components/schemas/HistoricBaseline'
-          staticThreshold: '#/components/schemas/StaticThreshold'
-        propertyName: type
-      properties:
-        operator:
-          type: string
-          enum:
-          - '>'
-          - '>='
-          - <
-          - <=
-        type:
-          type: string
-      required:
-      - operator
-      - type
-    TagTreeLevel:
-      type: object
-      description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
-
-        Consider this as the root of the tree where it has tags as attributes or children.
-
-        '
-      properties:
-        children:
-          type: array
-          description: Children tags of tagTree
-          items:
-            $ref: '#/components/schemas/TagTreeNode'
-        description:
-          type: string
-          description: The description provided, if any.
-          maxLength: 512
-          minLength: 0
-        icon:
-          type: string
-          description: 'Each tag has an Icon which can be seen on the drop down list in Unbounded Analytics.
-
-            If there is an icon, there will be a string associated with it.
-
-            Eg: For for all `TAG` under `Call` tagTreeNode, the `icon` value is `lib_application_call`.
-
-            '
-          maxLength: 128
-          minLength: 0
-        label:
-          type: string
-          description: 'The name of the tagTreeNode. Eg: `Commonly Used`, `Application`.'
-          maxLength: 128
-          minLength: 0
-        queryable:
-          type: boolean
-        scoreBoost:
-          type: integer
-          format: int32
-          description: 'By default it is `null` if it is not set explictily by IBM Instana.
-
-            The purpose of this parameter is to rank the tagTree. For eg: some set of tags are frequently used.
-
-            Tags under `Commonly used` is frequently used, so it will come up on top of the drop down list of `Query Builder` in `Unbounded Analytics`.
-
-            Higher the scoreBoost, higher the ranking.
-
-            '
-        type:
-          type: string
-          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
-      required:
-      - children
-      - label
-    TagCatalog:
-      type: object
-      properties:
-        tagTree:
-          type: array
-          description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
-
-            Consider this as the root of the tree where it has tags as attributes or children.
-
-            '
-          items:
-            $ref: '#/components/schemas/TagTreeLevel'
-        tags:
-          type: array
-          description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
-
-            Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
-
-            '
-          items:
-            $ref: '#/components/schemas/Tag'
-      required:
-      - tagTree
-      - tags
-    CustomPayloadConfiguration:
-      type: object
-      properties:
-        fields:
-          type: array
-          description: Required parameters for custom payload configuration.
-          items:
-            $ref: '#/components/schemas/CustomPayloadField'
-          maxItems: 20
-          minItems: 0
-      required:
-      - fields
-    StaticStringField:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/CustomPayloadField'
-      - type: object
-        properties:
-          value:
-            type: string
-            description: Custom value for static type custom payload
-      required:
-      - key
-      - value
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
+      - author
+      - changeType
     EventSpecificationInfo:
       type: object
       properties:
@@ -4937,36 +4914,59 @@ components:
       - id
       - name
       - type
-    IntegrationOverview:
+    CustomPayloadWithVersion:
       type: object
       properties:
+        fields:
+          type: array
+          description: Required parameters for custom payload configuration.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        lastUpdated:
+          type: integer
+          format: int64
+          description: Unix timestamp representing the time (in milliseconds) the configuration was last updated.
+          minimum: 1
+        version:
+          type: integer
+          format: int32
+          description: Global custom payloads version.
+      required:
+      - fields
+      - version
+    ApiTag:
+      type: object
+      properties:
+        displayName:
+          type: string
+          maxLength: 256
+          minLength: 0
         id:
           type: string
-          description: Unique ID of the alert channel
-        kind:
-          type: string
-          description: The type of the Alerting Channel.
-        name:
-          type: string
-          description: The name of the Alerting Channel.
-        properties:
-          type: object
-          additionalProperties:
-            type: string
-            description: Properties of the alert channel in pairs of key/value
-          description: Properties of the alert channel in pairs of key/value
-        rbacTags:
-          type: array
-          description: Team Tags that's assigned to the Alerting Channel
-          items:
-            $ref: '#/components/schemas/ApiTag'
-          uniqueItems: true
+          maxLength: 64
+          minLength: 0
       required:
+      - displayName
       - id
-      - kind
-      - name
-    Json:
+    MobileAppTimeThreshold:
       type: object
+      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
+      discriminator:
+        mapping:
+          userImpactOfViolationsInSequence: '#/components/schemas/UserImpactMobileAppTimeThreshold'
+          violationsInPeriod: '#/components/schemas/ViolationsInPeriodMobileAppTimeThreshold'
+          violationsInSequence: '#/components/schemas/ViolationsInSequenceMobileAppTimeThreshold'
+        propertyName: type
+      properties:
+        timeWindow:
+          type: integer
+          format: int64
+        type:
+          type: string
+      required:
+      - type
   securitySchemes:
     ApiKeyAuth:
       in: header

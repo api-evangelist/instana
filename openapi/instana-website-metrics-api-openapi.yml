@@ -282,93 +282,20 @@ components:
           minimum: -1
       required:
       - file
-    TagFilterExpressionElement:
+    TimeFrame:
       type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
+      description: Time range for which the data should be retrieved.
       properties:
-        type:
-          type: string
-      required:
-      - type
-    GetWebsiteMetricsV2:
-      type: object
-      properties:
-        metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/WebsiteMonitoringMetricsConfiguration'
-          maxItems: 5
-          minItems: 1
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-        type:
-          type: string
-          enum:
-          - PAGELOAD
-          - RESOURCELOAD
-          - HTTPREQUEST
-          - ERROR
-          - CUSTOM
-          - PAGE_CHANGE
-      required:
-      - metrics
-      - type
-    MetricAPIResult:
-      type: object
-      properties:
-        adjustedTimeframe:
-          $ref: '#/components/schemas/AdjustedTimeframe'
-        metrics:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: array
-              items:
-                type: number
-      required:
-      - metrics
-    WebsiteMonitoringMetricsConfiguration:
-      type: object
-      properties:
-        aggregation:
-          type: string
-          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
-          enum:
-          - SUM
-          - MEAN
-          - MAX
-          - MIN
-          - P25
-          - P50
-          - P75
-          - P90
-          - P95
-          - P98
-          - P99
-          - P99_9
-          - P99_99
-          - DISTINCT_COUNT
-          - SUM_POSITIVE
-          - PER_SECOND
-          - INCREASE
-        granularity:
+        to:
           type: integer
-          format: int32
-          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
-        metric:
-          type: string
-          description: 'Set a particular metric, eg: `latency`.'
-      required:
-      - aggregation
-      - metric
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          maximum: 2678400000
+          minimum: 0
     AdjustedTimeframe:
       type: object
       description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
@@ -432,20 +359,122 @@ components:
       properties:
         empty:
           type: boolean
-    TimeFrame:
+    TagFilterExpressionElement:
       type: object
-      description: Time range for which the data should be retrieved.
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
       properties:
-        to:
+        type:
+          type: string
+      required:
+      - type
+    GetWebsiteMetrics:
+      type: object
+      properties:
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebsiteMonitoringMetricsConfiguration'
+          maxItems: 5
+          minItems: 1
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeprecatedTagFilter'
+          maxItems: 32
+          minItems: 0
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+        type:
+          type: string
+          enum:
+          - PAGELOAD
+          - RESOURCELOAD
+          - HTTPREQUEST
+          - ERROR
+          - CUSTOM
+          - PAGE_CHANGE
+      required:
+      - metrics
+      - type
+    MetricAPIResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+      required:
+      - metrics
+    WebsiteMonitoringMetricsConfiguration:
+      type: object
+      properties:
+        aggregation:
+          type: string
+          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        granularity:
           type: integer
-          format: int64
-          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
-        windowSize:
-          type: integer
-          format: int64
-          description: windowSize in milliseconds
-          maximum: 2678400000
-          minimum: 0
+          format: int32
+          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
+        metric:
+          type: string
+          description: 'Set a particular metric, eg: `latency`.'
+      required:
+      - aggregation
+      - metric
+    GetWebsiteMetricsV2:
+      type: object
+      properties:
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebsiteMonitoringMetricsConfiguration'
+          maxItems: 5
+          minItems: 1
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+        type:
+          type: string
+          enum:
+          - PAGELOAD
+          - RESOURCELOAD
+          - HTTPREQUEST
+          - ERROR
+          - CUSTOM
+          - PAGE_CHANGE
+      required:
+      - metrics
+      - type
     WebsiteMonitoringBeacon:
       type: object
       properties:
@@ -763,35 +792,6 @@ components:
       - type
       - websiteId
       - websiteLabel
-    GetWebsiteMetrics:
-      type: object
-      properties:
-        metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/WebsiteMonitoringMetricsConfiguration'
-          maxItems: 5
-          minItems: 1
-        tagFilters:
-          type: array
-          items:
-            $ref: '#/components/schemas/DeprecatedTagFilter'
-          maxItems: 32
-          minItems: 0
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-        type:
-          type: string
-          enum:
-          - PAGELOAD
-          - RESOURCELOAD
-          - HTTPREQUEST
-          - ERROR
-          - CUSTOM
-          - PAGE_CHANGE
-      required:
-      - metrics
-      - type
   securitySchemes:
     ApiKeyAuth:
       in: header

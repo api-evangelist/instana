@@ -172,16 +172,6 @@ components:
       - email
       - fullName
       - tenantId
-    AccessLogResponse:
-      type: object
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessLogEntry'
-        total:
-          type: integer
-          format: int64
     LogEntryActor:
       type: object
       properties:
@@ -201,16 +191,6 @@ components:
       - id
       - name
       - type
-    AuditLogUiResponse:
-      type: object
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/AuditLogEntry'
-        total:
-          type: integer
-          format: int64
     AuditLogEntry:
       type: object
       properties:
@@ -235,6 +215,26 @@ components:
       - id
       - message
       - meta
+    AccessLogResponse:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessLogEntry'
+        total:
+          type: integer
+          format: int64
+    AuditLogUiResponse:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLogEntry'
+        total:
+          type: integer
+          format: int64
   securitySchemes:
     ApiKeyAuth:
       in: header

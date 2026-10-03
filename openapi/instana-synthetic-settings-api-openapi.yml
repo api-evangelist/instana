@@ -1544,105 +1544,17 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    SyntheticLocationConfiguration:
-      type: object
-      properties:
-        clusterName:
-          type: string
-        namespace:
-          type: string
-        tenantType:
-          type: string
-          enum:
-          - Multi
-          - Single
-    ApiTag:
-      type: object
-      properties:
-        displayName:
-          type: string
-          maxLength: 256
-          minLength: 0
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
-      required:
-      - displayName
-      - id
-    SyntheticResourceUpdateListStringListString:
+    SyntheticResourceUpdateMapStringStringListString:
       type: object
       properties:
         add:
-          type: array
-          items:
+          type: object
+          additionalProperties:
             type: string
         remove:
           type: array
           items:
             type: string
-    SyntheticTestUpdate:
-      type: object
-      description: Identifies the type of the synthetic tests updated on this request. Valid types are Deep and Shallow.
-      discriminator:
-        mapping:
-          Deep: '#/components/schemas/SyntheticTestDeepUpdate'
-          Shallow: '#/components/schemas/SyntheticTestShallowUpdate'
-        propertyName: syntheticUpdateType
-      properties:
-        active:
-          type: boolean
-        applications:
-          $ref: '#/components/schemas/SyntheticResourceUpdateListStringListString'
-        customProperties:
-          $ref: '#/components/schemas/SyntheticResourceUpdateMapStringStringListString'
-        ids:
-          type: array
-          items:
-            type: string
-        lastModifiedAt:
-          type: array
-          items:
-            type: integer
-            format: int64
-        locations:
-          $ref: '#/components/schemas/SyntheticResourceUpdateListStringListString'
-        mobileApps:
-          $ref: '#/components/schemas/SyntheticResourceUpdateListStringListString'
-        modifiedBy:
-          type: string
-        shallowUpdate:
-          type: boolean
-        syntheticUpdateType:
-          type: string
-          description: 'Indicates the type of update to apply to a set of tests of same syntheticType (Deep)
-
-            or a mix of syntheticType values (Shallow). When Shallow is used, only the configuration properties
-
-            retries, retryInterval and timeout can be updated
-
-            '
-          enum:
-          - Deep
-          - Shallow
-        testFrequency:
-          type: integer
-          format: int32
-          maximum: 1440
-          minimum: 1
-        websites:
-          $ref: '#/components/schemas/SyntheticResourceUpdateListStringListString'
-      required:
-      - syntheticUpdateType
-    SyntheticBulkResponse:
-      type: object
-      properties:
-        errorMessage:
-          type: string
-        id:
-          type: string
-        status:
-          type: string
     SyntheticTestCICDItem:
       type: object
       properties:
@@ -1685,148 +1597,29 @@ components:
       - testLabel
       - testResultId
       - testType
-    SyntheticGeoPoint:
+    SyntheticPlaybackCapabilities:
       type: object
       properties:
-        cityName:
-          type: string
-        countryName:
-          type: string
-        latitude:
-          type: number
-          format: double
-        longitude:
-          type: number
-          format: double
-      required:
-      - cityName
-      - countryName
-      - latitude
-      - longitude
-    SyntheticCredential:
-      type: object
-      properties:
-        applicationLabels:
+        browserType:
           type: array
           items:
             type: string
-            readOnly: true
-          readOnly: true
-        applications:
+            enum:
+            - chrome
+            - firefox
+        executionType:
           type: array
           items:
             type: string
-        createdAt:
-          type: integer
-          format: int64
-          readOnly: true
-        createdBy:
-          type: string
-          maxLength: 128
-          minLength: 0
-        credentialName:
-          type: string
-          maxLength: 128
-          minLength: 1
-        credentialValue:
-          type: string
-          writeOnly: true
-        mobileAppLabels:
-          type: array
-          items:
-            type: string
-            readOnly: true
-          readOnly: true
-        mobileApps:
-          type: array
-          items:
-            type: string
-        modifiedAt:
-          type: integer
-          format: int64
-          readOnly: true
-        modifiedBy:
-          type: string
-          maxLength: 128
-          minLength: 0
-        rbacTags:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiTag'
-          uniqueItems: true
-        websiteLabels:
-          type: array
-          items:
-            type: string
-            readOnly: true
-          readOnly: true
-        websites:
+            enum:
+            - CI/CD
+        syntheticType:
           type: array
           items:
             type: string
       required:
-      - credentialName
-      - credentialValue
-    SyntheticTestCICDCustomization:
-      type: object
-      properties:
-        configuration:
-          $ref: '#/components/schemas/SyntheticConfiguration'
-        customProperties:
-          type: object
-          additionalProperties:
-            type: string
-        locations:
-          type: array
-          items:
-            type: string
-      required:
-      - configuration
-    SyntheticDatacenter:
-      type: object
-      properties:
-        cityName:
-          type: string
-        code:
-          type: string
-          maxLength: 128
-          minLength: 1
-        configuration:
-          $ref: '#/components/schemas/SyntheticDatacenterConfiguration'
-        countryName:
-          type: string
-        datacenterId:
-          type: string
-        expectedActiveAt:
-          type: integer
-          format: int64
-        label:
-          type: string
-          maxLength: 128
-          minLength: 1
-        latitude:
-          type: number
-          format: double
-        locationLabel:
-          type: string
-        longitude:
-          type: number
-          format: double
-        modifiedAt:
-          type: integer
-          format: int64
-        provider:
-          type: string
-          maxLength: 128
-          minLength: 1
-        status:
-          type: string
-      required:
-      - cityName
-      - code
-      - countryName
-      - label
-      - provider
+      - browserType
+      - syntheticType
     SyntheticConfiguration:
       type: object
       properties:
@@ -1841,6 +1634,60 @@ components:
           maximum: 10
           minimum: 1
         timeout:
+          type: string
+    SyntheticTypeConfiguration:
+      type: object
+      description: 'Synthetic test configuration that is unique to a synthetic type. Valid types are BrowserScript,
+
+        DNS, HTTPAction, HTTPScript, SSLCertificate, WebpageAction, and WebpageScript.'
+      discriminator:
+        mapping:
+          BrowserScript: '#/components/schemas/BrowserScriptConfiguration'
+          DNS: '#/components/schemas/DNSConfiguration'
+          HTTPAction: '#/components/schemas/HttpActionConfiguration'
+          HTTPScript: '#/components/schemas/HttpScriptConfiguration'
+          NotConfigured: '#/components/schemas/EmptyConfiguration'
+          SSLCertificate: '#/components/schemas/SSLCertificateConfiguration'
+          WebpageAction: '#/components/schemas/WebpageActionConfiguration'
+          WebpageScript: '#/components/schemas/WebpageScriptConfiguration'
+        propertyName: syntheticType
+      properties:
+        markSyntheticCall:
+          type: boolean
+        retries:
+          type: integer
+          format: int32
+          maximum: 2
+          minimum: 0
+        retryInterval:
+          type: integer
+          format: int32
+          maximum: 10
+          minimum: 1
+        syntheticType:
+          type: string
+          enum:
+          - BrowserScript
+          - DNS
+          - HTTPAction
+          - HTTPScript
+          - SSLCertificate
+          - WebpageAction
+          - WebpageScript
+          - NotConfigured
+        timeout:
+          type: string
+      required:
+      - markSyntheticCall
+      - syntheticType
+    SyntheticBulkResponse:
+      type: object
+      properties:
+        errorMessage:
+          type: string
+        id:
+          type: string
+        status:
           type: string
     SyntheticTest:
       type: object
@@ -1958,29 +1805,143 @@ components:
       - label
       - locations
       - testFrequency
-    SyntheticPlaybackCapabilities:
+    SyntheticResourceUpdateListStringListString:
       type: object
       properties:
-        browserType:
+        add:
           type: array
           items:
             type: string
-            enum:
-            - chrome
-            - firefox
-        executionType:
+        remove:
           type: array
           items:
             type: string
-            enum:
-            - CI/CD
-        syntheticType:
+    SyntheticTestCICDResponse:
+      type: object
+      properties:
+        locationId:
+          type: string
+        testId:
+          type: string
+        testResultId:
+          type: string
+      required:
+      - locationId
+      - testId
+      - testResultId
+    SyntheticTestCICDCustomization:
+      type: object
+      properties:
+        configuration:
+          $ref: '#/components/schemas/SyntheticConfiguration'
+        customProperties:
+          type: object
+          additionalProperties:
+            type: string
+        locations:
           type: array
           items:
             type: string
       required:
-      - browserType
-      - syntheticType
+      - configuration
+    SyntheticDatacenter:
+      type: object
+      properties:
+        cityName:
+          type: string
+        code:
+          type: string
+          maxLength: 128
+          minLength: 1
+        configuration:
+          $ref: '#/components/schemas/SyntheticDatacenterConfiguration'
+        countryName:
+          type: string
+        datacenterId:
+          type: string
+        expectedActiveAt:
+          type: integer
+          format: int64
+        label:
+          type: string
+          maxLength: 128
+          minLength: 1
+        latitude:
+          type: number
+          format: double
+        locationLabel:
+          type: string
+        longitude:
+          type: number
+          format: double
+        modifiedAt:
+          type: integer
+          format: int64
+        provider:
+          type: string
+          maxLength: 128
+          minLength: 1
+        status:
+          type: string
+      required:
+      - cityName
+      - code
+      - countryName
+      - label
+      - provider
+    SyntheticTestUpdate:
+      type: object
+      description: Identifies the type of the synthetic tests updated on this request. Valid types are Deep and Shallow.
+      discriminator:
+        mapping:
+          Deep: '#/components/schemas/SyntheticTestDeepUpdate'
+          Shallow: '#/components/schemas/SyntheticTestShallowUpdate'
+        propertyName: syntheticUpdateType
+      properties:
+        active:
+          type: boolean
+        applications:
+          $ref: '#/components/schemas/SyntheticResourceUpdateListStringListString'
+        customProperties:
+          $ref: '#/components/schemas/SyntheticResourceUpdateMapStringStringListString'
+        ids:
+          type: array
+          items:
+            type: string
+        lastModifiedAt:
+          type: array
+          items:
+            type: integer
+            format: int64
+        locations:
+          $ref: '#/components/schemas/SyntheticResourceUpdateListStringListString'
+        mobileApps:
+          $ref: '#/components/schemas/SyntheticResourceUpdateListStringListString'
+        modifiedBy:
+          type: string
+        shallowUpdate:
+          type: boolean
+        syntheticUpdateType:
+          type: string
+          description: 'Indicates the type of update to apply to a set of tests of same syntheticType (Deep)
+
+            or a mix of syntheticType values (Shallow). When Shallow is used, only the configuration properties
+
+            retries, retryInterval and timeout can be updated
+
+            '
+          enum:
+          - Deep
+          - Shallow
+        testFrequency:
+          type: integer
+          format: int32
+          maximum: 1440
+          minimum: 1
+        websites:
+          $ref: '#/components/schemas/SyntheticResourceUpdateListStringListString'
+      required:
+      - syntheticUpdateType
     SyntheticDatacenterConfiguration:
       type: object
       properties:
@@ -1988,51 +1949,126 @@ components:
           type: array
           items:
             type: string
-    SyntheticTypeConfiguration:
+    SyntheticGeoPoint:
       type: object
-      description: 'Synthetic test configuration that is unique to a synthetic type. Valid types are BrowserScript,
-
-        DNS, HTTPAction, HTTPScript, SSLCertificate, WebpageAction, and WebpageScript.'
-      discriminator:
-        mapping:
-          BrowserScript: '#/components/schemas/BrowserScriptConfiguration'
-          DNS: '#/components/schemas/DNSConfiguration'
-          HTTPAction: '#/components/schemas/HttpActionConfiguration'
-          HTTPScript: '#/components/schemas/HttpScriptConfiguration'
-          NotConfigured: '#/components/schemas/EmptyConfiguration'
-          SSLCertificate: '#/components/schemas/SSLCertificateConfiguration'
-          WebpageAction: '#/components/schemas/WebpageActionConfiguration'
-          WebpageScript: '#/components/schemas/WebpageScriptConfiguration'
-        propertyName: syntheticType
       properties:
-        markSyntheticCall:
-          type: boolean
-        retries:
-          type: integer
-          format: int32
-          maximum: 2
-          minimum: 0
-        retryInterval:
-          type: integer
-          format: int32
-          maximum: 10
-          minimum: 1
-        syntheticType:
+        cityName:
           type: string
-          enum:
-          - BrowserScript
-          - DNS
-          - HTTPAction
-          - HTTPScript
-          - SSLCertificate
-          - WebpageAction
-          - WebpageScript
-          - NotConfigured
-        timeout:
+        countryName:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+      required:
+      - cityName
+      - countryName
+      - latitude
+      - longitude
+    SyntheticTestCICD:
+      type: object
+      properties:
+        customization:
+          $ref: '#/components/schemas/SyntheticTestCICDCustomization'
+        runType:
+          type: string
+        testId:
           type: string
       required:
-      - markSyntheticCall
-      - syntheticType
+      - customization
+      - testId
+    SyntheticCredential:
+      type: object
+      properties:
+        applicationLabels:
+          type: array
+          items:
+            type: string
+            readOnly: true
+          readOnly: true
+        applications:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: integer
+          format: int64
+          readOnly: true
+        createdBy:
+          type: string
+          maxLength: 128
+          minLength: 0
+        credentialName:
+          type: string
+          maxLength: 128
+          minLength: 1
+        credentialValue:
+          type: string
+          writeOnly: true
+        mobileAppLabels:
+          type: array
+          items:
+            type: string
+            readOnly: true
+          readOnly: true
+        mobileApps:
+          type: array
+          items:
+            type: string
+        modifiedAt:
+          type: integer
+          format: int64
+          readOnly: true
+        modifiedBy:
+          type: string
+          maxLength: 128
+          minLength: 0
+        rbacTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTag'
+          uniqueItems: true
+        websiteLabels:
+          type: array
+          items:
+            type: string
+            readOnly: true
+          readOnly: true
+        websites:
+          type: array
+          items:
+            type: string
+      required:
+      - credentialName
+      - credentialValue
+    SyntheticLocationConfiguration:
+      type: object
+      properties:
+        clusterName:
+          type: string
+        namespace:
+          type: string
+        tenantType:
+          type: string
+          enum:
+          - Multi
+          - Single
+    ApiTag:
+      type: object
+      properties:
+        displayName:
+          type: string
+          maxLength: 256
+          minLength: 0
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+      required:
+      - displayName
+      - id
     SyntheticLocation:
       type: object
       properties:
@@ -2087,42 +2123,6 @@ components:
       - label
       - locationType
       - playbackCapabilities
-    SyntheticResourceUpdateMapStringStringListString:
-      type: object
-      properties:
-        add:
-          type: object
-          additionalProperties:
-            type: string
-        remove:
-          type: array
-          items:
-            type: string
-    SyntheticTestCICD:
-      type: object
-      properties:
-        customization:
-          $ref: '#/components/schemas/SyntheticTestCICDCustomization'
-        runType:
-          type: string
-        testId:
-          type: string
-      required:
-      - customization
-      - testId
-    SyntheticTestCICDResponse:
-      type: object
-      properties:
-        locationId:
-          type: string
-        testId:
-          type: string
-        testResultId:
-          type: string
-      required:
-      - locationId
-      - testId
-      - testResultId
   securitySchemes:
     ApiKeyAuth:
       in: header

@@ -608,6 +608,61 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
+    SliConfigurationWithLastUpdated:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID for each SLI
+          maxLength: 64
+          minLength: 0
+        initialEvaluationTimestamp:
+          type: integer
+          format: int64
+          description: Initial evaluation timestamp in milliseconds (13-digit)
+        lastUpdated:
+          type: integer
+          format: int64
+          description: Last Updated timestamp in milliseconds (13-digit)
+          minimum: 1
+        metricConfiguration:
+          $ref: '#/components/schemas/MetricConfiguration'
+        sliEntity:
+          $ref: '#/components/schemas/SliEntity'
+        sliName:
+          type: string
+          description: The name of the Service Level Indicator (SLI) specified during its creation
+          maxLength: 256
+          minLength: 0
+      required:
+      - id
+      - sliEntity
+      - sliName
+    SliConfiguration:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID for each SLI
+          maxLength: 64
+          minLength: 0
+        initialEvaluationTimestamp:
+          type: integer
+          format: int64
+          description: Initial evaluation timestamp in milliseconds (13-digit)
+        metricConfiguration:
+          $ref: '#/components/schemas/MetricConfiguration'
+        sliEntity:
+          $ref: '#/components/schemas/SliEntity'
+        sliName:
+          type: string
+          description: The name of the Service Level Indicator (SLI) specified during its creation
+          maxLength: 256
+          minLength: 0
+      required:
+      - id
+      - sliEntity
+      - sliName
     MetricConfiguration:
       type: object
       description: Details regarding the metric to be configured, including the metric name, threshold, and aggregation method
@@ -649,61 +704,6 @@ components:
           exclusiveMinimum: 0
       required:
       - metricName
-    SliConfiguration:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique ID for each SLI
-          maxLength: 64
-          minLength: 0
-        initialEvaluationTimestamp:
-          type: integer
-          format: int64
-          description: Initial evaluation timestamp in milliseconds (13-digit)
-        metricConfiguration:
-          $ref: '#/components/schemas/MetricConfiguration'
-        sliEntity:
-          $ref: '#/components/schemas/SliEntity'
-        sliName:
-          type: string
-          description: The name of the Service Level Indicator (SLI) specified during its creation
-          maxLength: 256
-          minLength: 0
-      required:
-      - id
-      - sliEntity
-      - sliName
-    SliConfigurationWithLastUpdated:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique ID for each SLI
-          maxLength: 64
-          minLength: 0
-        initialEvaluationTimestamp:
-          type: integer
-          format: int64
-          description: Initial evaluation timestamp in milliseconds (13-digit)
-        lastUpdated:
-          type: integer
-          format: int64
-          description: Last Updated timestamp in milliseconds (13-digit)
-          minimum: 1
-        metricConfiguration:
-          $ref: '#/components/schemas/MetricConfiguration'
-        sliEntity:
-          $ref: '#/components/schemas/SliEntity'
-        sliName:
-          type: string
-          description: The name of the Service Level Indicator (SLI) specified during its creation
-          maxLength: 256
-          minLength: 0
-      required:
-      - id
-      - sliEntity
-      - sliName
     SliEntity:
       type: object
       description: Entity Type of the SLI Configuration

@@ -120,90 +120,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    MetricsResult:
-      type: object
-      properties:
-        metricsResult:
-          type: array
-          items:
-            $ref: '#/components/schemas/MetricsResultItem'
-      required:
-      - metricsResult
-    MetricsResultItem:
-      type: object
-      properties:
-        customTags:
-          type: object
-          additionalProperties:
-            type: string
-            description: A map of custom properties composed of the custom property name and its value.  This information will be included if the custom properties were requested or if the query was grouped and the grouping included one or more custom properties.
-          description: A map of custom properties composed of the custom property name and its value.  This information will be included if the custom properties were requested or if the query was grouped and the grouping included one or more custom properties.
-        metrics:
-          type: array
-          description: A map of the requested metrics, composed of the metric name and its value.
-          items:
-            type: object
-            additionalProperties:
-              type: object
-              description: A map of the requested metrics, composed of the metric name and its value.
-            description: A map of the requested metrics, composed of the metric name and its value.
-        runType:
-          type: string
-          description: Indicates whether the test was scheduled to run or run now
-        tests:
-          type: array
-          description: A description of the Synthetic test associated with the result item.  This information will be included if the request was grouped by synthetic.testId or if includeAggregatedTestId was true on the request.
-          items:
-            $ref: '#/components/schemas/MetricsTestResultItem'
-      required:
-      - metrics
-    SyntheticMetricTagGroup:
-      type: object
-      description: ' Grouping of data under `groupbyTag`, where `groupbyTagEntity` and `groupbyTagSecondLevelKey` are aspects of `groupbyTag`.'
-      properties:
-        groupbyTag:
-          type: string
-          description: The name of the group tag (e.g. `agent.tag` or `docker.label`).
-          maxLength: 256
-          minLength: 0
-        groupbyTagEntity:
-          type: string
-          description: 'The entity by which the data should be grouped.
-
-            This field supports three possible values: `NOT_APPLICABLE`, `DESTINATION`, and `SOURCE`.
-
-            `SOURCE`: the tag filter should apply to the source entity.
-
-            `DESTINATION`: the tag filter should apply to the destination entity.
-
-            `NOT_APPLICABLE`: some tags are independent of source or destination, such as tags on the call itself, log tags or trace tags (only destination makes sense because the source is unknown for the root call).
-
-            '
-          enum:
-          - NOT_APPLICABLE
-          - DESTINATION
-          - SOURCE
-        groupbyTagSecondLevelKey:
-          type: string
-          description: If present, it's the 2nd level key part (e.g. `customKey` on `docker.label.customKey`)
-          maxLength: 256
-          minLength: 0
-      required:
-      - groupbyTag
-      - groupbyTagEntity
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
     Pagination:
       type: object
       properties:
@@ -218,67 +134,6 @@ components:
           description: 'Set the number of items you want to return with one query. Eg: if you want to retrieve 10 items, the value would be 10.'
           maximum: 200
           minimum: 1
-    SyntheticMetricConfiguration:
-      type: object
-      properties:
-        aggregation:
-          type: string
-          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
-          enum:
-          - SUM
-          - MEAN
-          - MAX
-          - MIN
-          - P25
-          - P50
-          - P75
-          - P90
-          - P95
-          - P98
-          - P99
-          - P99_9
-          - P99_99
-          - DISTINCT_COUNT
-          - SUM_POSITIVE
-          - PER_SECOND
-          - INCREASE
-        granularity:
-          type: integer
-          format: int32
-          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
-        metric:
-          type: string
-          description: 'Set a particular metric, eg: `latency`.'
-      required:
-      - aggregation
-      - metric
-    GetMetricsResult:
-      type: object
-      properties:
-        disableDefaultGroups:
-          type: boolean
-          writeOnly: true
-        groups:
-          type: array
-          description: ' Grouping of data under `groupbyTag`, where `groupbyTagEntity` and `groupbyTagSecondLevelKey` are aspects of `groupbyTag`.'
-          items:
-            $ref: '#/components/schemas/SyntheticMetricTagGroup'
-        includeAggregatedTestIds:
-          type: boolean
-          writeOnly: true
-        metrics:
-          type: array
-          description: 'A list of objects each of which defines a metric and the (statistical) aggregation -- MEAN, SUM, MAX, etc -- that should be used to summarize it for the defined time frame. Eg: `[{ ''metric'': ''latency'', ''aggregation'': ''MEAN''}]`. To know more about supported metrics and its aggregation, See `Get Metric catalog`.'
-          items:
-            $ref: '#/components/schemas/SyntheticMetricConfiguration'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-      required:
-      - metrics
     MetricsTestResultItem:
       type: object
       description: A description of the Synthetic test associated with the result item.  This information will be included if the request was grouped by synthetic.testId or if includeAggregatedTestId was true on the request.
@@ -321,6 +176,40 @@ components:
             description: A list of the websites associated with the Synthetic test.
       required:
       - testId
+    SyntheticMetricTagGroup:
+      type: object
+      description: ' Grouping of data under `groupbyTag`, where `groupbyTagEntity` and `groupbyTagSecondLevelKey` are aspects of `groupbyTag`.'
+      properties:
+        groupbyTag:
+          type: string
+          description: The name of the group tag (e.g. `agent.tag` or `docker.label`).
+          maxLength: 256
+          minLength: 0
+        groupbyTagEntity:
+          type: string
+          description: 'The entity by which the data should be grouped.
+
+            This field supports three possible values: `NOT_APPLICABLE`, `DESTINATION`, and `SOURCE`.
+
+            `SOURCE`: the tag filter should apply to the source entity.
+
+            `DESTINATION`: the tag filter should apply to the destination entity.
+
+            `NOT_APPLICABLE`: some tags are independent of source or destination, such as tags on the call itself, log tags or trace tags (only destination makes sense because the source is unknown for the root call).
+
+            '
+          enum:
+          - NOT_APPLICABLE
+          - DESTINATION
+          - SOURCE
+        groupbyTagSecondLevelKey:
+          type: string
+          description: If present, it's the 2nd level key part (e.g. `customKey` on `docker.label.customKey`)
+          maxLength: 256
+          minLength: 0
+      required:
+      - groupbyTag
+      - groupbyTagEntity
     TimeFrame:
       type: object
       description: Time range for which the data should be retrieved.
@@ -335,6 +224,117 @@ components:
           description: windowSize in milliseconds
           maximum: 2678400000
           minimum: 0
+    GetMetricsResult:
+      type: object
+      properties:
+        disableDefaultGroups:
+          type: boolean
+          writeOnly: true
+        groups:
+          type: array
+          description: ' Grouping of data under `groupbyTag`, where `groupbyTagEntity` and `groupbyTagSecondLevelKey` are aspects of `groupbyTag`.'
+          items:
+            $ref: '#/components/schemas/SyntheticMetricTagGroup'
+        includeAggregatedTestIds:
+          type: boolean
+          writeOnly: true
+        metrics:
+          type: array
+          description: 'A list of objects each of which defines a metric and the (statistical) aggregation -- MEAN, SUM, MAX, etc -- that should be used to summarize it for the defined time frame. Eg: `[{ ''metric'': ''latency'', ''aggregation'': ''MEAN''}]`. To know more about supported metrics and its aggregation, See `Get Metric catalog`.'
+          items:
+            $ref: '#/components/schemas/SyntheticMetricConfiguration'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+      required:
+      - metrics
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    MetricsResult:
+      type: object
+      properties:
+        metricsResult:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsResultItem'
+      required:
+      - metricsResult
+    SyntheticMetricConfiguration:
+      type: object
+      properties:
+        aggregation:
+          type: string
+          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        granularity:
+          type: integer
+          format: int32
+          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
+        metric:
+          type: string
+          description: 'Set a particular metric, eg: `latency`.'
+      required:
+      - aggregation
+      - metric
+    MetricsResultItem:
+      type: object
+      properties:
+        customTags:
+          type: object
+          additionalProperties:
+            type: string
+            description: A map of custom properties composed of the custom property name and its value.  This information will be included if the custom properties were requested or if the query was grouped and the grouping included one or more custom properties.
+          description: A map of custom properties composed of the custom property name and its value.  This information will be included if the custom properties were requested or if the query was grouped and the grouping included one or more custom properties.
+        metrics:
+          type: array
+          description: A map of the requested metrics, composed of the metric name and its value.
+          items:
+            type: object
+            additionalProperties:
+              type: object
+              description: A map of the requested metrics, composed of the metric name and its value.
+            description: A map of the requested metrics, composed of the metric name and its value.
+        runType:
+          type: string
+          description: Indicates whether the test was scheduled to run or run now
+        tests:
+          type: array
+          description: A description of the Synthetic test associated with the result item.  This information will be included if the request was grouped by synthetic.testId or if includeAggregatedTestId was true on the request.
+          items:
+            $ref: '#/components/schemas/MetricsTestResultItem'
+      required:
+      - metrics
   securitySchemes:
     ApiKeyAuth:
       in: header

@@ -157,19 +157,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
     AccessRule:
       type: object
       properties:
@@ -196,41 +183,77 @@ components:
       required:
       - accessType
       - relationType
-    Widget:
+    CustomDependency:
       type: object
       properties:
-        config:
-          type: object
-        height:
-          type: integer
-          format: int32
-          minimum: 1
-        id:
+        direction:
           type: string
+          enum:
+          - outgoing
+          - incoming
+          maxLength: 64
+          minLength: 1
+        entityType:
+          type: string
+          description: If entityType is set, the dependency will be added to the plugin for that entity type. Otherwise, the dependency will be applied to the custom entity itself.
           maxLength: 64
           minLength: 0
-        title:
+        identifiers:
+          type: array
+          description: Will take the identifiers values for building the key of the dependency.
+          items:
+            type: string
+            description: Will take the identifiers values for building the key of the dependency.
+          maxItems: 512
+          minItems: 0
+          uniqueItems: true
+        name:
           type: string
+          maxLength: 256
+          minLength: 1
+        separator:
+          type: string
+          description: Separator between identifiers for building the key of the dependency.
         type:
           type: string
-        width:
-          type: integer
-          format: int32
-          maximum: 12
-          minimum: 1
-        x:
-          type: integer
-          format: int32
-          maximum: 11
-          minimum: 0
-        y:
-          type: integer
-          format: int32
-          minimum: 0
+          enum:
+          - in
+          - is
+          - to
+          - of
+          - connected
+          - describes
+          - of20
+          - to20
+          - dummy
+          - parent
+          maxLength: 8
+          minLength: 1
+    CustomDashboard:
+      type: object
+      properties:
+        accessRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessRule'
+          maxItems: 64
+          minItems: 1
+        id:
+          type: string
+        title:
+          type: string
+        widgets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Widget'
+          maxItems: 128
+          minItems: 0
+          uniqueItems: true
       required:
-      - config
+      - accessRules
       - id
-      - type
+      - title
+      - widgets
     CustomMetric:
       type: object
       properties:
@@ -352,6 +375,69 @@ components:
         type:
           type: string
           description: Type of entity for the source metric
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    CustomEntityWithMetadata:
+      type: object
+      properties:
+        created:
+          type: integer
+          format: int64
+        data:
+          $ref: '#/components/schemas/CustomEntityModel'
+        id:
+          type: string
+        version:
+          type: string
+      required:
+      - data
+      - id
+    Widget:
+      type: object
+      properties:
+        config:
+          type: object
+        height:
+          type: integer
+          format: int32
+          minimum: 1
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+        title:
+          type: string
+        type:
+          type: string
+        width:
+          type: integer
+          format: int32
+          maximum: 12
+          minimum: 1
+        x:
+          type: integer
+          format: int32
+          maximum: 11
+          minimum: 0
+        y:
+          type: integer
+          format: int32
+          minimum: 0
+      required:
+      - config
+      - id
+      - type
     CustomEntityModel:
       type: object
       properties:
@@ -382,92 +468,6 @@ components:
       - identifiers
       - label
       - tagFilterExpression
-    CustomEntityWithMetadata:
-      type: object
-      properties:
-        created:
-          type: integer
-          format: int64
-        data:
-          $ref: '#/components/schemas/CustomEntityModel'
-        id:
-          type: string
-        version:
-          type: string
-      required:
-      - data
-      - id
-    CustomDashboard:
-      type: object
-      properties:
-        accessRules:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessRule'
-          maxItems: 64
-          minItems: 1
-        id:
-          type: string
-        title:
-          type: string
-        widgets:
-          type: array
-          items:
-            $ref: '#/components/schemas/Widget'
-          maxItems: 128
-          minItems: 0
-          uniqueItems: true
-      required:
-      - accessRules
-      - id
-      - title
-      - widgets
-    CustomDependency:
-      type: object
-      properties:
-        direction:
-          type: string
-          enum:
-          - outgoing
-          - incoming
-          maxLength: 64
-          minLength: 1
-        entityType:
-          type: string
-          description: If entityType is set, the dependency will be added to the plugin for that entity type. Otherwise, the dependency will be applied to the custom entity itself.
-          maxLength: 64
-          minLength: 0
-        identifiers:
-          type: array
-          description: Will take the identifiers values for building the key of the dependency.
-          items:
-            type: string
-            description: Will take the identifiers values for building the key of the dependency.
-          maxItems: 512
-          minItems: 0
-          uniqueItems: true
-        name:
-          type: string
-          maxLength: 256
-          minLength: 1
-        separator:
-          type: string
-          description: Separator between identifiers for building the key of the dependency.
-        type:
-          type: string
-          enum:
-          - in
-          - is
-          - to
-          - of
-          - connected
-          - describes
-          - of20
-          - to20
-          - dummy
-          - parent
-          maxLength: 8
-          minLength: 1
   securitySchemes:
     ApiKeyAuth:
       in: header

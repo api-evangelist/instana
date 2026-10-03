@@ -347,22 +347,6 @@ components:
       required:
       - name
       - type
-    TagTreeNode:
-      type: object
-      description: Children tags of tagTree
-      discriminator:
-        mapping:
-          LEVEL: '#/components/schemas/TagTreeLevel'
-          TAG: '#/components/schemas/TagTreeTag'
-        propertyName: type
-      properties:
-        icon:
-          type: string
-        label:
-          type: string
-        type:
-          type: string
-          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
     WebsiteMonitoringMetricDescription:
       type: object
       properties:
@@ -541,6 +525,22 @@ components:
       required:
       - children
       - label
+    TagTreeNode:
+      type: object
+      description: Children tags of tagTree
+      discriminator:
+        mapping:
+          LEVEL: '#/components/schemas/TagTreeLevel'
+          TAG: '#/components/schemas/TagTreeTag'
+        propertyName: type
+      properties:
+        icon:
+          type: string
+        label:
+          type: string
+        type:
+          type: string
+          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
   securitySchemes:
     ApiKeyAuth:
       in: header

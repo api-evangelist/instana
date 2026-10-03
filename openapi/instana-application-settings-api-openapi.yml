@@ -1723,149 +1723,75 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    HttpEndpointRule:
+    ServiceConfig:
       type: object
-      description: Specify custom rule configuration apart from Instana predefined rules. This rule has the highest precedence. This is only available for HTTP endpoints.
       properties:
+        comment:
+          type: string
+          description: 'A small description of the service configuration would be present in this field if it was provided during creation of the custom service rule.
+
+            If it was not provided, this field will remain empty. It is considered as best practice to add a comment to document the reasoning behind creating the rule.
+
+            '
+          maxLength: 2048
+          minLength: 0
         enabled:
           type: boolean
-          description: Set this flag to `true` if custom rule configurations has to be considered.
-        pathSegments:
-          type: array
-          description: "A list of path segment matching rules, each defining how a segment of the HTTP path should be matched.\nEach object in this array represents a segment rule, allowing for fixed segments, dynamic parameters, wildcards, or unsupported segments. \n\n**UNSUPPORTED**: A path segment that is not recognized by the system. \n\n**FIXED**: This type represents a static, unchanging part of the URL path.\nFor example, `/api/{version}/users`, `api` and `users` would be `FIXED` segment. \n\n**PARAMETER**: This type represents a variable part of the URL path, often used to capture specific parameters or IDs that change with each request.\nFor example, `/api/{version}/users`, `version` would be `PARAMETER` segment. `version` can be `v1`, `v2`, `v3` etc. \n\n**MATCH_ALL**: This type represents a wildcard, capturing all remaining segments from this point onward in the URL path.\nFor example, `/api/{version}/users/*` — Matches all paths like `/api/v1/users/123`. `/api/v3/users/456` etc. \n\n"
-          items:
-            $ref: '#/components/schemas/HttpPathSegmentMatchingRule'
-          maxItems: 16
-          minItems: 1
-        testCases:
-          type: array
-          description: 'To validate whether the the defined custom endpoint rule configuration is working as expected.
-
-            For example, given a query `/api/*/{version}`, the following test case `/api/anyName/123` will match, while `/otherApi/anyName/123` will not.
-
-            '
-          items:
-            type: string
-            description: 'To validate whether the the defined custom endpoint rule configuration is working as expected.
-
-              For example, given a query `/api/*/{version}`, the following test case `/api/anyName/123` will match, while `/otherApi/anyName/123` will not.
-
-              '
-          maxItems: 32
-          minItems: 0
-      required:
-      - pathSegments
-    HttpEndpointConfig:
-      type: object
-      properties:
-        endpointNameByCollectedPathTemplateRuleEnabled:
-          type: boolean
-          description: 'The highest default precedence of endpoint rule is creating endpoint is based on path template. For example,
-
-            ```
-
-            /hospital/1948/patient/291148
-
-            /hospital/728/patient/924892
-
-            /hospital/47/patient/25978
-
-            /hospital/108429/patient/1847
-
-            ```
-
-            can be considered as `/hospital/{hid}/patient/{pid}` if this rule is enabled. For most of the use cases, this rule should be enabled.
-
-            '
-        endpointNameByFirstPathSegmentRuleEnabled:
-          type: boolean
-          description: 'There are endpoint extraction rules in Instana which take the first path segment from the HTTP request and turn this into an endpoint name.
-
-            For example, given the following URLs `/users/123/profile` and `/users/123/settings`, the extraction rule will only take the first segment. As a result endpoint name will be `users`.
-
-            Although this is useful in cases where broad overview of monitoring is required, lot of use cases are more specified.
-
-            Considering the above example, if this rule is enabled, Instana can''t distinguish between `profile` or `settings` as endpoints.
-
-            For use cases where endpoints has to be monitored at fine granular level, this flag should be set to `false`.
-
-            '
-        rules:
-          type: array
-          description: Specify custom rule configuration apart from Instana predefined rules. This rule has the highest precedence. This is only available for HTTP endpoints.
-          items:
-            $ref: '#/components/schemas/HttpEndpointRule'
-          maxItems: 500
-          minItems: 0
-        serviceId:
-          type: string
-          description: 'An Instana generated unique identifier for a Service. If specified, the list of results will be filtered for the specified Service ID. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
-
-            One can see the service id from Instana UI by going to a Service page. In the URL, there will be `serviceId=3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
-
-            Alternatively, one can use `Get services` API endpoint to get the service id in `id` parameter.
-
-            '
-      required:
-      - rules
-      - serviceId
-    MatchExpressionDTO:
-      type: object
-      description: ' Specify the expression to match, For example, `endpoint.name contains health`.'
-      discriminator:
-        mapping:
-          BINARY_OP: '#/components/schemas/BinaryOperatorDTO'
-          LEAF: '#/components/schemas/TagMatcherDTO'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    ManualServiceConfig:
-      type: object
-      properties:
-        description:
-          type: string
-          description: A description of the manual service configuration.
-        enabled:
-          type: boolean
-          description: Enable or disable the manual service configuration. By default it is enabled.
-        existingServiceId:
-          type: string
-          description: The service ID of the existing monitored service to which the calls should be linked.
+          description: If enabled, calls will be mapped to the rule.
         id:
           type: string
-          description: A unique id of the manual service configuration.
+          description: 'A unique string for the service configuration. Eg: `G510hmXYSDysLZ5kuj0BaQ`'
+        label:
+          type: string
+          description: 'It contains the tags defined in `matchSpecification` concatenated with a dash.
+
+            Eg: if the `matchSpecification` contains keys `kubernetes.namespace.name` and `docker.label`, `label` would be `kubernetes.namespace.name-docker.label`.
+
+            '
+        matchSpecification:
+          type: array
+          description: Calls will be matched with the array of key-value tags present in this field.
+          items:
+            $ref: '#/components/schemas/ServiceMatchingRule'
+          maxItems: 20
+          minItems: 0
+        name:
+          type: string
+          description: 'The name of the service configuration. Eg: `Rule ABC`'
           maxLength: 128
           minLength: 1
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        unmonitoredServiceName:
-          type: string
-          description: A service name if you want to map calls to an unmonitored service.
       required:
+      - enabled
       - id
-      - tagFilterExpression
-    NewManualServiceConfig:
+      - label
+      - matchSpecification
+      - name
+    AccessRule:
       type: object
       properties:
-        description:
+        accessType:
           type: string
-          description: A description of the manual service configuration.
-        enabled:
-          type: boolean
-          description: Enable or disable the manual service configuration. By default it is enabled.
-        existingServiceId:
+          description: "Specifies the type of access permitted. \n\n`READ`: Only viewing Application Perspective is allowed. \n\n`READ_WRITE`: Both viewing and modifying Application Perspective are permitted. \n\n"
+          enum:
+          - READ
+          - READ_WRITE
+        relatedId:
           type: string
-          description: The service ID of the existing monitored service to which the calls should be linked.
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        unmonitoredServiceName:
+          description: "An identifier that connects the access rule to a specific entity.\nFor example, if the `relationType` is `USER`, the corresponding `relatedId` would be a user id. \n\n**Note**: when `relationType` is `GLOBAL`, `relatedId` is `null`.\n"
+          maxLength: 64
+          minLength: 0
+        relationType:
           type: string
-          description: A service name if you want to map calls to an unmonitored service.
+          description: "Defines the type of relationship or subject to which the access rule applies. \n\n`USER`: Access is granted to an individual user. \n\n`API_TOKEN`: Access is granted to a specific API token. \n\n`ROLE`: Access is granted based on a user role, applying to any user with that role. \n\n`TEAM`: Access is granted to a team, likely applying to all team members. \n\n`GLOBAL`: Access is granted to every user or service.\n"
+          enum:
+          - USER
+          - API_TOKEN
+          - ROLE
+          - TEAM
+          - GLOBAL
       required:
-      - tagFilterExpression
+      - accessType
+      - relationType
     NewApplicationConfig:
       type: object
       properties:
@@ -1997,111 +1923,60 @@ components:
       required:
       - endpointCase
       - serviceId
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    AccessRule:
+    HttpEndpointConfig:
       type: object
       properties:
-        accessType:
-          type: string
-          description: "Specifies the type of access permitted. \n\n`READ`: Only viewing Application Perspective is allowed. \n\n`READ_WRITE`: Both viewing and modifying Application Perspective are permitted. \n\n"
-          enum:
-          - READ
-          - READ_WRITE
-        relatedId:
-          type: string
-          description: "An identifier that connects the access rule to a specific entity.\nFor example, if the `relationType` is `USER`, the corresponding `relatedId` would be a user id. \n\n**Note**: when `relationType` is `GLOBAL`, `relatedId` is `null`.\n"
-          maxLength: 64
-          minLength: 0
-        relationType:
-          type: string
-          description: "Defines the type of relationship or subject to which the access rule applies. \n\n`USER`: Access is granted to an individual user. \n\n`API_TOKEN`: Access is granted to a specific API token. \n\n`ROLE`: Access is granted based on a user role, applying to any user with that role. \n\n`TEAM`: Access is granted to a team, likely applying to all team members. \n\n`GLOBAL`: Access is granted to every user or service.\n"
-          enum:
-          - USER
-          - API_TOKEN
-          - ROLE
-          - TEAM
-          - GLOBAL
-      required:
-      - accessType
-      - relationType
-    ServiceConfig:
-      type: object
-      properties:
-        comment:
-          type: string
-          description: 'A small description of the service configuration would be present in this field if it was provided during creation of the custom service rule.
-
-            If it was not provided, this field will remain empty. It is considered as best practice to add a comment to document the reasoning behind creating the rule.
-
-            '
-          maxLength: 2048
-          minLength: 0
-        enabled:
+        endpointNameByCollectedPathTemplateRuleEnabled:
           type: boolean
-          description: If enabled, calls will be mapped to the rule.
-        id:
-          type: string
-          description: 'A unique string for the service configuration. Eg: `G510hmXYSDysLZ5kuj0BaQ`'
-        label:
-          type: string
-          description: 'It contains the tags defined in `matchSpecification` concatenated with a dash.
+          description: 'The highest default precedence of endpoint rule is creating endpoint is based on path template. For example,
 
-            Eg: if the `matchSpecification` contains keys `kubernetes.namespace.name` and `docker.label`, `label` would be `kubernetes.namespace.name-docker.label`.
+            ```
+
+            /hospital/1948/patient/291148
+
+            /hospital/728/patient/924892
+
+            /hospital/47/patient/25978
+
+            /hospital/108429/patient/1847
+
+            ```
+
+            can be considered as `/hospital/{hid}/patient/{pid}` if this rule is enabled. For most of the use cases, this rule should be enabled.
 
             '
-        matchSpecification:
+        endpointNameByFirstPathSegmentRuleEnabled:
+          type: boolean
+          description: 'There are endpoint extraction rules in Instana which take the first path segment from the HTTP request and turn this into an endpoint name.
+
+            For example, given the following URLs `/users/123/profile` and `/users/123/settings`, the extraction rule will only take the first segment. As a result endpoint name will be `users`.
+
+            Although this is useful in cases where broad overview of monitoring is required, lot of use cases are more specified.
+
+            Considering the above example, if this rule is enabled, Instana can''t distinguish between `profile` or `settings` as endpoints.
+
+            For use cases where endpoints has to be monitored at fine granular level, this flag should be set to `false`.
+
+            '
+        rules:
           type: array
-          description: Calls will be matched with the array of key-value tags present in this field.
+          description: Specify custom rule configuration apart from Instana predefined rules. This rule has the highest precedence. This is only available for HTTP endpoints.
           items:
-            $ref: '#/components/schemas/ServiceMatchingRule'
-          maxItems: 20
+            $ref: '#/components/schemas/HttpEndpointRule'
+          maxItems: 500
           minItems: 0
-        name:
+        serviceId:
           type: string
-          description: 'The name of the service configuration. Eg: `Rule ABC`'
-          maxLength: 128
-          minLength: 1
-      required:
-      - enabled
-      - id
-      - label
-      - matchSpecification
-      - name
-    ServiceMatchingRule:
-      type: object
-      description: Calls will be matched with the array of key-value tags present in this field.
-      properties:
-        key:
-          type: string
-          description: 'In Instana UI, this is shown as `Tag`.
+          description: 'An Instana generated unique identifier for a Service. If specified, the list of results will be filtered for the specified Service ID. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
 
-            One can select a variety of pre-defined tags. Eg: `host.fqdn`, `container.label` etc.
+            One can see the service id from Instana UI by going to a Service page. In the URL, there will be `serviceId=3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
 
-            '
-        value:
-          type: string
-          description: 'In Instana UI, this is known as ''key`.
-
-            Eg: if one labels Docker containers such as com.acme.service-name:myservice, to map services from this label,
-
-            the `key` aka `tag` would be `docker.label` and `value` aka `key` would be `com.acme.service-name`.
+            Alternatively, one can use `Get services` API endpoint to get the service id in `id` parameter.
 
             '
       required:
-      - key
-      - value
+      - rules
+      - serviceId
     ApplicationConfig:
       type: object
       properties:
@@ -2178,6 +2053,106 @@ components:
       - id
       - label
       - scope
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    HttpEndpointRule:
+      type: object
+      description: Specify custom rule configuration apart from Instana predefined rules. This rule has the highest precedence. This is only available for HTTP endpoints.
+      properties:
+        enabled:
+          type: boolean
+          description: Set this flag to `true` if custom rule configurations has to be considered.
+        pathSegments:
+          type: array
+          description: "A list of path segment matching rules, each defining how a segment of the HTTP path should be matched.\nEach object in this array represents a segment rule, allowing for fixed segments, dynamic parameters, wildcards, or unsupported segments. \n\n**UNSUPPORTED**: A path segment that is not recognized by the system. \n\n**FIXED**: This type represents a static, unchanging part of the URL path.\nFor example, `/api/{version}/users`, `api` and `users` would be `FIXED` segment. \n\n**PARAMETER**: This type represents a variable part of the URL path, often used to capture specific parameters or IDs that change with each request.\nFor example, `/api/{version}/users`, `version` would be `PARAMETER` segment. `version` can be `v1`, `v2`, `v3` etc. \n\n**MATCH_ALL**: This type represents a wildcard, capturing all remaining segments from this point onward in the URL path.\nFor example, `/api/{version}/users/*` — Matches all paths like `/api/v1/users/123`. `/api/v3/users/456` etc. \n\n"
+          items:
+            $ref: '#/components/schemas/HttpPathSegmentMatchingRule'
+          maxItems: 16
+          minItems: 1
+        testCases:
+          type: array
+          description: 'To validate whether the the defined custom endpoint rule configuration is working as expected.
+
+            For example, given a query `/api/*/{version}`, the following test case `/api/anyName/123` will match, while `/otherApi/anyName/123` will not.
+
+            '
+          items:
+            type: string
+            description: 'To validate whether the the defined custom endpoint rule configuration is working as expected.
+
+              For example, given a query `/api/*/{version}`, the following test case `/api/anyName/123` will match, while `/otherApi/anyName/123` will not.
+
+              '
+          maxItems: 32
+          minItems: 0
+      required:
+      - pathSegments
+    NewManualServiceConfig:
+      type: object
+      properties:
+        description:
+          type: string
+          description: A description of the manual service configuration.
+        enabled:
+          type: boolean
+          description: Enable or disable the manual service configuration. By default it is enabled.
+        existingServiceId:
+          type: string
+          description: The service ID of the existing monitored service to which the calls should be linked.
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        unmonitoredServiceName:
+          type: string
+          description: A service name if you want to map calls to an unmonitored service.
+      required:
+      - tagFilterExpression
+    MatchExpressionDTO:
+      type: object
+      description: ' Specify the expression to match, For example, `endpoint.name contains health`.'
+      discriminator:
+        mapping:
+          BINARY_OP: '#/components/schemas/BinaryOperatorDTO'
+          LEAF: '#/components/schemas/TagMatcherDTO'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    ServiceMatchingRule:
+      type: object
+      description: Calls will be matched with the array of key-value tags present in this field.
+      properties:
+        key:
+          type: string
+          description: 'In Instana UI, this is shown as `Tag`.
+
+            One can select a variety of pre-defined tags. Eg: `host.fqdn`, `container.label` etc.
+
+            '
+        value:
+          type: string
+          description: 'In Instana UI, this is known as ''key`.
+
+            Eg: if one labels Docker containers such as com.acme.service-name:myservice, to map services from this label,
+
+            the `key` aka `tag` would be `docker.label` and `value` aka `key` would be `com.acme.service-name`.
+
+            '
+      required:
+      - key
+      - value
     HttpPathSegmentMatchingRule:
       type: object
       description: "A list of path segment matching rules, each defining how a segment of the HTTP path should be matched.\nEach object in this array represents a segment rule, allowing for fixed segments, dynamic parameters, wildcards, or unsupported segments. \n\n**UNSUPPORTED**: A path segment that is not recognized by the system. \n\n**FIXED**: This type represents a static, unchanging part of the URL path.\nFor example, `/api/{version}/users`, `api` and `users` would be `FIXED` segment. \n\n**PARAMETER**: This type represents a variable part of the URL path, often used to capture specific parameters or IDs that change with each request.\nFor example, `/api/{version}/users`, `version` would be `PARAMETER` segment. `version` can be `v1`, `v2`, `v3` etc. \n\n**MATCH_ALL**: This type represents a wildcard, capturing all remaining segments from this point onward in the URL path.\nFor example, `/api/{version}/users/*` — Matches all paths like `/api/v1/users/123`. `/api/v3/users/456` etc. \n\n"
@@ -2198,6 +2173,31 @@ components:
           - MATCH_ALL
       required:
       - type
+    ManualServiceConfig:
+      type: object
+      properties:
+        description:
+          type: string
+          description: A description of the manual service configuration.
+        enabled:
+          type: boolean
+          description: Enable or disable the manual service configuration. By default it is enabled.
+        existingServiceId:
+          type: string
+          description: The service ID of the existing monitored service to which the calls should be linked.
+        id:
+          type: string
+          description: A unique id of the manual service configuration.
+          maxLength: 128
+          minLength: 1
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        unmonitoredServiceName:
+          type: string
+          description: A service name if you want to map calls to an unmonitored service.
+      required:
+      - id
+      - tagFilterExpression
   securitySchemes:
     ApiKeyAuth:
       in: header

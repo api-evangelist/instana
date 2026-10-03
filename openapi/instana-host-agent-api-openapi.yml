@@ -307,6 +307,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SnapshotItem'
+    AgentConfigurationUpdate:
+      type: object
+      properties:
+        remoteBranch:
+          type: string
+          maxLength: 256
+          minLength: 0
+        remoteName:
+          type: string
+          maxLength: 256
+          minLength: 0
+        remoteUri:
+          type: string
+          maxLength: 65536
+          minLength: 0
     SnapshotItem:
       type: object
       description: Detail information for requested snapshots.
@@ -342,21 +357,6 @@ components:
           type: integer
           format: int64
           description: End of timeframe expressed as the Unix epoch time in milliseconds
-    AgentConfigurationUpdate:
-      type: object
-      properties:
-        remoteBranch:
-          type: string
-          maxLength: 256
-          minLength: 0
-        remoteName:
-          type: string
-          maxLength: 256
-          minLength: 0
-        remoteUri:
-          type: string
-          maxLength: 65536
-          minLength: 0
   securitySchemes:
     ApiKeyAuth:
       in: header

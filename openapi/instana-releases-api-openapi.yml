@@ -207,6 +207,92 @@ paths:
       description: Use this API endpoint to update a release.
 components:
   schemas:
+    ServiceScopeWithMetadata:
+      type: object
+      description: The list of services where the release can be viewed.
+      properties:
+        id:
+          type: string
+          description: 'Unique ID of the Service. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.'
+        name:
+          type: string
+          description: 'Name of the Service. Eg: `payment`.'
+        scopedTo:
+          $ref: '#/components/schemas/ServiceScopedToWithMetadata'
+      required:
+      - id
+    ServiceScopedTo:
+      type: object
+      description: 'The list of application perspectives where the service is present. '
+      properties:
+        applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationScope'
+          maxItems: 10
+          minItems: 1
+      required:
+      - applications
+    ReleaseScope:
+      type: object
+      properties:
+        applicationId:
+          type: string
+        applicationName:
+          type: string
+        serviceId:
+          type: string
+        serviceName:
+          type: string
+    ServiceScope:
+      type: object
+      description: The list of services where the release can be viewed.
+      properties:
+        name:
+          type: string
+          description: 'Name of the Service. Eg: `payment`.'
+          maxLength: 256
+          minLength: 0
+        scopedTo:
+          $ref: '#/components/schemas/ServiceScopedTo'
+      required:
+      - name
+    ApplicationScope:
+      type: object
+      description: The list of application perspectives where the release can be viewed.
+      properties:
+        name:
+          type: string
+          description: 'Name of the Application Perspective. Eg: `app1`.'
+          maxLength: 256
+          minLength: 0
+      required:
+      - name
+    ApplicationScopeWithMetadata:
+      type: object
+      description: The list of application perspectives where the release can be viewed.
+      properties:
+        id:
+          type: string
+          description: 'Unique ID of the Application Perspective. Eg: `Av62RoIKQv-A3n6DbMQh9g`.'
+        name:
+          type: string
+          description: 'Name of the Application Perspective. Eg: `app1`.'
+      required:
+      - id
+    ServiceScopedToWithMetadata:
+      type: object
+      description: The release marker would be present in the service but not for other services within the Application perspective.
+      properties:
+        applications:
+          type: array
+          description: 'The list of application perspectives where the service is present. '
+          items:
+            $ref: '#/components/schemas/ApplicationScopeWithMetadata'
+          maxItems: 10
+          minItems: 1
+      required:
+      - applications
     Release:
       type: object
       properties:
@@ -237,92 +323,6 @@ components:
       required:
       - name
       - start
-    ServiceScopeWithMetadata:
-      type: object
-      description: The list of services where the release can be viewed.
-      properties:
-        id:
-          type: string
-          description: 'Unique ID of the Service. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.'
-        name:
-          type: string
-          description: 'Name of the Service. Eg: `payment`.'
-        scopedTo:
-          $ref: '#/components/schemas/ServiceScopedToWithMetadata'
-      required:
-      - id
-    ServiceScopedToWithMetadata:
-      type: object
-      description: The release marker would be present in the service but not for other services within the Application perspective.
-      properties:
-        applications:
-          type: array
-          description: 'The list of application perspectives where the service is present. '
-          items:
-            $ref: '#/components/schemas/ApplicationScopeWithMetadata'
-          maxItems: 10
-          minItems: 1
-      required:
-      - applications
-    ReleaseScope:
-      type: object
-      properties:
-        applicationId:
-          type: string
-        applicationName:
-          type: string
-        serviceId:
-          type: string
-        serviceName:
-          type: string
-    ApplicationScopeWithMetadata:
-      type: object
-      description: The list of application perspectives where the release can be viewed.
-      properties:
-        id:
-          type: string
-          description: 'Unique ID of the Application Perspective. Eg: `Av62RoIKQv-A3n6DbMQh9g`.'
-        name:
-          type: string
-          description: 'Name of the Application Perspective. Eg: `app1`.'
-      required:
-      - id
-    ServiceScopedTo:
-      type: object
-      description: 'The list of application perspectives where the service is present. '
-      properties:
-        applications:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApplicationScope'
-          maxItems: 10
-          minItems: 1
-      required:
-      - applications
-    ServiceScope:
-      type: object
-      description: The list of services where the release can be viewed.
-      properties:
-        name:
-          type: string
-          description: 'Name of the Service. Eg: `payment`.'
-          maxLength: 256
-          minLength: 0
-        scopedTo:
-          $ref: '#/components/schemas/ServiceScopedTo'
-      required:
-      - name
-    ApplicationScope:
-      type: object
-      description: The list of application perspectives where the release can be viewed.
-      properties:
-        name:
-          type: string
-          description: 'Name of the Application Perspective. Eg: `app1`.'
-          maxLength: 256
-          minLength: 0
-      required:
-      - name
     ReleaseWithMetadata:
       type: object
       properties:

@@ -226,70 +226,83 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    MobileAppMonitoringMetricsConfiguration:
+    AdjustedTimeframe:
       type: object
+      description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
+
+        For example, In request payload, if timeframe is 08:03 - 14:03, which is a 6 hour window size. It is adjusted to 08:05 - 14:00
+
+        Another example, In request payload, if timeframe is 08:20 - 08:20 (next day) which is a 24h window size. It is adjusted to 08:30 - 08:00 (next day)
+
+        '
       properties:
-        aggregation:
-          type: string
-          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
-          enum:
-          - SUM
-          - MEAN
-          - MAX
-          - MIN
-          - P25
-          - P50
-          - P75
-          - P90
-          - P95
-          - P98
-          - P99
-          - P99_9
-          - P99_99
-          - DISTINCT_COUNT
-          - SUM_POSITIVE
-          - PER_SECOND
-          - INCREASE
-        granularity:
+        to:
           type: integer
-          format: int32
-          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
-        metric:
-          type: string
-          description: 'Set a particular metric, eg: `latency`.'
-        numeratorTagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          minimum: 0
       required:
-      - aggregation
-      - metric
-    TagFilterExpressionElement:
+      - to
+    TimeFrame:
       type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
+      description: Time range for which the data should be retrieved.
       properties:
-        type:
-          type: string
-      required:
-      - type
-    MetricAPIResult:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          maximum: 2678400000
+          minimum: 0
+    DeprecatedTagFilter:
       type: object
       properties:
-        adjustedTimeframe:
-          $ref: '#/components/schemas/AdjustedTimeframe'
-        metrics:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: array
-              items:
-                type: number
+        entity:
+          type: string
+          enum:
+          - NOT_APPLICABLE
+          - DESTINATION
+          - SOURCE
+        name:
+          type: string
+        operator:
+          type: string
+          enum:
+          - EQUALS
+          - CONTAINS
+          - LESS_THAN
+          - LESS_OR_EQUAL_THAN
+          - GREATER_THAN
+          - GREATER_OR_EQUAL_THAN
+          - NOT_EMPTY
+          - NOT_EQUAL
+          - NOT_CONTAIN
+          - IS_EMPTY
+          - NOT_BLANK
+          - IS_BLANK
+          - STARTS_WITH
+          - ENDS_WITH
+          - NOT_STARTS_WITH
+          - NOT_ENDS_WITH
+          - REGEX_MATCH
+        value:
+          type: string
       required:
-      - metrics
+      - name
+      - operator
+      - value
+    MobileAppMetricResult:
+      type: object
+      properties:
+        empty:
+          type: boolean
     GetMobileAppMetrics:
       type: object
       properties:
@@ -320,27 +333,83 @@ components:
       required:
       - metrics
       - type
-    AdjustedTimeframe:
+    StackTraceLine:
       type: object
-      description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
-
-        For example, In request payload, if timeframe is 08:03 - 14:03, which is a 6 hour window size. It is adjusted to 08:05 - 14:00
-
-        Another example, In request payload, if timeframe is 08:20 - 08:20 (next day) which is a 24h window size. It is adjusted to 08:30 - 08:00 (next day)
-
-        '
       properties:
-        to:
+        column:
           type: integer
-          format: int64
-          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
-        windowSize:
+          format: int32
+          minimum: -1
+        file:
+          type: string
+        line:
           type: integer
-          format: int64
-          description: windowSize in milliseconds
-          minimum: 0
+          format: int32
+          minimum: -1
+        name:
+          type: string
+        translationExplanation:
+          type: string
+        translationStatus:
+          type: integer
+          format: int32
+          minimum: -1
       required:
-      - to
+      - file
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    GetMobileAppMetricsV2:
+      type: object
+      properties:
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAppMonitoringMetricsConfiguration'
+          maxItems: 5
+          minItems: 1
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+        type:
+          type: string
+          enum:
+          - SESSION_START
+          - HTTP_REQUEST
+          - CRASH
+          - CUSTOM
+          - VIEW_CHANGE
+          - DROP_BEACON
+          - PERF
+      required:
+      - metrics
+      - type
+    MetricAPIResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+      required:
+      - metrics
     MobileAppMonitoringBeacon:
       type: object
       properties:
@@ -710,111 +779,42 @@ components:
       - performanceSubtype
       - rateLimitBeaconType
       - type
-    StackTraceLine:
+    MobileAppMonitoringMetricsConfiguration:
       type: object
       properties:
-        column:
-          type: integer
-          format: int32
-          minimum: -1
-        file:
+        aggregation:
           type: string
-        line:
-          type: integer
-          format: int32
-          minimum: -1
-        name:
-          type: string
-        translationExplanation:
-          type: string
-        translationStatus:
-          type: integer
-          format: int32
-          minimum: -1
-      required:
-      - file
-    DeprecatedTagFilter:
-      type: object
-      properties:
-        entity:
-          type: string
+          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
           enum:
-          - NOT_APPLICABLE
-          - DESTINATION
-          - SOURCE
-        name:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        granularity:
+          type: integer
+          format: int32
+          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
+        metric:
           type: string
-        operator:
-          type: string
-          enum:
-          - EQUALS
-          - CONTAINS
-          - LESS_THAN
-          - LESS_OR_EQUAL_THAN
-          - GREATER_THAN
-          - GREATER_OR_EQUAL_THAN
-          - NOT_EMPTY
-          - NOT_EQUAL
-          - NOT_CONTAIN
-          - IS_EMPTY
-          - NOT_BLANK
-          - IS_BLANK
-          - STARTS_WITH
-          - ENDS_WITH
-          - NOT_STARTS_WITH
-          - NOT_ENDS_WITH
-          - REGEX_MATCH
-        value:
-          type: string
-      required:
-      - name
-      - operator
-      - value
-    GetMobileAppMetricsV2:
-      type: object
-      properties:
-        metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/MobileAppMonitoringMetricsConfiguration'
-          maxItems: 5
-          minItems: 1
-        tagFilterExpression:
+          description: 'Set a particular metric, eg: `latency`.'
+        numeratorTagFilterExpression:
           $ref: '#/components/schemas/TagFilterExpressionElement'
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-        type:
-          type: string
-          enum:
-          - SESSION_START
-          - HTTP_REQUEST
-          - CRASH
-          - CUSTOM
-          - VIEW_CHANGE
-          - DROP_BEACON
-          - PERF
       required:
-      - metrics
-      - type
-    TimeFrame:
-      type: object
-      description: Time range for which the data should be retrieved.
-      properties:
-        to:
-          type: integer
-          format: int64
-          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
-        windowSize:
-          type: integer
-          format: int64
-          description: windowSize in milliseconds
-          maximum: 2678400000
-          minimum: 0
-    MobileAppMetricResult:
-      type: object
-      properties:
-        empty:
-          type: boolean
+      - aggregation
+      - metric
   securitySchemes:
     ApiKeyAuth:
       in: header

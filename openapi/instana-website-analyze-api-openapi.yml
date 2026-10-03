@@ -257,33 +257,102 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    GetWebsiteBeacons:
+    WebsiteBeaconTagGroup:
       type: object
       properties:
-        pagination:
-          $ref: '#/components/schemas/CursorPagination'
-        tagFilters:
-          type: array
-          items:
-            $ref: '#/components/schemas/DeprecatedTagFilter'
-          maxItems: 32
-          minItems: 0
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-        type:
+        groupbyTag:
           type: string
+          description: The name of the group tag (e.g. `agent.tag` or `docker.label`).
+          maxLength: 256
+          minLength: 0
+        groupbyTagEntity:
+          type: string
+          description: 'The entity by which the data should be grouped.
+
+            This field supports three possible values: `NOT_APPLICABLE`, `DESTINATION`, and `SOURCE`.
+
+            `SOURCE`: the tag filter should apply to the source entity.
+
+            `DESTINATION`: the tag filter should apply to the destination entity.
+
+            `NOT_APPLICABLE`: some tags are independent of source or destination, such as tags on the call itself, log tags or trace tags (only destination makes sense because the source is unknown for the root call).
+
+            '
           enum:
-          - PAGELOAD
-          - RESOURCELOAD
-          - HTTPREQUEST
-          - ERROR
-          - CUSTOM
-          - PAGE_CHANGE
+          - NOT_APPLICABLE
+          - DESTINATION
+          - SOURCE
+        groupbyTagSecondLevelKey:
+          type: string
+          description: If present, it's the 2nd level key part (e.g. `customKey` on `docker.label.customKey`)
+          maxLength: 256
+          minLength: 0
       required:
-      - type
+      - groupbyTag
+      - groupbyTagEntity
+    Order:
+      type: object
+      description: 'Specifies the ordering of the results.
+
+        It contains fields that define the sorting criteria, the collation for sorting, and the direction in which the results should be ordered.
+
+        '
+      properties:
+        by:
+          type: string
+          description: If the granularity is set to `1` you can use the metric name eg. `latency.p95` to order by that value.
+        collation:
+          type: string
+          description: Language code used for sorting. Ignored for infrastructure queries.
+        direction:
+          type: string
+          description: The order in which results will be sorted, either `ASC` for ascending or `DESC` for descending.
+          enum:
+          - ASC
+          - DESC
+      required:
+      - by
+      - direction
     IngestionOffsetCursor:
       type: object
       description: Cursor to use between successive queries
+    JsStackTraceLine:
+      type: object
+      properties:
+        column:
+          type: integer
+          format: int32
+          minimum: -1
+        file:
+          type: string
+        line:
+          type: integer
+          format: int32
+          minimum: -1
+        name:
+          type: string
+        translationExplanation:
+          type: string
+        translationStatus:
+          type: integer
+          format: int32
+          minimum: -1
+      required:
+      - file
+    TimeFrame:
+      type: object
+      description: Time range for which the data should be retrieved.
+      properties:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          maximum: 2678400000
+          minimum: 0
     GetWebsiteBeaconGroups:
       type: object
       properties:
@@ -321,6 +390,135 @@ components:
       required:
       - group
       - metrics
+      - type
+    DeprecatedTagFilter:
+      type: object
+      properties:
+        entity:
+          type: string
+          enum:
+          - NOT_APPLICABLE
+          - DESTINATION
+          - SOURCE
+        name:
+          type: string
+        operator:
+          type: string
+          enum:
+          - EQUALS
+          - CONTAINS
+          - LESS_THAN
+          - LESS_OR_EQUAL_THAN
+          - GREATER_THAN
+          - GREATER_OR_EQUAL_THAN
+          - NOT_EMPTY
+          - NOT_EQUAL
+          - NOT_CONTAIN
+          - IS_EMPTY
+          - NOT_BLANK
+          - IS_BLANK
+          - STARTS_WITH
+          - ENDS_WITH
+          - NOT_STARTS_WITH
+          - NOT_ENDS_WITH
+          - REGEX_MATCH
+        value:
+          type: string
+      required:
+      - name
+      - operator
+      - value
+    GetWebsiteBeacons:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/CursorPagination'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeprecatedTagFilter'
+          maxItems: 32
+          minItems: 0
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+        type:
+          type: string
+          enum:
+          - PAGELOAD
+          - RESOURCELOAD
+          - HTTPREQUEST
+          - ERROR
+          - CUSTOM
+          - PAGE_CHANGE
+      required:
+      - type
+    AdjustedTimeframe:
+      type: object
+      description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
+
+        For example, In request payload, if timeframe is 08:03 - 14:03, which is a 6 hour window size. It is adjusted to 08:05 - 14:00
+
+        Another example, In request payload, if timeframe is 08:20 - 08:20 (next day) which is a 24h window size. It is adjusted to 08:30 - 08:00 (next day)
+
+        '
+      properties:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          minimum: 0
+      required:
+      - to
+    WebsiteBeaconGroupsResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        canLoadMore:
+          type: boolean
+          description: Determine if additional data is available when a new query is made using the cursor from the last item in the `items` list.
+        items:
+          type: array
+          description: 'Represents an array of call group item containing several attributes that describe its properties.
+
+            The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
+
+            '
+          items:
+            $ref: '#/components/schemas/WebsiteBeaconGroupsItem'
+        totalHits:
+          type: integer
+          format: int64
+          description: The total number of items that match a given filter
+          minimum: 0
+        totalRepresentedItemCount:
+          type: integer
+          format: int64
+          description: For calls and EUM beacons, one row can represent multiple real items (batched call, sample multiplicity)
+          minimum: 0
+        totalRetainedItemCount:
+          type: integer
+          format: int64
+          description: For calls and EUM beacons, only a subset is retained for historic data. Each retained row can represent multiple real items due to batching.
+          minimum: 0
+      required:
+      - items
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
       - type
     CursorPagination:
       type: object
@@ -362,142 +560,6 @@ components:
             '
           maximum: 200
           minimum: 1
-    JsStackTraceLine:
-      type: object
-      properties:
-        column:
-          type: integer
-          format: int32
-          minimum: -1
-        file:
-          type: string
-        line:
-          type: integer
-          format: int32
-          minimum: -1
-        name:
-          type: string
-        translationExplanation:
-          type: string
-        translationStatus:
-          type: integer
-          format: int32
-          minimum: -1
-      required:
-      - file
-    WebsiteBeaconGroupsItem:
-      type: object
-      description: 'Represents an array of call group item containing several attributes that describe its properties.
-
-        The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
-
-        '
-      properties:
-        cursor:
-          $ref: '#/components/schemas/IngestionOffsetCursor'
-        earliestTimestamp:
-          type: integer
-          format: int64
-          minimum: 0
-        metrics:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: array
-              items:
-                type: number
-        name:
-          type: string
-      required:
-      - cursor
-      - metrics
-      - name
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    WebsiteBeaconsItem:
-      type: object
-      description: 'Represents an array of call group item containing several attributes that describe its properties.
-
-        The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
-
-        '
-      properties:
-        beacon:
-          $ref: '#/components/schemas/WebsiteMonitoringBeacon'
-        cursor:
-          $ref: '#/components/schemas/IngestionOffsetCursor'
-        impactedBeaconInfo:
-          $ref: '#/components/schemas/ImpactedBeaconInfo'
-      required:
-      - beacon
-      - cursor
-    WebsiteBeaconGroupsResult:
-      type: object
-      properties:
-        adjustedTimeframe:
-          $ref: '#/components/schemas/AdjustedTimeframe'
-        canLoadMore:
-          type: boolean
-          description: Determine if additional data is available when a new query is made using the cursor from the last item in the `items` list.
-        items:
-          type: array
-          description: 'Represents an array of call group item containing several attributes that describe its properties.
-
-            The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
-
-            '
-          items:
-            $ref: '#/components/schemas/WebsiteBeaconGroupsItem'
-        totalHits:
-          type: integer
-          format: int64
-          description: The total number of items that match a given filter
-          minimum: 0
-        totalRepresentedItemCount:
-          type: integer
-          format: int64
-          description: For calls and EUM beacons, one row can represent multiple real items (batched call, sample multiplicity)
-          minimum: 0
-        totalRetainedItemCount:
-          type: integer
-          format: int64
-          description: For calls and EUM beacons, only a subset is retained for historic data. Each retained row can represent multiple real items due to batching.
-          minimum: 0
-      required:
-      - items
-    AdjustedTimeframe:
-      type: object
-      description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
-
-        For example, In request payload, if timeframe is 08:03 - 14:03, which is a 6 hour window size. It is adjusted to 08:05 - 14:00
-
-        Another example, In request payload, if timeframe is 08:20 - 08:20 (next day) which is a 24h window size. It is adjusted to 08:30 - 08:00 (next day)
-
-        '
-      properties:
-        to:
-          type: integer
-          format: int64
-          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
-        windowSize:
-          type: integer
-          format: int64
-          description: windowSize in milliseconds
-          minimum: 0
-      required:
-      - to
     WebsiteMonitoringMetricsConfiguration:
       type: object
       properties:
@@ -532,76 +594,6 @@ components:
       required:
       - aggregation
       - metric
-    DeprecatedTagFilter:
-      type: object
-      properties:
-        entity:
-          type: string
-          enum:
-          - NOT_APPLICABLE
-          - DESTINATION
-          - SOURCE
-        name:
-          type: string
-        operator:
-          type: string
-          enum:
-          - EQUALS
-          - CONTAINS
-          - LESS_THAN
-          - LESS_OR_EQUAL_THAN
-          - GREATER_THAN
-          - GREATER_OR_EQUAL_THAN
-          - NOT_EMPTY
-          - NOT_EQUAL
-          - NOT_CONTAIN
-          - IS_EMPTY
-          - NOT_BLANK
-          - IS_BLANK
-          - STARTS_WITH
-          - ENDS_WITH
-          - NOT_STARTS_WITH
-          - NOT_ENDS_WITH
-          - REGEX_MATCH
-        value:
-          type: string
-      required:
-      - name
-      - operator
-      - value
-    WebsiteBeaconTagGroup:
-      type: object
-      properties:
-        groupbyTag:
-          type: string
-          description: The name of the group tag (e.g. `agent.tag` or `docker.label`).
-          maxLength: 256
-          minLength: 0
-        groupbyTagEntity:
-          type: string
-          description: 'The entity by which the data should be grouped.
-
-            This field supports three possible values: `NOT_APPLICABLE`, `DESTINATION`, and `SOURCE`.
-
-            `SOURCE`: the tag filter should apply to the source entity.
-
-            `DESTINATION`: the tag filter should apply to the destination entity.
-
-            `NOT_APPLICABLE`: some tags are independent of source or destination, such as tags on the call itself, log tags or trace tags (only destination makes sense because the source is unknown for the root call).
-
-            '
-          enum:
-          - NOT_APPLICABLE
-          - DESTINATION
-          - SOURCE
-        groupbyTagSecondLevelKey:
-          type: string
-          description: If present, it's the 2nd level key part (e.g. `customKey` on `docker.label.customKey`)
-          maxLength: 256
-          minLength: 0
-      required:
-      - groupbyTag
-      - groupbyTagEntity
     WebsiteBeaconResult:
       type: object
       properties:
@@ -636,43 +628,64 @@ components:
           minimum: 0
       required:
       - items
-    TimeFrame:
+    WebsiteBeaconsItem:
       type: object
-      description: Time range for which the data should be retrieved.
-      properties:
-        to:
-          type: integer
-          format: int64
-          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
-        windowSize:
-          type: integer
-          format: int64
-          description: windowSize in milliseconds
-          maximum: 2678400000
-          minimum: 0
-    Order:
-      type: object
-      description: 'Specifies the ordering of the results.
+      description: 'Represents an array of call group item containing several attributes that describe its properties.
 
-        It contains fields that define the sorting criteria, the collation for sorting, and the direction in which the results should be ordered.
+        The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
 
         '
       properties:
-        by:
-          type: string
-          description: If the granularity is set to `1` you can use the metric name eg. `latency.p95` to order by that value.
-        collation:
-          type: string
-          description: Language code used for sorting. Ignored for infrastructure queries.
-        direction:
-          type: string
-          description: The order in which results will be sorted, either `ASC` for ascending or `DESC` for descending.
-          enum:
-          - ASC
-          - DESC
+        beacon:
+          $ref: '#/components/schemas/WebsiteMonitoringBeacon'
+        cursor:
+          $ref: '#/components/schemas/IngestionOffsetCursor'
+        impactedBeaconInfo:
+          $ref: '#/components/schemas/ImpactedBeaconInfo'
       required:
-      - by
-      - direction
+      - beacon
+      - cursor
+    ImpactedBeaconInfo:
+      type: object
+      properties:
+        country:
+          type: string
+        label:
+          type: string
+        subdivision:
+          type: string
+        userEmail:
+          type: string
+        userName:
+          type: string
+    WebsiteBeaconGroupsItem:
+      type: object
+      description: 'Represents an array of call group item containing several attributes that describe its properties.
+
+        The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
+
+        '
+      properties:
+        cursor:
+          $ref: '#/components/schemas/IngestionOffsetCursor'
+        earliestTimestamp:
+          type: integer
+          format: int64
+          minimum: 0
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+        name:
+          type: string
+      required:
+      - cursor
+      - metrics
+      - name
     WebsiteMonitoringBeacon:
       type: object
       properties:
@@ -990,19 +1003,6 @@ components:
       - type
       - websiteId
       - websiteLabel
-    ImpactedBeaconInfo:
-      type: object
-      properties:
-        country:
-          type: string
-        label:
-          type: string
-        subdivision:
-          type: string
-        userEmail:
-          type: string
-        userName:
-          type: string
   securitySchemes:
     ApiKeyAuth:
       in: header

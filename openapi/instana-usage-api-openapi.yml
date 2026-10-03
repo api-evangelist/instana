@@ -193,14 +193,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    UsageResultItems:
-      type: object
-      properties:
-        name:
-          type: string
-        sims:
-          type: integer
-          format: int64
     UsageResult:
       type: object
       properties:
@@ -209,6 +201,14 @@ components:
           items:
             $ref: '#/components/schemas/UsageResultItems'
         time:
+          type: integer
+          format: int64
+    UsageResultItems:
+      type: object
+      properties:
+        name:
+          type: string
+        sims:
           type: integer
           format: int64
   securitySchemes:

@@ -582,58 +582,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    PaginatedResult:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            type: object
-        page:
-          type: integer
-          format: int32
-          description: Page Number
-          minimum: 1
-        pageSize:
-          type: integer
-          format: int32
-          minimum: 1
-        totalHits:
-          type: integer
-          format: int64
-          minimum: 0
-      required:
-      - items
-    SloEntity:
-      type: object
-      description: Entity of the Service Levels Objective Configuration, it could be either Application nor Website
-      discriminator:
-        mapping:
-          application: '#/components/schemas/ApplicationSloEntity'
-          infrastructure: '#/components/schemas/InfraSloEntity'
-          synthetic: '#/components/schemas/SyntheticSloEntity'
-          website: '#/components/schemas/WebsiteSloEntity'
-        propertyName: type
-      properties:
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        type:
-          type: string
-      required:
-      - type
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
     TimeWindow:
       type: object
       description: Time Window type of the SLO, it could be Fixed or Rolling
@@ -667,20 +615,6 @@ components:
       - duration
       - durationUnit
       - type
-    ApiTag:
-      type: object
-      properties:
-        displayName:
-          type: string
-          maxLength: 256
-          minLength: 0
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
-      required:
-      - displayName
-      - id
     ServiceLevelIndicator:
       type: object
       description: Indicator of the Service Levels Objective Configuration, it indicates the type of metric by which the SLO should be evaluated
@@ -747,6 +681,36 @@ components:
           enum:
           - eventBased
           - timeBased
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    SloEntity:
+      type: object
+      description: Entity of the Service Levels Objective Configuration, it could be either Application nor Website
+      discriminator:
+        mapping:
+          application: '#/components/schemas/ApplicationSloEntity'
+          infrastructure: '#/components/schemas/InfraSloEntity'
+          synthetic: '#/components/schemas/SyntheticSloEntity'
+          website: '#/components/schemas/WebsiteSloEntity'
+        propertyName: type
+      properties:
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        type:
+          type: string
+      required:
+      - type
     SLOConfigWithRBACTag:
       type: object
       properties:
@@ -796,6 +760,42 @@ components:
       - tags
       - target
       - timeWindow
+    ApiTag:
+      type: object
+      properties:
+        displayName:
+          type: string
+          maxLength: 256
+          minLength: 0
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+      required:
+      - displayName
+      - id
+    PaginatedResult:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+        page:
+          type: integer
+          format: int32
+          description: Page Number
+          minimum: 1
+        pageSize:
+          type: integer
+          format: int32
+          minimum: 1
+        totalHits:
+          type: integer
+          format: int64
+          minimum: 0
+      required:
+      - items
   securitySchemes:
     ApiKeyAuth:
       in: header

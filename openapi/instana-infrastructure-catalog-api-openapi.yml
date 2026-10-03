@@ -238,79 +238,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    MetricInstance:
-      type: object
-      properties:
-        custom:
-          type: boolean
-        description:
-          type: string
-        formatter:
-          type: string
-          description: '|
-
-            * NUMBER: Generic number
-
-            * BYTES: Number of bytes
-
-            * KILO_BYTES: Number of kilobytes
-
-            * MEGA_BYTES: Number of megabytes
-
-            * PERCENTAGE: Percentage in scale [0,1]
-
-            * PERCENTAGE_100: Percentage in scale [0,100]
-
-            * PERCENTAGE_NO_CAPPING: Percentage in scale [0,1] but value could exceed 1 for example when metric is aggregated
-
-            * PERCENTAGE_100_NO_CAPPING: Percentage in scale [0,100] but value could exceed 100 for example when metric is aggregated
-
-            * LATENCY: Time in milliseconds, with value of 0 should not be considered a a strict 0, but considered as < 1ms
-
-            * NANOS: Time in nanoseconds
-
-            * MILLIS: Time in milliseconds
-
-            * MICROS: Time in microseconds
-
-            * SECONDS: Time in seconds
-
-            * RATE: Number of occurrences per second
-
-            * BYTE_RATE: Number of bytes per second
-
-            * UNDEFINED: Metric value unit is not known
-
-            '
-          enum:
-          - NUMBER
-          - BYTES
-          - KILO_BYTES
-          - MEGA_BYTES
-          - PERCENTAGE
-          - PERCENTAGE_100
-          - PERCENTAGE_NO_CAPPING
-          - PERCENTAGE_100_NO_CAPPING
-          - LATENCY
-          - NANOS
-          - MILLIS
-          - MICROS
-          - SECONDS
-          - RATE
-          - BYTE_RATE
-          - UNDEFINED
-        label:
-          type: string
-        metricId:
-          type: string
-        pluginId:
-          type: string
-      required:
-      - description
-      - formatter
-      - label
-      - metricId
-      - pluginId
     TagCatalog:
       type: object
       properties:
@@ -335,52 +262,6 @@ components:
       required:
       - tagTree
       - tags
-    SearchFieldResult:
-      type: object
-      properties:
-        context:
-          type: string
-          description: Field context
-          enum:
-          - entities
-          - events
-          - applications
-          - services
-          - endpoints
-          - appdata_shared
-          - default_field
-          example: Entity data, trace data, even data
-        description:
-          type: string
-          description: Description of the keyword
-        fixedValues:
-          type: array
-          description: Fixed value associated to the keyword
-          items:
-            type: string
-            description: Fixed value associated to the keyword
-        keyword:
-          type: string
-          description: Retrieved keyword
-        termType:
-          type: string
-          description: Term type
-          enum:
-          - string
-          - long
-          - double
-          - bool
-          - key_value
-          - id
-    GetPayloadKeysResult:
-      type: object
-      properties:
-        payloadKeys:
-          type: array
-          description: Keys that can be used to retrieve plugin payloads.
-          items:
-            type: string
-            description: Keys that can be used to retrieve plugin payloads.
     Tag:
       type: object
       description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
@@ -478,31 +359,88 @@ components:
       required:
       - name
       - type
-    TagTreeNode:
-      type: object
-      description: Children tags of tagTree
-      discriminator:
-        mapping:
-          LEVEL: '#/components/schemas/TagTreeLevel'
-          TAG: '#/components/schemas/TagTreeTag'
-        propertyName: type
-      properties:
-        icon:
-          type: string
-        label:
-          type: string
-        type:
-          type: string
-          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
-    PluginResult:
+    GetPayloadKeysResult:
       type: object
       properties:
+        payloadKeys:
+          type: array
+          description: Keys that can be used to retrieve plugin payloads.
+          items:
+            type: string
+            description: Keys that can be used to retrieve plugin payloads.
+    MetricInstance:
+      type: object
+      properties:
+        custom:
+          type: boolean
+        description:
+          type: string
+        formatter:
+          type: string
+          description: '|
+
+            * NUMBER: Generic number
+
+            * BYTES: Number of bytes
+
+            * KILO_BYTES: Number of kilobytes
+
+            * MEGA_BYTES: Number of megabytes
+
+            * PERCENTAGE: Percentage in scale [0,1]
+
+            * PERCENTAGE_100: Percentage in scale [0,100]
+
+            * PERCENTAGE_NO_CAPPING: Percentage in scale [0,1] but value could exceed 1 for example when metric is aggregated
+
+            * PERCENTAGE_100_NO_CAPPING: Percentage in scale [0,100] but value could exceed 100 for example when metric is aggregated
+
+            * LATENCY: Time in milliseconds, with value of 0 should not be considered a a strict 0, but considered as < 1ms
+
+            * NANOS: Time in nanoseconds
+
+            * MILLIS: Time in milliseconds
+
+            * MICROS: Time in microseconds
+
+            * SECONDS: Time in seconds
+
+            * RATE: Number of occurrences per second
+
+            * BYTE_RATE: Number of bytes per second
+
+            * UNDEFINED: Metric value unit is not known
+
+            '
+          enum:
+          - NUMBER
+          - BYTES
+          - KILO_BYTES
+          - MEGA_BYTES
+          - PERCENTAGE
+          - PERCENTAGE_100
+          - PERCENTAGE_NO_CAPPING
+          - PERCENTAGE_100_NO_CAPPING
+          - LATENCY
+          - NANOS
+          - MILLIS
+          - MICROS
+          - SECONDS
+          - RATE
+          - BYTE_RATE
+          - UNDEFINED
         label:
           type: string
-          description: Plugin name
-        plugin:
+        metricId:
           type: string
-          description: Plugin ID
+        pluginId:
+          type: string
+      required:
+      - description
+      - formatter
+      - label
+      - metricId
+      - pluginId
     TagTreeLevel:
       type: object
       description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
@@ -557,6 +495,68 @@ components:
       required:
       - children
       - label
+    PluginResult:
+      type: object
+      properties:
+        label:
+          type: string
+          description: Plugin name
+        plugin:
+          type: string
+          description: Plugin ID
+    SearchFieldResult:
+      type: object
+      properties:
+        context:
+          type: string
+          description: Field context
+          enum:
+          - entities
+          - events
+          - applications
+          - services
+          - endpoints
+          - appdata_shared
+          - default_field
+          example: Entity data, trace data, even data
+        description:
+          type: string
+          description: Description of the keyword
+        fixedValues:
+          type: array
+          description: Fixed value associated to the keyword
+          items:
+            type: string
+            description: Fixed value associated to the keyword
+        keyword:
+          type: string
+          description: Retrieved keyword
+        termType:
+          type: string
+          description: Term type
+          enum:
+          - string
+          - long
+          - double
+          - bool
+          - key_value
+          - id
+    TagTreeNode:
+      type: object
+      description: Children tags of tagTree
+      discriminator:
+        mapping:
+          LEVEL: '#/components/schemas/TagTreeLevel'
+          TAG: '#/components/schemas/TagTreeTag'
+        propertyName: type
+      properties:
+        icon:
+          type: string
+        label:
+          type: string
+        type:
+          type: string
+          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
   securitySchemes:
     ApiKeyAuth:
       in: header

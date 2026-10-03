@@ -124,19 +124,21 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    MatchExpressionDTO:
+    SyntheticCallConfig:
       type: object
-      description: ' Specify the expression to match, For example, `endpoint.name contains health`.'
-      discriminator:
-        mapping:
-          BINARY_OP: '#/components/schemas/BinaryOperatorDTO'
-          LEAF: '#/components/schemas/TagMatcherDTO'
-        propertyName: type
       properties:
-        type:
-          type: string
+        customRules:
+          type: array
+          description: The list of custom rules for synthetic endpoints defined by the user.
+          items:
+            $ref: '#/components/schemas/SyntheticCallRule'
+          maxItems: 500
+          minItems: 0
+        defaultRulesEnabled:
+          type: boolean
+          description: A flag to enable/disable the default synthetic endpoint configurations defined by Instana.
       required:
-      - type
+      - customRules
     SyntheticCallWithDefaultsConfig:
       type: object
       properties:
@@ -157,21 +159,6 @@ components:
       required:
       - customRules
       - defaultRules
-    SyntheticCallConfig:
-      type: object
-      properties:
-        customRules:
-          type: array
-          description: The list of custom rules for synthetic endpoints defined by the user.
-          items:
-            $ref: '#/components/schemas/SyntheticCallRule'
-          maxItems: 500
-          minItems: 0
-        defaultRulesEnabled:
-          type: boolean
-          description: A flag to enable/disable the default synthetic endpoint configurations defined by Instana.
-      required:
-      - customRules
     SyntheticCallRule:
       type: object
       description: The list of custom rules for synthetic endpoints defined by the user.
@@ -194,6 +181,19 @@ components:
       required:
       - matchSpecification
       - name
+    MatchExpressionDTO:
+      type: object
+      description: ' Specify the expression to match, For example, `endpoint.name contains health`.'
+      discriminator:
+        mapping:
+          BINARY_OP: '#/components/schemas/BinaryOperatorDTO'
+          LEAF: '#/components/schemas/TagMatcherDTO'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
   securitySchemes:
     ApiKeyAuth:
       in: header
