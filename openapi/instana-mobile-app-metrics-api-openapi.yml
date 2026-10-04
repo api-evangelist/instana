@@ -226,27 +226,49 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    AdjustedTimeframe:
+    TagFilterExpressionElement:
       type: object
-      description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
-
-        For example, In request payload, if timeframe is 08:03 - 14:03, which is a 6 hour window size. It is adjusted to 08:05 - 14:00
-
-        Another example, In request payload, if timeframe is 08:20 - 08:20 (next day) which is a 24h window size. It is adjusted to 08:30 - 08:00 (next day)
-
-        '
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
       properties:
-        to:
-          type: integer
-          format: int64
-          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
-        windowSize:
-          type: integer
-          format: int64
-          description: windowSize in milliseconds
-          minimum: 0
+        type:
+          type: string
       required:
-      - to
+      - type
+    GetMobileAppMetrics:
+      type: object
+      properties:
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MobileAppMonitoringMetricsConfiguration'
+          maxItems: 5
+          minItems: 1
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeprecatedTagFilter'
+          maxItems: 32
+          minItems: 0
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+        type:
+          type: string
+          enum:
+          - SESSION_START
+          - HTTP_REQUEST
+          - CRASH
+          - CUSTOM
+          - VIEW_CHANGE
+          - DROP_BEACON
+          - PERF
+      required:
+      - metrics
+      - type
     TimeFrame:
       type: object
       description: Time range for which the data should be retrieved.
@@ -298,77 +320,6 @@ components:
       - name
       - operator
       - value
-    MobileAppMetricResult:
-      type: object
-      properties:
-        empty:
-          type: boolean
-    GetMobileAppMetrics:
-      type: object
-      properties:
-        metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/MobileAppMonitoringMetricsConfiguration'
-          maxItems: 5
-          minItems: 1
-        tagFilters:
-          type: array
-          items:
-            $ref: '#/components/schemas/DeprecatedTagFilter'
-          maxItems: 32
-          minItems: 0
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-        type:
-          type: string
-          enum:
-          - SESSION_START
-          - HTTP_REQUEST
-          - CRASH
-          - CUSTOM
-          - VIEW_CHANGE
-          - DROP_BEACON
-          - PERF
-      required:
-      - metrics
-      - type
-    StackTraceLine:
-      type: object
-      properties:
-        column:
-          type: integer
-          format: int32
-          minimum: -1
-        file:
-          type: string
-        line:
-          type: integer
-          format: int32
-          minimum: -1
-        name:
-          type: string
-        translationExplanation:
-          type: string
-        translationStatus:
-          type: integer
-          format: int32
-          minimum: -1
-      required:
-      - file
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
     GetMobileAppMetricsV2:
       type: object
       properties:
@@ -395,21 +346,6 @@ components:
       required:
       - metrics
       - type
-    MetricAPIResult:
-      type: object
-      properties:
-        adjustedTimeframe:
-          $ref: '#/components/schemas/AdjustedTimeframe'
-        metrics:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: array
-              items:
-                type: number
-      required:
-      - metrics
     MobileAppMonitoringBeacon:
       type: object
       properties:
@@ -779,6 +715,65 @@ components:
       - performanceSubtype
       - rateLimitBeaconType
       - type
+    MetricAPIResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+      required:
+      - metrics
+    StackTraceLine:
+      type: object
+      properties:
+        column:
+          type: integer
+          format: int32
+          minimum: -1
+        file:
+          type: string
+        line:
+          type: integer
+          format: int32
+          minimum: -1
+        name:
+          type: string
+        translationExplanation:
+          type: string
+        translationStatus:
+          type: integer
+          format: int32
+          minimum: -1
+      required:
+      - file
+    AdjustedTimeframe:
+      type: object
+      description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
+
+        For example, In request payload, if timeframe is 08:03 - 14:03, which is a 6 hour window size. It is adjusted to 08:05 - 14:00
+
+        Another example, In request payload, if timeframe is 08:20 - 08:20 (next day) which is a 24h window size. It is adjusted to 08:30 - 08:00 (next day)
+
+        '
+      properties:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          minimum: 0
+      required:
+      - to
     MobileAppMonitoringMetricsConfiguration:
       type: object
       properties:
@@ -815,6 +810,11 @@ components:
       required:
       - aggregation
       - metric
+    MobileAppMetricResult:
+      type: object
+      properties:
+        empty:
+          type: boolean
   securitySchemes:
     ApiKeyAuth:
       in: header

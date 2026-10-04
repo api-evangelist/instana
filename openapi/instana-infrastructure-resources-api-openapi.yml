@@ -402,6 +402,55 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
+    SnapshotItem:
+      type: object
+      description: Detail information for requested snapshots.
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            type: object
+        from:
+          type: integer
+          format: int64
+          description: Start of timeframe expressed as the Unix epoch time in milliseconds
+        host:
+          type: string
+          description: Host name
+        label:
+          type: string
+          description: Friendly label for the entity
+        plugin:
+          type: string
+          description: Plugin name
+          example: host
+        snapshotId:
+          type: string
+          description: Snapshot ID
+        tags:
+          type: array
+          description: Tags which can be used to search for this entity
+          items:
+            type: string
+            description: Tags which can be used to search for this entity
+        to:
+          type: integer
+          format: int64
+          description: End of timeframe expressed as the Unix epoch time in milliseconds
+    TimeFrame:
+      type: object
+      description: Time range for which the data should be retrieved.
+      properties:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          maximum: 2678400000
+          minimum: 0
     PostSnapshotsResult:
       type: object
       properties:
@@ -416,6 +465,42 @@ components:
           items:
             type: string
             description: Snapshot ids for snapshots that could not be retrieved.
+    MonitoredEntitiesStats:
+      type: object
+      description: Statistics of monitored entities.
+      properties:
+        hostCount:
+          type: integer
+          format: int32
+        otelCount:
+          type: integer
+          format: int32
+        serverlessCount:
+          type: integer
+          format: int32
+    GetSnapshotsQuery:
+      type: object
+      properties:
+        snapshotIds:
+          type: array
+          description: List of one or more snapshot ids.
+          items:
+            type: string
+            description: List of one or more snapshot ids.
+          maxItems: 1000
+          minItems: 0
+          uniqueItems: true
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+      required:
+      - snapshotIds
+    SnapshotResult:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SnapshotItem'
     SoftwareVersion:
       type: object
       properties:
@@ -465,67 +550,6 @@ components:
       - usedBy
       - vendor
       - version
-    TimeFrame:
-      type: object
-      description: Time range for which the data should be retrieved.
-      properties:
-        to:
-          type: integer
-          format: int64
-          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
-        windowSize:
-          type: integer
-          format: int64
-          description: windowSize in milliseconds
-          maximum: 2678400000
-          minimum: 0
-    SoftwareUser:
-      type: object
-      properties:
-        container:
-          type: string
-        host:
-          type: string
-        process:
-          type: string
-        snapshotId:
-          type: string
-    MonitoredEntitiesStats:
-      type: object
-      description: Statistics of monitored entities.
-      properties:
-        hostCount:
-          type: integer
-          format: int32
-        otelCount:
-          type: integer
-          format: int32
-        serverlessCount:
-          type: integer
-          format: int32
-    SnapshotResult:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/SnapshotItem'
-    GetSnapshotsQuery:
-      type: object
-      properties:
-        snapshotIds:
-          type: array
-          description: List of one or more snapshot ids.
-          items:
-            type: string
-            description: List of one or more snapshot ids.
-          maxItems: 1000
-          minItems: 0
-          uniqueItems: true
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-      required:
-      - snapshotIds
     MonitoringState:
       type: object
       properties:
@@ -546,41 +570,17 @@ components:
           type: integer
           format: int32
           description: Count of serverless
-    SnapshotItem:
+    SoftwareUser:
       type: object
-      description: Detail information for requested snapshots.
       properties:
-        data:
-          type: object
-          additionalProperties:
-            type: object
-        from:
-          type: integer
-          format: int64
-          description: Start of timeframe expressed as the Unix epoch time in milliseconds
+        container:
+          type: string
         host:
           type: string
-          description: Host name
-        label:
+        process:
           type: string
-          description: Friendly label for the entity
-        plugin:
-          type: string
-          description: Plugin name
-          example: host
         snapshotId:
           type: string
-          description: Snapshot ID
-        tags:
-          type: array
-          description: Tags which can be used to search for this entity
-          items:
-            type: string
-            description: Tags which can be used to search for this entity
-        to:
-          type: integer
-          format: int64
-          description: End of timeframe expressed as the Unix epoch time in milliseconds
   securitySchemes:
     ApiKeyAuth:
       in: header

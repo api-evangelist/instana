@@ -439,54 +439,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    ActionInstanceRequest:
-      type: object
-      properties:
-        actionId:
-          type: string
-          description: Action identifier of the action to run.
-        async:
-          type: string
-          description: '`"true"` if the action should be run in asynchronous mode `"false"` otherwise. Default is `"true"`.'
-        eventId:
-          type: string
-          description: Event identifier (incident or issue) associated with the policy.
-        hostId:
-          type: string
-          description: Agent host identifier on which to run the action.
-        inputParameters:
-          type: array
-          description: Action run input parameters.
-          items:
-            $ref: '#/components/schemas/ActionInstanceRequestParameters'
-        policyId:
-          type: string
-          description: Policy identifier that associates the action trigger (incident or issue) to the action to run.
-        timeout:
-          type: string
-          description: Action run time out. Default is `30 seconds`.
-      required:
-      - actionId
-      - hostId
-    ActionInstanceParameter:
-      type: object
-      description: List of input parameters to this action run.
-      properties:
-        displayName:
-          type: string
-          description: Parameter display name.
-        name:
-          type: string
-          description: Parameter name.
-        type:
-          type: string
-          description: Parameter type. Valid values are `static`, `dynamic` or `vault`
-        value:
-          type: string
-          description: Parameter value.
-      required:
-      - displayName
-      - name
     ActionInstance:
       type: object
       properties:
@@ -605,18 +557,6 @@ components:
       - actionId
       - actionName
       - type
-    ActionInstanceMetadataEntry:
-      type: object
-      description: List of metadata parameters set to this action run by sensors.
-      properties:
-        name:
-          type: string
-          description: Metadata name.
-        value:
-          type: string
-          description: Metadata value.
-      required:
-      - name
     ActionInstanceRequestParameters:
       type: object
       description: Action run input parameters.
@@ -633,6 +573,25 @@ components:
       required:
       - name
       - value
+    ActionInstanceParameter:
+      type: object
+      description: List of input parameters to this action run.
+      properties:
+        displayName:
+          type: string
+          description: Parameter display name.
+        name:
+          type: string
+          description: Parameter name.
+        type:
+          type: string
+          description: Parameter type. Valid values are `static`, `dynamic` or `vault`
+        value:
+          type: string
+          description: Parameter value.
+      required:
+      - displayName
+      - name
     PaginatedResult:
       type: object
       properties:
@@ -655,6 +614,47 @@ components:
           minimum: 0
       required:
       - items
+    ActionInstanceMetadataEntry:
+      type: object
+      description: List of metadata parameters set to this action run by sensors.
+      properties:
+        name:
+          type: string
+          description: Metadata name.
+        value:
+          type: string
+          description: Metadata value.
+      required:
+      - name
+    ActionInstanceRequest:
+      type: object
+      properties:
+        actionId:
+          type: string
+          description: Action identifier of the action to run.
+        async:
+          type: string
+          description: '`"true"` if the action should be run in asynchronous mode `"false"` otherwise. Default is `"true"`.'
+        eventId:
+          type: string
+          description: Event identifier (incident or issue) associated with the policy.
+        hostId:
+          type: string
+          description: Agent host identifier on which to run the action.
+        inputParameters:
+          type: array
+          description: Action run input parameters.
+          items:
+            $ref: '#/components/schemas/ActionInstanceRequestParameters'
+        policyId:
+          type: string
+          description: Policy identifier that associates the action trigger (incident or issue) to the action to run.
+        timeout:
+          type: string
+          description: Action run time out. Default is `30 seconds`.
+      required:
+      - actionId
+      - hostId
   securitySchemes:
     ApiKeyAuth:
       in: header

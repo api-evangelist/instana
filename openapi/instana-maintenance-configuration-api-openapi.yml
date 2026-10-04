@@ -657,22 +657,19 @@ paths:
         - **id:** The ID of the maintenance config to resume.'
 components:
   schemas:
-    Duration:
+    TagFilterExpressionElement:
       type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
       properties:
-        amount:
-          type: integer
-          format: int64
-          minimum: 1
-        unit:
+        type:
           type: string
-          enum:
-          - MINUTES
-          - HOURS
-          - DAYS
       required:
-      - amount
-      - unit
+      - type
     MaintenanceConfigV2:
       type: object
       properties:
@@ -709,6 +706,22 @@ components:
       - name
       - query
       - scheduling
+    Duration:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+          minimum: 1
+        unit:
+          type: string
+          enum:
+          - MINUTES
+          - HOURS
+          - DAYS
+      required:
+      - amount
+      - unit
     MaintenanceConfig:
       type: object
       properties:
@@ -739,6 +752,99 @@ components:
       - id
       - name
       - query
+    MaintenanceConfigV2WithStateAndOccurrence:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the Maintenance Window configuration.
+          maxLength: 64
+          minLength: 0
+        lastUpdated:
+          type: integer
+          format: int64
+          minimum: 1
+        name:
+          type: string
+          description: Name of the Maintenance Window configuration.
+          maxLength: 256
+          minLength: 0
+        occurrence:
+          $ref: '#/components/schemas/Occurrence'
+        paused:
+          type: boolean
+          description: Boolean flag to determine if the Maintenance Window configuration is paused or still live.
+        query:
+          type: string
+          description: Dynamic Focus Query that determines the scope of the Maintenance Window configuration.
+          maxLength: 2048
+          minLength: 0
+        retriggerOpenAlertsEnabled:
+          type: boolean
+          description: Boolean flag to determine if we should retrigger open alerts to be sent out for any events that opened during this maintenance window, and continues to remain open after the window expires
+        scheduling:
+          $ref: '#/components/schemas/MaintenanceConfigScheduling'
+        state:
+          type: string
+          description: 'State of the Maintenance Window, it can be: UNSCHEDULED, SCHEDULED, ACTIVE, PAUSED, EXPIRED.'
+          enum:
+          - UNSCHEDULED
+          - SCHEDULED
+          - ACTIVE
+          - PAUSED
+          - EXPIRED
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilterExpressionEnabled:
+          type: boolean
+          description: Boolean flag to determine if the tagFilterExpression is enabled.
+      required:
+      - id
+      - name
+      - occurrence
+      - query
+      - scheduling
+    MaintenanceWindow:
+      type: object
+      description: A set of time periods when the Maintenance Window Configuration is active.
+      properties:
+        end:
+          type: integer
+          format: int64
+          minimum: 1
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+        start:
+          type: integer
+          format: int64
+          minimum: 0
+      required:
+      - id
+    MaintenanceConfigScheduling:
+      type: object
+      description: Time scheduling of the Maintenance Window configurations.
+      discriminator:
+        mapping:
+          ONE_TIME: '#/components/schemas/OneTimeMaintenanceWindow'
+          RECURRENT: '#/components/schemas/RecurrentMaintenanceWindow'
+        propertyName: type
+      properties:
+        duration:
+          $ref: '#/components/schemas/Duration'
+        start:
+          type: integer
+          format: int64
+          minimum: 1
+        type:
+          type: string
+          maxLength: 2048
+          minLength: 0
+      required:
+      - duration
+      - start
+      - type
     ValidatedMaintenanceConfigV2WithStateAndOccurrence:
       type: object
       properties:
@@ -801,19 +907,6 @@ components:
       - occurrence
       - query
       - scheduling
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
     MaintenanceConfigWithLastUpdated:
       type: object
       properties:
@@ -848,18 +941,6 @@ components:
       - id
       - name
       - query
-    Occurrence:
-      type: object
-      description: Time window of the Maintence Window configuration occurrences.
-      properties:
-        end:
-          type: integer
-          format: int64
-          minimum: 1
-        start:
-          type: integer
-          format: int64
-          minimum: 0
     ValidatedMaintenanceConfigWithStatus:
       type: object
       properties:
@@ -907,99 +988,18 @@ components:
       - name
       - query
       - status
-    MaintenanceConfigScheduling:
+    Occurrence:
       type: object
-      description: Time scheduling of the Maintenance Window configurations.
-      discriminator:
-        mapping:
-          ONE_TIME: '#/components/schemas/OneTimeMaintenanceWindow'
-          RECURRENT: '#/components/schemas/RecurrentMaintenanceWindow'
-        propertyName: type
-      properties:
-        duration:
-          $ref: '#/components/schemas/Duration'
-        start:
-          type: integer
-          format: int64
-          minimum: 1
-        type:
-          type: string
-          maxLength: 2048
-          minLength: 0
-      required:
-      - duration
-      - start
-      - type
-    MaintenanceWindow:
-      type: object
-      description: A set of time periods when the Maintenance Window Configuration is active.
+      description: Time window of the Maintence Window configuration occurrences.
       properties:
         end:
           type: integer
           format: int64
           minimum: 1
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
         start:
           type: integer
           format: int64
           minimum: 0
-      required:
-      - id
-    MaintenanceConfigV2WithStateAndOccurrence:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the Maintenance Window configuration.
-          maxLength: 64
-          minLength: 0
-        lastUpdated:
-          type: integer
-          format: int64
-          minimum: 1
-        name:
-          type: string
-          description: Name of the Maintenance Window configuration.
-          maxLength: 256
-          minLength: 0
-        occurrence:
-          $ref: '#/components/schemas/Occurrence'
-        paused:
-          type: boolean
-          description: Boolean flag to determine if the Maintenance Window configuration is paused or still live.
-        query:
-          type: string
-          description: Dynamic Focus Query that determines the scope of the Maintenance Window configuration.
-          maxLength: 2048
-          minLength: 0
-        retriggerOpenAlertsEnabled:
-          type: boolean
-          description: Boolean flag to determine if we should retrigger open alerts to be sent out for any events that opened during this maintenance window, and continues to remain open after the window expires
-        scheduling:
-          $ref: '#/components/schemas/MaintenanceConfigScheduling'
-        state:
-          type: string
-          description: 'State of the Maintenance Window, it can be: UNSCHEDULED, SCHEDULED, ACTIVE, PAUSED, EXPIRED.'
-          enum:
-          - UNSCHEDULED
-          - SCHEDULED
-          - ACTIVE
-          - PAUSED
-          - EXPIRED
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        tagFilterExpressionEnabled:
-          type: boolean
-          description: Boolean flag to determine if the tagFilterExpression is enabled.
-      required:
-      - id
-      - name
-      - occurrence
-      - query
-      - scheduling
   securitySchemes:
     ApiKeyAuth:
       in: header

@@ -578,41 +578,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    SyntheticAlertRule:
-      type: object
-      description: Indicates the type of rule this alert configuration is about.
-      discriminator:
-        mapping:
-          failure: '#/components/schemas/FailureSyntheticAlertRule'
-        propertyName: alertType
-      properties:
-        aggregation:
-          type: string
-          enum:
-          - SUM
-          - MEAN
-          - MAX
-          - MIN
-          - P25
-          - P50
-          - P75
-          - P90
-          - P95
-          - P98
-          - P99
-          - P99_9
-          - P99_99
-          - DISTINCT_COUNT
-          - SUM_POSITIVE
-          - PER_SECOND
-          - INCREASE
-        alertType:
-          type: string
-        metricName:
-          type: string
-      required:
-      - alertType
-      - metricName
     Author:
       type: object
       properties:
@@ -625,6 +590,55 @@ components:
           - USER
           - INSTANA
           - UNKNOWN
+    SyntheticTimeThreshold:
+      type: object
+      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
+      discriminator:
+        mapping:
+          violationsInSequence: '#/components/schemas/ViolationsInSequenceSyntheticTimeThreshold'
+        propertyName: type
+      properties:
+        type:
+          type: string
+        violationsCount:
+          type: integer
+          format: int32
+          maximum: 12
+          minimum: 1
+      required:
+      - type
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    ChangeSummary:
+      type: object
+      description: Brief summary of changes made in this config version.
+      properties:
+        author:
+          $ref: '#/components/schemas/Author'
+        changeType:
+          type: string
+          enum:
+          - CREATE
+          - UPDATE
+          - DELETE
+          - ENABLE
+          - DISABLE
+          - RESTORE
+          - UNKNOWN
+      required:
+      - author
+      - changeType
     SyntheticAlertConfig:
       type: object
       properties:
@@ -686,23 +700,6 @@ components:
       - syntheticTestIds
       - tagFilterExpression
       - timeThreshold
-    CustomPayloadField:
-      type: object
-      description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
-      discriminator:
-        mapping:
-          dynamic: '#/components/schemas/DynamicField'
-          staticString: '#/components/schemas/StaticStringField'
-        propertyName: type
-      properties:
-        key:
-          type: string
-          description: A user-specified unique identifier or name for a custom payload entry.
-        type:
-          type: string
-      required:
-      - key
-      - type
     ConfigVersion:
       type: object
       properties:
@@ -728,37 +725,22 @@ components:
           minLength: 0
       required:
       - id
-    ChangeSummary:
+    CustomPayloadField:
       type: object
-      description: Brief summary of changes made in this config version.
-      properties:
-        author:
-          $ref: '#/components/schemas/Author'
-        changeType:
-          type: string
-          enum:
-          - CREATE
-          - UPDATE
-          - DELETE
-          - ENABLE
-          - DISABLE
-          - RESTORE
-          - UNKNOWN
-      required:
-      - author
-      - changeType
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
+      description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
       discriminator:
         mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
+          dynamic: '#/components/schemas/DynamicField'
+          staticString: '#/components/schemas/StaticStringField'
         propertyName: type
       properties:
+        key:
+          type: string
+          description: A user-specified unique identifier or name for a custom payload entry.
         type:
           type: string
       required:
+      - key
       - type
     SyntheticAlertConfigWithMetadata:
       type: object
@@ -843,23 +825,41 @@ components:
       - syntheticTestIds
       - tagFilterExpression
       - timeThreshold
-    SyntheticTimeThreshold:
+    SyntheticAlertRule:
       type: object
-      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
+      description: Indicates the type of rule this alert configuration is about.
       discriminator:
         mapping:
-          violationsInSequence: '#/components/schemas/ViolationsInSequenceSyntheticTimeThreshold'
-        propertyName: type
+          failure: '#/components/schemas/FailureSyntheticAlertRule'
+        propertyName: alertType
       properties:
-        type:
+        aggregation:
           type: string
-        violationsCount:
-          type: integer
-          format: int32
-          maximum: 12
-          minimum: 1
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        alertType:
+          type: string
+        metricName:
+          type: string
       required:
-      - type
+      - alertType
+      - metricName
   securitySchemes:
     ApiKeyAuth:
       in: header

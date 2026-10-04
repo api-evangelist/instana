@@ -392,13 +392,20 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    EditUser:
+    InvitationResult:
       type: object
       properties:
-        fullName:
+        invitationStatus:
           type: string
-      required:
-      - fullName
+          enum:
+          - SUCCESS
+          - INTERNAL_ERROR
+          - FAILURE_USER_ALREADY_EXISTS
+          - FAILURE_USER_ALREADY_INVITED
+          - FAILURE_ONLY_DEFAULT_GROUP_INVITATION_ALLOWED
+          - FAILURE_TENANT_IDP_CONFIGURED
+        userEmail:
+          type: string
     InvitationResponse:
       type: object
       properties:
@@ -406,6 +413,40 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InvitationResult'
+    EditUser:
+      type: object
+      properties:
+        fullName:
+          type: string
+      required:
+      - fullName
+    UsersResult:
+      type: object
+      properties:
+        invitations:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvitationResult'
+          uniqueItems: true
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResult'
+          uniqueItems: true
+    Invitation:
+      type: object
+      properties:
+        email:
+          type: string
+        groupId:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+      required:
+      - email
+      - groupId
     UserResult:
       type: object
       properties:
@@ -427,47 +468,6 @@ components:
       - email
       - fullName
       - id
-    Invitation:
-      type: object
-      properties:
-        email:
-          type: string
-        groupId:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-      required:
-      - email
-      - groupId
-    UsersResult:
-      type: object
-      properties:
-        invitations:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvitationResult'
-          uniqueItems: true
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserResult'
-          uniqueItems: true
-    InvitationResult:
-      type: object
-      properties:
-        invitationStatus:
-          type: string
-          enum:
-          - SUCCESS
-          - INTERNAL_ERROR
-          - FAILURE_USER_ALREADY_EXISTS
-          - FAILURE_USER_ALREADY_INVITED
-          - FAILURE_ONLY_DEFAULT_GROUP_INVITATION_ALLOWED
-          - FAILURE_TENANT_IDP_CONFIGURED
-        userEmail:
-          type: string
   securitySchemes:
     ApiKeyAuth:
       in: header

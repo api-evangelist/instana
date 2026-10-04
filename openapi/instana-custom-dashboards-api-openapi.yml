@@ -261,6 +261,44 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
+    CustomDashboard:
+      type: object
+      properties:
+        accessRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessRule'
+          maxItems: 64
+          minItems: 1
+        id:
+          type: string
+        title:
+          type: string
+        widgets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Widget'
+          maxItems: 128
+          minItems: 0
+          uniqueItems: true
+      required:
+      - accessRules
+      - id
+      - title
+      - widgets
+    UserBasicResult:
+      type: object
+      properties:
+        email:
+          type: string
+        fullName:
+          type: string
+        id:
+          type: string
+      required:
+      - email
+      - fullName
+      - id
     AccessRule:
       type: object
       properties:
@@ -287,19 +325,47 @@ components:
       required:
       - accessType
       - relationType
-    UserBasicResult:
+    DashboardApiToken:
       type: object
       properties:
-        email:
-          type: string
-        fullName:
-          type: string
         id:
           type: string
+        name:
+          type: string
       required:
-      - email
-      - fullName
       - id
+      - name
+    CustomDashboardWithUserSpecificInformation:
+      type: object
+      properties:
+        accessRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessRule'
+          maxItems: 64
+          minItems: 1
+        id:
+          type: string
+        ownerId:
+          type: string
+        title:
+          type: string
+        widgets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Widget'
+          maxItems: 128
+          minItems: 0
+          uniqueItems: true
+        writable:
+          type: boolean
+      required:
+      - accessRules
+      - id
+      - ownerId
+      - title
+      - widgets
+      - writable
     CustomDashboardPreview:
       type: object
       properties:
@@ -326,31 +392,6 @@ components:
       - id
       - ownerId
       - title
-    CustomDashboard:
-      type: object
-      properties:
-        accessRules:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessRule'
-          maxItems: 64
-          minItems: 1
-        id:
-          type: string
-        title:
-          type: string
-        widgets:
-          type: array
-          items:
-            $ref: '#/components/schemas/Widget'
-          maxItems: 128
-          minItems: 0
-          uniqueItems: true
-      required:
-      - accessRules
-      - id
-      - title
-      - widgets
     Widget:
       type: object
       properties:
@@ -386,47 +427,6 @@ components:
       - config
       - id
       - type
-    CustomDashboardWithUserSpecificInformation:
-      type: object
-      properties:
-        accessRules:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessRule'
-          maxItems: 64
-          minItems: 1
-        id:
-          type: string
-        ownerId:
-          type: string
-        title:
-          type: string
-        widgets:
-          type: array
-          items:
-            $ref: '#/components/schemas/Widget'
-          maxItems: 128
-          minItems: 0
-          uniqueItems: true
-        writable:
-          type: boolean
-      required:
-      - accessRules
-      - id
-      - ownerId
-      - title
-      - widgets
-      - writable
-    DashboardApiToken:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-      required:
-      - id
-      - name
   securitySchemes:
     ApiKeyAuth:
       in: header

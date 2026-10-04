@@ -431,6 +431,19 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
+    ParameterValue:
+      type: object
+      description: List of action input parameters.
+      properties:
+        name:
+          type: string
+          description: Parameter name.
+        value:
+          type: string
+          description: Parameter value.
+      required:
+      - name
+      - value
     Policy:
       type: object
       properties:
@@ -468,6 +481,24 @@ components:
       - name
       - trigger
       - typeConfigurations
+    Field:
+      type: object
+      description: List of fields that describe an action.
+      properties:
+        description:
+          type: string
+        encoding:
+          type: string
+        name:
+          type: string
+        secured:
+          type: boolean
+        value:
+          type: string
+      required:
+      - encoding
+      - name
+      - value
     PolicyRunnable:
       type: object
       description: Runnable associated with the policy. It can be a `workflow` or `action`. Currently only supports `action`.
@@ -487,6 +518,48 @@ components:
       - id
       - runConfiguration
       - type
+    MetaData:
+      type: object
+      description: Action metadata.
+      properties:
+        ai:
+          type: array
+          description: List of metadata for AI originated actions.
+          items:
+            type: object
+            additionalProperties:
+              type: object
+              description: List of metadata for AI originated actions.
+            description: List of metadata for AI originated actions.
+        aiOriginated:
+          type: boolean
+          description: AI originated action flag. Value is `true` if action is AI generated `false` otherwise.
+        builtIn:
+          type: boolean
+          description: Built-in out of the box action flag. Value is `true` if built-in action `false` otherwise.
+        readOnly:
+          type: boolean
+          description: Read only action flag. Value is `true` if read only `false` otherwise.
+        sensorImported:
+          type: boolean
+          description: Sensor imported action flag. Value is `true` if action is imported from sensor `false` otherwise.
+    TypeConfiguration:
+      type: object
+      description: List of configurations that contains the list of actions to run and the mode (automatic or manual) in which the policy is run.
+      properties:
+        condition:
+          $ref: '#/components/schemas/Condition'
+        name:
+          type: string
+          description: The policy type determines how a policy is run. Value must be one of the enum values. Value `manual` means the policy is run manually when an event is raised. Value `automatic` means policy is run automatically when an event is raised.
+          enum:
+          - automatic
+          - manual
+        runnable:
+          $ref: '#/components/schemas/PolicyRunnable'
+      required:
+      - name
+      - runnable
     Action:
       type: object
       description: Automation action definition. When this is used in policy creation request, only `id` should be specified.
@@ -553,111 +626,6 @@ components:
       - modifiedAt
       - name
       - type
-    PolicyScheduling:
-      type: object
-      description: Scheduling information for a scheduled policy.
-      properties:
-        recurrentRule:
-          type: string
-          description: 'Recurrent Rule defines how the policy recurs, using iCalendar RRULE format (e.g., `FREQ=DAILY;INTERVAL=1`).It supports fields like FREQ, INTERVAL, BYDAY. Refer to RFC 5545: https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10'
-        startTime:
-          type: string
-          format: date-time
-          description: The time to run the policy action in milliseconds since epoch (UTC) (e.g., `1706713140000`).
-      required:
-      - startTime
-    MetaData:
-      type: object
-      description: Action metadata.
-      properties:
-        ai:
-          type: array
-          description: List of metadata for AI originated actions.
-          items:
-            type: object
-            additionalProperties:
-              type: object
-              description: List of metadata for AI originated actions.
-            description: List of metadata for AI originated actions.
-        aiOriginated:
-          type: boolean
-          description: AI originated action flag. Value is `true` if action is AI generated `false` otherwise.
-        builtIn:
-          type: boolean
-          description: Built-in out of the box action flag. Value is `true` if built-in action `false` otherwise.
-        readOnly:
-          type: boolean
-          description: Read only action flag. Value is `true` if read only `false` otherwise.
-        sensorImported:
-          type: boolean
-          description: Sensor imported action flag. Value is `true` if action is imported from sensor `false` otherwise.
-    Field:
-      type: object
-      description: List of fields that describe an action.
-      properties:
-        description:
-          type: string
-        encoding:
-          type: string
-        name:
-          type: string
-        secured:
-          type: boolean
-        value:
-          type: string
-      required:
-      - encoding
-      - name
-      - value
-    Trigger:
-      type: object
-      description: The trigger is the Instana event or Smart Alert that defines the initial conditions that must be met for the policy to apply on the actions in `typeConfiguration`.
-      properties:
-        description:
-          type: string
-          description: A description for the trigger.
-        id:
-          type: string
-          description: Trigger (Instana event or Smart Alert) identifier.
-        name:
-          type: string
-          description: A name of the trigger (name of Instana event or Smart Alert).
-        scheduling:
-          $ref: '#/components/schemas/PolicyScheduling'
-        type:
-          type: string
-          description: Instana event type, Smart Alert type, or 'schedule'. The type must be one of the enum values.
-          enum:
-          - customEvent
-          - builtinEvent
-          - applicationSmartAlert
-          - globalApplicationSmartAlert
-          - websiteSmartAlert
-          - infraSmartAlert
-          - mobileAppSmartAlert
-          - syntheticsSmartAlert
-          - logSmartAlert
-          - sloSmartAlert
-          - schedule
-      required:
-      - type
-    TypeConfiguration:
-      type: object
-      description: List of configurations that contains the list of actions to run and the mode (automatic or manual) in which the policy is run.
-      properties:
-        condition:
-          $ref: '#/components/schemas/Condition'
-        name:
-          type: string
-          description: The policy type determines how a policy is run. Value must be one of the enum values. Value `manual` means the policy is run manually when an event is raised. Value `automatic` means policy is run automatically when an event is raised.
-          enum:
-          - automatic
-          - manual
-        runnable:
-          $ref: '#/components/schemas/PolicyRunnable'
-      required:
-      - name
-      - runnable
     Parameter:
       type: object
       description: List of inputs to the action.
@@ -690,6 +658,24 @@ components:
       - label
       - name
       - type
+    Condition:
+      type: object
+      description: This applies to only `automatic` policy type. A Dynamic Focus Query that selects a list of entities on which the policy is run.
+      properties:
+        query:
+          type: string
+          description: Dynamic Focus Query string that selects a list of entities on which the policy is run.
+    RunConfiguration:
+      type: object
+      description: Action run configuration.
+      properties:
+        actions:
+          type: array
+          description: List of action configurations.
+          items:
+            $ref: '#/components/schemas/ActionConfiguration'
+      required:
+      - actions
     ActionConfiguration:
       type: object
       description: List of action configurations.
@@ -706,37 +692,51 @@ components:
             $ref: '#/components/schemas/ParameterValue'
       required:
       - action
-    RunConfiguration:
+    PolicyScheduling:
       type: object
-      description: Action run configuration.
+      description: Scheduling information for a scheduled policy.
       properties:
-        actions:
-          type: array
-          description: List of action configurations.
-          items:
-            $ref: '#/components/schemas/ActionConfiguration'
-      required:
-      - actions
-    Condition:
-      type: object
-      description: This applies to only `automatic` policy type. A Dynamic Focus Query that selects a list of entities on which the policy is run.
-      properties:
-        query:
+        recurrentRule:
           type: string
-          description: Dynamic Focus Query string that selects a list of entities on which the policy is run.
-    ParameterValue:
+          description: 'Recurrent Rule defines how the policy recurs, using iCalendar RRULE format (e.g., `FREQ=DAILY;INTERVAL=1`).It supports fields like FREQ, INTERVAL, BYDAY. Refer to RFC 5545: https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10'
+        startTime:
+          type: string
+          format: date-time
+          description: The time to run the policy action in milliseconds since epoch (UTC) (e.g., `1706713140000`).
+      required:
+      - startTime
+    Trigger:
       type: object
-      description: List of action input parameters.
+      description: The trigger is the Instana event or Smart Alert that defines the initial conditions that must be met for the policy to apply on the actions in `typeConfiguration`.
       properties:
+        description:
+          type: string
+          description: A description for the trigger.
+        id:
+          type: string
+          description: Trigger (Instana event or Smart Alert) identifier.
         name:
           type: string
-          description: Parameter name.
-        value:
+          description: A name of the trigger (name of Instana event or Smart Alert).
+        scheduling:
+          $ref: '#/components/schemas/PolicyScheduling'
+        type:
           type: string
-          description: Parameter value.
+          description: Instana event type, Smart Alert type, or 'schedule'. The type must be one of the enum values.
+          enum:
+          - customEvent
+          - builtinEvent
+          - applicationSmartAlert
+          - globalApplicationSmartAlert
+          - websiteSmartAlert
+          - infraSmartAlert
+          - mobileAppSmartAlert
+          - syntheticsSmartAlert
+          - logSmartAlert
+          - sloSmartAlert
+          - schedule
       required:
-      - name
-      - value
+      - type
   securitySchemes:
     ApiKeyAuth:
       in: header

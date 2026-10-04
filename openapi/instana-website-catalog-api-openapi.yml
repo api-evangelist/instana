@@ -226,30 +226,6 @@ paths:
         ```'
 components:
   schemas:
-    TagCatalog:
-      type: object
-      properties:
-        tagTree:
-          type: array
-          description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
-
-            Consider this as the root of the tree where it has tags as attributes or children.
-
-            '
-          items:
-            $ref: '#/components/schemas/TagTreeLevel'
-        tags:
-          type: array
-          description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
-
-            Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
-
-            '
-          items:
-            $ref: '#/components/schemas/Tag'
-      required:
-      - tagTree
-      - tags
     Tag:
       type: object
       description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
@@ -541,6 +517,30 @@ components:
         type:
           type: string
           description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
+    TagCatalog:
+      type: object
+      properties:
+        tagTree:
+          type: array
+          description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
+
+            Consider this as the root of the tree where it has tags as attributes or children.
+
+            '
+          items:
+            $ref: '#/components/schemas/TagTreeLevel'
+        tags:
+          type: array
+          description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
+
+            Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
+
+            '
+          items:
+            $ref: '#/components/schemas/Tag'
+      required:
+      - tagTree
+      - tags
   securitySchemes:
     ApiKeyAuth:
       in: header

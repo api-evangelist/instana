@@ -544,6 +544,25 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
+    ChangeSummary:
+      type: object
+      description: Brief summary of changes made in this config version.
+      properties:
+        author:
+          $ref: '#/components/schemas/Author'
+        changeType:
+          type: string
+          enum:
+          - CREATE
+          - UPDATE
+          - DELETE
+          - ENABLE
+          - DISABLE
+          - RESTORE
+          - UNKNOWN
+      required:
+      - author
+      - changeType
     AlertingTimeWindow:
       type: object
       properties:
@@ -574,74 +593,40 @@ components:
       required:
       - duration
       - durationType
-    ServiceLevelsAlertConfig:
+    ServiceLevelsStaticThresholdConfig:
       type: object
+      description: This threshold defines a static value to be evaluated with a specific operator for burn rate v2 alerts.
       properties:
-        alertChannelIds:
-          type: array
-          description: This is the list of channel IDs when alert triggered and sent to.
-          items:
-            type: string
-            description: This is the list of channel IDs when alert triggered and sent to.
-          maxItems: 1024
-          minItems: 0
-          uniqueItems: true
-        burnRateConfig:
-          type: array
-          description: This is the burn rate alert configuration which defines alerting windows and corresponding thresholds. This configuration must to specified for BURN_RATE_V2 Alerts.
-          items:
-            $ref: '#/components/schemas/ServiceLevelsBurnRateConfig'
-          uniqueItems: true
-        burnRateTimeWindows:
-          $ref: '#/components/schemas/ServiceLevelsBurnRateTimeWindows'
-        customPayloadFields:
-          type: array
-          description: This is the custom name and value pairs to be sent along with the alert to the alert channels.
-          items:
-            $ref: '#/components/schemas/CustomPayloadField'
-          maxItems: 20
-          minItems: 0
-        description:
-          type: string
-          description: The description of the alert. It is also the alert message content.
-          maxLength: 65536
-          minLength: 0
-        name:
-          type: string
-          description: Name of the Service Levels Smart Alerts Configuration.
-          maxLength: 256
-          minLength: 0
-        rule:
-          $ref: '#/components/schemas/ServiceLevelsAlertRule'
-        severity:
+        lastUpdated:
           type: integer
-          format: int32
-          description: 'This is the severity of the alert. The value can be: <b>5</b>: warning, <b>10</b>: critical.'
-        sloIds:
-          type: array
-          description: This is the list of SLO configurations related to this alert.
-          items:
-            type: string
-            description: This is the list of SLO configurations related to this alert.
-          maxItems: 1024
-          minItems: 0
-          uniqueItems: true
-        threshold:
-          $ref: '#/components/schemas/StaticThreshold'
-        timeThreshold:
-          $ref: '#/components/schemas/ServiceLevelsTimeThreshold'
-        triggering:
-          type: boolean
-          description: Incident flag. If value is true, this alert will become an accident.
+          format: int64
+          minimum: 0
+        operator:
+          type: string
+          enum:
+          - '>'
+          - '>='
+          - <
+          - <=
+        value:
+          type: number
+          format: double
+          minimum: 0
       required:
-      - alertChannelIds
-      - customPayloadFields
-      - description
-      - name
-      - rule
-      - severity
-      - sloIds
-      - timeThreshold
+      - operator
+    ServiceLevelsAlertRule:
+      type: object
+      description: This is the service levels alert type. It could be error budget alert or service levels object alert.
+      discriminator:
+        mapping:
+          ERROR_BUDGET: '#/components/schemas/ErrorBudgetAlertRule'
+          SERVICE_LEVELS_OBJECTIVE: '#/components/schemas/ServiceLevelObjectiveAlertRule'
+        propertyName: alertType
+      properties:
+        alertType:
+          type: string
+      required:
+      - alertType
     ServiceLevelsBurnRateTimeWindows:
       type: object
       deprecated: true
@@ -651,18 +636,23 @@ components:
           $ref: '#/components/schemas/AlertingTimeWindow'
         shortTimeWindow:
           $ref: '#/components/schemas/AlertingTimeWindow'
-    Author:
+    CustomPayloadField:
       type: object
+      description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+      discriminator:
+        mapping:
+          dynamic: '#/components/schemas/DynamicField'
+          staticString: '#/components/schemas/StaticStringField'
+        propertyName: type
       properties:
-        id:
+        key:
           type: string
+          description: A user-specified unique identifier or name for a custom payload entry.
         type:
           type: string
-          enum:
-          - API
-          - USER
-          - INSTANA
-          - UNKNOWN
+      required:
+      - key
+      - type
     ServiceLevelsBurnRateConfig:
       type: object
       description: This is the burn rate alert configuration which defines alerting windows and corresponding thresholds. This configuration must to specified for BURN_RATE_V2 Alerts.
@@ -695,23 +685,6 @@ components:
       - duration
       - durationUnitType
       - threshold
-    CustomPayloadField:
-      type: object
-      description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
-      discriminator:
-        mapping:
-          dynamic: '#/components/schemas/DynamicField'
-          staticString: '#/components/schemas/StaticStringField'
-        propertyName: type
-      properties:
-        key:
-          type: string
-          description: A user-specified unique identifier or name for a custom payload entry.
-        type:
-          type: string
-      required:
-      - key
-      - type
     ServiceLevelseAlertConfigWithMetadata:
       type: object
       properties:
@@ -802,19 +775,118 @@ components:
       - severity
       - sloIds
       - timeThreshold
-    ServiceLevelsAlertRule:
+    ServiceLevelsAlertConfig:
       type: object
-      description: This is the service levels alert type. It could be error budget alert or service levels object alert.
-      discriminator:
-        mapping:
-          ERROR_BUDGET: '#/components/schemas/ErrorBudgetAlertRule'
-          SERVICE_LEVELS_OBJECTIVE: '#/components/schemas/ServiceLevelObjectiveAlertRule'
-        propertyName: alertType
       properties:
-        alertType:
+        alertChannelIds:
+          type: array
+          description: This is the list of channel IDs when alert triggered and sent to.
+          items:
+            type: string
+            description: This is the list of channel IDs when alert triggered and sent to.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        burnRateConfig:
+          type: array
+          description: This is the burn rate alert configuration which defines alerting windows and corresponding thresholds. This configuration must to specified for BURN_RATE_V2 Alerts.
+          items:
+            $ref: '#/components/schemas/ServiceLevelsBurnRateConfig'
+          uniqueItems: true
+        burnRateTimeWindows:
+          $ref: '#/components/schemas/ServiceLevelsBurnRateTimeWindows'
+        customPayloadFields:
+          type: array
+          description: This is the custom name and value pairs to be sent along with the alert to the alert channels.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        description:
           type: string
+          description: The description of the alert. It is also the alert message content.
+          maxLength: 65536
+          minLength: 0
+        name:
+          type: string
+          description: Name of the Service Levels Smart Alerts Configuration.
+          maxLength: 256
+          minLength: 0
+        rule:
+          $ref: '#/components/schemas/ServiceLevelsAlertRule'
+        severity:
+          type: integer
+          format: int32
+          description: 'This is the severity of the alert. The value can be: <b>5</b>: warning, <b>10</b>: critical.'
+        sloIds:
+          type: array
+          description: This is the list of SLO configurations related to this alert.
+          items:
+            type: string
+            description: This is the list of SLO configurations related to this alert.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        threshold:
+          $ref: '#/components/schemas/StaticThreshold'
+        timeThreshold:
+          $ref: '#/components/schemas/ServiceLevelsTimeThreshold'
+        triggering:
+          type: boolean
+          description: Incident flag. If value is true, this alert will become an accident.
       required:
-      - alertType
+      - alertChannelIds
+      - customPayloadFields
+      - description
+      - name
+      - rule
+      - severity
+      - sloIds
+      - timeThreshold
+    Author:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - API
+          - USER
+          - INSTANA
+          - UNKNOWN
+    ServiceLevelsTimeThreshold:
+      type: object
+      description: This is the warm-up and cool-down setting to emit or stop alert event after threshold reached.
+      properties:
+        expiry:
+          type: integer
+          format: int64
+          description: This is the cooldown period when the active alert misses threshold and stop emitting notification.
+        timeWindow:
+          type: integer
+          format: int64
+          description: This is the grace period when the threshold is reached and the alert becomes active to emit notification.
+      required:
+      - expiry
+      - timeWindow
+    StaticThreshold:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Threshold'
+      - type: object
+        properties:
+          lastUpdated:
+            type: integer
+            format: int64
+            minimum: 0
+          value:
+            type: number
+            format: double
+            minimum: 0
+      description: This threshold defines a static value to be evaluated with a specific operator.
+      required:
+      - operator
     ConfigVersion:
       type: object
       properties:
@@ -840,63 +912,6 @@ components:
           minLength: 0
       required:
       - id
-    ChangeSummary:
-      type: object
-      description: Brief summary of changes made in this config version.
-      properties:
-        author:
-          $ref: '#/components/schemas/Author'
-        changeType:
-          type: string
-          enum:
-          - CREATE
-          - UPDATE
-          - DELETE
-          - ENABLE
-          - DISABLE
-          - RESTORE
-          - UNKNOWN
-      required:
-      - author
-      - changeType
-    ServiceLevelsStaticThresholdConfig:
-      type: object
-      description: This threshold defines a static value to be evaluated with a specific operator for burn rate v2 alerts.
-      properties:
-        lastUpdated:
-          type: integer
-          format: int64
-          minimum: 0
-        operator:
-          type: string
-          enum:
-          - '>'
-          - '>='
-          - <
-          - <=
-        value:
-          type: number
-          format: double
-          minimum: 0
-      required:
-      - operator
-    StaticThreshold:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Threshold'
-      - type: object
-        properties:
-          lastUpdated:
-            type: integer
-            format: int64
-            minimum: 0
-          value:
-            type: number
-            format: double
-            minimum: 0
-      description: This threshold defines a static value to be evaluated with a specific operator.
-      required:
-      - operator
     Threshold:
       type: object
       deprecated: true
@@ -920,21 +935,6 @@ components:
       required:
       - operator
       - type
-    ServiceLevelsTimeThreshold:
-      type: object
-      description: This is the warm-up and cool-down setting to emit or stop alert event after threshold reached.
-      properties:
-        expiry:
-          type: integer
-          format: int64
-          description: This is the cooldown period when the active alert misses threshold and stop emitting notification.
-        timeWindow:
-          type: integer
-          format: int64
-          description: This is the grace period when the threshold is reached and the alert becomes active to emit notification.
-      required:
-      - expiry
-      - timeWindow
   securitySchemes:
     ApiKeyAuth:
       in: header

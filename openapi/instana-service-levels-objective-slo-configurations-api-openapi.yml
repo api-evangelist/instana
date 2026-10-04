@@ -582,38 +582,49 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    TimeWindow:
+    ApiTag:
       type: object
-      description: Time Window type of the SLO, it could be Fixed or Rolling
+      properties:
+        displayName:
+          type: string
+          maxLength: 256
+          minLength: 0
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+      required:
+      - displayName
+      - id
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
       discriminator:
         mapping:
-          fixed: '#/components/schemas/FixedTimeWindow'
-          rolling: '#/components/schemas/RollingTimeWindow'
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
         propertyName: type
       properties:
-        duration:
-          type: integer
-          format: int32
-          description: Duration of the Time Window
-        durationUnit:
-          type: string
-          description: Unit of the Time Window Duration
-          enum:
-          - millisecond
-          - second
-          - minute
-          - hour
-          - day
-          - week
-          - month
-        timezone:
-          type: string
-          description: Timezone string
         type:
           type: string
       required:
-      - duration
-      - durationUnit
+      - type
+    SloEntity:
+      type: object
+      description: Entity of the Service Levels Objective Configuration, it could be either Application nor Website
+      discriminator:
+        mapping:
+          application: '#/components/schemas/ApplicationSloEntity'
+          infrastructure: '#/components/schemas/InfraSloEntity'
+          synthetic: '#/components/schemas/SyntheticSloEntity'
+          website: '#/components/schemas/WebsiteSloEntity'
+        propertyName: type
+      properties:
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        type:
+          type: string
+      required:
       - type
     ServiceLevelIndicator:
       type: object
@@ -681,35 +692,38 @@ components:
           enum:
           - eventBased
           - timeBased
-    TagFilterExpressionElement:
+    TimeWindow:
       type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
+      description: Time Window type of the SLO, it could be Fixed or Rolling
       discriminator:
         mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
+          fixed: '#/components/schemas/FixedTimeWindow'
+          rolling: '#/components/schemas/RollingTimeWindow'
         propertyName: type
       properties:
+        duration:
+          type: integer
+          format: int32
+          description: Duration of the Time Window
+        durationUnit:
+          type: string
+          description: Unit of the Time Window Duration
+          enum:
+          - millisecond
+          - second
+          - minute
+          - hour
+          - day
+          - week
+          - month
+        timezone:
+          type: string
+          description: Timezone string
         type:
           type: string
       required:
-      - type
-    SloEntity:
-      type: object
-      description: Entity of the Service Levels Objective Configuration, it could be either Application nor Website
-      discriminator:
-        mapping:
-          application: '#/components/schemas/ApplicationSloEntity'
-          infrastructure: '#/components/schemas/InfraSloEntity'
-          synthetic: '#/components/schemas/SyntheticSloEntity'
-          website: '#/components/schemas/WebsiteSloEntity'
-        propertyName: type
-      properties:
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        type:
-          type: string
-      required:
+      - duration
+      - durationUnit
       - type
     SLOConfigWithRBACTag:
       type: object
@@ -760,20 +774,6 @@ components:
       - tags
       - target
       - timeWindow
-    ApiTag:
-      type: object
-      properties:
-        displayName:
-          type: string
-          maxLength: 256
-          minLength: 0
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
-      required:
-      - displayName
-      - id
     PaginatedResult:
       type: object
       properties:

@@ -1230,55 +1230,6 @@ paths:
       description: See creating group mapping
 components:
   schemas:
-    ApiRestrictedApplicationFilter:
-      type: object
-      properties:
-        label:
-          type: string
-        restrictingApplicationId:
-          type: string
-        scope:
-          type: string
-          enum:
-          - INCLUDE_NO_DOWNSTREAM
-          - INCLUDE_IMMEDIATE_DOWNSTREAM_DATABASE_AND_MESSAGING
-          - INCLUDE_ALL_DOWNSTREAM
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-    GroupMappingOverview:
-      type: object
-      properties:
-        id:
-          type: string
-        key:
-          type: string
-        role:
-          type: string
-        team:
-          type: string
-        value:
-          type: string
-    ApiGroup:
-      type: object
-      properties:
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiMember'
-          uniqueItems: true
-        name:
-          type: string
-        permissionSet:
-          $ref: '#/components/schemas/ApiPermissionSet'
-      required:
-      - id
-      - members
-      - name
-      - permissionSet
     TagFilterExpressionElement:
       type: object
       description: Boolean expression of tag filters to define the scope of relevant calls.
@@ -1292,6 +1243,19 @@ components:
           type: string
       required:
       - type
+    GroupMappingOverview:
+      type: object
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        role:
+          type: string
+        team:
+          type: string
+        value:
+          type: string
     GroupMapping:
       type: object
       properties:
@@ -1317,6 +1281,85 @@ components:
       - groupId
       - key
       - value
+    ApiGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 64
+          minLength: 0
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiMember'
+          uniqueItems: true
+        name:
+          type: string
+        permissionSet:
+          $ref: '#/components/schemas/ApiPermissionSet'
+      required:
+      - id
+      - members
+      - name
+      - permissionSet
+    ApiCreateGroup:
+      type: object
+      properties:
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiMember'
+          uniqueItems: true
+        name:
+          type: string
+        permissionSet:
+          $ref: '#/components/schemas/ApiPermissionSet'
+      required:
+      - members
+      - name
+      - permissionSet
+    ScopeBinding:
+      type: object
+      properties:
+        scopeId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        scopeRoleId:
+          type: string
+          maxLength: 64
+          minLength: 0
+    ApiMember:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        userId:
+          type: string
+      required:
+      - userId
+    ApiRestrictedApplicationFilter:
+      type: object
+      properties:
+        label:
+          type: string
+        restrictingApplicationId:
+          type: string
+        scope:
+          type: string
+          enum:
+          - INCLUDE_NO_DOWNSTREAM
+          - INCLUDE_IMMEDIATE_DOWNSTREAM_DATABASE_AND_MESSAGING
+          - INCLUDE_ALL_DOWNSTREAM
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+    IdentityProviderPatch:
+      type: object
+      properties:
+        restrictEmptyIdpGroups:
+          type: boolean
     ApiPermissionSet:
       type: object
       properties:
@@ -1408,49 +1451,6 @@ components:
       - syntheticCredentialKeys
       - syntheticTestIds
       - websiteIds
-    ApiMember:
-      type: object
-      properties:
-        email:
-          type: string
-        name:
-          type: string
-        userId:
-          type: string
-      required:
-      - userId
-    ApiCreateGroup:
-      type: object
-      properties:
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiMember'
-          uniqueItems: true
-        name:
-          type: string
-        permissionSet:
-          $ref: '#/components/schemas/ApiPermissionSet'
-      required:
-      - members
-      - name
-      - permissionSet
-    IdentityProviderPatch:
-      type: object
-      properties:
-        restrictEmptyIdpGroups:
-          type: boolean
-    ScopeBinding:
-      type: object
-      properties:
-        scopeId:
-          type: string
-          maxLength: 64
-          minLength: 0
-        scopeRoleId:
-          type: string
-          maxLength: 64
-          minLength: 0
   securitySchemes:
     ApiKeyAuth:
       in: header

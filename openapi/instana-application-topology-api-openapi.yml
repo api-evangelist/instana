@@ -185,6 +185,24 @@ components:
       - snapshotIds
       - technologies
       - types
+    ServiceMap:
+      type: object
+      properties:
+        connections:
+          type: array
+          description: A list which indicates which services are consumers and which are providers in the communication chain.
+          items:
+            $ref: '#/components/schemas/ServiceMapConnection'
+          uniqueItems: true
+        services:
+          type: array
+          description: List of services in the topology.
+          items:
+            $ref: '#/components/schemas/ExtendedService'
+          uniqueItems: true
+      required:
+      - connections
+      - services
     ServiceMapConnection:
       type: object
       description: A list which indicates which services are consumers and which are providers in the communication chain.
@@ -222,24 +240,6 @@ components:
       required:
       - from
       - to
-    ServiceMap:
-      type: object
-      properties:
-        connections:
-          type: array
-          description: A list which indicates which services are consumers and which are providers in the communication chain.
-          items:
-            $ref: '#/components/schemas/ServiceMapConnection'
-          uniqueItems: true
-        services:
-          type: array
-          description: List of services in the topology.
-          items:
-            $ref: '#/components/schemas/ExtendedService'
-          uniqueItems: true
-      required:
-      - connections
-      - services
   securitySchemes:
     ApiKeyAuth:
       in: header

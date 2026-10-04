@@ -132,22 +132,18 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    RetentionPeriod:
+    LogVolumeGroup:
       type: object
       properties:
+        label:
+          type: string
+          maxLength: 256
+          minLength: 0
         logVolume:
           type: integer
           format: int64
-        logVolumeGroups:
-          type: array
-          items:
-            $ref: '#/components/schemas/LogVolumeGroup'
-        retentionDays:
-          type: integer
-          format: int32
-          maximum: 90
-          minimum: 7
       required:
+      - label
       - logVolume
     LogVolumeUsageResult:
       type: object
@@ -176,18 +172,22 @@ components:
       required:
       - logVolume
       - retentionPeriods
-    LogVolumeGroup:
+    RetentionPeriod:
       type: object
       properties:
-        label:
-          type: string
-          maxLength: 256
-          minLength: 0
         logVolume:
           type: integer
           format: int64
+        logVolumeGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/LogVolumeGroup'
+        retentionDays:
+          type: integer
+          format: int32
+          maximum: 90
+          minimum: 7
       required:
-      - label
       - logVolume
   securitySchemes:
     ApiKeyAuth:

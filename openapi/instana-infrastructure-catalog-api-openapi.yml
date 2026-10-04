@@ -238,30 +238,15 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    TagCatalog:
+    GetPayloadKeysResult:
       type: object
       properties:
-        tagTree:
+        payloadKeys:
           type: array
-          description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
-
-            Consider this as the root of the tree where it has tags as attributes or children.
-
-            '
+          description: Keys that can be used to retrieve plugin payloads.
           items:
-            $ref: '#/components/schemas/TagTreeLevel'
-        tags:
-          type: array
-          description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
-
-            Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
-
-            '
-          items:
-            $ref: '#/components/schemas/Tag'
-      required:
-      - tagTree
-      - tags
+            type: string
+            description: Keys that can be used to retrieve plugin payloads.
     Tag:
       type: object
       description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
@@ -359,15 +344,6 @@ components:
       required:
       - name
       - type
-    GetPayloadKeysResult:
-      type: object
-      properties:
-        payloadKeys:
-          type: array
-          description: Keys that can be used to retrieve plugin payloads.
-          items:
-            type: string
-            description: Keys that can be used to retrieve plugin payloads.
     MetricInstance:
       type: object
       properties:
@@ -441,6 +417,15 @@ components:
       - label
       - metricId
       - pluginId
+    PluginResult:
+      type: object
+      properties:
+        label:
+          type: string
+          description: Plugin name
+        plugin:
+          type: string
+          description: Plugin ID
     TagTreeLevel:
       type: object
       description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
@@ -495,15 +480,22 @@ components:
       required:
       - children
       - label
-    PluginResult:
+    TagTreeNode:
       type: object
+      description: Children tags of tagTree
+      discriminator:
+        mapping:
+          LEVEL: '#/components/schemas/TagTreeLevel'
+          TAG: '#/components/schemas/TagTreeTag'
+        propertyName: type
       properties:
+        icon:
+          type: string
         label:
           type: string
-          description: Plugin name
-        plugin:
+        type:
           type: string
-          description: Plugin ID
+          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
     SearchFieldResult:
       type: object
       properties:
@@ -541,22 +533,30 @@ components:
           - bool
           - key_value
           - id
-    TagTreeNode:
+    TagCatalog:
       type: object
-      description: Children tags of tagTree
-      discriminator:
-        mapping:
-          LEVEL: '#/components/schemas/TagTreeLevel'
-          TAG: '#/components/schemas/TagTreeTag'
-        propertyName: type
       properties:
-        icon:
-          type: string
-        label:
-          type: string
-        type:
-          type: string
-          description: Type would be either `LEVEL` or `TAG` depending on whether the tag has any child tags or not respectively.
+        tagTree:
+          type: array
+          description: 'The name of the tag dataset (tagTree) which can contain one or more tags as its attributes or children. Eg: `Call`.
+
+            Consider this as the root of the tree where it has tags as attributes or children.
+
+            '
+          items:
+            $ref: '#/components/schemas/TagTreeLevel'
+        tags:
+          type: array
+          description: 'List of queryable tags available in a tagTree. Eg: `call.erroneous`.
+
+            Consider these tags as attributes of a tagTree. Eg: `Call` tagTree has have `Erroneous`, `Call name`, `Latency` etc as attributes.
+
+            '
+          items:
+            $ref: '#/components/schemas/Tag'
+      required:
+      - tagTree
+      - tags
   securitySchemes:
     ApiKeyAuth:
       in: header

@@ -157,6 +157,89 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
+    CustomDashboard:
+      type: object
+      properties:
+        accessRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessRule'
+          maxItems: 64
+          minItems: 1
+        id:
+          type: string
+        title:
+          type: string
+        widgets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Widget'
+          maxItems: 128
+          minItems: 0
+          uniqueItems: true
+      required:
+      - accessRules
+      - id
+      - title
+      - widgets
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    CustomEntityModel:
+      type: object
+      properties:
+        dashboards:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomDashboard'
+          uniqueItems: true
+        dependencies:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomDependency'
+          uniqueItems: true
+        identifiers:
+          type: array
+          items:
+            type: string
+        label:
+          type: string
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomMetric'
+          uniqueItems: true
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+      required:
+      - identifiers
+      - label
+      - tagFilterExpression
+    CustomEntityWithMetadata:
+      type: object
+      properties:
+        created:
+          type: integer
+          format: int64
+        data:
+          $ref: '#/components/schemas/CustomEntityModel'
+        id:
+          type: string
+        version:
+          type: string
+      required:
+      - data
+      - id
     AccessRule:
       type: object
       properties:
@@ -229,31 +312,6 @@ components:
           - parent
           maxLength: 8
           minLength: 1
-    CustomDashboard:
-      type: object
-      properties:
-        accessRules:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessRule'
-          maxItems: 64
-          minItems: 1
-        id:
-          type: string
-        title:
-          type: string
-        widgets:
-          type: array
-          items:
-            $ref: '#/components/schemas/Widget'
-          maxItems: 128
-          minItems: 0
-          uniqueItems: true
-      required:
-      - accessRules
-      - id
-      - title
-      - widgets
     CustomMetric:
       type: object
       properties:
@@ -375,34 +433,6 @@ components:
         type:
           type: string
           description: Type of entity for the source metric
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    CustomEntityWithMetadata:
-      type: object
-      properties:
-        created:
-          type: integer
-          format: int64
-        data:
-          $ref: '#/components/schemas/CustomEntityModel'
-        id:
-          type: string
-        version:
-          type: string
-      required:
-      - data
-      - id
     Widget:
       type: object
       properties:
@@ -438,36 +468,6 @@ components:
       - config
       - id
       - type
-    CustomEntityModel:
-      type: object
-      properties:
-        dashboards:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomDashboard'
-          uniqueItems: true
-        dependencies:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomDependency'
-          uniqueItems: true
-        identifiers:
-          type: array
-          items:
-            type: string
-        label:
-          type: string
-        metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomMetric'
-          uniqueItems: true
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-      required:
-      - identifiers
-      - label
-      - tagFilterExpression
   securitySchemes:
     ApiKeyAuth:
       in: header

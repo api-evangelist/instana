@@ -207,32 +207,6 @@ paths:
       description: Use this API endpoint to update a release.
 components:
   schemas:
-    ServiceScopeWithMetadata:
-      type: object
-      description: The list of services where the release can be viewed.
-      properties:
-        id:
-          type: string
-          description: 'Unique ID of the Service. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.'
-        name:
-          type: string
-          description: 'Name of the Service. Eg: `payment`.'
-        scopedTo:
-          $ref: '#/components/schemas/ServiceScopedToWithMetadata'
-      required:
-      - id
-    ServiceScopedTo:
-      type: object
-      description: 'The list of application perspectives where the service is present. '
-      properties:
-        applications:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApplicationScope'
-          maxItems: 10
-          minItems: 1
-      required:
-      - applications
     ReleaseScope:
       type: object
       properties:
@@ -257,72 +231,6 @@ components:
           $ref: '#/components/schemas/ServiceScopedTo'
       required:
       - name
-    ApplicationScope:
-      type: object
-      description: The list of application perspectives where the release can be viewed.
-      properties:
-        name:
-          type: string
-          description: 'Name of the Application Perspective. Eg: `app1`.'
-          maxLength: 256
-          minLength: 0
-      required:
-      - name
-    ApplicationScopeWithMetadata:
-      type: object
-      description: The list of application perspectives where the release can be viewed.
-      properties:
-        id:
-          type: string
-          description: 'Unique ID of the Application Perspective. Eg: `Av62RoIKQv-A3n6DbMQh9g`.'
-        name:
-          type: string
-          description: 'Name of the Application Perspective. Eg: `app1`.'
-      required:
-      - id
-    ServiceScopedToWithMetadata:
-      type: object
-      description: The release marker would be present in the service but not for other services within the Application perspective.
-      properties:
-        applications:
-          type: array
-          description: 'The list of application perspectives where the service is present. '
-          items:
-            $ref: '#/components/schemas/ApplicationScopeWithMetadata'
-          maxItems: 10
-          minItems: 1
-      required:
-      - applications
-    Release:
-      type: object
-      properties:
-        applications:
-          type: array
-          description: The list of application perspectives where the release can be viewed.
-          items:
-            $ref: '#/components/schemas/ApplicationScope'
-          maxItems: 10
-          minItems: 0
-        name:
-          type: string
-          description: 'The name of the release. For example: `frontend/release-2000`.'
-          maxLength: 256
-          minLength: 0
-        services:
-          type: array
-          description: The list of services where the release can be viewed.
-          items:
-            $ref: '#/components/schemas/ServiceScope'
-          maxItems: 10
-          minItems: 0
-        start:
-          type: integer
-          format: int64
-          description: 'The timestamp for when the release is created. The time measured is in milliseconds. For example: `1742349976000` is `Wednesday, 19 March 2025 02:06:16 GMT`.'
-          minimum: 1
-      required:
-      - name
-      - start
     ReleaseWithMetadata:
       type: object
       properties:
@@ -368,6 +276,98 @@ components:
       required:
       - id
       - name
+    ApplicationScope:
+      type: object
+      description: The list of application perspectives where the release can be viewed.
+      properties:
+        name:
+          type: string
+          description: 'Name of the Application Perspective. Eg: `app1`.'
+          maxLength: 256
+          minLength: 0
+      required:
+      - name
+    ApplicationScopeWithMetadata:
+      type: object
+      description: The list of application perspectives where the release can be viewed.
+      properties:
+        id:
+          type: string
+          description: 'Unique ID of the Application Perspective. Eg: `Av62RoIKQv-A3n6DbMQh9g`.'
+        name:
+          type: string
+          description: 'Name of the Application Perspective. Eg: `app1`.'
+      required:
+      - id
+    ServiceScopedToWithMetadata:
+      type: object
+      description: The release marker would be present in the service but not for other services within the Application perspective.
+      properties:
+        applications:
+          type: array
+          description: 'The list of application perspectives where the service is present. '
+          items:
+            $ref: '#/components/schemas/ApplicationScopeWithMetadata'
+          maxItems: 10
+          minItems: 1
+      required:
+      - applications
+    ServiceScopedTo:
+      type: object
+      description: 'The list of application perspectives where the service is present. '
+      properties:
+        applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationScope'
+          maxItems: 10
+          minItems: 1
+      required:
+      - applications
+    ServiceScopeWithMetadata:
+      type: object
+      description: The list of services where the release can be viewed.
+      properties:
+        id:
+          type: string
+          description: 'Unique ID of the Service. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.'
+        name:
+          type: string
+          description: 'Name of the Service. Eg: `payment`.'
+        scopedTo:
+          $ref: '#/components/schemas/ServiceScopedToWithMetadata'
+      required:
+      - id
+    Release:
+      type: object
+      properties:
+        applications:
+          type: array
+          description: The list of application perspectives where the release can be viewed.
+          items:
+            $ref: '#/components/schemas/ApplicationScope'
+          maxItems: 10
+          minItems: 0
+        name:
+          type: string
+          description: 'The name of the release. For example: `frontend/release-2000`.'
+          maxLength: 256
+          minLength: 0
+        services:
+          type: array
+          description: The list of services where the release can be viewed.
+          items:
+            $ref: '#/components/schemas/ServiceScope'
+          maxItems: 10
+          minItems: 0
+        start:
+          type: integer
+          format: int64
+          description: 'The timestamp for when the release is created. The time measured is in milliseconds. For example: `1742349976000` is `Wednesday, 19 March 2025 02:06:16 GMT`.'
+          minimum: 1
+      required:
+      - name
+      - start
   securitySchemes:
     ApiKeyAuth:
       in: header

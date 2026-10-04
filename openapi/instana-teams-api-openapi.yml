@@ -284,6 +284,46 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
+    ApiTeamMember:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTeamRole'
+          uniqueItems: true
+        userId:
+          type: string
+      required:
+      - userId
+    ApiTeamRole:
+      type: object
+      properties:
+        roleId:
+          type: string
+        roleName:
+          type: string
+        viaIdP:
+          type: boolean
+      required:
+      - roleId
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
     ApiRestrictedApplicationFilter:
       type: object
       properties:
@@ -419,46 +459,6 @@ components:
           items:
             type: string
           uniqueItems: true
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    ApiTeamMember:
-      type: object
-      properties:
-        email:
-          type: string
-        name:
-          type: string
-        roles:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiTeamRole'
-          uniqueItems: true
-        userId:
-          type: string
-      required:
-      - userId
-    ApiTeamRole:
-      type: object
-      properties:
-        roleId:
-          type: string
-        roleName:
-          type: string
-        viaIdP:
-          type: boolean
-      required:
-      - roleId
   securitySchemes:
     ApiKeyAuth:
       in: header

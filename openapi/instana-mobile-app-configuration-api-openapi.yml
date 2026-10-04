@@ -849,17 +849,32 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    IpMaskingConfiguration:
+    SourceMapFileBlob:
       type: object
       properties:
-        ipMasking:
+        blobIndex:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int64
+        sizeOnDisk:
+          type: integer
+          format: int64
+    MobileApp:
+      type: object
+      properties:
+        id:
           type: string
-          enum:
-          - DEFAULT
-          - STRICT
-          - REMOVE_ALL_DETAILS
+          maxLength: 128
+          minLength: 0
+        name:
+          type: string
+          maxLength: 128
+          minLength: 0
       required:
-      - ipMasking
+      - id
+      - name
     GeoSubdivision:
       type: object
       properties:
@@ -873,28 +888,20 @@ components:
           minLength: 0
       required:
       - name
-    SourceMapUploadConfig:
+    ApiTag:
       type: object
       properties:
-        createdAt:
+        displayName:
           type: string
-          format: date-time
-        description:
-          type: string
+          maxLength: 256
+          minLength: 0
         id:
           type: string
-        metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/SourceMapFileMeta'
-          maxItems: 500
-          minItems: 0
-        modifiedAt:
-          type: string
-          format: date-time
+          maxLength: 64
+          minLength: 0
       required:
+      - displayName
       - id
-      - metadata
     SourceMapFileMeta:
       type: object
       properties:
@@ -925,34 +932,6 @@ components:
       - format
       - type
       - url
-    SourceMapUploadConfigs:
-      type: object
-      properties:
-        config:
-          type: array
-          items:
-            $ref: '#/components/schemas/SourceMapUploadConfig'
-          writeOnly: true
-        configs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SourceMapUploadConfig'
-          maxItems: 1024
-          minItems: 0
-      required:
-      - configs
-    SourceMapFileBlob:
-      type: object
-      properties:
-        blobIndex:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int64
-        sizeOnDisk:
-          type: integer
-          format: int64
     GeoMappingRule:
       type: object
       properties:
@@ -991,34 +970,17 @@ components:
       required:
       - cidr
       - subdivisions
-    MobileApp:
+    IpMaskingConfiguration:
       type: object
       properties:
-        id:
+        ipMasking:
           type: string
-          maxLength: 128
-          minLength: 0
-        name:
-          type: string
-          maxLength: 128
-          minLength: 0
+          enum:
+          - DEFAULT
+          - STRICT
+          - REMOVE_ALL_DETAILS
       required:
-      - id
-      - name
-    ApiTag:
-      type: object
-      properties:
-        displayName:
-          type: string
-          maxLength: 256
-          minLength: 0
-        id:
-          type: string
-          maxLength: 64
-          minLength: 0
-      required:
-      - displayName
-      - id
+      - ipMasking
     GeoLocationConfiguration:
       type: object
       properties:
@@ -1037,6 +999,44 @@ components:
           minItems: 0
       required:
       - geoDetailRemoval
+    SourceMapUploadConfig:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        description:
+          type: string
+        id:
+          type: string
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceMapFileMeta'
+          maxItems: 500
+          minItems: 0
+        modifiedAt:
+          type: string
+          format: date-time
+      required:
+      - id
+      - metadata
+    SourceMapUploadConfigs:
+      type: object
+      properties:
+        config:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceMapUploadConfig'
+          writeOnly: true
+        configs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceMapUploadConfig'
+          maxItems: 1024
+          minItems: 0
+      required:
+      - configs
   securitySchemes:
     ApiKeyAuth:
       in: header

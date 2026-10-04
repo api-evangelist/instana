@@ -610,6 +610,57 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
+    RuleWithThresholdApplicationAlertRule:
+      type: object
+      description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
+      properties:
+        rule:
+          $ref: '#/components/schemas/ApplicationAlertRule'
+        thresholdOperator:
+          type: string
+          enum:
+          - '>'
+          - '>='
+          - <
+          - <=
+        thresholds:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ThresholdConfigRule'
+      required:
+      - rule
+      - thresholdOperator
+      - thresholds
+    ApplicationNode:
+      type: object
+      description: Selection of applications, services, and endpoints that this Smart Alert configuration is associated with. This selection is connected to the defined `tagFilterExpression` by the logical `AND` operator.
+      properties:
+        applicationId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        inclusive:
+          type: boolean
+        services:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ServiceNode'
+      required:
+      - applicationId
+      - services
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
     ThresholdConfigRule:
       type: object
       discriminator:
@@ -623,6 +674,142 @@ components:
           type: string
       required:
       - type
+    ChangeSummary:
+      type: object
+      description: Brief summary of changes made in this config version.
+      properties:
+        author:
+          $ref: '#/components/schemas/Author'
+        changeType:
+          type: string
+          enum:
+          - CREATE
+          - UPDATE
+          - DELETE
+          - ENABLE
+          - DISABLE
+          - RESTORE
+          - UNKNOWN
+      required:
+      - author
+      - changeType
+    GlobalApplicationsAlertConfig:
+      type: object
+      properties:
+        alertChannelIds:
+          type: array
+          deprecated: true
+          description: List of IDs of alert channels defined in Instana. Can be left empty.
+          items:
+            type: string
+            deprecated: true
+            description: List of IDs of alert channels defined in Instana. Can be left empty.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        alertChannels:
+          type: object
+          additionalProperties:
+            type: array
+            description: Set of alert channel IDs associated with the severity.
+            items:
+              type: string
+              description: Set of alert channel IDs associated with the severity.
+            uniqueItems: true
+          description: Set of alert channel IDs associated with the severity.
+        applications:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ApplicationNode'
+          description: Selection of applications, services, and endpoints that this Smart Alert configuration is associated with. This selection is connected to the defined `tagFilterExpression` by the logical `AND` operator.
+        boundaryScope:
+          type: string
+          description: Determines the source of the application alert configuration. An `INBOUND` scope refers to consumer-made calls. An `ALL` scope refers to both consumer and internally made calls.
+          enum:
+          - ALL
+          - INBOUND
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        description:
+          type: string
+          description: Description of the application alert configuration. Used as a template for the description of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 65536
+          minLength: 0
+        evaluationType:
+          type: string
+          description: Determines whether calls of the aggregated metrics are grouped by the application, the service, or the endpoint. This also determines whether the resulting events are categorized as an issue on the respective entity of that group.
+          enum:
+          - PER_AP
+          - PER_AP_SERVICE
+          - PER_AP_ENDPOINT
+        gracePeriod:
+          type: integer
+          format: int64
+          description: The duration for which an alert remains open after conditions are no longer violated, with the alert auto-closing once the grace period expires.
+        granularity:
+          type: integer
+          format: int32
+          default: 600000
+          description: The evaluation granularity used for detection of violations of the defined threshold. Defines the size of the tumbling window used.
+          enum:
+          - 60000
+          - 300000
+          - 600000
+          - 900000
+          - 1200000
+          - 1800000
+        includeInternal:
+          type: boolean
+          description: Flag to include Internal Calls. These calls are work done inside a service and correspond to intermediate spans in custom tracing.
+        includeSynthetic:
+          type: boolean
+          description: 'Flag to include Synthetic Calls. These calls have a synthetic endpoint as their destination, such as calls to health-check endpoints. '
+        name:
+          type: string
+          description: Name of the application alert configuration. Used as a template for the title of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 256
+          minLength: 0
+        rule:
+          $ref: '#/components/schemas/ApplicationAlertRule'
+        rules:
+          type: array
+          description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
+          items:
+            $ref: '#/components/schemas/RuleWithThresholdApplicationAlertRule'
+          maxItems: 1
+          minItems: 1
+        severity:
+          type: integer
+          format: int32
+          deprecated: true
+          description: The severity of the alert when triggered, which is either 5 (Warning), or 10 (Critical).
+          maximum: 10
+          minimum: 5
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        threshold:
+          $ref: '#/components/schemas/Threshold'
+        timeThreshold:
+          $ref: '#/components/schemas/ApplicationTimeThreshold'
+        triggering:
+          type: boolean
+          description: Optional flag to indicate whether an Incident is also triggered or not.
+      required:
+      - alertChannelIds
+      - applications
+      - boundaryScope
+      - customPayloadFields
+      - description
+      - evaluationType
+      - granularity
+      - name
+      - tagFilterExpression
+      - timeThreshold
     ApplicationAlertRule:
       type: object
       discriminator:
@@ -662,6 +849,67 @@ components:
       required:
       - alertType
       - metricName
+    ApplicationTimeThreshold:
+      type: object
+      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
+      discriminator:
+        mapping:
+          requestImpact: '#/components/schemas/TraceImpactApplicationTimeThreshold'
+          violationsInPeriod: '#/components/schemas/ViolationsInPeriodApplicationTimeThreshold'
+          violationsInSequence: '#/components/schemas/ViolationsInSequenceApplicationTimeThreshold'
+        propertyName: type
+      properties:
+        timeWindow:
+          type: integer
+          format: int64
+        type:
+          type: string
+      required:
+      - type
+    CustomPayloadField:
+      type: object
+      description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+      discriminator:
+        mapping:
+          dynamic: '#/components/schemas/DynamicField'
+          staticString: '#/components/schemas/StaticStringField'
+        propertyName: type
+      properties:
+        key:
+          type: string
+          description: A user-specified unique identifier or name for a custom payload entry.
+        type:
+          type: string
+      required:
+      - key
+      - type
+    ServiceNode:
+      type: object
+      properties:
+        endpoints:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EndpointNode'
+        inclusive:
+          type: boolean
+        serviceId:
+          type: string
+          maxLength: 64
+          minLength: 0
+      required:
+      - endpoints
+      - serviceId
+    EndpointNode:
+      type: object
+      properties:
+        endpointId:
+          type: string
+          maxLength: 64
+          minLength: 0
+        inclusive:
+          type: boolean
+      required:
+      - endpointId
     Author:
       type: object
       properties:
@@ -823,161 +1071,6 @@ components:
       - name
       - tagFilterExpression
       - timeThreshold
-    CustomPayloadField:
-      type: object
-      description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
-      discriminator:
-        mapping:
-          dynamic: '#/components/schemas/DynamicField'
-          staticString: '#/components/schemas/StaticStringField'
-        propertyName: type
-      properties:
-        key:
-          type: string
-          description: A user-specified unique identifier or name for a custom payload entry.
-        type:
-          type: string
-      required:
-      - key
-      - type
-    RuleWithThresholdApplicationAlertRule:
-      type: object
-      description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
-      properties:
-        rule:
-          $ref: '#/components/schemas/ApplicationAlertRule'
-        thresholdOperator:
-          type: string
-          enum:
-          - '>'
-          - '>='
-          - <
-          - <=
-        thresholds:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ThresholdConfigRule'
-      required:
-      - rule
-      - thresholdOperator
-      - thresholds
-    GlobalApplicationsAlertConfig:
-      type: object
-      properties:
-        alertChannelIds:
-          type: array
-          deprecated: true
-          description: List of IDs of alert channels defined in Instana. Can be left empty.
-          items:
-            type: string
-            deprecated: true
-            description: List of IDs of alert channels defined in Instana. Can be left empty.
-          maxItems: 1024
-          minItems: 0
-          uniqueItems: true
-        alertChannels:
-          type: object
-          additionalProperties:
-            type: array
-            description: Set of alert channel IDs associated with the severity.
-            items:
-              type: string
-              description: Set of alert channel IDs associated with the severity.
-            uniqueItems: true
-          description: Set of alert channel IDs associated with the severity.
-        applications:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ApplicationNode'
-          description: Selection of applications, services, and endpoints that this Smart Alert configuration is associated with. This selection is connected to the defined `tagFilterExpression` by the logical `AND` operator.
-        boundaryScope:
-          type: string
-          description: Determines the source of the application alert configuration. An `INBOUND` scope refers to consumer-made calls. An `ALL` scope refers to both consumer and internally made calls.
-          enum:
-          - ALL
-          - INBOUND
-        customPayloadFields:
-          type: array
-          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
-          items:
-            $ref: '#/components/schemas/CustomPayloadField'
-          maxItems: 20
-          minItems: 0
-        description:
-          type: string
-          description: Description of the application alert configuration. Used as a template for the description of alert/event notifications triggered by this Smart Alert configuration.
-          maxLength: 65536
-          minLength: 0
-        evaluationType:
-          type: string
-          description: Determines whether calls of the aggregated metrics are grouped by the application, the service, or the endpoint. This also determines whether the resulting events are categorized as an issue on the respective entity of that group.
-          enum:
-          - PER_AP
-          - PER_AP_SERVICE
-          - PER_AP_ENDPOINT
-        gracePeriod:
-          type: integer
-          format: int64
-          description: The duration for which an alert remains open after conditions are no longer violated, with the alert auto-closing once the grace period expires.
-        granularity:
-          type: integer
-          format: int32
-          default: 600000
-          description: The evaluation granularity used for detection of violations of the defined threshold. Defines the size of the tumbling window used.
-          enum:
-          - 60000
-          - 300000
-          - 600000
-          - 900000
-          - 1200000
-          - 1800000
-        includeInternal:
-          type: boolean
-          description: Flag to include Internal Calls. These calls are work done inside a service and correspond to intermediate spans in custom tracing.
-        includeSynthetic:
-          type: boolean
-          description: 'Flag to include Synthetic Calls. These calls have a synthetic endpoint as their destination, such as calls to health-check endpoints. '
-        name:
-          type: string
-          description: Name of the application alert configuration. Used as a template for the title of alert/event notifications triggered by this Smart Alert configuration.
-          maxLength: 256
-          minLength: 0
-        rule:
-          $ref: '#/components/schemas/ApplicationAlertRule'
-        rules:
-          type: array
-          description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
-          items:
-            $ref: '#/components/schemas/RuleWithThresholdApplicationAlertRule'
-          maxItems: 1
-          minItems: 1
-        severity:
-          type: integer
-          format: int32
-          deprecated: true
-          description: The severity of the alert when triggered, which is either 5 (Warning), or 10 (Critical).
-          maximum: 10
-          minimum: 5
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        threshold:
-          $ref: '#/components/schemas/Threshold'
-        timeThreshold:
-          $ref: '#/components/schemas/ApplicationTimeThreshold'
-        triggering:
-          type: boolean
-          description: Optional flag to indicate whether an Incident is also triggered or not.
-      required:
-      - alertChannelIds
-      - applications
-      - boundaryScope
-      - customPayloadFields
-      - description
-      - evaluationType
-      - granularity
-      - name
-      - tagFilterExpression
-      - timeThreshold
     ConfigVersion:
       type: object
       properties:
@@ -1003,99 +1096,6 @@ components:
           minLength: 0
       required:
       - id
-    ChangeSummary:
-      type: object
-      description: Brief summary of changes made in this config version.
-      properties:
-        author:
-          $ref: '#/components/schemas/Author'
-        changeType:
-          type: string
-          enum:
-          - CREATE
-          - UPDATE
-          - DELETE
-          - ENABLE
-          - DISABLE
-          - RESTORE
-          - UNKNOWN
-      required:
-      - author
-      - changeType
-    EndpointNode:
-      type: object
-      properties:
-        endpointId:
-          type: string
-          maxLength: 64
-          minLength: 0
-        inclusive:
-          type: boolean
-      required:
-      - endpointId
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    ApplicationTimeThreshold:
-      type: object
-      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
-      discriminator:
-        mapping:
-          requestImpact: '#/components/schemas/TraceImpactApplicationTimeThreshold'
-          violationsInPeriod: '#/components/schemas/ViolationsInPeriodApplicationTimeThreshold'
-          violationsInSequence: '#/components/schemas/ViolationsInSequenceApplicationTimeThreshold'
-        propertyName: type
-      properties:
-        timeWindow:
-          type: integer
-          format: int64
-        type:
-          type: string
-      required:
-      - type
-    ApplicationNode:
-      type: object
-      description: Selection of applications, services, and endpoints that this Smart Alert configuration is associated with. This selection is connected to the defined `tagFilterExpression` by the logical `AND` operator.
-      properties:
-        applicationId:
-          type: string
-          maxLength: 64
-          minLength: 0
-        inclusive:
-          type: boolean
-        services:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ServiceNode'
-      required:
-      - applicationId
-      - services
-    ServiceNode:
-      type: object
-      properties:
-        endpoints:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/EndpointNode'
-        inclusive:
-          type: boolean
-        serviceId:
-          type: string
-          maxLength: 64
-          minLength: 0
-      required:
-      - endpoints
-      - serviceId
     Threshold:
       type: object
       deprecated: true

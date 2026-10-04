@@ -135,43 +135,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    AccessLogEntry:
-      type: object
-      properties:
-        action:
-          type: string
-          enum:
-          - GRANT_TEMP_ACCESS
-          - FIRST_LOGIN
-          - LOGIN
-          - ACCESS
-          - FAILED_LOGIN
-          - LOGOUT
-          - CREATE_API_TOKEN_BY_POLICY
-          - IDP_MAPPING
-        email:
-          type: string
-        fullName:
-          type: string
-        message:
-          type: string
-        meta:
-          type: object
-          additionalProperties:
-            type: object
-        tenantId:
-          type: string
-        tenantUnitId:
-          type: string
-        timestamp:
-          type: integer
-          format: int64
-          minimum: 1118583367265
-      required:
-      - action
-      - email
-      - fullName
-      - tenantId
     LogEntryActor:
       type: object
       properties:
@@ -215,16 +178,43 @@ components:
       - id
       - message
       - meta
-    AccessLogResponse:
+    AccessLogEntry:
       type: object
       properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessLogEntry'
-        total:
+        action:
+          type: string
+          enum:
+          - GRANT_TEMP_ACCESS
+          - FIRST_LOGIN
+          - LOGIN
+          - ACCESS
+          - FAILED_LOGIN
+          - LOGOUT
+          - CREATE_API_TOKEN_BY_POLICY
+          - IDP_MAPPING
+        email:
+          type: string
+        fullName:
+          type: string
+        message:
+          type: string
+        meta:
+          type: object
+          additionalProperties:
+            type: object
+        tenantId:
+          type: string
+        tenantUnitId:
+          type: string
+        timestamp:
           type: integer
           format: int64
+          minimum: 1118583367265
+      required:
+      - action
+      - email
+      - fullName
+      - tenantId
     AuditLogUiResponse:
       type: object
       properties:
@@ -232,6 +222,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AuditLogEntry'
+        total:
+          type: integer
+          format: int64
+    AccessLogResponse:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessLogEntry'
         total:
           type: integer
           format: int64
