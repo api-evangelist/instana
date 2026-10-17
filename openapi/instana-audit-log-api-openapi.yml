@@ -135,25 +135,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    LogEntryActor:
-      type: object
-      properties:
-        email:
-          type: string
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-          - USER
-          - API_TOKEN
-          - POLICY
-      required:
-      - id
-      - name
-      - type
     AuditLogEntry:
       type: object
       properties:
@@ -178,6 +159,45 @@ components:
       - id
       - message
       - meta
+    AuditLogUiResponse:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLogEntry'
+        total:
+          type: integer
+          format: int64
+    AccessLogResponse:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessLogEntry'
+        total:
+          type: integer
+          format: int64
+    LogEntryActor:
+      type: object
+      properties:
+        email:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - USER
+          - API_TOKEN
+          - POLICY
+      required:
+      - id
+      - name
+      - type
     AccessLogEntry:
       type: object
       properties:
@@ -215,26 +235,6 @@ components:
       - email
       - fullName
       - tenantId
-    AuditLogUiResponse:
-      type: object
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/AuditLogEntry'
-        total:
-          type: integer
-          format: int64
-    AccessLogResponse:
-      type: object
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessLogEntry'
-        total:
-          type: integer
-          format: int64
   securitySchemes:
     ApiKeyAuth:
       in: header

@@ -419,6 +419,28 @@ components:
       - duration
       - durationUnit
       - startTime
+    PaginatedResult:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+        page:
+          type: integer
+          format: int32
+          description: Page Number
+          minimum: 1
+        pageSize:
+          type: integer
+          format: int32
+          minimum: 1
+        totalHits:
+          type: integer
+          format: int64
+          minimum: 0
+      required:
+      - items
     CorrectionConfiguration:
       type: object
       properties:
@@ -467,28 +489,6 @@ components:
       - scheduling
       - sloIds
       - tags
-    PaginatedResult:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            type: object
-        page:
-          type: integer
-          format: int32
-          description: Page Number
-          minimum: 1
-        pageSize:
-          type: integer
-          format: int32
-          minimum: 1
-        totalHits:
-          type: integer
-          format: int64
-          minimum: 0
-      required:
-      - items
   securitySchemes:
     ApiKeyAuth:
       in: header

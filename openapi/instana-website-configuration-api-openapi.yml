@@ -740,31 +740,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    SourceMapFileBlob:
-      type: object
-      properties:
-        blobIndex:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int64
-        sizeOnDisk:
-          type: integer
-          format: int64
-    GeoSubdivision:
-      type: object
-      properties:
-        code:
-          type: string
-          maxLength: 32
-          minLength: 0
-        name:
-          type: string
-          maxLength: 256
-          minLength: 0
-      required:
-      - name
     ApiTag:
       type: object
       properties:
@@ -779,6 +754,31 @@ components:
       required:
       - displayName
       - id
+    GeoSubdivision:
+      type: object
+      properties:
+        code:
+          type: string
+          maxLength: 32
+          minLength: 0
+        name:
+          type: string
+          maxLength: 256
+          minLength: 0
+      required:
+      - name
+    Website:
+      type: object
+      properties:
+        appName:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
     SourceMapFileMeta:
       type: object
       properties:
@@ -809,6 +809,44 @@ components:
       - format
       - type
       - url
+    SourceMapUploadConfig:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        description:
+          type: string
+        id:
+          type: string
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceMapFileMeta'
+          maxItems: 500
+          minItems: 0
+        modifiedAt:
+          type: string
+          format: date-time
+      required:
+      - id
+      - metadata
+    SourceMapUploadConfigs:
+      type: object
+      properties:
+        config:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceMapUploadConfig'
+          writeOnly: true
+        configs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceMapUploadConfig'
+          maxItems: 1024
+          minItems: 0
+      required:
+      - configs
     GeoMappingRule:
       type: object
       properties:
@@ -858,6 +896,18 @@ components:
           - REMOVE_ALL_DETAILS
       required:
       - ipMasking
+    SourceMapFileBlob:
+      type: object
+      properties:
+        blobIndex:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int64
+        sizeOnDisk:
+          type: integer
+          format: int64
     GeoLocationConfiguration:
       type: object
       properties:
@@ -876,56 +926,6 @@ components:
           minItems: 0
       required:
       - geoDetailRemoval
-    SourceMapUploadConfig:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-        description:
-          type: string
-        id:
-          type: string
-        metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/SourceMapFileMeta'
-          maxItems: 500
-          minItems: 0
-        modifiedAt:
-          type: string
-          format: date-time
-      required:
-      - id
-      - metadata
-    SourceMapUploadConfigs:
-      type: object
-      properties:
-        config:
-          type: array
-          items:
-            $ref: '#/components/schemas/SourceMapUploadConfig'
-          writeOnly: true
-        configs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SourceMapUploadConfig'
-          maxItems: 1024
-          minItems: 0
-      required:
-      - configs
-    Website:
-      type: object
-      properties:
-        appName:
-          type: string
-        id:
-          type: string
-        name:
-          type: string
-      required:
-      - id
-      - name
   securitySchemes:
     ApiKeyAuth:
       in: header

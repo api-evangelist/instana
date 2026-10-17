@@ -111,29 +111,17 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    GraphEdge:
+    Topology:
       type: object
       properties:
-        destination:
-          type: string
-          description: ID of the outgoing GraphEdge.
-        relation:
-          type: string
-          description: Type of dependency between the source and the destination.
-          enum:
-          - in
-          - is
-          - to
-          - of
-          - connected
-          - describes
-          - of20
-          - to20
-          - dummy
-          - parent
-        source:
-          type: string
-          description: ID of the incoming GraphEdge.
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/GraphEdge'
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/GraphNode'
     EntityId:
       type: object
       properties:
@@ -167,17 +155,29 @@ components:
         plugin:
           type: string
           description: Name of the plugin
-    Topology:
+    GraphEdge:
       type: object
       properties:
-        edges:
-          type: array
-          items:
-            $ref: '#/components/schemas/GraphEdge'
-        nodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/GraphNode'
+        destination:
+          type: string
+          description: ID of the outgoing GraphEdge.
+        relation:
+          type: string
+          description: Type of dependency between the source and the destination.
+          enum:
+          - in
+          - is
+          - to
+          - of
+          - connected
+          - describes
+          - of20
+          - to20
+          - dummy
+          - parent
+        source:
+          type: string
+          description: ID of the incoming GraphEdge.
   securitySchemes:
     ApiKeyAuth:
       in: header

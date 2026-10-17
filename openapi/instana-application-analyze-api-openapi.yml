@@ -534,29 +534,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    CloudfoundryPhysicalContext:
-      type: object
-      description: 'Contains physical context of Cloudfoundry. It contains the following information:
-
-        1. `application`: Application running within Cloud Foundry environment.
-
-        2. `cfInstanceIndex`: A unique ID of the container created and managed by Garden in the Cloud Foundry environment.
-
-        3. `organization`: Organization in the Cloud Foundry environment.
-
-        4. `space`: Space within an organization in Cloud Foundry environment.
-
-        '
-      properties:
-        application:
-          $ref: '#/components/schemas/SnapshotPreview'
-        cfInstanceIndex:
-          type: string
-          description: A unique ID of the container created and managed by Garden in the Cloud Foundry environment.
-        organization:
-          $ref: '#/components/schemas/SnapshotPreview'
-        space:
-          $ref: '#/components/schemas/SnapshotPreview'
     TimeFrame:
       type: object
       description: Time range for which the data should be retrieved.
@@ -571,6 +548,604 @@ components:
           description: windowSize in milliseconds
           maximum: 2678400000
           minimum: 0
+    Endpoint:
+      type: object
+      properties:
+        entityType:
+          type: string
+          description: Since, this is a Endpoint, it will be of type `ENDPOINT`.
+          enum:
+          - APPLICATION
+          - SERVICE
+          - ENDPOINT
+        id:
+          type: string
+          description: 'Unique ID of the Endpoint. Eg: `NCRq5oYnan5x-PkdTPQwLLUdu5M`.'
+        isSynthetic:
+          type: boolean
+          writeOnly: true
+        label:
+          type: string
+          description: 'Name of the Endpoint. Eg: `GET /api/fetch`.'
+        serviceId:
+          type: string
+          description: The serviceId this endpoint belongs to.
+        synthetic:
+          type: boolean
+        syntheticType:
+          type: string
+          enum:
+          - NON_SYNTHETIC
+          - SYNTHETIC
+          - MIXED
+        technologies:
+          type: array
+          description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
+          items:
+            type: string
+            description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
+          uniqueItems: true
+        type:
+          type: string
+          description: The type of the Endpoint.
+          enum:
+          - UNDEFINED
+          - RPC
+          - EVENT
+          - GRAPHQL
+          - BATCH
+          - SHELL
+          - HTTP
+          - SDK
+          - OPENTELEMETRY
+          - INTERNAL
+          - DATABASE
+          - MESSAGING
+          - PAGE
+          - PAGE_RESOURCE
+      required:
+      - id
+      - label
+      - serviceId
+      - technologies
+      - type
+    EndpointSimple:
+      type: object
+      description: The destination service's endpoint where the call enters.
+      properties:
+        id:
+          type: string
+          description: 'Unique ID of the Endpoint. Eg: `NCRq5oYnan5x-PkdTPQwLLUdu5M`.'
+        label:
+          type: string
+          description: 'Name of the Endpoint. Eg: `GET /api/fetch`.'
+        type:
+          type: string
+          description: The type of the Endpoint.
+          enum:
+          - UNDEFINED
+          - RPC
+          - EVENT
+          - GRAPHQL
+          - BATCH
+          - SHELL
+          - HTTP
+          - SDK
+          - OPENTELEMETRY
+          - INTERNAL
+          - DATABASE
+          - MESSAGING
+          - PAGE
+          - PAGE_RESOURCE
+    KubernetesPhysicalContext:
+      type: object
+      description: Contains physical context of Kubernetes which contains information about the cluster, namespace, node and pod.
+      properties:
+        cluster:
+          $ref: '#/components/schemas/SnapshotPreview'
+        namespace:
+          $ref: '#/components/schemas/SnapshotPreview'
+        node:
+          $ref: '#/components/schemas/SnapshotPreview'
+        pod:
+          $ref: '#/components/schemas/SnapshotPreview'
+    TraceGroupsItem:
+      type: object
+      description: 'Represents an array of call group item containing several attributes that describe its properties.
+
+        The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
+
+        '
+      properties:
+        cursor:
+          $ref: '#/components/schemas/IngestionOffsetCursor'
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            description: 'Grouped metric details like `errors.mean`, `calls.sum`.
+
+              It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
+
+              Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
+
+              '
+            items:
+              type: array
+              description: 'Grouped metric details like `errors.mean`, `calls.sum`.
+
+                It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
+
+                Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
+
+                '
+              items:
+                type: number
+                description: 'Grouped metric details like `errors.mean`, `calls.sum`.
+
+                  It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
+
+                  Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
+
+                  '
+          description: 'Grouped metric details like `errors.mean`, `calls.sum`.
+
+            It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
+
+            Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
+
+            '
+        name:
+          type: string
+          description: Name of the group.
+        timestamp:
+          type: integer
+          format: int64
+          description: Earliest timestamp of the trace from the group
+          minimum: 0
+      required:
+      - cursor
+      - metrics
+      - name
+    CallRelation:
+      type: object
+      description: It shows from where the call is destined to. It includes destination service, its endpoint and list of technologies of the service.
+      properties:
+        endpoint:
+          $ref: '#/components/schemas/EndpointSimple'
+        service:
+          $ref: '#/components/schemas/ServiceSimple'
+        technologies:
+          type: array
+          description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
+          items:
+            type: string
+            description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
+    TraceDownloadResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        canLoadMore:
+          type: boolean
+          description: Determine if additional data is available when a new query is made using the cursor from the last item in the `items` list.
+        items:
+          type: array
+          description: 'Represents an array of call group item containing several attributes that describe its properties.
+
+            The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
+
+            '
+          items:
+            $ref: '#/components/schemas/GetTraceDownloadResultItem'
+        totalHits:
+          type: integer
+          format: int64
+          description: The total number of items that match a given filter
+          minimum: 0
+        totalRepresentedItemCount:
+          type: integer
+          format: int64
+          description: For calls and EUM beacons, one row can represent multiple real items (batched call, sample multiplicity)
+          minimum: 0
+        totalRetainedItemCount:
+          type: integer
+          format: int64
+          description: For calls and EUM beacons, only a subset is retained for historic data. Each retained row can represent multiple real items due to batching.
+          minimum: 0
+      required:
+      - items
+    DatabaseIntegration:
+      type: object
+      properties:
+        type:
+          type: string
+        url:
+          type: string
+    SpanExcerpt:
+      type: object
+      description: Information about the logs attached to the call, if available.
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            type: object
+            description: Some information about the span, like service name, if it is an http call, then some information about it like, path, method, host, errors etc.
+          description: Some information about the span, like service name, if it is an http call, then some information about it like, path, method, host, errors etc.
+        databaseIntegrations:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatabaseIntegration'
+        duration:
+          type: integer
+          format: int64
+          description: The total time taken for the entire operation of a call, from the moment the request was initiated to when the response was received. The time measured is in milliseconds. This is also known as latency of a call.
+          minimum: 0
+        errorCount:
+          type: integer
+          format: int32
+          description: Represents whether the span is erroneous or not. 0 is not erroneous and 1 is erroneous.
+          minimum: 0
+        foreignParentId:
+          type: string
+        id:
+          type: string
+          description: 'The call ID. A unique identifier for an individual call. For example: `1bcad5c82338deaf`.'
+        kind:
+          type: string
+          description: 'There are 4 types of span kind:
+
+            1. `ENTRY`: An entry span represents an incoming request into a traced service.
+
+            2. `EXIT`: An exit span represents an outgoing request that a service makes to some other service.
+
+            3. `INTERMEDIATE`: An intermediate span represents anything that happens inside a traced service where the flow of control neither enters nor leaves that service, but stays inside it.
+
+            4. `UNKNOWN`: Instana can''t determine the span kind.
+
+            '
+          enum:
+          - UNKNOWN
+          - ENTRY
+          - EXIT
+          - INTERMEDIATE
+        name:
+          type: string
+          description: The technical type of the span. For example, `node.http.client` or `jdbc`.
+        parentId:
+          type: string
+          description: The parent call id, referring to another call in the same trace which triggered the processing associated with this call.
+        stackTrace:
+          type: array
+          description: For an erroneous call, if stack trace is available it will show a list of items containing file, method and line number of the code.
+          items:
+            $ref: '#/components/schemas/StackTraceItem'
+        start:
+          type: integer
+          format: int64
+          description: The timestamp when the call or request was initiated. For example, Unix epoch time in milliseconds `1735532879870` is `Monday, 30 December 2024 04:27:59.870 GMT`
+          minimum: 1
+      required:
+      - data
+      - id
+      - kind
+      - name
+      - stackTrace
+    SpanRelation:
+      type: object
+      description: 'It shows from where the call is destined to. It includes the following information:
+
+        1. List of Application Perspectives from which the call is destined to.
+
+        2. Destination service and destination endpoint.
+
+        3. Physical context from the infrastructure point of view.
+
+        '
+      properties:
+        applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/Application'
+          uniqueItems: true
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
+        physicalContext:
+          $ref: '#/components/schemas/PhysicalContext'
+        service:
+          $ref: '#/components/schemas/Service'
+      required:
+      - applications
+    GetTraceDownloadResultItem:
+      type: object
+      description: 'Represents an array of call group item containing several attributes that describe its properties.
+
+        The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
+
+        '
+      properties:
+        callCount:
+          type: integer
+          format: int64
+          description: Number of calls in a trace.
+        cursor:
+          $ref: '#/components/schemas/IngestionOffsetCursor'
+        destination:
+          $ref: '#/components/schemas/CallRelation'
+        duration:
+          type: integer
+          format: int64
+          description: The total time taken for the entire operation of a call, from the moment the request was initiated to when the response was received. The time measured is in milliseconds. This is also known as latency of a call.
+        errorCount:
+          type: integer
+          format: int64
+          description: Represents whether the call is erroneous or not. 0 is not erroneous and 1 is erroneous.
+        foreignParentId:
+          type: string
+        id:
+          type: string
+          description: 'The call ID. A unique identifier for an individual call. For example: `1bcad5c82338deaf`.'
+        minSelfTime:
+          type: integer
+          format: int64
+          description: The smallest self time in the batch. May be null to indicate that `minSelfTime` is unknown when this node has only an exit span and no children. The time measured is in milliseconds.
+        name:
+          type: string
+          description: 'Name of the call. For example: `GET /articles/:id`.'
+        networkTime:
+          type: integer
+          format: int64
+          description: exit span duration - entry span duration
+        parentId:
+          type: string
+          description: The parent call id, referring to another call in the same trace which triggered the processing associated with this call.
+        timestamp:
+          type: integer
+          format: int64
+          description: The timestamp when the call or request was initiated. For example, Unix epoch time in milliseconds `1735532879870` is `Monday, 30 December 2024 04:27:59.870 GMT`
+    TraceGroupsResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        canLoadMore:
+          type: boolean
+          description: Determine if additional data is available when a new query is made using the cursor from the last item in the `items` list.
+        items:
+          type: array
+          description: 'Represents an array of call group item containing several attributes that describe its properties.
+
+            The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
+
+            '
+          items:
+            $ref: '#/components/schemas/TraceGroupsItem'
+        totalHits:
+          type: integer
+          format: int64
+          description: The total number of items that match a given filter
+          minimum: 0
+        totalRepresentedItemCount:
+          type: integer
+          format: int64
+          description: For calls and EUM beacons, one row can represent multiple real items (batched call, sample multiplicity)
+          minimum: 0
+        totalRetainedItemCount:
+          type: integer
+          format: int64
+          description: For calls and EUM beacons, only a subset is retained for historic data. Each retained row can represent multiple real items due to batching.
+          minimum: 0
+      required:
+      - items
+    TraceItem:
+      type: object
+      description: 'Represents an array of call group item containing several attributes that describe its properties.
+
+        The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
+
+        '
+      properties:
+        cursor:
+          $ref: '#/components/schemas/IngestionOffsetCursor'
+        trace:
+          $ref: '#/components/schemas/Trace'
+      required:
+      - cursor
+      - trace
+    ServiceSimple:
+      type: object
+      description: The destination service.
+      properties:
+        id:
+          type: string
+          description: 'Unique ID of the Service. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.'
+        label:
+          type: string
+          description: 'Name of the Service. Eg: `payment`.'
+    Service:
+      type: object
+      properties:
+        entityType:
+          type: string
+          description: Since, this is a Service, it will be of type `SERVICE`.
+          enum:
+          - APPLICATION
+          - SERVICE
+          - ENDPOINT
+        id:
+          type: string
+          description: 'Unique ID of the Service. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.'
+        label:
+          type: string
+          description: 'Name of the Service. Eg: `payment`.'
+        snapshotIds:
+          type: array
+          description: A unique identifier the metrics are assigned to.
+          items:
+            type: string
+            description: A unique identifier the metrics are assigned to.
+          uniqueItems: true
+        technologies:
+          type: array
+          description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
+          items:
+            type: string
+            description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
+          uniqueItems: true
+        types:
+          type: array
+          description: 'Shows types of Endpoints a Service can consist of. It may be one or more. Eg: `HTTP` `OPENTELEMETRY` can be in 1 Service.'
+          items:
+            type: string
+            description: 'Shows types of Endpoints a Service can consist of. It may be one or more. Eg: `HTTP` `OPENTELEMETRY` can be in 1 Service.'
+            enum:
+            - UNDEFINED
+            - RPC
+            - EVENT
+            - GRAPHQL
+            - BATCH
+            - SHELL
+            - HTTP
+            - SDK
+            - OPENTELEMETRY
+            - INTERNAL
+            - DATABASE
+            - MESSAGING
+            - PAGE
+            - PAGE_RESOURCE
+          uniqueItems: true
+      required:
+      - id
+      - label
+      - snapshotIds
+      - technologies
+      - types
+    PhysicalContext:
+      type: object
+      description: 'The physical context of an entity. This is typically used to describe where a host, container or process fits into the infrastructure.
+
+        1. `cloudfoundry`: Contains physical context of Cloudfoundry.
+
+        2. `cluster`: Contains physical context of cluster like Hazelcast, Elasticsearch.
+
+        3. `container`: Contains physical context of container.
+
+        4. `host`: Contains physical context of host.
+
+        5. `kubernetes`: Contains physical context of Kubernetes.
+
+        6. `process`: Contains physical context of a process.
+
+        '
+      properties:
+        cloudfoundry:
+          $ref: '#/components/schemas/CloudfoundryPhysicalContext'
+        cluster:
+          $ref: '#/components/schemas/SnapshotPreview'
+        container:
+          $ref: '#/components/schemas/SnapshotPreview'
+        host:
+          $ref: '#/components/schemas/SnapshotPreview'
+        kubernetes:
+          $ref: '#/components/schemas/KubernetesPhysicalContext'
+        process:
+          $ref: '#/components/schemas/SnapshotPreview'
+    MetricConfig:
+      type: object
+      description: 'A list of objects each of which defines a metric and the (statistical) aggregation -- MEAN, SUM, MAX, etc -- that should be used to summarize it for the defined time frame. Eg: `[{ ''metric'': ''latency'', ''aggregation'': ''MEAN''}]`. To know more about supported metrics and its aggregation, See `Get Metric catalog`.'
+      properties:
+        aggregation:
+          type: string
+          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        granularity:
+          type: integer
+          format: int32
+          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
+        metric:
+          type: string
+          description: 'Set a particular metric, eg: `latency`.'
+      required:
+      - aggregation
+      - metric
+    TraceResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        canLoadMore:
+          type: boolean
+          description: Determine if additional data is available when a new query is made using the cursor from the last item in the `items` list.
+        items:
+          type: array
+          description: 'Represents an array of call group item containing several attributes that describe its properties.
+
+            The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
+
+            '
+          items:
+            $ref: '#/components/schemas/TraceItem'
+        totalHits:
+          type: integer
+          format: int64
+          description: The total number of items that match a given filter
+          minimum: 0
+        totalRepresentedItemCount:
+          type: integer
+          format: int64
+          description: For calls and EUM beacons, one row can represent multiple real items (batched call, sample multiplicity)
+          minimum: 0
+        totalRetainedItemCount:
+          type: integer
+          format: int64
+          description: For calls and EUM beacons, only a subset is retained for historic data. Each retained row can represent multiple real items due to batching.
+          minimum: 0
+      required:
+      - items
+    IngestionOffsetCursor:
+      type: object
+      description: Cursor to use between successive queries
+    Application:
+      type: object
+      description: Returns a list of Application Perspectives.
+      properties:
+        boundaryScope:
+          type: string
+          description: Here, `ALL` Application Boundary Scope is considered.
+        entityType:
+          type: string
+          description: Since, this is an Application Perspective, it will be of type `APPLICATION`.
+          enum:
+          - APPLICATION
+          - SERVICE
+          - ENDPOINT
+        id:
+          type: string
+          description: 'Unique ID of the Application Perspective. Eg: `Av62RoIKQv-A3n6DbMQh9g`.'
+        label:
+          type: string
+          description: 'Name of the Application Perspective. Eg: `app1`.'
+      required:
+      - boundaryScope
+      - id
+      - label
     AdjustedTimeframe:
       type: object
       description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
@@ -592,7 +1167,150 @@ components:
           minimum: 0
       required:
       - to
-    GetTraceGroups:
+    StackTraceItem:
+      type: object
+      description: For an erroneous call, if stack trace is available it will show a list of items containing file, method and line number of the code.
+      properties:
+        file:
+          type: string
+          description: The name of the file where the executed code resides.
+        line:
+          type: string
+          description: The line number within the file where the error was thrown.
+        method:
+          type: string
+          description: The name of the method or function being executed at the time the stack trace item was generated.
+    CursorPagination:
+      type: object
+      description: 'Details for controlling the pagination of the API response.
+
+        This object allows you to define the starting point for retrieving records, how many records to skip, and the size of the result set.
+
+        '
+      properties:
+        ingestionTime:
+          type: integer
+          format: int64
+          description: 'The timestamp indicating the starting point from which data was ingested.
+
+            The format of the timestamp is in Unix epoch Time.
+
+            For example, `Thursday, 5 September 2024 07:03:13 GMT` can be represented as `1725519793`.
+
+            '
+        offset:
+          type: integer
+          format: int32
+          description: 'The number of records to be skipped from the `ingestionTime`.
+
+            For example: when `offset` is 20 and `ingestionTime` is 1725519793, the API response should have records starting from the 21st record after the specified `ingestionTime`.
+
+            Note that if `offset` value is not empty, `ingestionTime` can''t be empty.
+
+            '
+        retrievalSize:
+          type: integer
+          format: int32
+          description: 'The number of records to retrieve in a single request.
+
+            For example, when retrievalSize is set to 30, offset is 20, and ingestionTime is 1725519793, the API request will fetch 30 records starting from the 21st record after the specified `ingestionTime`.
+
+            Minimum value is 1 and maximum value is 200.
+
+            '
+          maximum: 200
+          minimum: 1
+    BackendTraceReference:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 'The corresponding trace ID. For eg: `07eaf10c1d051234` or `000000000000000007eaf10c1d051234`'
+      required:
+      - traceId
+    GetTraces:
+      type: object
+      properties:
+        includeInternal:
+          type: boolean
+          description: Flag to include Internal Calls. These calls are work done inside a service and correspond to intermediate spans in custom tracing.
+        includeSynthetic:
+          type: boolean
+          description: Flag to include Synthetic Calls. These calls have a synthetic endpoint as their destination, such as calls to health-check endpoints.
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/CursorPagination'
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeprecatedTagFilter'
+          maxItems: 32
+          minItems: 0
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
+    SnapshotPreview:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            type: object
+            description: Subset of the data section of the plugin. In most cases this field will be null.
+          description: Subset of the data section of the plugin. In most cases this field will be null.
+        id:
+          type: string
+          description: This is a snapshot ID. A unique identifier the metrics are assigned to.
+        label:
+          type: string
+          description: Name of the entity.
+        plugin:
+          type: string
+          description: A short plugin ID. For example, `containerd`, `nginx` etc.
+        time:
+          type: integer
+          format: int64
+          description: Specifies the exact point at which the id, label and plugin are valid.
+          minimum: 1
+      required:
+      - id
+    CallGroupsResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        canLoadMore:
+          type: boolean
+          description: Determine if additional data is available when a new query is made using the cursor from the last item in the `items` list.
+        items:
+          type: array
+          description: 'Represents an array of call group item containing several attributes that describe its properties.
+
+            The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
+
+            '
+          items:
+            $ref: '#/components/schemas/CallGroupsItem'
+        totalHits:
+          type: integer
+          format: int64
+          description: The total number of items that match a given filter
+          minimum: 0
+        totalRepresentedItemCount:
+          type: integer
+          format: int64
+          description: For calls and EUM beacons, one row can represent multiple real items (batched call, sample multiplicity)
+          minimum: 0
+        totalRetainedItemCount:
+          type: integer
+          format: int64
+          description: For calls and EUM beacons, only a subset is retained for historic data. Each retained row can represent multiple real items due to batching.
+          minimum: 0
+      required:
+      - items
+    GetCallGroups:
       type: object
       properties:
         group:
@@ -620,13 +1338,154 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DeprecatedTagFilter'
-          maxItems: 32
+          maxItems: 10
           minItems: 0
         timeFrame:
           $ref: '#/components/schemas/TimeFrame'
       required:
       - group
       - metrics
+    Order:
+      type: object
+      description: 'Specifies the ordering of the results.
+
+        It contains fields that define the sorting criteria, the collation for sorting, and the direction in which the results should be ordered.
+
+        '
+      properties:
+        by:
+          type: string
+          description: If the granularity is set to `1` you can use the metric name eg. `latency.p95` to order by that value.
+        collation:
+          type: string
+          description: Language code used for sorting. Ignored for infrastructure queries.
+        direction:
+          type: string
+          description: The order in which results will be sorted, either `ASC` for ascending or `DESC` for descending.
+          enum:
+          - ASC
+          - DESC
+      required:
+      - by
+      - direction
+    CallGroupsItem:
+      type: object
+      description: 'Represents an array of call group item containing several attributes that describe its properties.
+
+        The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
+
+        '
+      properties:
+        cursor:
+          $ref: '#/components/schemas/IngestionOffsetCursor'
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            description: 'Grouped metric details like `errors.mean`, `calls.sum`.
+
+              It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
+
+              Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
+
+              '
+            items:
+              type: array
+              description: 'Grouped metric details like `errors.mean`, `calls.sum`.
+
+                It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
+
+                Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
+
+                '
+              items:
+                type: number
+                description: 'Grouped metric details like `errors.mean`, `calls.sum`.
+
+                  It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
+
+                  Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
+
+                  '
+          description: 'Grouped metric details like `errors.mean`, `calls.sum`.
+
+            It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
+
+            Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
+
+            '
+        name:
+          type: string
+          description: Name of the group.
+        timestamp:
+          type: integer
+          format: int64
+          description: Earliest timestamp of the call from the group
+          minimum: 0
+      required:
+      - cursor
+      - metrics
+      - name
+    DeprecatedTagFilter:
+      type: object
+      properties:
+        entity:
+          type: string
+          enum:
+          - NOT_APPLICABLE
+          - DESTINATION
+          - SOURCE
+        name:
+          type: string
+        operator:
+          type: string
+          enum:
+          - EQUALS
+          - CONTAINS
+          - LESS_THAN
+          - LESS_OR_EQUAL_THAN
+          - GREATER_THAN
+          - GREATER_OR_EQUAL_THAN
+          - NOT_EMPTY
+          - NOT_EQUAL
+          - NOT_CONTAIN
+          - IS_EMPTY
+          - NOT_BLANK
+          - IS_BLANK
+          - STARTS_WITH
+          - ENDS_WITH
+          - NOT_STARTS_WITH
+          - NOT_ENDS_WITH
+          - REGEX_MATCH
+        value:
+          type: string
+      required:
+      - name
+      - operator
+      - value
+    CloudfoundryPhysicalContext:
+      type: object
+      description: 'Contains physical context of Cloudfoundry. It contains the following information:
+
+        1. `application`: Application running within Cloud Foundry environment.
+
+        2. `cfInstanceIndex`: A unique ID of the container created and managed by Garden in the Cloud Foundry environment.
+
+        3. `organization`: Organization in the Cloud Foundry environment.
+
+        4. `space`: Space within an organization in Cloud Foundry environment.
+
+        '
+      properties:
+        application:
+          $ref: '#/components/schemas/SnapshotPreview'
+        cfInstanceIndex:
+          type: string
+          description: A unique ID of the container created and managed by Garden in the Cloud Foundry environment.
+        organization:
+          $ref: '#/components/schemas/SnapshotPreview'
+        space:
+          $ref: '#/components/schemas/SnapshotPreview'
     TraceActivityTreeNodeDetails:
       type: object
       properties:
@@ -712,231 +1571,6 @@ components:
       - label
       - logs
       - spans
-    Service:
-      type: object
-      properties:
-        entityType:
-          type: string
-          description: Since, this is a Service, it will be of type `SERVICE`.
-          enum:
-          - APPLICATION
-          - SERVICE
-          - ENDPOINT
-        id:
-          type: string
-          description: 'Unique ID of the Service. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.'
-        label:
-          type: string
-          description: 'Name of the Service. Eg: `payment`.'
-        snapshotIds:
-          type: array
-          description: A unique identifier the metrics are assigned to.
-          items:
-            type: string
-            description: A unique identifier the metrics are assigned to.
-          uniqueItems: true
-        technologies:
-          type: array
-          description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
-          items:
-            type: string
-            description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
-          uniqueItems: true
-        types:
-          type: array
-          description: 'Shows types of Endpoints a Service can consist of. It may be one or more. Eg: `HTTP` `OPENTELEMETRY` can be in 1 Service.'
-          items:
-            type: string
-            description: 'Shows types of Endpoints a Service can consist of. It may be one or more. Eg: `HTTP` `OPENTELEMETRY` can be in 1 Service.'
-            enum:
-            - UNDEFINED
-            - RPC
-            - EVENT
-            - GRAPHQL
-            - BATCH
-            - SHELL
-            - HTTP
-            - SDK
-            - OPENTELEMETRY
-            - INTERNAL
-            - DATABASE
-            - MESSAGING
-            - PAGE
-            - PAGE_RESOURCE
-          uniqueItems: true
-      required:
-      - id
-      - label
-      - snapshotIds
-      - technologies
-      - types
-    ServiceSimple:
-      type: object
-      description: The destination service.
-      properties:
-        id:
-          type: string
-          description: 'Unique ID of the Service. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.'
-        label:
-          type: string
-          description: 'Name of the Service. Eg: `payment`.'
-    IngestionOffsetCursor:
-      type: object
-      description: Cursor to use between successive queries
-    GetTraceDownloadResultItem:
-      type: object
-      description: 'Represents an array of call group item containing several attributes that describe its properties.
-
-        The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
-
-        '
-      properties:
-        callCount:
-          type: integer
-          format: int64
-          description: Number of calls in a trace.
-        cursor:
-          $ref: '#/components/schemas/IngestionOffsetCursor'
-        destination:
-          $ref: '#/components/schemas/CallRelation'
-        duration:
-          type: integer
-          format: int64
-          description: The total time taken for the entire operation of a call, from the moment the request was initiated to when the response was received. The time measured is in milliseconds. This is also known as latency of a call.
-        errorCount:
-          type: integer
-          format: int64
-          description: Represents whether the call is erroneous or not. 0 is not erroneous and 1 is erroneous.
-        foreignParentId:
-          type: string
-        id:
-          type: string
-          description: 'The call ID. A unique identifier for an individual call. For example: `1bcad5c82338deaf`.'
-        minSelfTime:
-          type: integer
-          format: int64
-          description: The smallest self time in the batch. May be null to indicate that `minSelfTime` is unknown when this node has only an exit span and no children. The time measured is in milliseconds.
-        name:
-          type: string
-          description: 'Name of the call. For example: `GET /articles/:id`.'
-        networkTime:
-          type: integer
-          format: int64
-          description: exit span duration - entry span duration
-        parentId:
-          type: string
-          description: The parent call id, referring to another call in the same trace which triggered the processing associated with this call.
-        timestamp:
-          type: integer
-          format: int64
-          description: The timestamp when the call or request was initiated. For example, Unix epoch time in milliseconds `1735532879870` is `Monday, 30 December 2024 04:27:59.870 GMT`
-    TraceItem:
-      type: object
-      description: 'Represents an array of call group item containing several attributes that describe its properties.
-
-        The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
-
-        '
-      properties:
-        cursor:
-          $ref: '#/components/schemas/IngestionOffsetCursor'
-        trace:
-          $ref: '#/components/schemas/Trace'
-      required:
-      - cursor
-      - trace
-    TraceGroupsResult:
-      type: object
-      properties:
-        adjustedTimeframe:
-          $ref: '#/components/schemas/AdjustedTimeframe'
-        canLoadMore:
-          type: boolean
-          description: Determine if additional data is available when a new query is made using the cursor from the last item in the `items` list.
-        items:
-          type: array
-          description: 'Represents an array of call group item containing several attributes that describe its properties.
-
-            The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
-
-            '
-          items:
-            $ref: '#/components/schemas/TraceGroupsItem'
-        totalHits:
-          type: integer
-          format: int64
-          description: The total number of items that match a given filter
-          minimum: 0
-        totalRepresentedItemCount:
-          type: integer
-          format: int64
-          description: For calls and EUM beacons, one row can represent multiple real items (batched call, sample multiplicity)
-          minimum: 0
-        totalRetainedItemCount:
-          type: integer
-          format: int64
-          description: For calls and EUM beacons, only a subset is retained for historic data. Each retained row can represent multiple real items due to batching.
-          minimum: 0
-      required:
-      - items
-    TraceGroupsItem:
-      type: object
-      description: 'Represents an array of call group item containing several attributes that describe its properties.
-
-        The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
-
-        '
-      properties:
-        cursor:
-          $ref: '#/components/schemas/IngestionOffsetCursor'
-        metrics:
-          type: object
-          additionalProperties:
-            type: array
-            description: 'Grouped metric details like `errors.mean`, `calls.sum`.
-
-              It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
-
-              Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
-
-              '
-            items:
-              type: array
-              description: 'Grouped metric details like `errors.mean`, `calls.sum`.
-
-                It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
-
-                Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
-
-                '
-              items:
-                type: number
-                description: 'Grouped metric details like `errors.mean`, `calls.sum`.
-
-                  It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
-
-                  Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
-
-                  '
-          description: 'Grouped metric details like `errors.mean`, `calls.sum`.
-
-            It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
-
-            Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
-
-            '
-        name:
-          type: string
-          description: Name of the group.
-        timestamp:
-          type: integer
-          format: int64
-          description: Earliest timestamp of the trace from the group
-          minimum: 0
-      required:
-      - cursor
-      - metrics
-      - name
     Group:
       type: object
       description: ' Grouping of data under `groupbyTag`, where `groupbyTagEntity` and `groupbyTagSecondLevelKey` are aspects of `groupbyTag`.'
@@ -971,60 +1605,54 @@ components:
       required:
       - groupbyTag
       - groupbyTagEntity
-    PhysicalContext:
+    GetTraceGroups:
       type: object
-      description: 'The physical context of an entity. This is typically used to describe where a host, container or process fits into the infrastructure.
-
-        1. `cloudfoundry`: Contains physical context of Cloudfoundry.
-
-        2. `cluster`: Contains physical context of cluster like Hazelcast, Elasticsearch.
-
-        3. `container`: Contains physical context of container.
-
-        4. `host`: Contains physical context of host.
-
-        5. `kubernetes`: Contains physical context of Kubernetes.
-
-        6. `process`: Contains physical context of a process.
-
-        '
       properties:
-        cloudfoundry:
-          $ref: '#/components/schemas/CloudfoundryPhysicalContext'
-        cluster:
-          $ref: '#/components/schemas/SnapshotPreview'
-        container:
-          $ref: '#/components/schemas/SnapshotPreview'
-        host:
-          $ref: '#/components/schemas/SnapshotPreview'
-        kubernetes:
-          $ref: '#/components/schemas/KubernetesPhysicalContext'
-        process:
-          $ref: '#/components/schemas/SnapshotPreview'
-    Application:
-      type: object
-      description: Returns a list of Application Perspectives.
-      properties:
-        boundaryScope:
-          type: string
-          description: Here, `ALL` Application Boundary Scope is considered.
-        entityType:
-          type: string
-          description: Since, this is an Application Perspective, it will be of type `APPLICATION`.
-          enum:
-          - APPLICATION
-          - SERVICE
-          - ENDPOINT
-        id:
-          type: string
-          description: 'Unique ID of the Application Perspective. Eg: `Av62RoIKQv-A3n6DbMQh9g`.'
-        label:
-          type: string
-          description: 'Name of the Application Perspective. Eg: `app1`.'
+        group:
+          $ref: '#/components/schemas/Group'
+        includeInternal:
+          type: boolean
+          description: Flag to include Internal Calls. These calls are work done inside a service and correspond to intermediate spans in custom tracing.
+        includeSynthetic:
+          type: boolean
+          description: Flag to include Synthetic Calls. These calls have a synthetic endpoint as their destination, such as calls to health-check endpoints.
+        metrics:
+          type: array
+          description: 'A list of objects each of which defines a metric and the (statistical) aggregation -- MEAN, SUM, MAX, etc -- that should be used to summarize it for the defined time frame. Eg: `[{ ''metric'': ''latency'', ''aggregation'': ''MEAN''}]`. To know more about supported metrics and its aggregation, See `Get Metric catalog`.'
+          items:
+            $ref: '#/components/schemas/MetricConfig'
+          maxItems: 5
+          minItems: 1
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/CursorPagination'
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        tagFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeprecatedTagFilter'
+          maxItems: 32
+          minItems: 0
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
       required:
-      - boundaryScope
-      - id
-      - label
+      - group
+      - metrics
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
     Trace:
       type: object
       description: '1. `service`: The service from where trace started.
@@ -1059,634 +1687,6 @@ components:
       required:
       - id
       - label
-    EndpointSimple:
-      type: object
-      description: The destination service's endpoint where the call enters.
-      properties:
-        id:
-          type: string
-          description: 'Unique ID of the Endpoint. Eg: `NCRq5oYnan5x-PkdTPQwLLUdu5M`.'
-        label:
-          type: string
-          description: 'Name of the Endpoint. Eg: `GET /api/fetch`.'
-        type:
-          type: string
-          description: The type of the Endpoint.
-          enum:
-          - UNDEFINED
-          - RPC
-          - EVENT
-          - GRAPHQL
-          - BATCH
-          - SHELL
-          - HTTP
-          - SDK
-          - OPENTELEMETRY
-          - INTERNAL
-          - DATABASE
-          - MESSAGING
-          - PAGE
-          - PAGE_RESOURCE
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    Order:
-      type: object
-      description: 'Specifies the ordering of the results.
-
-        It contains fields that define the sorting criteria, the collation for sorting, and the direction in which the results should be ordered.
-
-        '
-      properties:
-        by:
-          type: string
-          description: If the granularity is set to `1` you can use the metric name eg. `latency.p95` to order by that value.
-        collation:
-          type: string
-          description: Language code used for sorting. Ignored for infrastructure queries.
-        direction:
-          type: string
-          description: The order in which results will be sorted, either `ASC` for ascending or `DESC` for descending.
-          enum:
-          - ASC
-          - DESC
-      required:
-      - by
-      - direction
-    MetricConfig:
-      type: object
-      description: 'A list of objects each of which defines a metric and the (statistical) aggregation -- MEAN, SUM, MAX, etc -- that should be used to summarize it for the defined time frame. Eg: `[{ ''metric'': ''latency'', ''aggregation'': ''MEAN''}]`. To know more about supported metrics and its aggregation, See `Get Metric catalog`.'
-      properties:
-        aggregation:
-          type: string
-          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
-          enum:
-          - SUM
-          - MEAN
-          - MAX
-          - MIN
-          - P25
-          - P50
-          - P75
-          - P90
-          - P95
-          - P98
-          - P99
-          - P99_9
-          - P99_99
-          - DISTINCT_COUNT
-          - SUM_POSITIVE
-          - PER_SECOND
-          - INCREASE
-        granularity:
-          type: integer
-          format: int32
-          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
-        metric:
-          type: string
-          description: 'Set a particular metric, eg: `latency`.'
-      required:
-      - aggregation
-      - metric
-    SpanRelation:
-      type: object
-      description: 'It shows from where the call is destined to. It includes the following information:
-
-        1. List of Application Perspectives from which the call is destined to.
-
-        2. Destination service and destination endpoint.
-
-        3. Physical context from the infrastructure point of view.
-
-        '
-      properties:
-        applications:
-          type: array
-          items:
-            $ref: '#/components/schemas/Application'
-          uniqueItems: true
-        endpoint:
-          $ref: '#/components/schemas/Endpoint'
-        physicalContext:
-          $ref: '#/components/schemas/PhysicalContext'
-        service:
-          $ref: '#/components/schemas/Service'
-      required:
-      - applications
-    BackendTraceReference:
-      type: object
-      properties:
-        traceId:
-          type: string
-          description: 'The corresponding trace ID. For eg: `07eaf10c1d051234` or `000000000000000007eaf10c1d051234`'
-      required:
-      - traceId
-    GetCallGroups:
-      type: object
-      properties:
-        group:
-          $ref: '#/components/schemas/Group'
-        includeInternal:
-          type: boolean
-          description: Flag to include Internal Calls. These calls are work done inside a service and correspond to intermediate spans in custom tracing.
-        includeSynthetic:
-          type: boolean
-          description: Flag to include Synthetic Calls. These calls have a synthetic endpoint as their destination, such as calls to health-check endpoints.
-        metrics:
-          type: array
-          description: 'A list of objects each of which defines a metric and the (statistical) aggregation -- MEAN, SUM, MAX, etc -- that should be used to summarize it for the defined time frame. Eg: `[{ ''metric'': ''latency'', ''aggregation'': ''MEAN''}]`. To know more about supported metrics and its aggregation, See `Get Metric catalog`.'
-          items:
-            $ref: '#/components/schemas/MetricConfig'
-          maxItems: 5
-          minItems: 1
-        order:
-          $ref: '#/components/schemas/Order'
-        pagination:
-          $ref: '#/components/schemas/CursorPagination'
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        tagFilters:
-          type: array
-          items:
-            $ref: '#/components/schemas/DeprecatedTagFilter'
-          maxItems: 10
-          minItems: 0
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-      required:
-      - group
-      - metrics
-    DeprecatedTagFilter:
-      type: object
-      properties:
-        entity:
-          type: string
-          enum:
-          - NOT_APPLICABLE
-          - DESTINATION
-          - SOURCE
-        name:
-          type: string
-        operator:
-          type: string
-          enum:
-          - EQUALS
-          - CONTAINS
-          - LESS_THAN
-          - LESS_OR_EQUAL_THAN
-          - GREATER_THAN
-          - GREATER_OR_EQUAL_THAN
-          - NOT_EMPTY
-          - NOT_EQUAL
-          - NOT_CONTAIN
-          - IS_EMPTY
-          - NOT_BLANK
-          - IS_BLANK
-          - STARTS_WITH
-          - ENDS_WITH
-          - NOT_STARTS_WITH
-          - NOT_ENDS_WITH
-          - REGEX_MATCH
-        value:
-          type: string
-      required:
-      - name
-      - operator
-      - value
-    DatabaseIntegration:
-      type: object
-      properties:
-        type:
-          type: string
-        url:
-          type: string
-    CallRelation:
-      type: object
-      description: It shows from where the call is destined to. It includes destination service, its endpoint and list of technologies of the service.
-      properties:
-        endpoint:
-          $ref: '#/components/schemas/EndpointSimple'
-        service:
-          $ref: '#/components/schemas/ServiceSimple'
-        technologies:
-          type: array
-          description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
-          items:
-            type: string
-            description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
-    SpanExcerpt:
-      type: object
-      description: Information about the logs attached to the call, if available.
-      properties:
-        data:
-          type: object
-          additionalProperties:
-            type: object
-            description: Some information about the span, like service name, if it is an http call, then some information about it like, path, method, host, errors etc.
-          description: Some information about the span, like service name, if it is an http call, then some information about it like, path, method, host, errors etc.
-        databaseIntegrations:
-          type: array
-          items:
-            $ref: '#/components/schemas/DatabaseIntegration'
-        duration:
-          type: integer
-          format: int64
-          description: The total time taken for the entire operation of a call, from the moment the request was initiated to when the response was received. The time measured is in milliseconds. This is also known as latency of a call.
-          minimum: 0
-        errorCount:
-          type: integer
-          format: int32
-          description: Represents whether the span is erroneous or not. 0 is not erroneous and 1 is erroneous.
-          minimum: 0
-        foreignParentId:
-          type: string
-        id:
-          type: string
-          description: 'The call ID. A unique identifier for an individual call. For example: `1bcad5c82338deaf`.'
-        kind:
-          type: string
-          description: 'There are 4 types of span kind:
-
-            1. `ENTRY`: An entry span represents an incoming request into a traced service.
-
-            2. `EXIT`: An exit span represents an outgoing request that a service makes to some other service.
-
-            3. `INTERMEDIATE`: An intermediate span represents anything that happens inside a traced service where the flow of control neither enters nor leaves that service, but stays inside it.
-
-            4. `UNKNOWN`: Instana can''t determine the span kind.
-
-            '
-          enum:
-          - UNKNOWN
-          - ENTRY
-          - EXIT
-          - INTERMEDIATE
-        name:
-          type: string
-          description: The technical type of the span. For example, `node.http.client` or `jdbc`.
-        parentId:
-          type: string
-          description: The parent call id, referring to another call in the same trace which triggered the processing associated with this call.
-        stackTrace:
-          type: array
-          description: For an erroneous call, if stack trace is available it will show a list of items containing file, method and line number of the code.
-          items:
-            $ref: '#/components/schemas/StackTraceItem'
-        start:
-          type: integer
-          format: int64
-          description: The timestamp when the call or request was initiated. For example, Unix epoch time in milliseconds `1735532879870` is `Monday, 30 December 2024 04:27:59.870 GMT`
-          minimum: 1
-      required:
-      - data
-      - id
-      - kind
-      - name
-      - stackTrace
-    GetTraces:
-      type: object
-      properties:
-        includeInternal:
-          type: boolean
-          description: Flag to include Internal Calls. These calls are work done inside a service and correspond to intermediate spans in custom tracing.
-        includeSynthetic:
-          type: boolean
-          description: Flag to include Synthetic Calls. These calls have a synthetic endpoint as their destination, such as calls to health-check endpoints.
-        order:
-          $ref: '#/components/schemas/Order'
-        pagination:
-          $ref: '#/components/schemas/CursorPagination'
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        tagFilters:
-          type: array
-          items:
-            $ref: '#/components/schemas/DeprecatedTagFilter'
-          maxItems: 32
-          minItems: 0
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-    CallGroupsItem:
-      type: object
-      description: 'Represents an array of call group item containing several attributes that describe its properties.
-
-        The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
-
-        '
-      properties:
-        cursor:
-          $ref: '#/components/schemas/IngestionOffsetCursor'
-        metrics:
-          type: object
-          additionalProperties:
-            type: array
-            description: 'Grouped metric details like `errors.mean`, `calls.sum`.
-
-              It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
-
-              Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
-
-              '
-            items:
-              type: array
-              description: 'Grouped metric details like `errors.mean`, `calls.sum`.
-
-                It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
-
-                Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
-
-                '
-              items:
-                type: number
-                description: 'Grouped metric details like `errors.mean`, `calls.sum`.
-
-                  It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
-
-                  Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
-
-                  '
-          description: 'Grouped metric details like `errors.mean`, `calls.sum`.
-
-            It is usually a array of key-value pair. Format of key is `metric.aggregation.granularity`, for example: `latency.p75.360`.
-
-            Format of value is `[earliest timestamp, value of key]`, for example: `[1725602720000, 0.013141001434936938]`.
-
-            '
-        name:
-          type: string
-          description: Name of the group.
-        timestamp:
-          type: integer
-          format: int64
-          description: Earliest timestamp of the call from the group
-          minimum: 0
-      required:
-      - cursor
-      - metrics
-      - name
-    StackTraceItem:
-      type: object
-      description: For an erroneous call, if stack trace is available it will show a list of items containing file, method and line number of the code.
-      properties:
-        file:
-          type: string
-          description: The name of the file where the executed code resides.
-        line:
-          type: string
-          description: The line number within the file where the error was thrown.
-        method:
-          type: string
-          description: The name of the method or function being executed at the time the stack trace item was generated.
-    KubernetesPhysicalContext:
-      type: object
-      description: Contains physical context of Kubernetes which contains information about the cluster, namespace, node and pod.
-      properties:
-        cluster:
-          $ref: '#/components/schemas/SnapshotPreview'
-        namespace:
-          $ref: '#/components/schemas/SnapshotPreview'
-        node:
-          $ref: '#/components/schemas/SnapshotPreview'
-        pod:
-          $ref: '#/components/schemas/SnapshotPreview'
-    TraceDownloadResult:
-      type: object
-      properties:
-        adjustedTimeframe:
-          $ref: '#/components/schemas/AdjustedTimeframe'
-        canLoadMore:
-          type: boolean
-          description: Determine if additional data is available when a new query is made using the cursor from the last item in the `items` list.
-        items:
-          type: array
-          description: 'Represents an array of call group item containing several attributes that describe its properties.
-
-            The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
-
-            '
-          items:
-            $ref: '#/components/schemas/GetTraceDownloadResultItem'
-        totalHits:
-          type: integer
-          format: int64
-          description: The total number of items that match a given filter
-          minimum: 0
-        totalRepresentedItemCount:
-          type: integer
-          format: int64
-          description: For calls and EUM beacons, one row can represent multiple real items (batched call, sample multiplicity)
-          minimum: 0
-        totalRetainedItemCount:
-          type: integer
-          format: int64
-          description: For calls and EUM beacons, only a subset is retained for historic data. Each retained row can represent multiple real items due to batching.
-          minimum: 0
-      required:
-      - items
-    TraceResult:
-      type: object
-      properties:
-        adjustedTimeframe:
-          $ref: '#/components/schemas/AdjustedTimeframe'
-        canLoadMore:
-          type: boolean
-          description: Determine if additional data is available when a new query is made using the cursor from the last item in the `items` list.
-        items:
-          type: array
-          description: 'Represents an array of call group item containing several attributes that describe its properties.
-
-            The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
-
-            '
-          items:
-            $ref: '#/components/schemas/TraceItem'
-        totalHits:
-          type: integer
-          format: int64
-          description: The total number of items that match a given filter
-          minimum: 0
-        totalRepresentedItemCount:
-          type: integer
-          format: int64
-          description: For calls and EUM beacons, one row can represent multiple real items (batched call, sample multiplicity)
-          minimum: 0
-        totalRetainedItemCount:
-          type: integer
-          format: int64
-          description: For calls and EUM beacons, only a subset is retained for historic data. Each retained row can represent multiple real items due to batching.
-          minimum: 0
-      required:
-      - items
-    SnapshotPreview:
-      type: object
-      properties:
-        data:
-          type: object
-          additionalProperties:
-            type: object
-            description: Subset of the data section of the plugin. In most cases this field will be null.
-          description: Subset of the data section of the plugin. In most cases this field will be null.
-        id:
-          type: string
-          description: This is a snapshot ID. A unique identifier the metrics are assigned to.
-        label:
-          type: string
-          description: Name of the entity.
-        plugin:
-          type: string
-          description: A short plugin ID. For example, `containerd`, `nginx` etc.
-        time:
-          type: integer
-          format: int64
-          description: Specifies the exact point at which the id, label and plugin are valid.
-          minimum: 1
-      required:
-      - id
-    CursorPagination:
-      type: object
-      description: 'Details for controlling the pagination of the API response.
-
-        This object allows you to define the starting point for retrieving records, how many records to skip, and the size of the result set.
-
-        '
-      properties:
-        ingestionTime:
-          type: integer
-          format: int64
-          description: 'The timestamp indicating the starting point from which data was ingested.
-
-            The format of the timestamp is in Unix epoch Time.
-
-            For example, `Thursday, 5 September 2024 07:03:13 GMT` can be represented as `1725519793`.
-
-            '
-        offset:
-          type: integer
-          format: int32
-          description: 'The number of records to be skipped from the `ingestionTime`.
-
-            For example: when `offset` is 20 and `ingestionTime` is 1725519793, the API response should have records starting from the 21st record after the specified `ingestionTime`.
-
-            Note that if `offset` value is not empty, `ingestionTime` can''t be empty.
-
-            '
-        retrievalSize:
-          type: integer
-          format: int32
-          description: 'The number of records to retrieve in a single request.
-
-            For example, when retrievalSize is set to 30, offset is 20, and ingestionTime is 1725519793, the API request will fetch 30 records starting from the 21st record after the specified `ingestionTime`.
-
-            Minimum value is 1 and maximum value is 200.
-
-            '
-          maximum: 200
-          minimum: 1
-    CallGroupsResult:
-      type: object
-      properties:
-        adjustedTimeframe:
-          $ref: '#/components/schemas/AdjustedTimeframe'
-        canLoadMore:
-          type: boolean
-          description: Determine if additional data is available when a new query is made using the cursor from the last item in the `items` list.
-        items:
-          type: array
-          description: 'Represents an array of call group item containing several attributes that describe its properties.
-
-            The item includes fields such as cursor, metrics, name, and timestamp, which provide detailed information about the item.
-
-            '
-          items:
-            $ref: '#/components/schemas/CallGroupsItem'
-        totalHits:
-          type: integer
-          format: int64
-          description: The total number of items that match a given filter
-          minimum: 0
-        totalRepresentedItemCount:
-          type: integer
-          format: int64
-          description: For calls and EUM beacons, one row can represent multiple real items (batched call, sample multiplicity)
-          minimum: 0
-        totalRetainedItemCount:
-          type: integer
-          format: int64
-          description: For calls and EUM beacons, only a subset is retained for historic data. Each retained row can represent multiple real items due to batching.
-          minimum: 0
-      required:
-      - items
-    Endpoint:
-      type: object
-      properties:
-        entityType:
-          type: string
-          description: Since, this is a Endpoint, it will be of type `ENDPOINT`.
-          enum:
-          - APPLICATION
-          - SERVICE
-          - ENDPOINT
-        id:
-          type: string
-          description: 'Unique ID of the Endpoint. Eg: `NCRq5oYnan5x-PkdTPQwLLUdu5M`.'
-        isSynthetic:
-          type: boolean
-          writeOnly: true
-        label:
-          type: string
-          description: 'Name of the Endpoint. Eg: `GET /api/fetch`.'
-        serviceId:
-          type: string
-          description: The serviceId this endpoint belongs to.
-        synthetic:
-          type: boolean
-        syntheticType:
-          type: string
-          enum:
-          - NON_SYNTHETIC
-          - SYNTHETIC
-          - MIXED
-        technologies:
-          type: array
-          description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
-          items:
-            type: string
-            description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
-          uniqueItems: true
-        type:
-          type: string
-          description: The type of the Endpoint.
-          enum:
-          - UNDEFINED
-          - RPC
-          - EVENT
-          - GRAPHQL
-          - BATCH
-          - SHELL
-          - HTTP
-          - SDK
-          - OPENTELEMETRY
-          - INTERNAL
-          - DATABASE
-          - MESSAGING
-          - PAGE
-          - PAGE_RESOURCE
-      required:
-      - id
-      - label
-      - serviceId
-      - technologies
-      - type
   securitySchemes:
     ApiKeyAuth:
       in: header

@@ -592,189 +592,82 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    RuleWithThresholdInfraAlertRule:
+    Author:
       type: object
-      description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
       properties:
-        rule:
-          $ref: '#/components/schemas/InfraAlertRule'
-        thresholdOperator:
+        id:
           type: string
-          enum:
-          - '>'
-          - '>='
-          - <
-          - <=
-        thresholds:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ThresholdConfigRule'
-      required:
-      - rule
-      - thresholdOperator
-      - thresholds
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
         type:
           type: string
-      required:
-      - type
-    ThresholdConfigRule:
-      type: object
-      discriminator:
-        mapping:
-          adaptiveBaseline: '#/components/schemas/AdaptiveThresholdRule'
-          historicBaseline: '#/components/schemas/StaticBaselineThresholdRule'
-          staticThreshold: '#/components/schemas/StaticThresholdRule'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    ChangeSummary:
-      type: object
-      description: Brief summary of changes made in this config version.
-      properties:
-        author:
-          $ref: '#/components/schemas/Author'
-        changeType:
-          type: string
           enum:
-          - CREATE
-          - UPDATE
-          - DELETE
-          - ENABLE
-          - DISABLE
-          - RESTORE
+          - API
+          - USER
+          - INSTANA
           - UNKNOWN
-      required:
-      - author
-      - changeType
-    InfraAlertConfig:
+    InfraAlertRule:
       type: object
-      properties:
-        alertChannelIds:
-          type: array
-          deprecated: true
-          description: List of IDs of alert channels defined in Instana. Can be left empty.
-          items:
-            type: string
-            deprecated: true
-            description: List of IDs of alert channels defined in Instana. Can be left empty.
-          maxItems: 1024
-          minItems: 0
-          uniqueItems: true
-        alertChannels:
-          type: object
-          additionalProperties:
-            type: array
-            description: Set of alert channel IDs associated with the severity.
-            items:
-              type: string
-              description: Set of alert channel IDs associated with the severity.
-            uniqueItems: true
-          description: Set of alert channel IDs associated with the severity.
-        customPayloadFields:
-          type: array
-          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
-          items:
-            $ref: '#/components/schemas/CustomPayloadField'
-          maxItems: 20
-          minItems: 0
-        description:
-          type: string
-          description: Description of the Infrastructure Smart Alert. Used as a template for the description of alert/event notifications triggered by this Smart Alert configuration.
-          maxLength: 65536
-          minLength: 0
-        evaluationType:
-          type: string
-          description: Determines whether we evaluate each infra entity independently or group of entities will be evaluated together.
-          enum:
-          - PER_ENTITY
-          - CUSTOM
-        gracePeriod:
-          type: integer
-          format: int64
-          description: The duration for which an alert remains open after conditions are no longer violated, with the alert auto-closing once the grace period expires.
-        granularity:
-          type: integer
-          format: int32
-          default: 600000
-          description: The evaluation granularity used for detection of violations of the defined threshold. Defines the size of the tumbling window used.
-          enum:
-          - 60000
-          - 300000
-          - 600000
-          - 900000
-          - 1200000
-          - 1800000
-        groupBy:
-          type: array
-          description: The grouping tags used to group the metric results.
-          items:
-            type: string
-            description: The grouping tags used to group the metric results.
-          maxItems: 5
-          minItems: 0
-        name:
-          type: string
-          description: Name of the Infrastructure Smart Alert. Used as a template for the title of alert/event notifications triggered by this Smart Alert configuration.
-          maxLength: 256
-          minLength: 0
-        rule:
-          $ref: '#/components/schemas/InfraAlertRule'
-        rules:
-          type: array
-          description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
-          items:
-            $ref: '#/components/schemas/RuleWithThresholdInfraAlertRule'
-          maxItems: 5
-          minItems: 1
-        severity:
-          type: integer
-          format: int32
-          deprecated: true
-          description: The severity of the alert when triggered, which is either 5 (Warning), or 10 (Critical).
-        tagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        threshold:
-          $ref: '#/components/schemas/Threshold'
-        timeThreshold:
-          $ref: '#/components/schemas/InfraTimeThreshold'
-        triggering:
-          type: boolean
-          description: Optional flag to indicate whether an Incident is also triggered or not.
-      required:
-      - customPayloadFields
-      - description
-      - granularity
-      - groupBy
-      - name
-      - tagFilterExpression
-      - timeThreshold
-    InfraTimeThreshold:
-      type: object
-      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
       discriminator:
         mapping:
-          violationsInSequence: '#/components/schemas/ViolationsInSequenceInfraTimeThreshold'
-        propertyName: type
+          genericRule: '#/components/schemas/GenericInfraAlertRule'
+        propertyName: alertType
       properties:
-        timeWindow:
-          type: integer
-          format: int64
-        type:
+        aggregation:
           type: string
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        alertType:
+          type: string
+        crossSeriesAggregation:
+          type: string
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        entityType:
+          type: string
+        metricGroupBy:
+          type: array
+          items:
+            type: string
+        metricName:
+          type: string
+        metricTagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        regex:
+          type: boolean
       required:
-      - type
+      - alertType
+      - metricName
     InfraAlertConfigWithMetadata:
       type: object
       properties:
@@ -894,35 +787,6 @@ components:
       - name
       - tagFilterExpression
       - timeThreshold
-    CustomPayloadField:
-      type: object
-      description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
-      discriminator:
-        mapping:
-          dynamic: '#/components/schemas/DynamicField'
-          staticString: '#/components/schemas/StaticStringField'
-        propertyName: type
-      properties:
-        key:
-          type: string
-          description: A user-specified unique identifier or name for a custom payload entry.
-        type:
-          type: string
-      required:
-      - key
-      - type
-    Author:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - API
-          - USER
-          - INSTANA
-          - UNKNOWN
     ConfigVersion:
       type: object
       properties:
@@ -948,6 +812,21 @@ components:
           minLength: 0
       required:
       - id
+    InfraTimeThreshold:
+      type: object
+      description: The type of threshold to define the criteria when the event and alert triggers and resolves.
+      discriminator:
+        mapping:
+          violationsInSequence: '#/components/schemas/ViolationsInSequenceInfraTimeThreshold'
+        propertyName: type
+      properties:
+        timeWindow:
+          type: integer
+          format: int64
+        type:
+          type: string
+      required:
+      - type
     Threshold:
       type: object
       deprecated: true
@@ -971,70 +850,191 @@ components:
       required:
       - operator
       - type
-    InfraAlertRule:
+    ChangeSummary:
+      type: object
+      description: Brief summary of changes made in this config version.
+      properties:
+        author:
+          $ref: '#/components/schemas/Author'
+        changeType:
+          type: string
+          enum:
+          - CREATE
+          - UPDATE
+          - DELETE
+          - ENABLE
+          - DISABLE
+          - RESTORE
+          - UNKNOWN
+      required:
+      - author
+      - changeType
+    RuleWithThresholdInfraAlertRule:
+      type: object
+      description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
+      properties:
+        rule:
+          $ref: '#/components/schemas/InfraAlertRule'
+        thresholdOperator:
+          type: string
+          enum:
+          - '>'
+          - '>='
+          - <
+          - <=
+        thresholds:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ThresholdConfigRule'
+      required:
+      - rule
+      - thresholdOperator
+      - thresholds
+    InfraAlertConfig:
+      type: object
+      properties:
+        alertChannelIds:
+          type: array
+          deprecated: true
+          description: List of IDs of alert channels defined in Instana. Can be left empty.
+          items:
+            type: string
+            deprecated: true
+            description: List of IDs of alert channels defined in Instana. Can be left empty.
+          maxItems: 1024
+          minItems: 0
+          uniqueItems: true
+        alertChannels:
+          type: object
+          additionalProperties:
+            type: array
+            description: Set of alert channel IDs associated with the severity.
+            items:
+              type: string
+              description: Set of alert channel IDs associated with the severity.
+            uniqueItems: true
+          description: Set of alert channel IDs associated with the severity.
+        customPayloadFields:
+          type: array
+          description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+          items:
+            $ref: '#/components/schemas/CustomPayloadField'
+          maxItems: 20
+          minItems: 0
+        description:
+          type: string
+          description: Description of the Infrastructure Smart Alert. Used as a template for the description of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 65536
+          minLength: 0
+        evaluationType:
+          type: string
+          description: Determines whether we evaluate each infra entity independently or group of entities will be evaluated together.
+          enum:
+          - PER_ENTITY
+          - CUSTOM
+        gracePeriod:
+          type: integer
+          format: int64
+          description: The duration for which an alert remains open after conditions are no longer violated, with the alert auto-closing once the grace period expires.
+        granularity:
+          type: integer
+          format: int32
+          default: 600000
+          description: The evaluation granularity used for detection of violations of the defined threshold. Defines the size of the tumbling window used.
+          enum:
+          - 60000
+          - 300000
+          - 600000
+          - 900000
+          - 1200000
+          - 1800000
+        groupBy:
+          type: array
+          description: The grouping tags used to group the metric results.
+          items:
+            type: string
+            description: The grouping tags used to group the metric results.
+          maxItems: 5
+          minItems: 0
+        name:
+          type: string
+          description: Name of the Infrastructure Smart Alert. Used as a template for the title of alert/event notifications triggered by this Smart Alert configuration.
+          maxLength: 256
+          minLength: 0
+        rule:
+          $ref: '#/components/schemas/InfraAlertRule'
+        rules:
+          type: array
+          description: A list of rules where each rule is associated with multiple thresholds and their corresponding severity levels. This enables more complex alert configurations with validations to ensure consistent and logical threshold-severity combinations.
+          items:
+            $ref: '#/components/schemas/RuleWithThresholdInfraAlertRule'
+          maxItems: 5
+          minItems: 1
+        severity:
+          type: integer
+          format: int32
+          deprecated: true
+          description: The severity of the alert when triggered, which is either 5 (Warning), or 10 (Critical).
+        tagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+        threshold:
+          $ref: '#/components/schemas/Threshold'
+        timeThreshold:
+          $ref: '#/components/schemas/InfraTimeThreshold'
+        triggering:
+          type: boolean
+          description: Optional flag to indicate whether an Incident is also triggered or not.
+      required:
+      - customPayloadFields
+      - description
+      - granularity
+      - groupBy
+      - name
+      - tagFilterExpression
+      - timeThreshold
+    ThresholdConfigRule:
       type: object
       discriminator:
         mapping:
-          genericRule: '#/components/schemas/GenericInfraAlertRule'
-        propertyName: alertType
+          adaptiveBaseline: '#/components/schemas/AdaptiveThresholdRule'
+          historicBaseline: '#/components/schemas/StaticBaselineThresholdRule'
+          staticThreshold: '#/components/schemas/StaticThresholdRule'
+        propertyName: type
       properties:
-        aggregation:
+        type:
           type: string
-          enum:
-          - SUM
-          - MEAN
-          - MAX
-          - MIN
-          - P25
-          - P50
-          - P75
-          - P90
-          - P95
-          - P98
-          - P99
-          - P99_9
-          - P99_99
-          - DISTINCT_COUNT
-          - SUM_POSITIVE
-          - PER_SECOND
-          - INCREASE
-        alertType:
-          type: string
-        crossSeriesAggregation:
-          type: string
-          enum:
-          - SUM
-          - MEAN
-          - MAX
-          - MIN
-          - P25
-          - P50
-          - P75
-          - P90
-          - P95
-          - P98
-          - P99
-          - P99_9
-          - P99_99
-          - DISTINCT_COUNT
-          - SUM_POSITIVE
-          - PER_SECOND
-          - INCREASE
-        entityType:
-          type: string
-        metricGroupBy:
-          type: array
-          items:
-            type: string
-        metricName:
-          type: string
-        metricTagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
-        regex:
-          type: boolean
       required:
-      - alertType
-      - metricName
+      - type
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    CustomPayloadField:
+      type: object
+      description: Custom payload fields to send additional information in the alert notifications. Can be left empty.
+      discriminator:
+        mapping:
+          dynamic: '#/components/schemas/DynamicField'
+          staticString: '#/components/schemas/StaticStringField'
+        propertyName: type
+      properties:
+        key:
+          type: string
+          description: A user-specified unique identifier or name for a custom payload entry.
+        type:
+          type: string
+      required:
+      - key
+      - type
   securitySchemes:
     ApiKeyAuth:
       in: header

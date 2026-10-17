@@ -439,6 +439,25 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
+    ActionInstanceParameter:
+      type: object
+      description: List of input parameters to this action run.
+      properties:
+        displayName:
+          type: string
+          description: Parameter display name.
+        name:
+          type: string
+          description: Parameter name.
+        type:
+          type: string
+          description: Parameter type. Valid values are `static`, `dynamic` or `vault`
+        value:
+          type: string
+          description: Parameter value.
+      required:
+      - displayName
+      - name
     ActionInstance:
       type: object
       properties:
@@ -557,40 +576,17 @@ components:
       - actionId
       - actionName
       - type
-    ActionInstanceRequestParameters:
+    ActionInstanceMetadataEntry:
       type: object
-      description: Action run input parameters.
+      description: List of metadata parameters set to this action run by sensors.
       properties:
         name:
           type: string
-          description: Name of the input parameter.
-        type:
-          type: string
-          description: Type of the input parameter. Valid values are `static`, `dynamic` or `vault`. Default is `static`.
+          description: Metadata name.
         value:
           type: string
-          description: Value of the input parameter
+          description: Metadata value.
       required:
-      - name
-      - value
-    ActionInstanceParameter:
-      type: object
-      description: List of input parameters to this action run.
-      properties:
-        displayName:
-          type: string
-          description: Parameter display name.
-        name:
-          type: string
-          description: Parameter name.
-        type:
-          type: string
-          description: Parameter type. Valid values are `static`, `dynamic` or `vault`
-        value:
-          type: string
-          description: Parameter value.
-      required:
-      - displayName
       - name
     PaginatedResult:
       type: object
@@ -614,18 +610,22 @@ components:
           minimum: 0
       required:
       - items
-    ActionInstanceMetadataEntry:
+    ActionInstanceRequestParameters:
       type: object
-      description: List of metadata parameters set to this action run by sensors.
+      description: Action run input parameters.
       properties:
         name:
           type: string
-          description: Metadata name.
+          description: Name of the input parameter.
+        type:
+          type: string
+          description: Type of the input parameter. Valid values are `static`, `dynamic` or `vault`. Default is `static`.
         value:
           type: string
-          description: Metadata value.
+          description: Value of the input parameter
       required:
       - name
+      - value
     ActionInstanceRequest:
       type: object
       properties:

@@ -596,18 +596,60 @@ components:
       required:
       - displayName
       - id
-    TagFilterExpressionElement:
+    PaginatedResult:
       type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+        page:
+          type: integer
+          format: int32
+          description: Page Number
+          minimum: 1
+        pageSize:
+          type: integer
+          format: int32
+          minimum: 1
+        totalHits:
+          type: integer
+          format: int64
+          minimum: 0
+      required:
+      - items
+    TimeWindow:
+      type: object
+      description: Time Window type of the SLO, it could be Fixed or Rolling
       discriminator:
         mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
+          fixed: '#/components/schemas/FixedTimeWindow'
+          rolling: '#/components/schemas/RollingTimeWindow'
         propertyName: type
       properties:
+        duration:
+          type: integer
+          format: int32
+          description: Duration of the Time Window
+        durationUnit:
+          type: string
+          description: Unit of the Time Window Duration
+          enum:
+          - millisecond
+          - second
+          - minute
+          - hour
+          - day
+          - week
+          - month
+        timezone:
+          type: string
+          description: Timezone string
         type:
           type: string
       required:
+      - duration
+      - durationUnit
       - type
     SloEntity:
       type: object
@@ -622,6 +664,68 @@ components:
       properties:
         tagFilterExpression:
           $ref: '#/components/schemas/TagFilterExpressionElement'
+        type:
+          type: string
+      required:
+      - type
+    SLOConfigWithRBACTag:
+      type: object
+      properties:
+        createdDate:
+          type: string
+          format: date-time
+          description: Created date of Service Levels Objective Configuration
+        entity:
+          $ref: '#/components/schemas/SloEntity'
+        id:
+          type: string
+          description: Service Levels Objective Configuration ID
+          maxLength: 64
+          minLength: 0
+        indicator:
+          $ref: '#/components/schemas/ServiceLevelIndicator'
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Last updated date of Service Levels Objective Configuration
+        name:
+          type: string
+          description: Name of the Service Levels Objective Configuration
+        rbacTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTag'
+          uniqueItems: true
+        tags:
+          type: array
+          description: List of tags associated with Service Levels Objective Configuration
+          items:
+            type: string
+            description: List of tags associated with Service Levels Objective Configuration
+        target:
+          type: number
+          format: double
+          description: Service Levels Objective Configuration Target
+          maximum: 0.9999
+          exclusiveMinimum: 0
+        timeWindow:
+          $ref: '#/components/schemas/TimeWindow'
+      required:
+      - entity
+      - indicator
+      - name
+      - tags
+      - target
+      - timeWindow
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
         type:
           type: string
       required:
@@ -692,110 +796,6 @@ components:
           enum:
           - eventBased
           - timeBased
-    TimeWindow:
-      type: object
-      description: Time Window type of the SLO, it could be Fixed or Rolling
-      discriminator:
-        mapping:
-          fixed: '#/components/schemas/FixedTimeWindow'
-          rolling: '#/components/schemas/RollingTimeWindow'
-        propertyName: type
-      properties:
-        duration:
-          type: integer
-          format: int32
-          description: Duration of the Time Window
-        durationUnit:
-          type: string
-          description: Unit of the Time Window Duration
-          enum:
-          - millisecond
-          - second
-          - minute
-          - hour
-          - day
-          - week
-          - month
-        timezone:
-          type: string
-          description: Timezone string
-        type:
-          type: string
-      required:
-      - duration
-      - durationUnit
-      - type
-    SLOConfigWithRBACTag:
-      type: object
-      properties:
-        createdDate:
-          type: string
-          format: date-time
-          description: Created date of Service Levels Objective Configuration
-        entity:
-          $ref: '#/components/schemas/SloEntity'
-        id:
-          type: string
-          description: Service Levels Objective Configuration ID
-          maxLength: 64
-          minLength: 0
-        indicator:
-          $ref: '#/components/schemas/ServiceLevelIndicator'
-        lastUpdated:
-          type: string
-          format: date-time
-          description: Last updated date of Service Levels Objective Configuration
-        name:
-          type: string
-          description: Name of the Service Levels Objective Configuration
-        rbacTags:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiTag'
-          uniqueItems: true
-        tags:
-          type: array
-          description: List of tags associated with Service Levels Objective Configuration
-          items:
-            type: string
-            description: List of tags associated with Service Levels Objective Configuration
-        target:
-          type: number
-          format: double
-          description: Service Levels Objective Configuration Target
-          maximum: 0.9999
-          exclusiveMinimum: 0
-        timeWindow:
-          $ref: '#/components/schemas/TimeWindow'
-      required:
-      - entity
-      - indicator
-      - name
-      - tags
-      - target
-      - timeWindow
-    PaginatedResult:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            type: object
-        page:
-          type: integer
-          format: int32
-          description: Page Number
-          minimum: 1
-        pageSize:
-          type: integer
-          format: int32
-          minimum: 1
-        totalHits:
-          type: integer
-          format: int64
-          minimum: 0
-      required:
-      - items
   securitySchemes:
     ApiKeyAuth:
       in: header

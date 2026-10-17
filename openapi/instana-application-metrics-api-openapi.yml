@@ -339,50 +339,50 @@ components:
           description: windowSize in milliseconds
           maximum: 2678400000
           minimum: 0
-    AdjustedTimeframe:
+    Pagination:
       type: object
-      description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
-
-        For example, In request payload, if timeframe is 08:03 - 14:03, which is a 6 hour window size. It is adjusted to 08:05 - 14:00
-
-        Another example, In request payload, if timeframe is 08:20 - 08:20 (next day) which is a 24h window size. It is adjusted to 08:30 - 08:00 (next day)
-
-        '
       properties:
-        to:
+        page:
           type: integer
-          format: int64
-          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
-        windowSize:
+          format: int32
+          description: Page number for a specific page in the results. For example, if you'd like to retrieve the 5th page out of 10 pages, the value would be 5.
+          minimum: 1
+        pageSize:
           type: integer
-          format: int64
-          description: windowSize in milliseconds
-          minimum: 0
-      required:
-      - to
-    Service:
+          format: int32
+          description: 'Set the number of items you want to return with one query. Eg: if you want to retrieve 10 items, the value would be 10.'
+          maximum: 200
+          minimum: 1
+    Endpoint:
       type: object
       properties:
         entityType:
           type: string
-          description: Since, this is a Service, it will be of type `SERVICE`.
+          description: Since, this is a Endpoint, it will be of type `ENDPOINT`.
           enum:
           - APPLICATION
           - SERVICE
           - ENDPOINT
         id:
           type: string
-          description: 'Unique ID of the Service. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.'
+          description: 'Unique ID of the Endpoint. Eg: `NCRq5oYnan5x-PkdTPQwLLUdu5M`.'
+        isSynthetic:
+          type: boolean
+          writeOnly: true
         label:
           type: string
-          description: 'Name of the Service. Eg: `payment`.'
-        snapshotIds:
-          type: array
-          description: A unique identifier the metrics are assigned to.
-          items:
-            type: string
-            description: A unique identifier the metrics are assigned to.
-          uniqueItems: true
+          description: 'Name of the Endpoint. Eg: `GET /api/fetch`.'
+        serviceId:
+          type: string
+          description: The serviceId this endpoint belongs to.
+        synthetic:
+          type: boolean
+        syntheticType:
+          type: string
+          enum:
+          - NON_SYNTHETIC
+          - SYNTHETIC
+          - MIXED
         technologies:
           type: array
           description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
@@ -390,142 +390,59 @@ components:
             type: string
             description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
           uniqueItems: true
-        types:
-          type: array
-          description: 'Shows types of Endpoints a Service can consist of. It may be one or more. Eg: `HTTP` `OPENTELEMETRY` can be in 1 Service.'
-          items:
-            type: string
-            description: 'Shows types of Endpoints a Service can consist of. It may be one or more. Eg: `HTTP` `OPENTELEMETRY` can be in 1 Service.'
-            enum:
-            - UNDEFINED
-            - RPC
-            - EVENT
-            - GRAPHQL
-            - BATCH
-            - SHELL
-            - HTTP
-            - SDK
-            - OPENTELEMETRY
-            - INTERNAL
-            - DATABASE
-            - MESSAGING
-            - PAGE
-            - PAGE_RESOURCE
-          uniqueItems: true
+        type:
+          type: string
+          description: The type of the Endpoint.
+          enum:
+          - UNDEFINED
+          - RPC
+          - EVENT
+          - GRAPHQL
+          - BATCH
+          - SHELL
+          - HTTP
+          - SDK
+          - OPENTELEMETRY
+          - INTERNAL
+          - DATABASE
+          - MESSAGING
+          - PAGE
+          - PAGE_RESOURCE
       required:
       - id
       - label
-      - snapshotIds
+      - serviceId
       - technologies
-      - types
-    GetServices:
+      - type
+    EndpointMetricResult:
       type: object
       properties:
-        applicationBoundaryScope:
-          type: string
-          description: "Use when querying calls of an application:\n `INBOUND`: only inbound calls \n `ALL`: all the calls to that application (inbound + internal)"
-          enum:
-          - ALL
-          - INBOUND
-        applicationId:
-          type: string
-          description: 'An Instana generated unique identifier for an Application. If specified, the list of results will be filtered for the specified Application ID. Eg: `Av62RoIKQv-A3n6DbMQh9g`.
-
-            One can see the application id from Instana UI by going to an Application Perspective page. In the URL, there will be `appId=Av62RoIKQv-A3n6DbMQh9g`.
-
-            Alternatively, one can use `Get applications` API endpoint to get the application id in `id` parameter.
-
-            '
-          maxLength: 64
-          minLength: 0
-        contextScope:
-          type: string
-          description: "separate filtering and group by service id field\n - upstream is filtered on destination service and groups on source service\n - downstream is filtered on source service and groups on destination service\n - none is filtered on destination service and no grouping"
-          enum:
-          - NONE
-          - UPSTREAM
-          - DOWNSTREAM
-        metrics:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        items:
           type: array
-          description: 'A list of objects each of which defines a metric and the (statistical) aggregation -- MEAN, SUM, MAX, etc -- that should be used to summarize it for the defined time frame. Eg: `[{ ''metric'': ''latency'', ''aggregation'': ''MEAN''}]`. To know more about supported metrics and its aggregation, See `Get Metric catalog`.'
           items:
-            $ref: '#/components/schemas/AppDataMetricConfiguration'
-          maxItems: 5
-          minItems: 1
-        nameFilter:
-          type: string
-          description: 'filter by name with `contains` semantic. Eg: Let''s say there are 2 service names `ecomm-order` and `ecomm-deliver`, you can set `ecomm-` here to include the two Services.'
-          maxLength: 256
-          minLength: 0
-        order:
-          $ref: '#/components/schemas/Order'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-        serviceId:
-          type: string
-          description: 'An Instana generated unique identifier for a Service. If specified, the list of results will be filtered for the specified Service ID. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
-
-            One can see the service id from Instana UI by going to a Service page. In the URL, there will be `serviceId=3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
-
-            Alternatively, one can use `Get services` API endpoint to get the service id in `id` parameter.
-
-            '
-          maxLength: 64
-          minLength: 0
-        technologies:
-          type: array
-          description: A list of technologies to be used for filtering data. For example, technologies could include AWS ECS, Cassandra, DB2, JVM, Kafka, etc. A full list of available technologies can be found in X.
-          items:
-            type: string
-            description: A list of technologies to be used for filtering data. For example, technologies could include AWS ECS, Cassandra, DB2, JVM, Kafka, etc. A full list of available technologies can be found in X.
-          maxItems: 20
-          minItems: 0
-          uniqueItems: true
-        timeFrame:
-          $ref: '#/components/schemas/TimeFrame'
-      required:
-      - metrics
-    AppDataMetricConfiguration:
-      type: object
-      properties:
-        aggregation:
-          type: string
-          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
-          enum:
-          - SUM
-          - MEAN
-          - MAX
-          - MIN
-          - P25
-          - P50
-          - P75
-          - P90
-          - P95
-          - P98
-          - P99
-          - P99_9
-          - P99_99
-          - DISTINCT_COUNT
-          - SUM_POSITIVE
-          - PER_SECOND
-          - INCREASE
-        granularity:
+            $ref: '#/components/schemas/EndpointItem'
+        page:
           type: integer
           format: int32
-          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
-        metric:
-          type: string
-          description: 'Set a particular metric, eg: `latency`.'
-        numeratorTagFilterExpression:
-          $ref: '#/components/schemas/TagFilterExpressionElement'
+          description: Page Number
+          minimum: 1
+        pageSize:
+          type: integer
+          format: int32
+          minimum: 1
+        totalHits:
+          type: integer
+          format: int64
+          minimum: 0
       required:
-      - aggregation
-      - metric
-    EndpointItem:
+      - items
+    ApplicationItem:
       type: object
       properties:
-        endpoint:
-          $ref: '#/components/schemas/Endpoint'
+        application:
+          $ref: '#/components/schemas/Application'
         metrics:
           type: object
           additionalProperties:
@@ -535,8 +452,63 @@ components:
               items:
                 type: number
       required:
-      - endpoint
+      - application
       - metrics
+    MetricAPIResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+      required:
+      - metrics
+    ServiceMetricResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceItem'
+        page:
+          type: integer
+          format: int32
+          description: Page Number
+          minimum: 1
+        pageSize:
+          type: integer
+          format: int32
+          minimum: 1
+        totalHits:
+          type: integer
+          format: int64
+          minimum: 0
+      required:
+      - items
+    ServiceItem:
+      type: object
+      properties:
+        metrics:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+        service:
+          $ref: '#/components/schemas/Service'
+      required:
+      - metrics
+      - service
     GetApplications:
       type: object
       properties:
@@ -626,6 +598,124 @@ components:
           $ref: '#/components/schemas/TimeFrame'
       required:
       - metrics
+    AppDataMetricConfiguration:
+      type: object
+      properties:
+        aggregation:
+          type: string
+          description: 'Set aggregation that can be applied to a series of values. Eg: `MEAN`.'
+          enum:
+          - SUM
+          - MEAN
+          - MAX
+          - MIN
+          - P25
+          - P50
+          - P75
+          - P90
+          - P95
+          - P98
+          - P99
+          - P99_9
+          - P99_99
+          - DISTINCT_COUNT
+          - SUM_POSITIVE
+          - PER_SECOND
+          - INCREASE
+        granularity:
+          type: integer
+          format: int32
+          description: 'If the granularity is set you will get data points with the specified granularity in seconds. Default: `1000` milliseconds'
+        metric:
+          type: string
+          description: 'Set a particular metric, eg: `latency`.'
+        numeratorTagFilterExpression:
+          $ref: '#/components/schemas/TagFilterExpressionElement'
+      required:
+      - aggregation
+      - metric
+    Service:
+      type: object
+      properties:
+        entityType:
+          type: string
+          description: Since, this is a Service, it will be of type `SERVICE`.
+          enum:
+          - APPLICATION
+          - SERVICE
+          - ENDPOINT
+        id:
+          type: string
+          description: 'Unique ID of the Service. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.'
+        label:
+          type: string
+          description: 'Name of the Service. Eg: `payment`.'
+        snapshotIds:
+          type: array
+          description: A unique identifier the metrics are assigned to.
+          items:
+            type: string
+            description: A unique identifier the metrics are assigned to.
+          uniqueItems: true
+        technologies:
+          type: array
+          description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
+          items:
+            type: string
+            description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
+          uniqueItems: true
+        types:
+          type: array
+          description: 'Shows types of Endpoints a Service can consist of. It may be one or more. Eg: `HTTP` `OPENTELEMETRY` can be in 1 Service.'
+          items:
+            type: string
+            description: 'Shows types of Endpoints a Service can consist of. It may be one or more. Eg: `HTTP` `OPENTELEMETRY` can be in 1 Service.'
+            enum:
+            - UNDEFINED
+            - RPC
+            - EVENT
+            - GRAPHQL
+            - BATCH
+            - SHELL
+            - HTTP
+            - SDK
+            - OPENTELEMETRY
+            - INTERNAL
+            - DATABASE
+            - MESSAGING
+            - PAGE
+            - PAGE_RESOURCE
+          uniqueItems: true
+      required:
+      - id
+      - label
+      - snapshotIds
+      - technologies
+      - types
+    ApplicationMetricResult:
+      type: object
+      properties:
+        adjustedTimeframe:
+          $ref: '#/components/schemas/AdjustedTimeframe'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationItem'
+        page:
+          type: integer
+          format: int32
+          description: Page Number
+          minimum: 1
+        pageSize:
+          type: integer
+          format: int32
+          minimum: 1
+        totalHits:
+          type: integer
+          format: int64
+          minimum: 0
+      required:
+      - items
     Application:
       type: object
       description: Returns a list of Application Perspectives.
@@ -650,42 +740,27 @@ components:
       - boundaryScope
       - id
       - label
-    TagFilterExpressionElement:
+    AdjustedTimeframe:
       type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    Order:
-      type: object
-      description: 'Specifies the ordering of the results.
+      description: 'Time frame provided in API request is slightly adjusted in response for faster API response.
 
-        It contains fields that define the sorting criteria, the collation for sorting, and the direction in which the results should be ordered.
+        For example, In request payload, if timeframe is 08:03 - 14:03, which is a 6 hour window size. It is adjusted to 08:05 - 14:00
+
+        Another example, In request payload, if timeframe is 08:20 - 08:20 (next day) which is a 24h window size. It is adjusted to 08:30 - 08:00 (next day)
 
         '
       properties:
-        by:
-          type: string
-          description: If the granularity is set to `1` you can use the metric name eg. `latency.p95` to order by that value.
-        collation:
-          type: string
-          description: Language code used for sorting. Ignored for infrastructure queries.
-        direction:
-          type: string
-          description: The order in which results will be sorted, either `ASC` for ascending or `DESC` for descending.
-          enum:
-          - ASC
-          - DESC
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          minimum: 0
       required:
-      - by
-      - direction
+      - to
     GetEndpoints:
       type: object
       properties:
@@ -775,73 +850,71 @@ components:
           $ref: '#/components/schemas/TimeFrame'
       required:
       - metrics
-    ServiceItem:
+    GetServices:
       type: object
       properties:
+        applicationBoundaryScope:
+          type: string
+          description: "Use when querying calls of an application:\n `INBOUND`: only inbound calls \n `ALL`: all the calls to that application (inbound + internal)"
+          enum:
+          - ALL
+          - INBOUND
+        applicationId:
+          type: string
+          description: 'An Instana generated unique identifier for an Application. If specified, the list of results will be filtered for the specified Application ID. Eg: `Av62RoIKQv-A3n6DbMQh9g`.
+
+            One can see the application id from Instana UI by going to an Application Perspective page. In the URL, there will be `appId=Av62RoIKQv-A3n6DbMQh9g`.
+
+            Alternatively, one can use `Get applications` API endpoint to get the application id in `id` parameter.
+
+            '
+          maxLength: 64
+          minLength: 0
+        contextScope:
+          type: string
+          description: "separate filtering and group by service id field\n - upstream is filtered on destination service and groups on source service\n - downstream is filtered on source service and groups on destination service\n - none is filtered on destination service and no grouping"
+          enum:
+          - NONE
+          - UPSTREAM
+          - DOWNSTREAM
         metrics:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: array
-              items:
-                type: number
-        service:
-          $ref: '#/components/schemas/Service'
-      required:
-      - metrics
-      - service
-    ApplicationMetricResult:
-      type: object
-      properties:
-        adjustedTimeframe:
-          $ref: '#/components/schemas/AdjustedTimeframe'
-        items:
           type: array
+          description: 'A list of objects each of which defines a metric and the (statistical) aggregation -- MEAN, SUM, MAX, etc -- that should be used to summarize it for the defined time frame. Eg: `[{ ''metric'': ''latency'', ''aggregation'': ''MEAN''}]`. To know more about supported metrics and its aggregation, See `Get Metric catalog`.'
           items:
-            $ref: '#/components/schemas/ApplicationItem'
-        page:
-          type: integer
-          format: int32
-          description: Page Number
-          minimum: 1
-        pageSize:
-          type: integer
-          format: int32
-          minimum: 1
-        totalHits:
-          type: integer
-          format: int64
-          minimum: 0
-      required:
-      - items
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-          format: int32
-          description: Page number for a specific page in the results. For example, if you'd like to retrieve the 5th page out of 10 pages, the value would be 5.
-          minimum: 1
-        pageSize:
-          type: integer
-          format: int32
-          description: 'Set the number of items you want to return with one query. Eg: if you want to retrieve 10 items, the value would be 10.'
-          maximum: 200
-          minimum: 1
-    MetricAPIResult:
-      type: object
-      properties:
-        adjustedTimeframe:
-          $ref: '#/components/schemas/AdjustedTimeframe'
-        metrics:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: array
-              items:
-                type: number
+            $ref: '#/components/schemas/AppDataMetricConfiguration'
+          maxItems: 5
+          minItems: 1
+        nameFilter:
+          type: string
+          description: 'filter by name with `contains` semantic. Eg: Let''s say there are 2 service names `ecomm-order` and `ecomm-deliver`, you can set `ecomm-` here to include the two Services.'
+          maxLength: 256
+          minLength: 0
+        order:
+          $ref: '#/components/schemas/Order'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        serviceId:
+          type: string
+          description: 'An Instana generated unique identifier for a Service. If specified, the list of results will be filtered for the specified Service ID. Eg: `3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
+
+            One can see the service id from Instana UI by going to a Service page. In the URL, there will be `serviceId=3feb3dcd206c166ef2b41c707e0cd38d7cd325aa`.
+
+            Alternatively, one can use `Get services` API endpoint to get the service id in `id` parameter.
+
+            '
+          maxLength: 64
+          minLength: 0
+        technologies:
+          type: array
+          description: A list of technologies to be used for filtering data. For example, technologies could include AWS ECS, Cassandra, DB2, JVM, Kafka, etc. A full list of available technologies can be found in X.
+          items:
+            type: string
+            description: A list of technologies to be used for filtering data. For example, technologies could include AWS ECS, Cassandra, DB2, JVM, Kafka, etc. A full list of available technologies can be found in X.
+          maxItems: 20
+          minItems: 0
+          uniqueItems: true
+        timeFrame:
+          $ref: '#/components/schemas/TimeFrame'
       required:
       - metrics
     GetApplicationMetrics:
@@ -864,35 +937,47 @@ components:
       required:
       - metrics
       - timeFrame
-    EndpointMetricResult:
+    Order:
       type: object
+      description: 'Specifies the ordering of the results.
+
+        It contains fields that define the sorting criteria, the collation for sorting, and the direction in which the results should be ordered.
+
+        '
       properties:
-        adjustedTimeframe:
-          $ref: '#/components/schemas/AdjustedTimeframe'
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/EndpointItem'
-        page:
-          type: integer
-          format: int32
-          description: Page Number
-          minimum: 1
-        pageSize:
-          type: integer
-          format: int32
-          minimum: 1
-        totalHits:
-          type: integer
-          format: int64
-          minimum: 0
+        by:
+          type: string
+          description: If the granularity is set to `1` you can use the metric name eg. `latency.p95` to order by that value.
+        collation:
+          type: string
+          description: Language code used for sorting. Ignored for infrastructure queries.
+        direction:
+          type: string
+          description: The order in which results will be sorted, either `ASC` for ascending or `DESC` for descending.
+          enum:
+          - ASC
+          - DESC
       required:
-      - items
-    ApplicationItem:
+      - by
+      - direction
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
+    EndpointItem:
       type: object
       properties:
-        application:
-          $ref: '#/components/schemas/Application'
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
         metrics:
           type: object
           additionalProperties:
@@ -902,93 +987,8 @@ components:
               items:
                 type: number
       required:
-      - application
+      - endpoint
       - metrics
-    ServiceMetricResult:
-      type: object
-      properties:
-        adjustedTimeframe:
-          $ref: '#/components/schemas/AdjustedTimeframe'
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ServiceItem'
-        page:
-          type: integer
-          format: int32
-          description: Page Number
-          minimum: 1
-        pageSize:
-          type: integer
-          format: int32
-          minimum: 1
-        totalHits:
-          type: integer
-          format: int64
-          minimum: 0
-      required:
-      - items
-    Endpoint:
-      type: object
-      properties:
-        entityType:
-          type: string
-          description: Since, this is a Endpoint, it will be of type `ENDPOINT`.
-          enum:
-          - APPLICATION
-          - SERVICE
-          - ENDPOINT
-        id:
-          type: string
-          description: 'Unique ID of the Endpoint. Eg: `NCRq5oYnan5x-PkdTPQwLLUdu5M`.'
-        isSynthetic:
-          type: boolean
-          writeOnly: true
-        label:
-          type: string
-          description: 'Name of the Endpoint. Eg: `GET /api/fetch`.'
-        serviceId:
-          type: string
-          description: The serviceId this endpoint belongs to.
-        synthetic:
-          type: boolean
-        syntheticType:
-          type: string
-          enum:
-          - NON_SYNTHETIC
-          - SYNTHETIC
-          - MIXED
-        technologies:
-          type: array
-          description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
-          items:
-            type: string
-            description: 'List of technologies: `Eg:["springbootApplicationContainer"]`'
-          uniqueItems: true
-        type:
-          type: string
-          description: The type of the Endpoint.
-          enum:
-          - UNDEFINED
-          - RPC
-          - EVENT
-          - GRAPHQL
-          - BATCH
-          - SHELL
-          - HTTP
-          - SDK
-          - OPENTELEMETRY
-          - INTERNAL
-          - DATABASE
-          - MESSAGING
-          - PAGE
-          - PAGE_RESOURCE
-      required:
-      - id
-      - label
-      - serviceId
-      - technologies
-      - type
   securitySchemes:
     ApiKeyAuth:
       in: header

@@ -120,75 +120,6 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    MetricsTestResultItem:
-      type: object
-      description: A description of the Synthetic test associated with the result item.  This information will be included if the request was grouped by synthetic.testId or if includeAggregatedTestId was true on the request.
-      properties:
-        applicationId:
-          type: string
-          description: An identifier of an application associated with the Synthetic test.  This field is deprecated and will be replace by the applicationIds field.
-        applicationIds:
-          type: array
-          description: A list of the applications associated with the Synthetic test.
-          items:
-            type: string
-            description: A list of the applications associated with the Synthetic test.
-        locationId:
-          type: array
-          description: A list of the locations associated with the Synthetic test.
-          items:
-            type: string
-            description: A list of the locations associated with the Synthetic test.
-        mobileApplicationIds:
-          type: array
-          description: A list of the mobile applications associated with the Synthetic test.
-          items:
-            type: string
-            description: A list of the mobile applications associated with the Synthetic test.
-        serviceId:
-          type: string
-          description: A service associated with the Synthetic test.
-        testId:
-          type: string
-          description: The testId for the Synthetic test.
-        testName:
-          type: string
-          description: The Synthetic test's name.
-        websiteIds:
-          type: array
-          description: A list of the websites associated with the Synthetic test.
-          items:
-            type: string
-            description: A list of the websites associated with the Synthetic test.
-      required:
-      - testId
-    TagFilterExpressionElement:
-      type: object
-      description: Boolean expression of tag filters to define the scope of relevant calls.
-      discriminator:
-        mapping:
-          EXPRESSION: '#/components/schemas/TagFilterExpression'
-          TAG_FILTER: '#/components/schemas/TagFilter'
-        propertyName: type
-      properties:
-        type:
-          type: string
-      required:
-      - type
-    TimeFrame:
-      type: object
-      description: Time range for which the data should be retrieved.
-      properties:
-        to:
-          type: integer
-          format: int64
-          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
-        windowSize:
-          type: integer
-          format: int64
-          description: windowSize in milliseconds
-          maximum: 2678400000
-          minimum: 0
     MetricsResultItem:
       type: object
       properties:
@@ -251,6 +182,20 @@ components:
       required:
       - aggregation
       - metric
+    TimeFrame:
+      type: object
+      description: Time range for which the data should be retrieved.
+      properties:
+        to:
+          type: integer
+          format: int64
+          description: 'end of timeframe expressed as the Unix epoch time in milliseconds. Eg: `ISO 8601` standard time `2024-06-27T05:05:55.615Z` can be represented as `1719464755615` in Unix epoch time in milliseconds.'
+        windowSize:
+          type: integer
+          format: int64
+          description: windowSize in milliseconds
+          maximum: 2678400000
+          minimum: 0
     SyntheticMetricTagGroup:
       type: object
       description: ' Grouping of data under `groupbyTag`, where `groupbyTagEntity` and `groupbyTagSecondLevelKey` are aspects of `groupbyTag`.'
@@ -299,15 +244,6 @@ components:
           description: 'Set the number of items you want to return with one query. Eg: if you want to retrieve 10 items, the value would be 10.'
           maximum: 200
           minimum: 1
-    MetricsResult:
-      type: object
-      properties:
-        metricsResult:
-          type: array
-          items:
-            $ref: '#/components/schemas/MetricsResultItem'
-      required:
-      - metricsResult
     GetMetricsResult:
       type: object
       properties:
@@ -335,6 +271,70 @@ components:
           $ref: '#/components/schemas/TimeFrame'
       required:
       - metrics
+    MetricsResult:
+      type: object
+      properties:
+        metricsResult:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsResultItem'
+      required:
+      - metricsResult
+    MetricsTestResultItem:
+      type: object
+      description: A description of the Synthetic test associated with the result item.  This information will be included if the request was grouped by synthetic.testId or if includeAggregatedTestId was true on the request.
+      properties:
+        applicationId:
+          type: string
+          description: An identifier of an application associated with the Synthetic test.  This field is deprecated and will be replace by the applicationIds field.
+        applicationIds:
+          type: array
+          description: A list of the applications associated with the Synthetic test.
+          items:
+            type: string
+            description: A list of the applications associated with the Synthetic test.
+        locationId:
+          type: array
+          description: A list of the locations associated with the Synthetic test.
+          items:
+            type: string
+            description: A list of the locations associated with the Synthetic test.
+        mobileApplicationIds:
+          type: array
+          description: A list of the mobile applications associated with the Synthetic test.
+          items:
+            type: string
+            description: A list of the mobile applications associated with the Synthetic test.
+        serviceId:
+          type: string
+          description: A service associated with the Synthetic test.
+        testId:
+          type: string
+          description: The testId for the Synthetic test.
+        testName:
+          type: string
+          description: The Synthetic test's name.
+        websiteIds:
+          type: array
+          description: A list of the websites associated with the Synthetic test.
+          items:
+            type: string
+            description: A list of the websites associated with the Synthetic test.
+      required:
+      - testId
+    TagFilterExpressionElement:
+      type: object
+      description: Boolean expression of tag filters to define the scope of relevant calls.
+      discriminator:
+        mapping:
+          EXPRESSION: '#/components/schemas/TagFilterExpression'
+          TAG_FILTER: '#/components/schemas/TagFilter'
+        propertyName: type
+      properties:
+        type:
+          type: string
+      required:
+      - type
   securitySchemes:
     ApiKeyAuth:
       in: header

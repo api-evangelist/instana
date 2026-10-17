@@ -431,74 +431,35 @@ paths:
       x-ibm-ahub-byok: true
 components:
   schemas:
-    ParameterValue:
+    ActionConfiguration:
       type: object
-      description: List of action input parameters.
+      description: List of action configurations.
       properties:
-        name:
+        action:
+          $ref: '#/components/schemas/Action'
+        agentId:
           type: string
-          description: Parameter name.
-        value:
-          type: string
-          description: Parameter value.
-      required:
-      - name
-      - value
-    Policy:
-      type: object
-      properties:
-        description:
-          type: string
-          description: Policy description.
-          maxLength: 512
-          minLength: 0
-        id:
-          type: string
-          description: Policy identifier.
-          maxLength: 128
-          minLength: 1
-          readOnly: true
-        name:
-          type: string
-          description: Policy name.
-          maxLength: 128
-          minLength: 1
-        tags:
+          description: Identifier of the agent host on which to run the action.
+        inputParameterValues:
           type: array
-          description: A list of policy tags.
+          description: List of action input parameters.
           items:
-            type: string
-            description: A list of policy tags.
-        trigger:
-          $ref: '#/components/schemas/Trigger'
-        typeConfigurations:
-          type: array
-          description: List of configurations that contains the list of actions to run and the mode (automatic or manual) in which the policy is run.
-          items:
-            $ref: '#/components/schemas/TypeConfiguration'
+            $ref: '#/components/schemas/ParameterValue'
       required:
-      - id
-      - name
-      - trigger
-      - typeConfigurations
-    Field:
+      - action
+    PolicyScheduling:
       type: object
-      description: List of fields that describe an action.
+      description: Scheduling information for a scheduled policy.
       properties:
-        description:
+        recurrentRule:
           type: string
-        encoding:
+          description: 'Recurrent Rule defines how the policy recurs, using iCalendar RRULE format (e.g., `FREQ=DAILY;INTERVAL=1`).It supports fields like FREQ, INTERVAL, BYDAY. Refer to RFC 5545: https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10'
+        startTime:
           type: string
-        name:
-          type: string
-        secured:
-          type: boolean
-        value:
-          type: string
+          format: date-time
+          description: The time to run the policy action in milliseconds since epoch (UTC) (e.g., `1706713140000`).
       required:
-      - encoding
-      - name
-      - value
+      - startTime
     PolicyRunnable:
       type: object
       description: Runnable associated with the policy. It can be a `workflow` or `action`. Currently only supports `action`.
@@ -518,48 +479,6 @@ components:
       - id
       - runConfiguration
       - type
-    MetaData:
-      type: object
-      description: Action metadata.
-      properties:
-        ai:
-          type: array
-          description: List of metadata for AI originated actions.
-          items:
-            type: object
-            additionalProperties:
-              type: object
-              description: List of metadata for AI originated actions.
-            description: List of metadata for AI originated actions.
-        aiOriginated:
-          type: boolean
-          description: AI originated action flag. Value is `true` if action is AI generated `false` otherwise.
-        builtIn:
-          type: boolean
-          description: Built-in out of the box action flag. Value is `true` if built-in action `false` otherwise.
-        readOnly:
-          type: boolean
-          description: Read only action flag. Value is `true` if read only `false` otherwise.
-        sensorImported:
-          type: boolean
-          description: Sensor imported action flag. Value is `true` if action is imported from sensor `false` otherwise.
-    TypeConfiguration:
-      type: object
-      description: List of configurations that contains the list of actions to run and the mode (automatic or manual) in which the policy is run.
-      properties:
-        condition:
-          $ref: '#/components/schemas/Condition'
-        name:
-          type: string
-          description: The policy type determines how a policy is run. Value must be one of the enum values. Value `manual` means the policy is run manually when an event is raised. Value `automatic` means policy is run automatically when an event is raised.
-          enum:
-          - automatic
-          - manual
-        runnable:
-          $ref: '#/components/schemas/PolicyRunnable'
-      required:
-      - name
-      - runnable
     Action:
       type: object
       description: Automation action definition. When this is used in policy creation request, only `id` should be specified.
@@ -626,6 +545,81 @@ components:
       - modifiedAt
       - name
       - type
+    ParameterValue:
+      type: object
+      description: List of action input parameters.
+      properties:
+        name:
+          type: string
+          description: Parameter name.
+        value:
+          type: string
+          description: Parameter value.
+      required:
+      - name
+      - value
+    Field:
+      type: object
+      description: List of fields that describe an action.
+      properties:
+        description:
+          type: string
+        encoding:
+          type: string
+        name:
+          type: string
+        secured:
+          type: boolean
+        value:
+          type: string
+      required:
+      - encoding
+      - name
+      - value
+    Policy:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Policy description.
+          maxLength: 512
+          minLength: 0
+        id:
+          type: string
+          description: Policy identifier.
+          maxLength: 128
+          minLength: 1
+          readOnly: true
+        name:
+          type: string
+          description: Policy name.
+          maxLength: 128
+          minLength: 1
+        tags:
+          type: array
+          description: A list of policy tags.
+          items:
+            type: string
+            description: A list of policy tags.
+        trigger:
+          $ref: '#/components/schemas/Trigger'
+        typeConfigurations:
+          type: array
+          description: List of configurations that contains the list of actions to run and the mode (automatic or manual) in which the policy is run.
+          items:
+            $ref: '#/components/schemas/TypeConfiguration'
+      required:
+      - id
+      - name
+      - trigger
+      - typeConfigurations
+    Condition:
+      type: object
+      description: This applies to only `automatic` policy type. A Dynamic Focus Query that selects a list of entities on which the policy is run.
+      properties:
+        query:
+          type: string
+          description: Dynamic Focus Query string that selects a list of entities on which the policy is run.
     Parameter:
       type: object
       description: List of inputs to the action.
@@ -658,13 +652,23 @@ components:
       - label
       - name
       - type
-    Condition:
+    TypeConfiguration:
       type: object
-      description: This applies to only `automatic` policy type. A Dynamic Focus Query that selects a list of entities on which the policy is run.
+      description: List of configurations that contains the list of actions to run and the mode (automatic or manual) in which the policy is run.
       properties:
-        query:
+        condition:
+          $ref: '#/components/schemas/Condition'
+        name:
           type: string
-          description: Dynamic Focus Query string that selects a list of entities on which the policy is run.
+          description: The policy type determines how a policy is run. Value must be one of the enum values. Value `manual` means the policy is run manually when an event is raised. Value `automatic` means policy is run automatically when an event is raised.
+          enum:
+          - automatic
+          - manual
+        runnable:
+          $ref: '#/components/schemas/PolicyRunnable'
+      required:
+      - name
+      - runnable
     RunConfiguration:
       type: object
       description: Action run configuration.
@@ -676,35 +680,31 @@ components:
             $ref: '#/components/schemas/ActionConfiguration'
       required:
       - actions
-    ActionConfiguration:
+    MetaData:
       type: object
-      description: List of action configurations.
+      description: Action metadata.
       properties:
-        action:
-          $ref: '#/components/schemas/Action'
-        agentId:
-          type: string
-          description: Identifier of the agent host on which to run the action.
-        inputParameterValues:
+        ai:
           type: array
-          description: List of action input parameters.
+          description: List of metadata for AI originated actions.
           items:
-            $ref: '#/components/schemas/ParameterValue'
-      required:
-      - action
-    PolicyScheduling:
-      type: object
-      description: Scheduling information for a scheduled policy.
-      properties:
-        recurrentRule:
-          type: string
-          description: 'Recurrent Rule defines how the policy recurs, using iCalendar RRULE format (e.g., `FREQ=DAILY;INTERVAL=1`).It supports fields like FREQ, INTERVAL, BYDAY. Refer to RFC 5545: https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10'
-        startTime:
-          type: string
-          format: date-time
-          description: The time to run the policy action in milliseconds since epoch (UTC) (e.g., `1706713140000`).
-      required:
-      - startTime
+            type: object
+            additionalProperties:
+              type: object
+              description: List of metadata for AI originated actions.
+            description: List of metadata for AI originated actions.
+        aiOriginated:
+          type: boolean
+          description: AI originated action flag. Value is `true` if action is AI generated `false` otherwise.
+        builtIn:
+          type: boolean
+          description: Built-in out of the box action flag. Value is `true` if built-in action `false` otherwise.
+        readOnly:
+          type: boolean
+          description: Read only action flag. Value is `true` if read only `false` otherwise.
+        sensorImported:
+          type: boolean
+          description: Sensor imported action flag. Value is `true` if action is imported from sensor `false` otherwise.
     Trigger:
       type: object
       description: The trigger is the Instana event or Smart Alert that defines the initial conditions that must be met for the policy to apply on the actions in `typeConfiguration`.
