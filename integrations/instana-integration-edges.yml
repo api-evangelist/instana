@@ -5,6 +5,8 @@ checked:
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/registry/
 - opentofu/integrations/opentofu-integration-edges.yml
 - terraform/integrations/terraform-integration-edges.yml
+- ansible/integrations/ansible-integration-edges.yml
+- chef-software/integrations/chef-software-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: OpenTelemetry
@@ -68,6 +70,40 @@ edges:
   category: infrastructure-as-code provider registry listing
   badges:
   - Verified publisher (Terraform official tier)
+- partner_name: Ansible (ansible-galaxy)
+  partner: ansible
+  partner_match: mirror
+  mirror_match: register
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: ansible-galaxy
+  evidence: https://galaxy.ansible.com/ui/repo/published/ibm/instana/
+  mirror_of: ansible/integrations/ansible-integration-edges.yml
+  apps:
+  - ibm.instana
+  listing_count: 1
+  detected: '2026-10-22'
+  detected_by: mirror-platform-listings.py
+  category: configuration-management content listing (Ansible collection)
+- partner_name: Chef Software (chef-supermarket)
+  partner: chef-software
+  partner_match: mirror
+  mirror_match: register
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: chef-supermarket
+  evidence: https://supermarket.chef.io/cookbooks/instana-agent
+  mirror_of: chef-software/integrations/chef-software-integration-edges.yml
+  apps:
+  - instana-agent
+  listing_count: 1
+  detected: '2026-10-22'
+  detected_by: mirror-platform-listings.py
+  category: configuration-management content listing (Chef cookbook)
 source:
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/ecosystem/vendors.yaml
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/registry/
